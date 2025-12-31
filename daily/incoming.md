@@ -1,0 +1,841 @@
+- [2025-05-26 16:16:54] : @end of the day
+- [2025-05-26 16:16:38] : @note I have continue working hard on modelling social systems.
+- [2025-05-26 16:16:20] : @note i spend the day workign and finish the ticket SGF-10340.
+- [2025-05-26 12:13:11] : @note move the note of "A History of Economic Thought to modelling"
+- [2025-05-26 09:49:18] : @note start working on "(SGF-10340) TK57402-Mejorar la funcionalidad “Registro de Asientos Diarios Manuales”"; again.
+- [2025-05-26 09:13:13] : @Note I Have stop adding notes here; almost for a week now; this is wrong; I should at least continue to add my main accomplisments of the day.
+- [2025-05-26 09:13:03] : @open work day
+- [2025-05-16 13:08:47] : @note improve RD 2.0
+- [2025-05-16 13:06:57] : @note start working on arbistrista labs.
+- [2025-05-16 13:05:32] : @note in the morning I have been workign with (SGF-10437) - Modificaciones prespuestarias. I have explain the work.    
+- [2025-05-16 13:05:23] : @start work day
+- [2025-05-15 16:46:52] : @close work day
+- [2025-05-15 16:45:58] : @note i  have spend all the day working on the ticket SGF-10437. I believe i have found the error; but need for information.
+- [2025-05-15 08:49:21] : @task(SGF-10437) work on ticket "TK65306-Investigacion para identificar funcionamiento del regimen de modificaciones presupuestarias./Ajuste a modalidad predefinida en el regimen de modificaciones presupuestarias."
+- [2025-05-15 08:49:09] : @open work day
+- [2025-05-15 08:49:01] : @close work day
+- [2025-05-14 09:03:22] : @task improve notes on HS Codes.
+- [2025-05-14 09:03:14] : @open work day
+- [2025-05-13 16:37:28] : @close work day
+- [2025-05-13 15:09:43] : @note - SIR-681 -  resulto que unos cambios fueron reemplazados.
+- [2025-05-13 15:08:57] : @note finish ticket contabilidad.
+- [2025-05-13 08:31:04] : @note reasoning about how to  store secret keys;  store by accident the comtrade keys.
+- [2025-05-13 08:29:07] : @note (SGF-10340) Ticket Contabilidad; i have to finish before 12:00 PM.
+- [2025-05-13 08:29:01] : @open work day
+- [2025-05-13 08:28:51] : @close work day
+- [2025-05-13 08:28:07] : @note summary; i have access to comtrade database; i have continue exploring the ideas of modelling social systems; and reading the "what you exports matter".
+- [2025-05-13 08:27:49] : @note i falied to continue taking the notes of the day; it's really important.
+- [2025-05-12 08:37:11] : @note this weeking i have re-started:what thinking deeply about social systems and the future of the dominican republic.
+- [2025-05-12 08:36:56] : @start  work day
+- [2025-05-08 17:56:18] : @close work day
+- [2025-05-08 17:53:57] : @action finish the ticket (SGF@action finish the ticket ()SGF-10420)
+- [2025-05-08 10:11:35] : @note how to improve inter-disciplinary research.
+- [2025-05-08 10:10:57] : @reason deeply about the technmology space; research space; basic science research; production space; service space;
+- [2025-05-08 10:07:43] : @task(SGF-10340): Continue working on. 
+- [2025-05-08 10:07:19] : @note in the morning I improve my information on differential equations.
+- [2025-05-08 10:07:09] : @open work day
+- [2025-05-07 16:09:20] : @close work day
+- [2025-05-07 09:42:56] : @note in the morning; I have improve the notes on differential equations; and integral calculus to reflect that the function being integrated; is a derivate; that capture the rate of change.
+- [2025-05-07 09:42:26] : @task (start working again on SGF-10340).
+- [2025-05-07 09:36:29] : @note on the night; I have spend time working; on differential equation basic example.
+- [2025-05-07 09:36:17] : @open work day
+- [2025-05-06 16:10:16] : @note add another - science case study o disipative systems.
+- [2025-05-06 14:28:03] : @action improve organization in 'Bremontix'
+- [2025-05-06 13:33:00] : @action finish chapter 3 of dahmen book "The general economic development in the interwar period in relation to the international background"
+- [2025-05-06 08:24:15] : note: I will be much more productive; If i take out; twitter; the idea of be explosed to great ideas;  when i can search it; in a  syncronized way (learning / problems - needs on demand); rather than (ideas -> to see if they latter are useful to solve prlblems); when i don't even master the ideas; myself.
+- [2025-05-06 08:21:46] : note: In this long weekend the following was archiev: reflection on the idea of "idea"; a reflection on the idea of a concep; the reflection on the idea of a modelling framework; reflection on the idea of modelling framework;  and improvement to the notes on behavioral sciences; an improvement on the idea of Justice; trying to understand time dilation; finish the first chapter on  "Mitchell, M. (2009). Complexity: A Guided Tour. Oxford University Press."; Improve my notes on geometry; improve the concept of momentus;  create different entries for biology and physics.
+- [2025-05-06 08:21:38] : @open work day
+- [2025-05-02 16:28:12] : @close work day
+- [2025-05-02 16:11:56] : @note i was so focus trying to translate  the first chapte - of dahmmen book; then i start trying to standarize the laboratorio arbitrista documents; to make then serchable.
+- [2025-05-02 16:11:46] : @open work day
+- [2025-05-01 16:37:08] : @close work day
+- [2025-05-01 12:35:45] : @note I am working on the concept of truth.
+- [2025-05-01 12:34:12] : @note in this morning; i find the error by which prb-1-fisico failed to upload the foreig keys; it has not change the db_owner; and provide a valid one in configuraciobasedatos.xml
+- [2025-05-01 12:32:17] : @note I the last i take a note on the "gamma distribution";  and think deeply about the the "concept of truth".
+- [2025-05-01 12:32:07] : @open work  day
+- [2025-04-30 16:13:03] : @close work day
+- [2025-04-30 09:40:12] : @action revserse the decition; a thermodynamics system is a useful abstarction.
+- [2025-04-30 09:26:31] : @action remove the idea of a thermodynamics system; it's not a useful abstraction.
+- [2025-04-30 09:07:46] : @note tengo dos casos pendientes (compras - tramite - error y problema loguedo prb - fisico.
+- [2025-04-30 09:07:24] : @note last night I add the roman numerals; try to reason more deeply about proportion problems.
+- [2025-04-30 09:07:18] : @open work day
+- [2025-04-29 16:48:28] : @close work day
+- [2025-04-29 16:47:52] : @action - some classes failed to load the foreign keys.
+- [2025-04-29 13:01:43] : @action improve the concept of adaptation and evolution.
+- [2025-04-29 11:09:21] : @action improve the lattice of numbers.
+- [2025-04-29 10:50:26] : @action improve the "Indo-Arabic Numeral"
+- [2025-04-29 10:04:54] : @action improve notes on arithmetic.
+- [2025-04-29 10:04:43] : @action add an entry on reference.
+- [2025-04-29 08:20:33] : @note last night I was working deeply on the concept of a reference system from the perspective of cognitive science.
+- [2025-04-29 08:20:28] : @open work day
+- [2025-04-28 16:47:39] : @close working day
+- [2025-04-28 16:47:15] : @note i almost finish the paper on computing machinary and intelligence.
+- [2025-04-28 09:55:12] : @task tell ariel; to find a place for a future; "supermarket + comedor".
+- [2025-04-28 09:55:02] : @task how to model an enterprise;
+- [2025-04-28 09:10:11] : @task "How to compute the investment requirment by the national productive system - to keek the productivity level."
+- [2025-04-28 08:33:06] : @task let's finish the read of "Turing, A. M. (1950). Computing Machinery and Intelligence. Mind, LIX(236), 433–460."
+- [2025-04-28 08:32:37] : @note this weekend I was in the Graduation of my cousing Iss...
+- [2025-04-28 08:32:28] : @open work day
+- [2025-04-25 13:59:25] : @close work day
+- [2025-04-25 09:12:34] : @note start working on price mo@note start working on price modellingg
+- [2025-04-25 09:12:27] : @open work day
+- [2025-04-24 16:17:49] : @close work day
+- [2025-04-24 16:14:36] : @note i have "flight price prediction" notebook; 
+- [2025-04-24 14:59:39] : @note i have spend all the working money on the paper "Domingos, P. (2012). A few useful things to know about machine learning. Communications of the ACM, 55(10), 78–8."
+- [2025-04-24 14:59:32] : @open work day
+- [2025-04-23 16:16:09] : @close work day
+- [2025-04-23 16:15:45] : @action start translating the document of Erik Dahmen.
+- [2025-04-23 15:21:08] : @action add an entry on formal concept analysis.
+- [2025-04-23 13:49:02] : @action migrade links to pocket.
+- [2025-04-23 13:28:40] : @action improve my knowledge of polynomials.
+- [2025-04-23 13:26:53] : @note in the morny i have been working on; working on tickets (fch registro mercantiul proveedor; se usa como fecha de vencimiento); a bit of mathematics.
+- [2025-04-23 13:26:08] : @note i open the work day too lay today; let's continue registering day actions and thougs; very valuable sinse i have bad memory.
+- [2025-04-23 13:26:00] : @open work day
+- [2025-04-22 16:48:51] : @close work day
+- [2025-04-22 16:47:54] : @note i have to re-do "SGF-10340" in order to ajust to new reqs.
+- [2025-04-22 08:57:13] : @task first of paper "Domingos, P. (2012). A few useful things to know about machine learning. Communications of the ACM, 55(10), 78–87."
+- [2025-04-22 08:38:51] : @note i have spend some holly week; studying social theory; and some church history.
+- [2025-04-22 08:38:36] : @open work day
+- [2025-04-19 01:55:45] : @close work day
+- [2025-04-18 15:53:54] : @note fix the entry on philosophy (adding reading books to buy list; and taking out complexity;
+- [2025-04-18 12:46:40] : @note write letters in "Bremontix Laboratorio"
+- [2025-04-18 12:45:59] : @note the topics in the book "All of Statistics" all hollistic cover in "Observation".
+- [2025-04-18 12:16:14] : @task make sure tha tth topics in the book of "All of Statistics" are cover in "Observation".
+- [2025-04-18 12:16:07] : @open work day
+- [2025-04-17 20:06:12] : @end work day
+- [2025-04-17 20:05:35] : @note  I spend the day improving the statistics entry; and doign some quick refactoring y also analye a bit better the concept of p-value.
+- [2025-04-17 11:09:15] : @action crate a note for the "Exponential Random Graph Model (ERGM)" a fixed structured; process rprenestation; graph generation model.
+- [2025-04-17 10:24:18] : @createw a complete refactoring of observatorional models & computation / ml systems.
+- [2025-04-17 10:23:05] : @start working day
+- [2025-04-16 08:05:47] : @note it is increadible; but even today; I don't understand today; how the weigts are update; usign the computation of the error  and pre-activations. 
+- [2025-04-16 07:54:10] : @note working on a small implementation of backprop.
+- [2025-04-16 07:54:04] : @start working day
+- [2025-04-16 02:22:42] : @close work night
+- [2025-04-16 02:22:23] : @action first passs on the paper "Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. Nature, 323(6088), 533–536. https://doi.org/10.1038/323533a0"
+- [2025-04-15 23:06:51] : @note work on backprop; (concept, alg implementation).
+- [2025-04-15 23:06:41] : @open work night
+- [2025-04-15 16:52:45] : @end work day
+- [2025-04-15 16:42:33] : @note i have improve the big guide (just pointers) of mathematics.
+- [2025-04-15 13:33:13] : @note I have continue working on arithmetic; characterization scheme (counting, measure, etc).
+- [2025-04-15 11:21:09] : @task I spend some time working on public administration models.
+- [2025-04-15 10:52:17] : @task improve the concept of the operator.
+- [2025-04-15 10:24:49] : @task improve the notion of mathematics; in relation with characterization.
+- [2025-04-15 09:31:53] : @task improve the concept of a linear space.
+- [2025-04-15 09:31:42] : @task improve the concept of a matrix.
+- [2025-04-15 09:15:33] : @task crete script sgf-10379.
+- [2025-04-15 09:03:56] : @task create some entries on dynamical systems.
+- [2025-04-15 09:03:45] : @open work day
+- [2025-04-14 23:25:10] : @end work night
+- [2025-04-14 23:24:56] : @note I spend the night organizing topics in amthematics; very unfinish task indeed. 
+- [2025-04-14 23:24:49] : @open work night
+- [2025-04-14 16:18:57] : @close work day
+- [2025-04-14 16:17:53] : @note I spend part of the morning; working on back prop.
+- [2025-04-14 16:05:47] : @note today i have several issues to solve in the work one with data restriccions to users (a very intricate system indeed); the other with 
+- [2025-04-14 10:52:49] : @note I have started to work much earlier;
+- [2025-04-14 10:52:41] : @start work day
+- [2025-04-13 22:11:18] : @end of work day
+- [2025-04-13 22:10:27] : @note i should really master nn; learn i can learn other learning formulations (representation + evaluation + optimization)
+- [2025-04-13 22:09:45] : @note start of th journey; learning the fundamental algorihm; behind; nn. 
+- [2025-04-13 17:25:10] : @note i have spend time working on gradient descent methods & backprop (for chai of computations) trying to understand the training.
+- [2025-04-13 10:01:06] : @task this  day should be well spend trying to learn more about gradient descent.
+- [2025-04-13 10:00:53] : @open work day
+- [2025-04-12 23:23:07] : @end work day
+- [2025-04-12 23:22:37] : @note this day was spend printing  & organizing papers.
+- [2025-04-12 23:22:31] : @start work day
+- [2025-04-11 16:36:43] : @end work day
+- [2025-04-11 16:36:36] : @action add some ml papers
+- [2025-04-11 13:45:53] : @action finish processing all papers from "Bremontix/Computer Science Review"
+- [2025-04-11 11:48:30] : @action process ~20 papers.
+- [2025-04-11 11:29:48] : @action process ~20 papers.
+- [2025-04-11 11:14:54] : @action process ~20 papers.
+- [2025-04-11 10:32:07] : @action process ~20 papers
+- [2025-04-11 09:30:02] : @action process ~20 papers
+- [2025-04-11 09:01:05] : @action process ~21 papers.
+- [2025-04-11 08:42:52] : @open worknig day
+- [2025-04-11 02:23:04] : @close working night
+- [2025-04-11 02:22:47] : @note very deep dive into arithmetics; must continue the pre-algebra book.
+- [2025-04-10 23:03:00] : @action create a big guide about the mathematical fields.
+- [2025-04-10 22:12:36] : @action add label to paper boxes
+- [2025-04-10 22:12:24] : @action ortanize books
+- [2025-04-10 22:12:11] : @open work night
+- [2025-04-10 16:14:00] : @end of the work day currating / problems.
+- [2025-04-10 15:23:50] : @action proces  ~ 15 process from "Computer Science Review"
+- [2025-04-10 14:29:13] : @action process ~ 14 process from "Computer Science Review"
+- [2025-04-10 14:03:52] : @action process ~ 20 process from "Computer Science Review"
+- [2025-04-10 13:12:11] : @action process ~ 20 process from "Computer Science Review"
+- [2025-04-10 11:24:29] : @action process ~ 10 process from "Computer Science Review"
+- [2025-04-10 10:51:28] : @action process ~ 20 papers from "Computer Science Review"
+- [2025-04-10 10:15:24] : @action process 20 papers from "Computer Science Review"
+- [2025-04-10 09:20:14] : @note i have begin the day cleaning the keyword;  and verifying the correncness of the
+-  [2025-04-10 09:20:02] : @open work day
+- [2025-04-10 02:04:09] : @close work night
+- [2025-04-10 01:35:41] : @note should i merge all mathematical reserch / fields -> into one big guide.
+- [2025-04-10 00:53:18] : @note i have added some methods to represetn a graph; the laplacian matrix.
+- [2025-04-10 00:52:28] : @note i have practice using khan academy; think deeply about commutativity;  organize some maths notes; add some books to the reading list.
+- [2025-04-09 22:48:05] : @open work night
+- [2025-04-08 16:20:18] : @close work day
+- [2025-04-08 15:46:19] : @note I have work on the ticket (SGF-10369); fixing again the problem of registration of money cotization.
+- [2025-04-08 15:44:47] : @note I have spend the day; workig on the kalman filter; variane; covariance; 
+- [2025-04-08 09:39:46] : @action create a note on first principles.
+- [2025-04-08 09:25:16] : @action add a entry to algorithms/cm/integral.ipynb; about the integral operatorl.
+- [2025-04-08 09:07:59] : @action clean entry in / bremontix.
+- [2025-04-08 08:56:23] : @action add a note on the limitations of logic.
+- [2025-04-08 08:51:47] : @action add a case on research study case "IQ / Intelligence Metrics"
+- [2025-04-08 08:41:31] : @action create a research note on what to do in case of my nation economic collape.
+- [2025-04-08 08:32:34] : @action add a note on distributed counter.
+- [2025-04-08 08:25:33] : @task clean "Bremontix In".
+- [2025-04-08 08:19:28] : @open work day
+- [2025-04-09 01:41:03] : @end work day
+- [2025-04-09 01:37:10] : @note today i have reson about the meaning of differentiation and integration; the history of calculus; and some fundamentals ideas in analysis.
+- [2025-04-08 21:54:33] : @task work a bit on the book "Mathematics Its Contents, Methods and Meaning"
+- [2025-04-08 01:54:27] : @end of work night
+- [2025-04-08 00:31:51] : @action improve the  integral operator.
+- [2025-04-08 00:15:31] : @action fix symbol for "Differential Operator".
+- [2025-04-07 23:50:29] : @action improve system identitifaction notes.
+- [2025-04-07 22:31:40] : @open work night
+- [2025-04-07 16:15:05] : @end working day
+- [2025-04-07 16:14:16] : @note i spend the day working on the basic derivative operator; and latter on system identifcation; and state estimation (filtering) ???
+- [2025-04-07 10:38:21] : @action create a "formal structure" ...
+- [2025-04-07 08:28:43] : @task create as structure of notes for bremontix ars.
+- [2025-04-05 16:55:51] : @close work day
+- [2025-04-05 09:53:06] : @task pago; open reading day;  cognitive sciences; psycology; and maths.
+- [2025-04-05 09:52:58] : @open work day
+- [2025-04-04 16:29:18] : @close work day
+- [2025-04-04 16:03:28] : @note today i spend the day writing a note on how to engage in conversatio; and related topics.
+- [2025-04-04 07:16:36] : @task escribir documento; laboratorio personal.
+- [2025-04-04 07:16:17] : @open work day
+- [2025-04-03 15:56:41] : @close work day
+- [2025-04-03 15:53:52] : @note resume of the day; i try to to make a dissaembler; it's hard but worith as a greaat exercise; then spend the day debugging peoples minds.
+- [2025-04-03 15:53:39] : @note i forget to register the work day; in the morning.
+- [2025-04-03 15:53:06] : @open work day
+- [2025-04-02 17:18:33] : @open work night
+- [2025-04-02 17:18:08] : @close work day
+- [2025-04-02 15:49:31] : @action finish SGF-10357.
+- [2025-04-02 15:08:25] : @task emergencia; trabajar ticket (SGF-10357); nomina y error validacion de pasaoprte.
+- [2025-04-02 14:56:10] : @note i am working very hard on learnign a bit of x86 assembler.
+- [2025-04-02 13:09:19] : @nota el ticket de nomina; genero problemas; por que al final resulto que los beneficiarios; pueden ser con pasaporte. Se hizo una corrección; pero el alegado original(tengo que pregutnar cual era); quedamos en la misma.
+- [2025-04-02 09:02:41] : @note working on ticket TK54598.
+- [2025-04-02 08:35:51] : @open work day
+- [2025-04-02 01:45:03] : @end work night
+- [2025-04-02 00:32:15] : @note  that'it for today in python.
+- [2025-04-02 00:31:56] : @note of progress; finish  python langauge specification.
+- [2025-04-01 21:47:54] : @note of progrees: finish chracterizign the models of computation supported by python.
+- [2025-04-01 20:46:11] : @open work night
+- [2025-04-01 16:41:37] : @close work day
+- [2025-04-01 16:41:03] : @note in the house i should continue; working on python, textual and rich.
+- [2025-04-01 14:33:40] : @action finish refactoring System.
+- [2025-04-01 14:30:17] : @note finish a note on compositionality
+- [2025-04-01 14:08:13] : @action; create the calculus of the month for payment; and switch to study modelligni an sysetms for the next three months.
+- [2025-04-01 13:40:55] : @note of progress; make some improvements; on; System Design.
+- [2025-04-01 12:07:26] : @note of progress; a lot of progress has been made;  in softwre architecture note; we have already the tooling; architectural components, architectural models (case study), architectur representation; pitfalls; 
+- [2025-04-01 11:12:41] : @action reactoring of the main note of system design.
+- [2025-04-01 11:03:14] : @note of progres: i have continue creating entries for dystems design; those entries latter will need to be refactor.
+- [2025-04-01 10:35:43] : @note add deontic logic to security.
+- [2025-04-01 10:10:37] : @note here to report the progress; we have the overal structure of the note; from system architecture; design; implementation;  analysis (verification, ...)
+- [2025-04-01 08:52:26] : @note today I have the great mission of refactoring Systems.
+- [2025-04-01 08:52:09] : @open work day
+- [2025-04-01 01:42:21] : @note a minimal amount of time was waste; almost no twitter; some youtube thought.
+- [2025-04-01 01:41:42] : @note this night was a deep dive into logic; formal sysetms, etc;  they was no time for  refactor systeems.
+- [2025-03-31 21:39:08] : @task refactor systems.
+- [2025-03-31 21:35:25] : @task work a bit in logic (free variables; logic reading list, sub structural logic)
+- [2025-03-31 21:35:13] : @open work night
+- [2025-03-31 14:51:28] : @note I have finish separating the agent / sample in java agent project.
+- [2025-03-31 09:21:43] : @nota la contraseña solo se puede cambiar cuado hay una notificacion del correo; (idiota); si lo intentas te dice que la contraseña no cumple con las politicas de seguridad; un mensaje horrible; con una gran discrepancia entre el estado (actual) del sistema y el estado denotado por el mensaje.
+- [2025-03-31 08:50:40] : @task problemas con la contraseña.
+- [2025-03-31 08:11:49] : @task can i find a a way to automate my passwords updates; or at least add some notifications previous to the expiratio.
+- [2025-03-31 08:04:45] : @task deep dive into variables free variables; bound variables; calling semantics; add reference to SCPI book; logic books.
+- [2025-03-31 08:03:53] : @task finish the prepatarion of the testing tool for sigef.
+- [2025-03-31 08:03:45] : @open work day
+- [2025-03-30 23:33:28] : @close work day; and weekend happy with the result.
+- [2025-03-30 20:35:55] : @action register language systems technology books in thesuarus; link with notes in bycode vm.
+- [2025-03-30 18:15:16] : @action Create a smal lvirtual machine [DONE WITH THE HELP OF CHATGPT I SHOULD SAY]
+- [2025-03-30 12:01:52] : @note on modularization; a file it's  itself a modularization primitive.
+- [2025-03-30 11:42:49] : @action refactor the progrrmming language study guide.
+- [2025-03-30 10:21:55] : @task work on refactorization.
+- [2025-03-29 17:55:01] : @close work day
+- [2025-03-29 13:11:46] : @task create a catalog of programming techniques; and replace a programing technique for a programming pattern.
+- [2025-03-29 12:33:04] : @action pago iternet.
+- [2025-03-29 12:17:10] : @action add the literatire review to firefox.
+- [2025-03-29 12:16:32] : @action adding a represention sense in the guide to study programming languages.
+- [2025-03-29 12:06:42] : @connect closuwer with jepsen; distributed software verification tool.
+- [2025-03-29 11:45:32] : @action add an entry to clojure. 
+- [2025-03-29 11:04:57] : @task mejorar info pagos prestamo l.
+- [2025-03-29 10:57:18] : @taks today goals: jepsen (testing tools); Pago L Converdolres;  Agregar Listo de Copras de Libros Firefox;  Java Instrumentation (Hacer Vario Pom Varios Jars / Modulos)
+- [2025-03-29 10:56:14] : @open work day
+- [2025-03-28 23:54:23] : @close work night
+- [2025-03-28 23:53:19] : @action move java-agent to cs-analysis tools.
+- [2025-03-28 23:25:12] : @task improve bytecode entry.
+- [2025-03-28 23:24:53] : @learn a bit a bout byte code compability  - asm version.
+- [2025-03-28 20:32:30] : @task trying to think trought the implementation of java agents; and how to make a class visible; to the boostrap namespace.
+- [2025-03-28 19:30:34] : @note learning about java code reslution
+- [2025-03-28 18:37:39] : @task improve "Concurrency Control Methods" taxonomy.
+- [2025-03-28 18:35:49] : @task convertir pagos luis a dolares.
+- [2025-03-28 18:32:44] : @open work night
+- [2025-03-28 16:30:28] : @close finish work day 
+- [2025-03-28 10:46:52] : @note el sr p.d no tiene derecho a quejarse del trabajo remoto; hoy se nego a poner la imagen de protesta.
+- [2025-03-28 09:18:09] : @note should i introduce an entry in programming languges to metacomputation; or ni toolbox?
+- [2025-03-28 09:04:03] : @task (SGF-10344) work on ticket; it will require it; some knoweldge increment of my part of java instrumentation.
+- [2025-03-28 09:03:40] : @open work night
+- [2025-03-28 02:36:27] : finish work day
+- [2025-03-28 01:49:35] : @task generaet a minimal set of questions;  that is neccesariy and suficiente to explore the scope.
+- [2025-03-28 01:21:18] : @note sinse the virtual table is mangle;  we have to learn about it.
+- [2025-03-28 00:43:13] : I have seen for the first time the vtable (virtual tables) in c++.
+- [2025-03-27 23:50:56] : @task trying to understand the concept of a v-table in cpp.
+- [2025-03-27 23:15:34] : @note ow to name a set of interacting actors? Is this a system? I believe that the word system; the word cmoplex system denotes the idea that i have in mind; but i believe it's an abuse of the word system.
+- [2025-03-27 23:13:42] : @action write a guide on the philosophers toolbox,
+- [2025-03-27 22:28:27] : @task refacto entry on a guide to ask questions.
+- [2025-03-27 22:27:57] : @open work night
+- [2025-03-27 16:46:19] : @close work day
+- [2025-03-27 16:45:07] : @action finish the ticket (SGF-10340); i take too much time because; it was hard to deploy contabilidad; error aspjectj.
+- [2025-03-27 08:44:42] : @open work day
+- [2025-03-27 01:57:44] : @close working night
+- [2025-03-27 01:57:24] : @note some notes about the solar system; and celestial mechanics.
+- [2025-03-27 01:08:54] : @note  a deep dive into the dimensions of understanding; and how unerstadnign  build reference systems in our frame; to parse and communicaet reality.
+- [2025-03-27 00:43:36] : @note deep dive into calendar; and the profound idea of reference system; reference frame, etc.
+- [2025-03-26 17:41:11] : @start working night
+- [2025-03-26 16:48:17] : @close work day
+- [2025-03-26 15:39:34] : @action cearch more info on "https://en.wikipedia.org/wiki/Orbital_mechanics"
+- [2025-03-26 11:41:04] : @action improve the note on cpu; performance counters; etc.
+- [2025-03-26 11:40:35] : @action add entry to linux; on which services; api are provided  by the kernel; to trace and monitor the system.
+- [2025-03-26 11:40:03] : @action a a guide to study computation systems; add this to HPS/Analysis.
+- [2025-03-26 11:39:40] : @action add latency entry; with latency  numbers that i should know
+- [2025-03-26 11:38:01] : @action install netdata (http://localhost:19999)
+- [2025-03-26 11:29:10] : @note i dig to deper on performace;  heppes before semantic specs; performance issues cataloc; etc.
+- [2025-03-26 08:43:19] : @action add a section to note on performace counters.
+- [2025-03-26 08:42:06] : @action create a note on cpu tracing & monitoring facilities. 
+- [2025-03-26 08:29:26] : @note working on CPU Performce Characterization
+- [2025-03-26 08:15:44] : @open work day
+- [2025-03-26 01:36:14] : finish work night
+- [2025-03-26 01:34:47] : improve the analysis; notes.
+- [2025-03-25 23:20:43] : worknig with the book "Jain, R. (1990). The Art of Computer Systems Performance Analysis. John Wiley & Sons."
+- [2025-03-25 22:28:34] : @open work night
+- [2025-03-25 15:54:46] : @i tried perf; but they where not realtime; and in the report i was not able to find some function; mapping issues.
+- [2025-03-25 14:38:54] : @note i could not make systemtap work.
+- [2025-03-25 13:50:32] : @task check systemtap.
+- [2025-03-25 13:49:50] : @note gcc -gp is not real tim; we need to way the finish/program in order to see the metrics.
+- [2025-03-25 12:53:00] : @note iam adding a note on profiler.
+- [2025-03-25 10:00:20] : @taks start working on analysis.
+- [2025-03-25 09:58:06] : @note the registration of the working day; was a litle bit late; i was giving axistance to testing.
+- [2025-03-25 09:57:58] : @start working day
+- [2025-03-24 23:41:41] : @close work day
+- [2025-03-24 23:41:29] : note: i should start working seriously on software analysis.
+- [2025-03-24 23:01:58] : @action improve the category of tools & libraries buiding blocks of computational systems.
+- [2025-03-24 23:01:50] : @action improve the notes on php.
+- [2025-03-24 17:14:42] : @actiohn add a link  / set of programming langauges to; models of computation.
+- [2025-03-24 16:57:26] : @action finish refactoring model of computation. I did a great job.
+- [2025-03-24 12:03:56] : @task big refactorign to "Models of Computation"
+- [2025-03-24 12:03:40] : @open start working day
+- [2025-03-24 00:35:41] : @close work day
+- [2025-03-24 00:35:28] : @note finish a great organization on coordination.
+- [2025-03-23 12:23:04] : @note create a coordination reading list.
+- [2025-03-23 12:12:38] : @note i am working on multi process coordination 
+- [2025-03-23 11:17:19] : @open work day
+- [2025-03-23 00:43:06] : @close end work day
+- [2025-03-22 23:53:37] : @action add a note on f-coalgebra a model of the object oriented system.
+- [2025-03-22 23:32:03] : @task creaet a guide to debug others peoples minds.
+- [2025-03-22 23:05:15] : @note i came up with the name "Time Reference System"; for capturing the idea ofa  system to measure time; the name was already coin for the same idea. Great stuff.
+- [2025-03-22 22:17:49] : @note "Experience and thought are rudimentary forms of understanding"
+- [2025-03-22 20:12:58] : improve a bit the times notes.
+- [2025-03-22 19:46:10] : @note how to fix systems; this is ve yinteresting;  very general; and very strategic; that will trully help integrate all my knowledge.
+- [2025-03-22 17:51:35] : @action create a liteature review on causality
+- [2025-03-22 17:50:02] : @task write a guide about improving computatioal systems in a principled way
+- [2025-03-22 17:13:40] : @task reasonng a bit about causal models; intervention.
+- [2025-03-22 16:13:58] : @task improve computer system aluaton emtrics taxonomy
+- [2025-03-22 13:05:24] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579) write a guide about paper publishing; typeopgrapy; .. document design? i dont know how to name it yet.
+- [2025-03-22 11:58:25] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579) which type of software is related with the internationalization process.
+- [2025-03-22 11:45:26] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579) add an entry in miscelanea dbremont github; about typography & internnationalization.
+- [2025-03-22 10:28:07] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579) refactor the general representation text/data; move the ml details to computational representation; ml.
+- [2025-03-22 10:27:19] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579) all of my knowledge of text; should be resume in the document of typography.
+- [2025-03-22 10:21:48] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579)/ What font redenring library is used in python/zsh/kitty interaction?
+- [2025-03-22 10:19:04] : @task(aeedfc83-a61a-47fa-b6a8-351085d41579)  improving my textual representation notes.
+- [2025-03-22 09:45:12] : @task representation/numeric/ieee 754; take notes.
+- [2025-03-22 09:19:38] : @open work day
+- [2025-03-22 02:08:45] : @close work night
+- [2025-03-22 02:08:28] : @action improve notes on numeric represenation.
+- [2025-03-22 00:25:14] : @action create a guide on list of cs system benchmarks
+- [2025-03-22 00:24:06] : @action create an entry for Python computational system performace analysis.
+- [2025-03-21 20:46:59] : @open work night
+- [2025-03-21 16:30:04] : @close work day
+- [2025-03-21 16:25:37] : tryign to reason about msgpack;
+- [2025-03-21 13:52:02] : @task how to parse log files?
+- [2025-03-21 13:36:13] : note neo4;  just used modify sql; in postgress; it can handle the graph data model. 
+- [2025-03-21 12:48:50] : @action create a guide to "A Guide to a Production Observability System"
+- [2025-03-21 11:53:13] : not; SGF-10329 para el ticke; una conversion del lote; quedo en estado no final; y por eso no se permitia agregarlo en otro coprobante.
+- [2025-03-21 11:52:04] : note (SIR-673) para el ticke;  me equivoque no supe leer el historico de commits; y a partir de este inferi discrepancias entre branch y tag; cuando no la habia. Por eso es recomendable hacer compare.
+- [2025-03-21 08:24:16] : @task check "SGF-10329" and "SIR-673".
+- [2025-03-21 08:20:08] : @open work day
+- [2025-03-21 00:32:18] : @close work night
+- [2025-03-21 00:07:53] : @action add some info to react entry
+- [2025-03-21 00:06:55] : note reason in very technical sense about; the relation of mental models - programs - process=;  captuing the deep meaning of being an efficient problem solving.
+- [2025-03-20 22:44:18] : note i make some serious problem visuliaing ; and mental modelling the coin change probem dp  solution. I improve the naming;
+- [2025-03-20 17:33:27] : @open work night
+- [2025-03-20 16:40:15] : @close work day
+- [2025-03-20 16:40:00] : @action corergir error montos - sirite - 20250320-sir-673
+- [2025-03-20 09:58:35] : @action take some notes about logic; structural rules; sub structural logic systems.
+- [2025-03-20 09:50:38] : @action reasong and take notes about python debugging.
+- [2025-03-20 08:26:57] : @open work day
+- [2025-03-20 00:53:38] : @close work night
+- [2025-03-20 00:52:40] : note: In this night I  continue trying to understand the "Coin Change Problem' algorithm; I did not finish; but improving. I make some notes about how to study algorithms;  and other notes about diffusion process.
+- [2025-03-20 00:52:02] : A way to improve my knowldge of science; is to take problems that are computaitonal; mathematical about a real process
+- [2025-03-19 19:54:43] : @open work night
+- [2025-03-19 16:26:32] : @close work day
+- [2025-03-19 16:20:49] : I make some progress; an i reflection that in order to follow an algorithm; i have to look at the state of the computaton; understand it's meaning; how how the dynamics of the algorithm; wil lead to the solution.
+- [2025-03-19 16:20:10] : i spend the  day trying to understand the algorith of coin change; in it's dynamic programmgni form.
+- [2025-03-19 15:44:19] : @action finish "SGF-10329" 
+- [2025-03-19 08:05:32] : @note I should used Audio Processing; as a Way to learn more advanced math; improve my basic math concepts;
+- [2025-03-19 08:04:11] : @open work day
+- [2025-03-19 02:36:50] : @close work night
+- [2025-03-19 02:35:39] : note i have work inthe Change-making problem;  related to linear combinations, diophantine equations, combinatorial optimization etc. I need to continue deepening & compacting my knolwdge of the problem solving methods.
+- [2025-03-19 00:04:39] : @task work on the "Change-making Problem"
+- [2025-03-19 00:04:25] : @open working night
+- [2025-03-18 16:30:25] : @close work day
+- [2025-03-18 14:37:19] : @action create an entry on the deep ideas of dimension.
+- [2025-03-18 13:22:33] : @task think deeply about system/interface error messages quality.
+- [2025-03-18 13:09:19] : @task add a note on the notion and langauge dis. for dimension.
+- [2025-03-18 12:55:51] : @task investigate infinite dimensiontal spaces; thelos; ethos; tecne. What is the notion of dimension here? Does the notion of 
+- [2025-03-18 12:54:52] : @task change the name of vector space -> to linear space; because some vector spaces may be non linear.
+- [2025-03-18 12:51:53] : @task study vector space; span;  matrix span -> column space; row space;  null space; left null space.
+- [2025-03-18 11:42:34] : @action create a very deep connection between; Modelling Case Studies; and Modellin; (Computational Science, etc).
+- [2025-03-18 09:45:07] : note very deep dive into type: variance, the idea of monotonicity (how to used it to reason and build distributed system; if in only learn this today; my day is done; such a beautufyl idea; apply in many contexts.
+- [2025-03-18 09:45:00] : @open work day
+- [2025-03-17 16:41:55] : @close work day
+- [2025-03-17 14:10:48] : @action create an entry on experssions and operator order of evolution.
+- [2025-03-17 13:52:12] : @action create a guide on "Abstract Algebra in Computer Science"
+- [2025-03-17 11:49:50] : @action crete a a guide on "Mental Model Refactorin" 
+- [2025-03-17 10:38:44] : @action create several intros in  glosarim.
+- [2025-03-17 09:45:35] : @task write a guide about "Mental Model Refactoring"
+- [2025-03-17 09:05:15] : @action pay the house month rent.
+- [2025-03-17 09:01:21] : @task pay the house month rent.
+- [2025-03-17 09:00:42] : @report i have done the previous tasks.
+- [2025-03-17 08:51:50] : @task remove proclamatio aeconomica from bremontix/algorithms.
+- [2025-03-17 08:48:25] : @task add the Journal of Operation Research to Thesaurus.
+- [2025-03-17 08:32:55] : @task create a github rep; model after dbremont/algorithms for quantiative management.
+- [2025-03-17 08:31:35] : @open work day
+- [2025-03-15 21:37:47] : @close working day
+- [2025-03-15 21:18:59] : @action finish merging AspectJ with systems stuyds lab.
+- [2025-03-15 12:53:07] : @task finish refactoring of aspeject notes; adding the  book  "AspectJ In Action" reference.
+- [2025-03-15 12:51:46] : @task AspectJ to the analysis labs.
+- [2025-03-15 12:51:26] : @make a list of the papers and books to print in sunday
+- [2025-03-15 12:51:20] : @buy books
+- [2025-03-15 12:51:04] : @open work day
+- [2025-03-15 00:37:05] : @close work night
+- [2025-03-14 23:55:05] : @tratar de obtener informacion tipo empresa de papi.
+- [2025-03-14 23:10:29] : @action create several aspject aspects of @action create several aspject aspects of examplee
+- [2025-03-14 22:11:47] : What is the meanign of an app in linux running in the context of an user?
+- [2025-03-14 21:51:52] : @action merge cs tooling guide to "A Guide to a Guide on X Computational Systems Implementation"
+- [2025-03-14 20:15:23] : @task work on AspectJ - trying to  re-produce errors of weaving - on certain ordering of the files.
+- [2025-03-14 18:22:22] : START working night.
+- [2025-03-13 13:59:52] : @action crate a guide on the creation of java computational system.
+- [2025-03-13 13:50:24] : @action crate a guide to "A Guide to a Guide on X Computational Systems Implementation" - similar a guide to study programming languages.
+- [2025-03-13 13:38:27] : @action create benefiario validatoni for ticket (SGF-10263); done at the level of nomina.
+- [2025-03-13 11:02:37] : @task workign on cheking a crazy failure while registering a provider.
+- [2025-03-13 08:44:12] : @task working (SGF-10263) on funcionario validation.
+- [2025-03-13 08:43:57] : @open work day
+- [2025-03-13 01:26:22] : @end work night
+- [2025-03-13 00:07:35] : @task read the paper "support-vector networks'.
+- [2025-03-13 00:00:14] : @action create an entry to explore agentic systems in bremontix ars.
+- [2025-03-12 23:25:01] : @action add entry to bremontix ars - on choosing papers to read.
+- [2025-03-12 22:35:42] : @action guradar factura de connected papers in sha1sum name - in dropbox.
+- [2025-03-12 22:26:43] : @future  How to update my literature in computer science systematically.
+- [2025-03-12 22:22:01] : @action clean literature review in Bremontix.
+- [2025-03-12 21:29:57] : @action add entry to Bremontox Ars in low-latency software design.
+- [2025-03-12 21:29:35] : @action add entry to Bremontix Ars in fault-tolerant design.
+- [2025-03-12 21:25:19] : move "2024-V1: House Improvement" to Historico.
+- [2025-03-12 21:05:30] : @start working night 
+- [2025-03-12 16:43:39] : move telecoms papers & boosk to evalute from bremontix to telecom review.
+- [2025-03-12 15:19:30] : @action trying to get help with the ticket SGF-10263; could not. So let's try tommorrow.
+- [2025-03-12 13:54:10] : task  working on ticket (SGF-10314).
+- [2025-03-12 07:08:42] : @note reflection on how to choose papers to read; add  a heuristic; using knowldge gain.
+- [2025-03-12 07:05:06] : @action add Ilya Sutskever' papers recommendations to Carmack.
+- [2025-03-12 07:04:30] : open work day
+- [2025-03-12 05:56:40] : close work night; without work; i sleep all night
+- [2025-03-11 18:31:20] : open work nigh open work night 
+- [2025-03-11 17:01:40] : close work day.
+- [2025-03-11 17:00:52] : @action remove hpc; create an entry fo hps: study hr; algo; .. bulding bloacks for highly performace systems.
+- [2025-03-11 14:29:56] : dañe todo el trabajo para "SGF-10314"
+- [2025-03-11 14:22:40] : check failed in "SGF-10253"
+- [2025-03-11 13:58:05] : @task explore sigef java language source encoding problem.
+- [2025-03-11 13:20:25] : should i crate a performade pervatium; how to build fast systems; in linux; or how to make the most from hardware; from first pricniples -> hardware characterization -> ... HPC -> High Performace Computing !!!
+- [2025-03-11 12:51:09] : should very piece of text; should be out of the application.
+- [2025-03-11 09:26:26] : @task create literature review in many in the below fields.
+- [2025-03-11 08:55:08] : @task gather a collection of computer science: disributed systems, compiler, interpreter, jit compilers, dabases, etc.
+- [2025-03-11 08:53:06] : @note yesterday; i did not close the work day properly; but in home i was able to install the paper's place.
+- [2025-03-11 08:52:53] : @open work day
+- [2025-03-10 17:05:11] : @action on (SGF-10314) -> improve spacing in ach 
+- [2025-03-10 15:07:24] : @task start working on ticket (SGF-10314).
+- [2025-03-10 11:32:33] : @action finish ticket (SGF-10313)
+- [2025-03-10 11:32:21] : @open work day; 
+- [2025-03-09 21:20:11] : @close of the work day
+- [2025-03-09 11:38:50] : should i merge sysetms, philosophy, and epistemology? Yes; because my goal of study philsopy; is only realtey  with metaphysics and epistemology  of reality.
+- [2025-03-09 10:56:49] : @note how to acces to env variables from assembly?
+- [2025-03-09 10:37:03] : @note can i merge simulation with numerical computation?
+- [2025-03-09 10:08:32] : @acton merge csiglab/econmodels with modellarium.
+- [2025-03-09 10:02:57] : @action remove repo csiglab/econometric
+- [2025-03-09 10:02:40] : @action remove repo csiglab/arbitrista
+- [2025-03-09 09:45:52] : @open work day
+- [2025-03-09 00:56:13] : @close work day
+- [2025-03-08 23:52:12] : @action add some models case study; gather some data; make model; this should be necesarilly be under natural systems; or  other area of study; becuase is not that relevant; or add uncesiarlly details; but it's a usefull practice to connect with modelarium. 
+- [2025-03-08 23:21:57] : @action take a very deep dive in physics;  electromagnisms; and related areas; turn that that electromagnism is pillar or reality;
+- [2025-03-08 13:45:59] : @action mege telecom and networking.
+- [2025-03-08 12:59:47] : @merge telecom and networking.
+- [2025-03-08 12:50:02] : @note working on networking now.
+- [2025-03-08 12:48:30] : @action create  a discent note on dpkg.
+- [2025-03-08 11:55:30] : @task add a note on dpkg; or update it.
+- [2025-03-08 11:53:48] : @open worknig saturday: reading saturday
+- [2025-03-08 03:46:27] : @close working night
+- [2025-03-08 03:45:47] : @action simplify isa_labs
+- [2025-03-08 00:13:26] : Note: I am cleaning a litle bit distracted.
+- [2025-03-07 22:33:45] : @open work night: goals finish chapter 2 freebsd book; advanced in the isa-labs refactoring-reconversion problem.
+- [2025-03-07 16:52:29] : @task SGF-10313  -  
+- [2025-03-07 15:39:24] : @action create an entry on graph processing.
+- [2025-03-07 15:13:01] : @action sepearte visualization.
+- [2025-03-07 14:42:23] : @task write about graph processing.
+- [2025-03-07 14:40:45] : @task improve log entry. 
+- [2025-03-07 14:40:09] : @action improve logs processing notes.
+- [2025-03-07 10:43:50] : @create a guide to long term informatio storage.
+- [2025-03-07 10:41:12] : @create a small python http service; in linenode.
+- [2025-03-07 09:45:30] : @action add theory of light in computer graphics.
+- [2025-03-07 09:45:09] : @taks check the progress of testing with the ticket (SGF-10164)
+- [2025-03-07 09:44:22] : @open workday: i forget to open it; in the morni; but it is fine.
+- [2025-03-07 00:57:02] : mostly productive work night; not that much twitter; and other stuff. I am beginnig to hate watchign videos (gracias a dios)
+- [2025-03-06 22:06:18] : @task  read the paper "On the criteria to be used in decomposing systems into modules"
+- [2025-03-06 21:54:34] : @task trying to accomplish refactoring of isa-labs and continue reading the book on  design and implementation of the freebsd operating system book.
+- [2025-03-06 21:54:19] : @open work night.
+- [2025-03-06 16:47:37] : @close work day
+- [2025-03-06 16:12:05] : @action add the book "Lessons In Industrial Instrumentation".
+- [2025-03-06 16:11:13] : @action oracle did not support many values inser; how incredible; at least the version that we used.
+- [2025-03-06 14:17:39] : @action create note on emulators.
+- [2025-03-06 14:13:48] : @task work on isa-labs.
+- [2025-03-06 10:00:35] : @notes advaced in some hardware studies.
+- [2025-03-06 09:38:28] : @note the ticket (sgf-10263) was correct.
+- [2025-03-06 08:23:41] : @open work day; let's see what can we do with some ticket (sgf-10263)
+- [2025-03-06 02:31:47] : @close work night; os, hardware, telecom, physics of telecom,  x86, intermedia representation, ...
+- [2025-03-06 01:47:35] : Which are the criterias used to decide which things will be log?
+- [2025-03-06 01:27:15] : @action register defeat reading the book "Adorno, T. (2005). Minima Moralia: Reflections from Damaged Life. Verso. "
+- [2025-03-06 00:26:57] : note: reusing/ a database connection in another process; is just re-using the file descriptor in another process; or the same process; using only the OS for more generality. Becuase if it's in the same process; you just can share it manually; or to some automated program transformation to do it.
+- [2025-03-05 22:08:27] : @open work night.
+- [2025-03-05 17:16:29] : finish very bad day; many ticket failures.
+- [2025-03-05 15:59:28] : The ticket (SGF-10928)  was more complicated then we thought; now were are experimenting problems; 
+- [2025-03-05 11:42:50] : @task verificar monitor sirite:  MonitorConciliaArchivoRecaudacion.
+- [2025-03-05 11:38:02] : task: check the ticket SGF-10298.
+- [2025-03-05 09:10:39] : task: check ticket 20250213-sgf-10263.
+- [2025-03-05 09:09:32] : @action improve the question related to file systems.
+- [2025-03-05 08:09:32] : @start working day.
+- [2025-03-05 08:07:09] : sinse i did not register tonight works: i was able to build the kernel (using linux /boot - uname -r) kernel + build an image using some google tool. I did also explore some raw file serer; unounded; it's just a blob.
+- [2025-03-05 08:03:49] : @close tomorow day
+- [2025-03-04 16:27:36] : should i explore more dapr?
+- [2025-03-04 16:26:54] : @action create a functional model of computation.
+- [2025-03-04 16:01:44] : @action create a note entry on distributed databases.
+- [2025-03-04 15:41:49] : learn about division operator, rates, ratio, etc. relation to marginalisn in economics; differential operator (calculus) / differental calculus; geometry; and the history of ideas.
+- [2025-03-04 14:52:09] : Space distribution of agencies in the Hacienda Edification.
+- [2025-03-04 14:32:44] : How can I localize the suggestions / autocomplete in zsh per directory? This is not salable
+- [2025-03-04 14:24:45] : @action written a descent treaty on states; natural; enginer; naming criterias;  criteria to represent conditions; etc.
+- [2025-03-04 13:31:00] : @action improve the notes on semantics, formal specifition and formal verification.
+- [2025-03-04 12:04:20] : @task continue with state; and modelling.
+- [2025-03-04 12:02:38] : @action finish the tas(20250210-sgf-10253).
+- [2025-03-04 11:38:15] : @task in ticket 20250210-sgf-10253; keep only the rules that ban x-x exchange rate registration.
+- [2025-03-04 10:48:09] : @think about the state of and objec; representation; and how to name states.
+- [2025-03-04 10:33:13] : @task improve the definition of monad.
+- [2025-03-04 10:10:18] : @action add book "Manual de Cadenas Productivas"
+- [2025-03-04 10:04:02] : @action add book  Human Knowledge: its scope and limits
+- [2025-03-04 10:03:46] : @action add the book of historia de las formas polticas.
+- [2025-03-04 09:59:09] : @action add a profile of marx weber.
+- [2025-03-04 09:56:41] : @action add "Weber, M. (1962). Basic concepts in sociology. Citadel Press."
+- [2025-03-04 09:56:27] : @action add book "Weber, M., Roth, G., & Wittic, C. (1978). Max Weber economy and society. CA: Berkeley, University of California Press."
+- [2025-03-04 09:51:20] : @action add Eliezer Yudkowsky; to Catálogo de Persoans.
+- [2025-03-04 09:47:09] : @action "Yudkowsky, E. (2015). Rationality: from AI to zombies. Berkeley: Machine Intelligence Research Institute.".
+- [2025-03-04 09:45:36] : @action finish a guide to enerprises.
+- [2025-03-04 09:40:23] : @action finish a guide to the social studies.
+- [2025-03-04 09:15:57] : @task write a guide to the enterprise.
+- [2025-03-04 09:14:17] : @task write a guide to social sciences; to only concentrate on social-economic systems.
+- [2025-03-04 09:11:02] : @action registrado exclusio lista de empleado estrella.
+- [2025-03-04 09:03:31] : @start of the work day.
+- [2025-03-04 03:28:03] : @end of work day.
+- [2025-03-04 03:14:17] : @action task(3c6e68a1-262f-4038-9aa1-04a100680718)/path(7ef099ff-3230-4cf0-85d1-f958d2d99ffd): try to copy my ubuntu kernel config;  have to do and update to that config; so it is an agreement with the new kernel sources. I consulted with the requireements,  well the path also failed !!! Let's continue tomorrow; and make sure that you come back with more knowledge.
+- [2025-03-04 00:18:29] : @follow task(3c6e68a1-262f-4038-9aa1-04a100680718)/path(7ef099ff-3230-4cf0-85d1-f958d2d99ffd) 
+- [2025-03-03 18:04:23] : @start working from home. Le escribi a luis sobre el prestamo; y organize alguna informacion de este.
+- [2025-03-03 16:58:36] : @action improve linguistic abstraciones note with modelling function  modeling date; data types  computatoin or function type.
+- [2025-03-03 15:32:28] : @task what type of pattern or code organization technique is Consumer in Java.
+- [2025-03-03 14:08:28] : @action deliver the letter; there was not objection.
+- [2025-03-03 13:27:14] : @action write document about my exclusion of the empleado estrella price.
+- [2025-03-03 12:53:22] : @task create a groovy profile.
+- [2025-03-03 12:52:44] : @action add some notes to thesaurus.
+- [2025-03-03 12:09:27] : Seria conbeniente tener una forma de rastrear los cambios a una coneccion; y poder ejecutar consultas en la misma; para verificar los cambios no commited
+- [2025-03-03 12:08:56] : Se logro re-aprobar el formulario y rechazar la factura del mismo.
+- [2025-03-03 09:23:59] : @task Work on uepex document.
+- [2025-03-03 09:19:31] : I recover the documents. Juan Carlos found them. Let's be more systematic; and put the document in there place; so i can reduce the amound of time needed to acknowledge that i lost the document.
+- [2025-03-03 09:18:45] : start work day.
+- [2025-03-02 21:50:07] : the end of this weekend is weekend in which i lost money and all my documents.
+- [2025-03-02 17:50:59] : @action @task(fc95496b-f4a6-43ea-839a-9fecc2fcea14) done.
+- [2025-03-02 14:49:57] : @task write a guide about knowledge evaluation;  and how to speak about things that you don't know?
+- [2025-03-02 14:42:29] : @task(fc95496b-f4a6-43ea-839a-9fecc2fcea14) thinkg about understnding things; as multiple layer of abstraction; ..
+- [2025-03-02 14:30:26] : @task make a guide for the languge used; like iniframfs; is not a filed system; the qemu gdb; is not gdbserver; but a qemu implementatino of the protocol; etc.
+- [2025-03-02 14:17:39] : @action enviar mensaje respuesta luis sobre persoald e odoo.
+- [2025-03-02 12:53:51] : @task supermarket buys.
+- [2025-03-02 12:15:41] : @action created method for naming recu-rring projects- [2025-03-02 11:58:25] : @action escribi a pipa para llamar a guelo.
+- [2025-03-02 11:58:25] : @action escribi a pipa para llamar a guelo.
+- [2025-03-02 11:57:52] : @Working sunday.
+- [2025-03-02 00:54:19] : This day was complicated; i did failed to debug linux; but take nodes; improve the logging system; waste some time too; maybe too much; fuck the internet(or just me); end this.
+- [2025-03-01 22:49:01] : Improve the  personal log system; adding identifiers to tasks.
+- [2025-03-01 21:58:08] : @action add info about pkg-config.
+- [2025-03-01 19:29:20] : @task(3c6e68a1-262f-4038-9aa1-04a100680718) Debug linux kernel.
+- [2025-03-01 18:40:25] : @todo write a guide to the social sciences;  in the spirit of simplification.
+- [2025-03-01 18:39:18] : I don't wnat to have a lot of financial analysis - in Bremontix Ars; make the most useful ones as guides.
+- [2025-03-01 18:20:33] : I have try so many things; failed. Learn somethign about logging failures; task ->  goal; path1 -> ... -> result; How to model this in paper?
+- [2025-03-01 10:18:08] : @task try to debug linux once and for all.
+- [2025-03-01 10:09:18] : Open work day; continue with Linux Kernel.
+- [2025-03-01 02:14:00] : Failed again; but continue; until sucess
+- [2025-02-28 23:32:10] : Why some places of the kernel must be compile with optimization?
+- [2025-02-28 21:47:15] : @note this is horrible; i have been trying to install things.
+- [2025-02-28 20:03:02] : @action transferi 1 400 000; a papi por compra de solar; esperando el recibo final a ver cuando me falta' tengo el 50 perc; de la propiedad.
+- [2025-02-28 19:49:43] : @taks how visudo works.
+- [2025-02-28 19:40:25] : @action send info to ariel in order to gather information about properties prices.
+- [2025-02-28 18:27:33] : @action take note on the initrd method.
+- [2025-02-28 17:25:21] : @action start the working night section.
+- [2025-02-28 16:22:02] : @action finish program/process modification.
+- [2025-02-28 15:51:40] : @action create more taks about distributed stated.
+- [2025-02-28 11:50:43] : @action encontre un buen simil en castellano para la palabra inglesa snipet; fragmento; recurso literario, mero literario, syntagma.
+- [2025-02-28 11:39:41] : @action commit ini; mensajeria extention.
+- [2025-02-28 11:06:56] : @task convert a webp; to icon16.png, icon48.png, icon128.png
+- [2025-02-28 10:00:10] : @task create template for formal meesages in Microsoft Teams.
+- [2025-02-28 09:59:48] : @action; mejorar notas de fpt.
+- [2025-02-28 09:32:19] : @task create intro for fpt : clien; server, etc:.
+- [2025-02-28 09:08:22] : @action complete "Langauge System + Formal System".
+- [2025-02-28 08:48:08] : @task improve the knowledge based entry. 
+- [2025-02-28 08:47:40] : @action create a stub method in Instrumentation.
+- [2025-02-28 08:47:03] : @task  move the content of "Language System + Formal System" to Languge System.
+- [2025-02-28 08:17:11] : @action clean Bremontix; Historical 'Projects'.
+- [2025-02-28 08:16:36] : @action open work day. 
+- [2025-02-27 21:28:58] : end of working day.
+- [2025-02-27 16:52:34] : @action an xv6; copy.
+- [2025-02-27 15:58:23] : @action "System V Application Binary Interface
+- [2025-02-27 15:49:17] : @create mini diss.
+- [2025-02-27 15:38:48] : @action create a small diss using a framework capstone.
+- [2025-02-27 15:30:34] : @task create a small dissambler; first used castom; letter alone.
+- [2025-02-27 15:17:47] : @action add a dissamsebler objdump.
+- [2025-02-27 15:17:34] : @action add a linker
+- [2025-02-27 14:57:03] : @action migrate tracy lab to analysis lab .
+- [2025-02-27 14:35:38] : @task document & migrate the example to analysis labs.
+- [2025-02-27 14:35:05] : @action i was able to compile tracy server; instrument a litle arithmetic server; and see it.
+- [2025-02-27 09:54:07] : @task make the guide of c language; compatible with my language study template.
+- [2025-02-27 09:42:31] : @task libc; and their implementations; source code, etc.
+- [2025-02-27 09:22:43] : @remember How to edit binary files; bin utils guide; elf utils guide; buy a file system book; how to list the dependencies in a elf file; what is a statistically link vs dynamically link elf file. How to list statically link file; how to debug an elf file; with independnet debug symbols; create a better environment for gdb debug; reasong to learn gdb (sometimes software is too large that other programs collapses; maximum flexibility);  code of a dissamsebler; code of a linker; c profile; go runtime; go elf files; c elf files; xv6 run in qemu; qemu improvements; libc source code; and notes; groovy notes; how to list the size of a program regions; like executable memory.
+- [2025-02-27 09:22:18] : Open Work Day.
+- [2025-02-26 17:30:12] : @remember to create  a mechanism to save json files for our api.
+- [2025-02-26 15:11:39] : @task continue with ticket (SGF-9982); it failed becaused i need the json for the contrato testting.
+- [2025-02-26 14:51:49] : @action finish previous task.
+- [2025-02-26 14:10:20] : @task Move all the web sercvers / backend frameworks to multi-node processing system.
+- [2025-02-26 14:08:53] : @action  create a new entry in computation; called multi-node processing system: merge distributed system and processing system here.
+- [2025-02-26 13:38:32] : @action/failed to install jenkins because the our central repo; problems.  http://172.16.7.40:8080/repositor
+- [2025-02-26 13:38:12] : @action created some actually great notes about jenkin.
+- [2025-02-26 10:31:16] : @action cancel the project reduce the velocity of a given domain; but certain elements of the projects were accomplish; like improving the nerwork notes; network control taxonomy; etc. 
+- [2025-02-26 10:30:33] : @idea Add some draft to network labs and performce labs adding networks tools to control the network bandwtih and other performace parameters.
+- [2025-02-26 10:29:53] : @idea Add some draft for a project for the sigef analysis tools.
+- [2025-02-26 10:02:13] : @action Create repo for lab of estudios hispanicos  / https://github.com/csiglab/lab-estudios-hispanicos.
+- [2025-02-26 09:53:03] : @task   (SGF-9982) Check the ticke; they were checking on wrong data. But the service; are able to udpate this data.
+- [2025-02-26 09:11:50] : @task   Create a history la; repo/ see Bremontix Laboratorio.
+- [2025-02-26 09:11:19] : @action Crate a guide to read biographys.
+- [2025-02-26 09:10:44] : Start day.
+- [2025-02-25 17:05:36] : @action finish work day.
+- [2025-02-25 15:48:15] : Remove reflexio notion; and from 1password.
+- [2025-02-25 15:45:12] : Remove github account arbitrista y reflexio; move the content to csiglab.
+- [2025-02-25 15:04:50] : Move Bremontix Args Brevariums to 'Laboratorim Personalem'
+- [2025-02-25 13:21:48] : Create a personal lab "Laboratorium Personale" to auto study; replace B Reflection.
+- [2025-02-25 11:37:36] : @remember create a tool to add to this notes; the next day wheater forecast. 
+- [2025-02-25 11:31:57] : @learning adding a taxonmoy of sentences (oraciones).
+- [2025-02-25 11:06:16] : Verificadndo la retro-alimentacion del ticket SGF-10263; nunca se hablo de botones.
+- [2025-02-25 11:00:11] : Termine de trabajar el ticket sgf-10253.
+- [2025-02-25 10:28:00] : Me rendi; intentado explicar que "NO hay registro vinculado"  !=   "todos los registros vinculados están anulados".
+- [2025-02-25 10:11:49] : @working ticket sgf-10253  - permitir anular tickets.
+- [2025-02-25 09:56:15] : @working Mejorado ticket SGF-10253.
+- [2025-02-25 08:48:02] : @working Organizing tickets.
+- [2025-02-25 08:45:34] : STAR: @working Organizing tickets.- [2025-02-25 08:40:43] : I failed to end the day.
+- [2025-02-24 15:48:13] : In ther morning I did not have DB Access; In the afternoon; I am working on the Monegro Recovery Ticket.
+- [2025-02-24 15:47:37] : START Day; Well a little bit late;
+- [2025-02-21 16:08:00] : Finish working day.
+- [2025-02-21 15:46:28] : Add network parsing; and make the first commit to networking-labs.
+- [2025-02-21 13:07:06] : Finish refactoring docker.
+- [2025-02-21 11:34:35] : WORKING: Refactoring docker.
+- [2025-02-21 11:09:48] : Add an entry to switch virtualization
+- [2025-02-21 11:08:11] : Add guide on how to add networknig to a virtual machine.
+- [2025-02-21 11:03:35] : Working on networking !!!
+- [2025-02-21 10:26:45] : Add link to "Train Your Own 01 Preview" / Bremontix Ars.
+- [2025-02-21 10:15:53] : Envio correo parval retorno inversion
+- [2025-02-21 09:47:38] : Remove research fields; add them to guides.
+- [2025-02-21 09:23:31] : Add a how's to to git note in bremontix ars; to git check-ignore.
+- [2025-02-21 09:15:22] : Add link "Torque Clustering"
+- [2025-02-21 08:30:13] : Install the bash langauge server.
+- [2025-02-21 08:26:18] : Add the "NASA has a list of 10 rules for software development" to the "Bremontix / System"
+- [2025-02-21 08:22:27] : START: Start 	working.
+- [2025-02-21 01:31:53] : End working day.
+- [2025-02-21 01:31:22] : End with some idea of the adjoin property; its pragmatics !!!
+- [2025-02-21 00:59:02] : Refactor time entry including the ISO 8601 format.
+- [2025-02-21 00:58:41] : I have learn one things or two about biology; until the next interaction.
+- [2025-02-20 23:55:42] : Refactor the conding entry in mathematics.
+- [2025-02-20 23:14:04] : Add an entry to the idea of a checksum.
+- [2025-02-20 23:06:02] : I am an idiot; i have remove neovim; langauge server configuration;
+- [2025-02-20 21:46:56] : WORKING: Study Leptospira Bacteria.
+- [2025-02-20 21:45:41] : START: Work Night
+- [2025-02-20 16:29:37] : Finish work day
+- [2025-02-20 12:14:39] : WORKING: Ticket Sirite (https://mh-pafi.atlassian.net/browse/SGF-10282) - Problema de Interpretacion.
+- [2025-02-20 12:14:12] : Se le hicieron varias actualizaes SGF-10276; al ticket de DODORIA.
+- [2025-02-20 09:32:26] : WORKING: DODORIA'S Ticket https://mh-pafi.atlassian.net/issues/SGWORKING: DODORIA'S Ticket https://mh-pafi.atlassian.net/issues/SGF-10276.
+- [2025-02-20 08:45:50] : Add reference to "Wangbin579. (2024). The Art of Problem-Solving in Software Engineering: How to Make MySQL Better. https://enhancedformysql.github.io/The-Art-of-Problem-Solving-in-Software-Engineering_How-to-Make-MySQL-Better/"; add to mysql Bremontix Ars.
+- [2025-02-20 08:41:10] : START: Start working day.
+- [2025-02-20 02:28:29] : Finish day.
+- [2025-02-20 00:40:44] : WORKING: Beyond Belief-Use the Introduction Info → To Generate a Sipnosis of Every Chapter.
+- [2025-02-20 00:40:08] : START: OPen work night.
+- [2025-02-19 16:54:06] : Add the models of space used in physics
+- [2025-02-19 15:34:22] : Finish the newton method.
+- [2025-02-19 13:41:26] : Migrate the models  from algorithms to modelarium.
+- [2025-02-19 13:41:09] : Create a repo for models (https://github.com/dbremont/modelarium/tree/main)
+- [2025-02-19 13:32:20] : Termine el ticket SGF-10276.
+- [2025-02-19 12:55:43] : Registrar y ordenar información médica.
+- [2025-02-19 12:38:52] : ABRIR: Abrir dia.
+- [2025-02-19 12:36:51] : El dia anterior; tube que salir para el medico y no pude cerrar el dia.
+- [2025-02-18 14:34:26] : Partidas mal actualizas para el problema de la tasa.
+- [2025-02-18 10:45:09] : Verificar caso sigef monegro usos de tasas.
+- [2025-02-18 10:43:01] : Procesar links - agregar to https://gist.github.com/dbremont/3718f384c711be504d520ddbd0846446
+- [2025-02-18 10:37:20] : TERMINADO: GSC-619 - Falta analisis etiologico.
+- [2025-02-18 09:18:27] : WORKING: On the ticket GSC-619 - TK62707-Pagos realizados , completados en SIRITE y no aparece en GSC.
+- [2025-02-18 09:18:04] : Start of the workday.
+- [2025-02-17 23:28:39] : End of the work day.
+- [2025-02-17 23:23:19] : I  manage to create the configuration for the bash language server.
+- [2025-02-17 23:23:05] : Open work nigh/ a little bit delayed.
+- [2025-02-17 15:42:35] : WORKING: Installing Vala LSP.
+- [2025-02-17 15:36:13] : Add a small regex implementation to algorithms.
+- [2025-02-17 15:22:18] : Refactor Regex, ad move Formal System ->  Language System.
+- [2025-02-17 15:21:56] : I add the link to github of Apache Trift.
+- [2025-02-17 15:16:02] : Create an entry for a functor.
+- [2025-02-17 14:30:41] : Refactor the Entry of Monad.
+- [2025-02-17 14:28:31] : In Language System - Change Annotation of "Control Flow" to "...".
+- [2025-02-17 13:49:29] : Refactor a bit - data systems. 
+- [2025-02-17 13:32:52] : Crate security labs.
+- [2025-02-17 13:03:54] : Refactor labs.
+- [2025-02-17 11:46:57] : Open Telemetry
+- [2025-02-17 10:58:07] : Refactor C#.
+- [2025-02-17 10:22:55] : Craete a Haskell Entry.
+- [2025-02-17 10:12:22] : Write about the philosohpy of metrology of Language Systems -> Let's say X is the set of all possible worklods? Which is the best language to express the workload?
+- [2025-02-17 10:06:53] : Add language system comppotnents to Performace Notes.
+- [2025-02-17 10:05:52] : Finish Languge Performace Study Guide
+- [2025-02-17 08:59:20] : Add a Language Performace Seccion to "Study of Programming Languagues"
+- [2025-02-17 08:35:29] : Open Work Day.
+- [2025-02-16 22:28:28] : Finish Day
+- [2025-02-16 18:21:32] : Work on the introductio of "Beyond Belief - Randomness, Prediction, and Explanation in Science"
+- [2025-02-16 18:08:54] : Add entry in the circle of competence>
+- [2025-02-16 18:00:04] : Move modelling principle to system/model
+- [2025-02-16 15:36:21] : Refactor skills
+- [2025-02-16 15:36:12] : Begin work sunday.
+- [2025-02-16 01:38:49] : I failed to archieve this "Haskell, C#,  Linux (Add References Books),  Data Systems (Refactor)"
+- [2025-02-15 20:56:32] : I have finish making the entries for every book.
+- [2025-02-15 20:55:55] : I have been streamin slow; i I have waste a lot of time on this; but i add the four volumne sof the "papers in complexity science"
+- [2025-02-15 16:00:21] : Organize the fuondational papers in complexity science
+- [2025-02-15 12:44:05] : Opening Day: Organize Books, Haskell, C#,  Linux (Add References Books),  Data Systems (Refactor)
+- [2025-02-15 01:35:32] : I read some Linux Kernel Development
+- [2025-02-14 23:12:25] : I need to learn about securityl; signing.
+- [2025-02-14 23:11:30] : I Was trying to develop a module; i was able to compoiled;  but secure boot was enable; hence the module needs a sign. I stop me; but enought of low level prog for today.
+- [2025-02-14 17:58:11] : Start Work From Home / Refactor the Mouse Entry / Read the SICP Book; 
+- [2025-02-14 16:22:10] : End work day.
+- [2025-02-14 16:04:39] : I have take the day to advanced my study of low level systems.
+- [2025-02-14 09:37:12] : Notion is Down / https://status.notion.so/
+- [2025-02-14 09:32:01] : Fixing references in linux notes.
+- [2025-02-14 08:46:57] : Refactoring syscalls.
+- [2025-02-14 08:31:07] : Open Day: Study Linux, Set of Questions, Set of Problems, ... 
+- [2025-02-13 22:55:20] : Finish Day
+- [2025-02-13 21:03:17] : Start reading section of the book SICP.
+- [2025-02-13 21:03:01] : I'am leaving the study of tracy; for the next day.  I need to install more dependencies like capstone.
+- [2025-02-13 21:02:29] : I discover that the build of tracy; cannot be done from the master branch; it has to be done for some reason in a tag.
+- [2025-02-13 19:29:31] : Let's try Tracy again.
+- [2025-02-13 19:28:29] : Vala Instalation; An First AI Generated Program; Well I Did Modified a bit; done.
+- [2025-02-13 18:38:47] : Beging Home Working
+- [2025-02-13 17:23:28] : Finish Work Day
+- [2025-02-13 17:23:11] : Finish Creating the Vala Profile.
+- [2025-02-13 16:14:40] : Create a the Vala Programming Langauge Profile.
+- [2025-02-13 16:11:03] : I have refactor "Enterprise Information System (EIS)".
+- [2025-02-13 15:29:43] : I have failed tryign to compile a gtk app. 
+- [2025-02-13 15:27:35] : After many hours trying to fix apt;  I have remove appstream package -> DEP-11;  becuase of a problem trying to download; icons; as a result of that struggle i have take some notes about the package maange sytem; to ease future issues.
+- [2025-02-13 11:41:18] : Trying to build tracer - tracy.
+- [2025-02-13 11:41:04] : Continue Working on Meta Labs.
+- [2025-02-13 11:19:26] : Finish add rules for certificaciones (SGF-10263)
+- [2025-02-13 09:56:27] : Begin creating a rule for for the certifications.
+- [2025-02-13 09:56:05] : I was trying to build tracy - and failed.
+- [2025-02-13 09:01:45] : Create meta-labs repo to create tools to study software systems  in various programming languages.
+- [2025-02-13 08:57:33] : Open the Work Day.
+- [2025-02-12 23:42:45] : Finish Work Day (Home)
+- [2025-02-12 23:41:45] : I take several notes of the SICP; evaluation, function (declaraation, expression); substitution model of function applicatoin (evaluation).
+- [2025-02-12 23:39:06] :Debugging firefox is very hard; i was abble to create some breakpoints; and see some networking; rendering; the beginig of a journey.
+- [2025-02-12 21:04:09] : Try to create several breakpoints.
+- [2025-02-12 19:17:03] : Have some failures doin the build because of a rust version; upgrading rust.
+- [2025-02-12 19:16:14] : Login to some sites for firefox developers; https://bugzilla.mozilla.org and the https://phabricator.services.mozilla.com/ 
+- [2025-02-12 18:23:09] : In the mean wild; lets' start reading SICP.
+- [2025-02-12 18:21:56] : Firefox Download Failed; Try to used Git Large File Storage; if the process failed again.
+- [2025-02-12 18:00:30] : Downloading the Firefox Source Code.
+- [2025-02-12 17:41:51] : Add an entry of the webdriver protocol (a browse interaction protocol); model after the selenium webdriver.
+- [2025-02-12 17:03:26] : Open House Work Night
+- [2025-02-12 16:13:04] : Close Work Day.
+- [2025-02-12 15:59:45] : Fin (SGF-10239) y (SGF-10164); hice dos pruebas  y corregi un error - la tabla no permitia total y cantidad nulos; hacie que en el VO lo defini por default a 0 ambos.
+- [2025-02-12 15:10:00] : The Horrible Null Pointer Exception, caused by AspectJ, struck again.
+- [2025-02-12 13:02:43] : Recibi un ticket (SGF-10263);  pero despues me fue retirado.
+- [2025-02-12 10:53:13] : Start working again on Probar ticket (SGF-10239) y (SGF-10164) Juntos. - This is how procastination looks like.
+- [2025-02-12 10:53:01] : Add a note and copy some code about huffman codes.
+- [2025-02-12 10:19:29] : Clean Mails.
+- [2025-02-12 10:16:13] : Start working again on Probar ticket (SGF-10239) y (SGF-10164) Juntos.
+- [2025-02-12 10:09:50] : End Refactoring Information Theory.
+- [2025-02-12 08:40:00] : Refactor Information Theory.
+- [2025-02-12 08:36:08] : Add "sudo vim etc/hosts and add: 127.0.0.0.1 x.com" to Collection of Little Scriopts.
+- [2025-02-12 08:34:49] : I did not see this paper "Smyth R. “Should China be Promoting Large-Scale Enterprises and Enterprise Groups?” World Development 28 (2000)." but the Idea of large business groups; seems relevant.
+- [2025-02-12 08:33:01] : Add link "The fruits of misunderstanding" to Bremontix Ars.
+- [2025-02-12 08:32:40] : Add link attention to attention in Bremnotix Ars.
+- [2025-02-12 08:18:53] : Probar ticket (SGF-10239) y (SGF-10164) Juntos.
+- [2025-02-12 08:15:38] : Le informe a monegro sobre el  resultado del ticket  (SGF-10125).
+- [2025-02-12 08:12:37] : Verifique en produccion y el ticket (SGF-10125) Funciono.
+- [2025-02-12 08:04:06] : Verificer ticket (SGF-10125) - Mensajes Monitor Cuentas Intervenidas.
+- [2025-02-12 08:03:31] : Open 	work day.
+- [2025-02-12 01:06:49] : Close day and go to sleep
+- [2025-02-12 01:06:10] : Read to 1.1.3 - Evaluating Operator Combinations of the "Abelson, H., & Sussman, G. J. (1985). Structure and Interpretation of Computer Programs. MIT Press."
+- [2025-02-12 00:01:33] : Hackernews  reader as an example of tools for a reddit reader.
+- [2025-02-11 22:35:11] : Slow Down Sites / So I loose my love for them (twitter) ??
+- [2025-02-11 21:59:43] : Try to develop a tool to download the current reddit posts.
+- [2025-02-11 21:59:32] : Refactor DevOps
+- [2025-02-11 21:59:20] : Beging working from home.
+- [2025-02-11 16:43:43] : End of the Work Day.
+- [2025-02-11 16:43:15] : Instrument Node Using Open Telemetry / Write the output to traces.json
+- [2025-02-11 16:43:01] : Failed to build firefox in the local machine.
+- [2025-02-11 15:34:07] : Trying to build firefo; Not Possible  in the works computer.
+- [2025-02-11 15:33:40] : Generate a Profile for the Firefox Browser.
+- [2025-02-11 13:58:17] : Update configs to boostrap Node.
+- [2025-02-11 13:52:14] : Begin working on the profile JavaScript, NodeJS, V8, etc.
+- [2025-02-11 13:50:43] : In the first hours of the day i was working on the ticket of (actualizar montos problema de tasa / many tables / trial and error); i was also working inserting some missing rows in the table 'IG_AUTORIZACION_PAGO'.
+- [2025-02-11 13:49:26] : Begin Close Day; Actually a Delay in the Registration (12:44:07).
+- [2025-02-10 20:50:40] : Finish Work Day in House
+- [2025-02-10 20:49:03] : Finish Cleaning Incoming in 'Bremontix' 
+- [2025-02-10 18:55:49] : Start Adding Books to Thesaurus / Continue Cleaning the Incoming in Bermontix.
+- [2025-02-10 17:33:23] : Closing Closing the Day.
+- [2025-02-10 15:47:47] : Working on Cleaning the Incoming Tasks.
+- [2025-02-10 13:38:36] : Working on checking if some tables where left without updating in ticket (SGF-10255)
+- [2025-02-10 13:37:59] : Working on Pending Tasks : Add All Books to Thesaurus.
+- [2025-02-10 10:37:22] : Remember to Begin Modelling Apps; Start Using Glowroot; to collect data.
+- [2025-02-10 10:34:47] : Working on Ticket: SGF-10253;  Hacer regla para impedir cotizaciones moneda x-x.
+- [2025-02-10 10:28:43] : Close Day 07 (Friday) and Open Day.
+- [2025-02-07 08:22:55] : Open Work Day.
+- [2025-02-06 17:06:00] : Close Work day.
+- [2025-02-06 15:32:47] : Time dependent graph - https://link.springer.com/article/10.1007/s41019-019-00105-0
+- [2025-02-06 14:58:12] : Learn more about ollama https://github.com/ollama/ollama
+- [2025-02-06 11:46:58] : Add emojis bremontix/algorithms.
+- [2025-02-06 11:42:56] : Refactor bremontix/algorithms by moving directory structure description to guide.
+- [2025-02-06 11:18:32] : Create a Cellular Automata entry in dbremont/algorithms; and create the Conway Game of Life.
+- [2025-02-06 10:45:58] : Refactor Performce Entry.
+- [2025-02-06 10:10:04] : Write the trace model for a Thread.
+- [2025-02-06 10:04:07] : Make an entry in Bremontix Ars of Language Interoperability.
+- [2025-02-06 08:52:33] : Ir a desayunar; go notes are not finished.
+- [2025-02-06 08:42:41] : Improve My Go Languages Notes (Profile).
+- [2025-02-06 08:42:14] : Open Hacienda Work Session.
+- [2025-02-05 22:36:07] : Create a small pub-sub System in go
+- [2025-02-05 22:21:54] : Read the book "Go The Programing Language"  http://www.cs.uniroma2.it/upload/2017/TSC/The%20Go%20Programming%20Language.pdf
+- [2025-02-05 18:09:38] : Democratizing Compute, Part 2: What exactly is “CUDA”? https://www.modular.com/blog/democratizing-compute-part-2-what-exactly-is-cuda
+- [2025-02-05 17:49:19] : Comparison of terminal emulators https://www.youtube.com/watch?v=WxzYtdIcHnQ 
+- [2025-02-05 16:53:08] : Finish seccion trabajo hacienda.
+- [2025-02-05 16:45:59] : Migrate to Bremontix Arbistrista Energy Industry and History of Institutionalization of innoovation.
+- [2025-02-05 16:41:44] : Agregar tareas recurrentes de ejecutar informacion.
+- [2025-02-05 15:16:30] : Utilize fswatch para notificar hacerca de los cambios de un archivo.
+- [2025-02-05 13:28:03] : Improve my understanding of .gitignore and how it works.
