@@ -6,11 +6,16 @@
 
 ### What are the things that I should be able to record?
 
-### What should be the structure of such record?
+> This the primary recording mechanism for the self management system.
+ 
+> A **Self-management system** is a recursive regulatory architecture through which an individual monitors, organizes, and steers their perceptual, cognitive, and behavioral processes, converting implicit routines into explicit and adaptively controlled operations.
+
+### What should be the structure of such **record**?
 
 - Record Id
 - Record Links Link -> [(Id - Link Type), ...]
 - Record Date
+- Record Time Nature: Past, Now, Future.
 - Record Tags
 - Record Detail
 
@@ -93,6 +98,8 @@ NVIM :
 ### Tags
 
 > How to classify the **record**?
+
+> Add: Temporal Tags (historical, immediate, scheduled, deferred).
 
 | Category               | Tag                          | Description                                                                            |
 | ---------------------- | ---------------------------- | -------------------------------------------------------------------------------------- |
