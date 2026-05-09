@@ -253,6 +253,46 @@ NVIM :
 | Strategic Value        | Decision Improvement         | Contribution to higher-quality future decisions                                    |
 | Strategic Value        | Viability Contribution       | Overall contribution to sustainable personal system functionality                  |
 
+## Implementation
+
+
+- File Type: .prs
+- Pluging Set: ...
+
+| Layer             | Recommendation              |
+| ----------------- | --------------------------- |
+| Storage           | Markdown + YAML frontmatter |
+| Filetype          | `prs`                       |
+| Structure         | Treesitter                  |
+| Retrieval         | Telescope                   |
+| Metadata          | Lua parser                  |
+| Semantic indexing | SQLite                      |
+| Navigation        | Custom commands             |
+| Graph links       | UUID-based                  |
+| Rendering         | conceal + extmarks          |
+| Capture           | popup forms/snippets        |
+
+### File Grammar
+
+```prs
+record REC-001 {
+    type: decision
+    temporal: future
+
+    ... other fields
+
+    tags: [
+        strategic,
+        high-priority
+    ]
+
+    links: [
+        depends-on REC-010
+        mitigates REC-004
+    ]
+}
+```
+
 ## References
 
 - [Self Management](https://www.notion.so/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link)
