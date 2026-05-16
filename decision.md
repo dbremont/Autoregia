@@ -1,4 +1,4 @@
-# Desition Log
+# Decision Log
 
 > This is a derivative product of the daily log.
 
