@@ -1,0 +1,762 @@
+[
+  {
+    "id": "REC-2026-00001",
+    "content": "Implement OAuth2 authentication module for PRS web client",
+    "detail": "Integrate OAuth2 with PKCE flow. Support Google and GitHub providers. Store refresh tokens securely. Implement token rotation and revocation handling.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-15 09:30:00",
+      "updatedAt": "2026-02-20 14:22:00",
+      "validFrom": "2026-01-15 09:30:00",
+      "validUntil": null,
+      "deadline": "2026-03-15 17:00:00",
+      "orientation": "prospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Project-Alpha",
+      "organizationalContext": "Engineering",
+      "strategicContext": "Security-hardening initiative",
+      "emotionalContext": "neutral"
+    },
+    "epistemicMetadata": {
+      "confidence": "85%",
+      "validationState": "confirmed",
+      "evidenceSource": ["technical-spec", "security-audit"],
+      "inferenceStatus": "requirements-based",
+      "certaintyLevel": 0.85
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "critical",
+      "delegation": "team-backend",
+      "coordinationState": "in-progress",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "revised",
+      "revision": 3,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00003", "type": "depends-on" },
+      { "target": "REC-2026-00007", "type": "supports" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["critical", "active", "technical-work"],
+      "domain": "technical-work",
+      "cognitiveCategory": "Operational State",
+      "operationalCategory": "task"
+    }
+  },
+  {
+    "id": "REC-2026-00002",
+    "content": "Review quarterly strategic goals and adjust roadmap",
+    "detail": "Q1 2026 strategic review. Assess progress on all five strategic pillars. Reallocate resources based on market signals and competitive intelligence gathered in January.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-05 08:00:00",
+      "updatedAt": "2026-02-10 11:45:00",
+      "validFrom": "2026-01-05 08:00:00",
+      "validUntil": "2026-04-05 08:00:00",
+      "deadline": "2026-03-01 12:00:00",
+      "orientation": "prospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Strategic-Review",
+      "organizationalContext": "Leadership",
+      "strategicContext": "Annual planning cycle",
+      "emotionalContext": "optimistic"
+    },
+    "epistemicMetadata": {
+      "confidence": "70%",
+      "validationState": "inferred",
+      "evidenceSource": ["market-report-q4", "internal-metrics"],
+      "inferenceStatus": "projection",
+      "certaintyLevel": 0.7
+    },
+    "operationalMetadata": {
+      "executionState": "pending",
+      "priority": "high",
+      "delegation": "leadership-team",
+      "coordinationState": "awaiting-input",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00005", "type": "depends-on" },
+      { "target": "REC-2026-00010", "type": "references" }
+    ],
+    "generalMetadata": {
+      "classification": "Confidential",
+      "tags": ["high-priority", "strategic", "planning"],
+      "domain": "planning",
+      "cognitiveCategory": "Temporal Projection Structures",
+      "operationalCategory": "decision"
+    }
+  },
+  {
+    "id": "REC-2026-00003",
+    "content": "PostgreSQL database migration: schema v2.1 deployment",
+    "detail": "Migrate production database from schema v2.0 to v2.1. Includes adding the JSONB indexes for the records table, partitioning the audit_log, and archiving records older than 2 years.",
+    "retentionPolicy": "archive-on-completion",
+    "temporalMetadata": {
+      "createdAt": "2026-01-12 10:00:00",
+      "updatedAt": "2026-02-18 16:30:00",
+      "validFrom": "2026-01-12 10:00:00",
+      "validUntil": null,
+      "deadline": "2026-02-28 02:00:00",
+      "orientation": "prospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Infrastructure-Upgrade",
+      "organizationalContext": "DevOps",
+      "strategicContext": "Scalability improvement",
+      "emotionalContext": "stressed"
+    },
+    "epistemicMetadata": {
+      "confidence": "90%",
+      "validationState": "confirmed",
+      "evidenceSource": ["migration-plan", "test-results"],
+      "inferenceStatus": "validated",
+      "certaintyLevel": 0.9
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "high",
+      "delegation": "devops-team",
+      "coordinationState": "staging-complete",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "revised",
+      "revision": 2,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00001", "type": "required-by" },
+      { "target": "REC-2026-00009", "type": "related-to" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["high-priority", "active", "infrastructure"],
+      "domain": "infrastructure",
+      "cognitiveCategory": "Operational State",
+      "operationalCategory": "task"
+    }
+  },
+  {
+    "id": "REC-2026-00004",
+    "content": "Medical checkup - annual physical examination",
+    "detail": "Schedule annual physical. Include blood panel, cholesterol check, and discuss recurring sleep issues. Bring medication list and recent fitness tracker data.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-03 07:15:00",
+      "updatedAt": "2026-02-01 09:00:00",
+      "validFrom": "2026-01-03 07:15:00",
+      "validUntil": null,
+      "deadline": "2026-03-10 10:00:00",
+      "orientation": "scheduled"
+    },
+    "contextualMetadata": {
+      "projectContext": "Personal-Health",
+      "organizationalContext": "Personal",
+      "strategicContext": "Health maintenance",
+      "emotionalContext": "neutral"
+    },
+    "epistemicMetadata": {
+      "confidence": "100%",
+      "validationState": "confirmed",
+      "evidenceSource": ["doctor-appointment"],
+      "inferenceStatus": "scheduled",
+      "certaintyLevel": 1.0
+    },
+    "operationalMetadata": {
+      "executionState": "pending",
+      "priority": "medium",
+      "delegation": null,
+      "coordinationState": "appointment-booked",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [],
+    "generalMetadata": {
+      "classification": "Personal",
+      "tags": ["routine", "scheduled", "physical-health"],
+      "domain": "physical-health",
+      "cognitiveCategory": "Temporal Projection Structures",
+      "operationalCategory": "commitment"
+    }
+  },
+  {
+    "id": "REC-2026-00005",
+    "content": "Market analysis: competitor pricing strategy shift detected",
+    "detail": "Competitor X reduced enterprise tier pricing by 22%. Likely response to market consolidation. Need to assess impact on Q2 sales pipeline and prepare counter-positioning document.",
+    "retentionPolicy": "temporary",
+    "temporalMetadata": {
+      "createdAt": "2026-02-08 13:20:00",
+      "updatedAt": "2026-02-08 15:45:00",
+      "validFrom": "2026-02-08 13:20:00",
+      "validUntil": "2026-05-08 13:20:00",
+      "deadline": "2026-02-25 17:00:00",
+      "orientation": "present"
+    },
+    "contextualMetadata": {
+      "projectContext": "Strategic-Review",
+      "organizationalContext": "Business Development",
+      "strategicContext": "Competitive response",
+      "emotionalContext": "concerned"
+    },
+    "epistemicMetadata": {
+      "confidence": "60%",
+      "validationState": "speculative",
+      "evidenceSource": ["market-signal", "sales-team-report"],
+      "inferenceStatus": "preliminary-analysis",
+      "certaintyLevel": 0.6
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "high",
+      "delegation": "bd-team",
+      "coordinationState": "analysis-in-progress",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00002", "type": "contributes-to" },
+      { "target": "REC-2026-00012", "type": "signals" }
+    ],
+    "generalMetadata": {
+      "classification": "Confidential",
+      "tags": ["high-priority", "speculative", "business-development"],
+      "domain": "business-development",
+      "cognitiveCategory": "Environmental Monitoring Structures",
+      "operationalCategory": "signal"
+    }
+  },
+  {
+    "id": "REC-2026-00006",
+    "content": "Knowledge graph visualization performance optimization needed",
+    "detail": "Current canvas rendering becomes sluggish above 200 nodes. Investigate WebGL alternatives (e.g., Sigma.js, vis-network) or implement level-of-detail culling. Benchmark with 1000-record dataset.",
+    "retentionPolicy": "review-periodic",
+    "temporalMetadata": {
+      "createdAt": "2026-01-20 11:00:00",
+      "updatedAt": "2026-02-14 10:30:00",
+      "validFrom": "2026-01-20 11:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "prospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Project-Alpha",
+      "organizationalContext": "Engineering",
+      "strategicContext": "UX improvement",
+      "emotionalContext": "neutral"
+    },
+    "epistemicMetadata": {
+      "confidence": "50%",
+      "validationState": "speculative",
+      "evidenceSource": ["performance-profiling"],
+      "inferenceStatus": "hypothesis",
+      "certaintyLevel": 0.5
+    },
+    "operationalMetadata": {
+      "executionState": "blocked",
+      "priority": "low",
+      "delegation": null,
+      "coordinationState": "blocked-by-higher-priority",
+      "actionability": false
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00001", "type": "related-to" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["low-priority", "blocked", "technical-debt"],
+      "domain": "technical-work",
+      "cognitiveCategory": "Knowledge Structures",
+      "operationalCategory": "task"
+    }
+  },
+  {
+    "id": "REC-2026-00007",
+    "content": "Decision: Adopt Flask as backend framework for PRS MVP",
+    "detail": "Evaluated Flask vs FastAPI vs Django. Chose Flask for simplicity, minimal dependencies, and team familiarity. FastAPI deferred to potential v2 rewrite. Django rejected as overly heavy for MVP scope.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-08 14:00:00",
+      "updatedAt": "2026-01-08 14:00:00",
+      "validFrom": "2026-01-08 14:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "retrospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Project-Alpha",
+      "organizationalContext": "Engineering",
+      "strategicContext": "Architecture decision",
+      "emotionalContext": "confident"
+    },
+    "epistemicMetadata": {
+      "confidence": "95%",
+      "validationState": "confirmed",
+      "evidenceSource": ["tech-evaluation-matrix", "team-vote"],
+      "inferenceStatus": "decided",
+      "certaintyLevel": 0.95
+    },
+    "operationalMetadata": {
+      "executionState": "completed",
+      "priority": "high",
+      "delegation": null,
+      "coordinationState": "finalized",
+      "actionability": false
+    },
+    "lifecycleMetadata": {
+      "state": "archived",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": "2026-01-08 14:00:00"
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00001", "type": "implements" },
+      { "target": "REC-2026-00003", "type": "enables" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["strategic", "confirmed", "organizational-development"],
+      "domain": "organizational-development",
+      "cognitiveCategory": "Decision Structures",
+      "operationalCategory": "decision"
+    }
+  },
+  {
+    "id": "REC-2026-00008",
+    "content": "Reflection: Deep-work sessions are most productive 9-11 AM",
+    "detail": "After 3 weeks of tracking, cognitive output metrics (code quality, problem-solving speed) peak during 9-11 AM blocks. Afternoon sessions show 40% more context switches. Recommendation: protect morning blocks for deep-work.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-02-05 18:00:00",
+      "updatedAt": "2026-02-05 18:00:00",
+      "validFrom": "2026-02-05 18:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "retrospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Personal-Optimization",
+      "organizationalContext": "Personal",
+      "strategicContext": "Productivity improvement",
+      "emotionalContext": "reflective"
+    },
+    "epistemicMetadata": {
+      "confidence": "80%",
+      "validationState": "inferred",
+      "evidenceSource": ["self-tracking-data", "focus-app-metrics"],
+      "inferenceStatus": "pattern-recognized",
+      "certaintyLevel": 0.8
+    },
+    "operationalMetadata": {
+      "executionState": "completed",
+      "priority": "routine",
+      "delegation": null,
+      "coordinationState": "none",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "revised",
+      "revision": 2,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00001", "type": "supports" }
+    ],
+    "generalMetadata": {
+      "classification": "Personal",
+      "tags": ["routine", "confirmed", "cognitively-expensive"],
+      "domain": "knowledge-management",
+      "cognitiveCategory": "Meta-Cognitive State",
+      "operationalCategory": "reflection"
+    }
+  },
+  {
+    "id": "REC-2026-00009",
+    "content": "Risk: Single-point-of-failure in database layer",
+    "detail": "Production database runs on single instance with no read replica. If primary fails, full system outage. Estimated recovery time: 2-4 hours. Probability: low but impact: critical. Mitigation: provision read replica and automated failover.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-25 09:00:00",
+      "updatedAt": "2026-02-12 14:15:00",
+      "validFrom": "2026-01-25 09:00:00",
+      "validUntil": null,
+      "deadline": "2026-04-30 17:00:00",
+      "orientation": "present"
+    },
+    "contextualMetadata": {
+      "projectContext": "Infrastructure-Upgrade",
+      "organizationalContext": "DevOps",
+      "strategicContext": "Risk mitigation",
+      "emotionalContext": "concerned"
+    },
+    "epistemicMetadata": {
+      "confidence": "85%",
+      "validationState": "confirmed",
+      "evidenceSource": ["infrastructure-audit"],
+      "inferenceStatus": "validated-risk",
+      "certaintyLevel": 0.85
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "critical",
+      "delegation": "devops-team",
+      "coordinationState": "remediation-planned",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 2,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00003", "type": "mitigated-by" },
+      { "target": "REC-2026-00013", "type": "clusters-with" }
+    ],
+    "generalMetadata": {
+      "classification": "Confidential",
+      "tags": ["critical", "active", "single-point-of-failure"],
+      "domain": "infrastructure",
+      "cognitiveCategory": "Risk Structures",
+      "operationalCategory": "risk"
+    }
+  },
+  {
+    "id": "REC-2026-00010",
+    "content": "Event: All-hands meeting Q1 2026 priorities announcement",
+    "detail": "CEO announced three priorities: (1) Ship PRS v1.0 by end of Q2, (2) Reduce infrastructure costs by 15%, (3) Expand API integrations to 5 new platforms. Engineering allocation shifts accordingly.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-10 15:00:00",
+      "updatedAt": "2026-01-10 16:30:00",
+      "validFrom": "2026-01-10 15:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "retrospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Organizational",
+      "organizationalContext": "All-Hands",
+      "strategicContext": "Priority alignment",
+      "emotionalContext": "motivated"
+    },
+    "epistemicMetadata": {
+      "confidence": "100%",
+      "validationState": "confirmed",
+      "evidenceSource": ["meeting-notes", "recording"],
+      "inferenceStatus": "observed",
+      "certaintyLevel": 1.0
+    },
+    "operationalMetadata": {
+      "executionState": "completed",
+      "priority": "routine",
+      "delegation": null,
+      "coordinationState": "none",
+      "actionability": false
+    },
+    "lifecycleMetadata": {
+      "state": "archived",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": "2026-01-10 16:30:00"
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00002", "type": "advances" },
+      { "target": "REC-2026-00007", "type": "aligned-with" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["routine", "confirmed", "historical"],
+      "domain": "administration",
+      "cognitiveCategory": "Memory-Audit Structures",
+      "operationalCategory": "event"
+    }
+  },
+  {
+    "id": "REC-2026-00011",
+    "content": "Research: Evaluate vector search for semantic record retrieval",
+    "detail": "Investigate pgvector, SQLite-vec, and external services (Pinecone, Weaviate). Goal: enable natural-language search across records. Prototype with 10k sample records. Measure recall@10 and latency.",
+    "retentionPolicy": "review-periodic",
+    "temporalMetadata": {
+      "createdAt": "2026-02-01 10:00:00",
+      "updatedAt": "2026-02-16 14:00:00",
+      "validFrom": "2026-02-01 10:00:00",
+      "validUntil": null,
+      "deadline": "2026-03-20 17:00:00",
+      "orientation": "prospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Research-Initiative",
+      "organizationalContext": "Engineering",
+      "strategicContext": "Capability exploration",
+      "emotionalContext": "curious"
+    },
+    "epistemicMetadata": {
+      "confidence": "40%",
+      "validationState": "speculative",
+      "evidenceSource": ["literature-review"],
+      "inferenceStatus": "exploratory",
+      "certaintyLevel": 0.4
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "low",
+      "delegation": null,
+      "coordinationState": "prototype-phase",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00006", "type": "related-to" },
+      { "target": "REC-2026-00001", "type": "extends" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["low-priority", "speculative", "research-later"],
+      "domain": "technical-work",
+      "cognitiveCategory": "Knowledge Structures",
+      "operationalCategory": "task"
+    }
+  },
+  {
+    "id": "REC-2026-00012",
+    "content": "Signal: Customer churn rate increased 3% month-over-month",
+    "detail": "Churn rose from 4.2% to 7.1% in February. Correlates with competitor pricing announcement (REC-2026-00005). Top reason cited in exit surveys: 'pricing'. Weak signal requiring monitoring - may indicate structural issue.",
+    "retentionPolicy": "temporary",
+    "temporalMetadata": {
+      "createdAt": "2026-02-18 09:00:00",
+      "updatedAt": "2026-02-19 11:00:00",
+      "validFrom": "2026-02-18 09:00:00",
+      "validUntil": "2026-05-18 09:00:00",
+      "deadline": "2026-03-05 17:00:00",
+      "orientation": "present"
+    },
+    "contextualMetadata": {
+      "projectContext": "Strategic-Review",
+      "organizationalContext": "Customer Success",
+      "strategicContext": "Retention risk",
+      "emotionalContext": "concerned"
+    },
+    "epistemicMetadata": {
+      "confidence": "65%",
+      "validationState": "speculative",
+      "evidenceSource": ["churn-dashboard", "exit-survey-data"],
+      "inferenceStatus": "emerging-pattern",
+      "certaintyLevel": 0.65
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "critical",
+      "delegation": "cs-team",
+      "coordinationState": "investigating",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "created",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00005", "type": "causes" },
+      { "target": "REC-2026-00013", "type": "escalates" }
+    ],
+    "generalMetadata": {
+      "classification": "Confidential",
+      "tags": ["critical", "speculative", "drift"],
+      "domain": "business-development",
+      "cognitiveCategory": "Environmental Monitoring Structures",
+      "operationalCategory": "signal"
+    }
+  },
+  {
+    "id": "REC-2026-00013",
+    "content": "Risk: Operational fragility from accumulating technical debt",
+    "detail": "Technical debt score increased 35% over 6 months. Major contributors: skipped test coverage, deferred refactoring of auth layer, outdated dependencies (3 critical CVEs). Systemic issue requiring dedicated remediation sprint.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-28 13:00:00",
+      "updatedAt": "2026-02-15 10:00:00",
+      "validFrom": "2026-01-28 13:00:00",
+      "validUntil": null,
+      "deadline": "2026-05-01 17:00:00",
+      "orientation": "present"
+    },
+    "contextualMetadata": {
+      "projectContext": "Infrastructure-Upgrade",
+      "organizationalContext": "Engineering",
+      "strategicContext": "Sustainability",
+      "emotionalContext": "stressed"
+    },
+    "epistemicMetadata": {
+      "confidence": "80%",
+      "validationState": "confirmed",
+      "evidenceSource": ["tech-debt-report", "dependency-scan"],
+      "inferenceStatus": "measured",
+      "certaintyLevel": 0.8
+    },
+    "operationalMetadata": {
+      "executionState": "active",
+      "priority": "high",
+      "delegation": "engineering-team",
+      "coordinationState": "sprint-planning",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "revised",
+      "revision": 2,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00009", "type": "clusters-with" },
+      { "target": "REC-2026-00006", "type": "contributes-to" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["high-priority", "active", "technical-debt"],
+      "domain": "technical-work",
+      "cognitiveCategory": "Risk Structures",
+      "operationalCategory": "risk"
+    }
+  },
+  {
+    "id": "REC-2026-00014",
+    "content": "Policy: All API endpoints must require authentication",
+    "detail": "Security policy: No public/unauthenticated API endpoints except /health and /login. Enforce via middleware. Audit quarterly. Violations block deployment. Applies to all services including internal tools.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-01-15 10:00:00",
+      "updatedAt": "2026-01-20 09:00:00",
+      "validFrom": "2026-01-15 10:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "present"
+    },
+    "contextualMetadata": {
+      "projectContext": "Organizational",
+      "organizationalContext": "Security",
+      "strategicContext": "Security governance",
+      "emotionalContext": "neutral"
+    },
+    "epistemicMetadata": {
+      "confidence": "100%",
+      "validationState": "confirmed",
+      "evidenceSource": ["security-policy-doc"],
+      "inferenceStatus": "ratified",
+      "certaintyLevel": 1.0
+    },
+    "operationalMetadata": {
+      "executionState": "completed",
+      "priority": "critical",
+      "delegation": "security-team",
+      "coordinationState": "enforced",
+      "actionability": false
+    },
+    "lifecycleMetadata": {
+      "state": "archived",
+      "revision": 1,
+      "supersededBy": null,
+      "archivedAt": "2026-01-20 09:00:00"
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00001", "type": "governed-by" },
+      { "target": "REC-2026-00007", "type": "aligned-with" }
+    ],
+    "generalMetadata": {
+      "classification": "Internal",
+      "tags": ["critical", "confirmed", "policy-aligned"],
+      "domain": "organizational-development",
+      "cognitiveCategory": "Identity-Continuity Structures",
+      "operationalCategory": "policy"
+    }
+  },
+  {
+    "id": "REC-2026-00015",
+    "content": "Consultation: Architecture review with external advisor",
+    "detail": "Engaged external architect for 2-hour review of PRS system design. Key feedback: (1) Consider event-sourcing for audit trail, (2) Separate read/write models, (3) Add circuit breakers for external API calls. Valuable insights for v2 roadmap.",
+    "retentionPolicy": "permanent",
+    "temporalMetadata": {
+      "createdAt": "2026-02-12 16:00:00",
+      "updatedAt": "2026-02-13 10:00:00",
+      "validFrom": "2026-02-12 16:00:00",
+      "validUntil": null,
+      "deadline": null,
+      "orientation": "retrospective"
+    },
+    "contextualMetadata": {
+      "projectContext": "Research-Initiative",
+      "organizationalContext": "Engineering",
+      "strategicContext": "Architecture improvement",
+      "emotionalContext": "inspired"
+    },
+    "epistemicMetadata": {
+      "confidence": "75%",
+      "validationState": "inferred",
+      "evidenceSource": ["advisor-notes", "architecture-diagrams"],
+      "inferenceStatus": "expert-informed",
+      "certaintyLevel": 0.75
+    },
+    "operationalMetadata": {
+      "executionState": "completed",
+      "priority": "routine",
+      "delegation": null,
+      "coordinationState": "none",
+      "actionability": true
+    },
+    "lifecycleMetadata": {
+      "state": "revised",
+      "revision": 2,
+      "supersededBy": null,
+      "archivedAt": null
+    },
+    "relationalMetadata": [
+      { "target": "REC-2026-00007", "type": "supersedes" },
+      { "target": "REC-2026-00011", "type": "supports" }
+    ],
+    "generalMetadata": {
+      "classification": "Confidential",
+      "tags": ["routine", "inferred", "context-heavy"],
+      "domain": "knowledge-management",
+      "cognitiveCategory": "Knowledge Structures",
+      "operationalCategory": "consultation"
+    }
+  }
+]

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Recording System (PRS) Client</title>
+    <style>
+        :root {
+            --bg-primary: #0f111a;
+            --bg-secondary: #1a1d2e;
+            --bg-tertiary: #242838;
+            --text-primary: #e4e6eb;
+            --text-secondary: #8b8fa3;
+            --accent-blue: #4ca6ff;
+            --accent-green: #35cc65;
+            --accent-red: #ff5c5c;
+            --accent-yellow: #ffcc00;
+            --accent-purple: #a96afb;
+            --border-color: #2a2f42;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 60px 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        h1 { font-size: 1.2rem; font-weight: 600; color: var(--accent-blue); }
+        .status-bar { font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 20px; }
+        .status-item { display: flex; align-items: center; gap: 6px; }
+        .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* Sidebar */
+        nav {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--accent-blue); color: #fff; }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            opacity: 0.6;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover { transform: translateY(-2px); border-color: var(--accent-blue); }
+
+        .card-title { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase;}
+        .card-value { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .card-meta { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* View Containers */
+        .view-container { display: none; }
+        .view-container.active { display: block; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        th { color: var(--text-secondary); font-weight: 500; background: var(--bg-tertiary); }
+        tr:hover { background: var(--bg-secondary); }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-high { background: rgba(255, 92, 92, 0.2); color: var(--accent-red); }
+        .badge-medium { background: rgba(255, 204, 0, 0.2); color: var(--accent-yellow); }
+        .badge-low { background: rgba(74, 198, 148, 0.2); color: var(--accent-green); }
+        .badge-active { background: rgba(76, 166, 255, 0.2); color: var(--accent-blue); }
+        .badge-completed { background: rgba(53, 204, 101, 0.2); color: var(--accent-green); }
+        .badge-blocked { background: rgba(255, 92, 92, 0.2); color: var(--accent-red); }
+
+        /* Graph Canvas */
+        #graphCanvas {
+            width: 100%;
+            height: 600px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Record Detail Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal {
+            background: var(--bg-secondary);
+            width: 800px;
+            max-height: 90vh;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .detail-section {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        
+        .detail-section h4 {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .detail-key { color: var(--text-secondary); }
+        .detail-val { color: var(--text-primary); text-align: right; }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: var(--border-color); }
+        
+        /* Syntax Highlighting for Content */
+        .raw-grammar {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            background: #000;
+            padding: 1rem;
+            border-radius: 4px;
+            color: #ccc;
+            white-space: pre-wrap;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PRS Client Interface</h1>
+    <div class="status-bar">
+        <div class="status-item"><span class="pulse"></span> System Operational</div>
+        <div class="status-item">Records: <span id="recordCount">0</span></div>
+        <div class="status-item">Current Time: <span id="currentTime"></span></div>
+    </div>
+</header>
+
+<nav>
+    <div class="nav-section-title">Perspective</div>
+    <div class="nav-item active" onclick="app.navigate('dashboard')">⬡ Dashboard</div>
+    <div class="nav-item" onclick="app.navigate('timeline')">◷ Timeline</div>
+    <div class="nav-item" onclick="app.navigate('graph')">❖ Knowledge Graph</div>
+    <div class="nav-item" onclick="app.navigate('records')">☰ Record Log</div>
+    
+    <div class="nav-section-title">Filters</div>
+    <div class="nav-item" onclick="app.filter('all')">◉ All</div>
+    <div class="nav-item" onclick="app.filter('active')">● Active</div>
+    <div class="nav-item" onclick="app.filter('risks')">⚠ Risks</div>
+    <div class="nav-item" onclick="app.filter('decisions')">◍ Decisions</div>
+</nav>
+
+<main>
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="view-container active">
+        <h2 style="margin-bottom: 1.5rem;">System State Overview</h2>
+        <div class="dashboard-grid" id="dashboardCards"></div>
+        
+        <h3 style="margin-bottom: 1rem;">Recent Critical Activity</h3>
+        <div class="card" style="padding: 0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Content</th>
+                        <th>State</th>
+                        <th>Priority</th>
+                        <th>Context</th>
+                    </tr>
+                </thead>
+                <tbody id="recentActivity"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Timeline View -->
+    <div id="view-timeline" class="view-container">
+        <h2 style="margin-bottom: 1.5rem;">Temporal Projection</h2>
+        <div id="timelineViz" style="background: var(--bg-secondary); padding: 20px; border-radius: 8px; position: relative; height: 400px;">
+            <!-- Visual timeline will be rendered here -->
+        </div>
+        <div id="timelineList" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Graph View -->
+    <div id="view-graph" class="view-container">
+        <h2 style="margin-bottom: 1.5rem;">Relational Structure</h2>
+        <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <!-- Records List View -->
+    <div id="view-records" class="view-container">
+        <h2 style="margin-bottom: 1.5rem;">Record Registry</h2>
+        <div class="card" style="padding: 0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Type</th>
+                        <th>Content Summary</th>
+                        <th>Epistemic State</th>
+                        <th>Lifecycle</th>
+                    </tr>
+                </thead>
+                <tbody id="recordTable"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Detail Modal -->
+<div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modal-title">Record Details</h3>
+            <button class="btn" onclick="app.closeModal()">Close</button>
+        </div>
+        <div class="modal-body" id="modal-content">
+            <!-- Dynamic Content -->
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * PRS Grammar Logic & Data Generation
+ */
+
+// Helper to generate random IDs
+const genId = () => `REC-${Math.floor(Math.random() * 9000 + 1000)}`;
+const now = new Date();
+const formatTime = (d) => d.toISOString().split('T')[0] + ' ' + d.toTimeString().split(' ')[0];
+
+// Sample Data Generator based on Grammar
+const sampleData = [];
+
+const contexts = ["Project-Alpha", "Infrastructure-Upgrade", "Strategic-Review", "Personal-Health", "Research-Initiative"];
+const domains = ["technical-work", "planning", "knowledge-management", "administration", "strategic"];
+const tags = [
+    ["critical", "active"], ["low-priority", "deferred"], ["speculative", "hypothesis"], 
+    ["decision", "policy"], ["risk", "technical-debt"], ["event", "meeting"]
+];
+
+const relationTypes = ["depends-on", "supports", "supersedes", "contradicts", "references", "derived-from", "causes", "related-to"];
+
+function generateRecords(count) {
+    for(let i=0; i<count; i++) {
+        const recId = genId();
+        const created = new Date(now.getTime() - Math.random() * 1000000000);
+        
+        // Generate Relations
+        const relations = [];
+        if (i > 2 && Math.random() > 0.5) {
+            const target = sampleData[Math.floor(Math.random() * sampleData.length)].id;
+            relations.push(`(${target}, ${relationTypes[Math.floor(Math.random() * relationTypes.length)]})`);
+        }
+
+        const rec = {
+            id: recId,
+            content: `Sample record content number ${i}: ${["Implement auth module", "Review quarterly goals", "Doctor appointment", "Database migration", "Risk analysis report"][i%5]}`,
+            detail: `Detailed breakdown for record ${i}. Includes specific constraints and procedural notes.`,
+            retentionPolicy: ["permanent", "temporary", "archive-on-completion"][Math.floor(Math.random()*3)],
+            
+            temporalMetadata: {
+                createdAt: formatTime(created),
+                updatedAt: formatTime(new Date(created.getTime() + 10000000)),
+                validFrom: formatTime(created),
+                validUntil: Math.random() > 0.5 ? formatTime(new Date(created.getTime() + 1000000000)) : "undefined",
+                deadline: Math.random() > 0.5 ? formatTime(new Date(now.getTime() + Math.random() * 500000000)) : null,
+                orientation: ["retrospective", "present", "prospective"][Math.floor(Math.random()*3)]
+            },
+
+            contextualMetadata: {
+                projectContext: contexts[Math.floor(Math.random() * contexts.length)],
+                emotionalContext: ["neutral", "stressed", "optimistic"][Math.floor(Math.random()*3)]
+            },
+
+            epistemicMetadata: {
+                confidence: `${Math.floor(Math.random() * 100)}%`,
+                validationState: ["confirmed", "speculative", "inferred", "disputed"][Math.floor(Math.random()*4)],
+                certaintyLevel: Math.random()
+            },
+
+            operationalMetadata: {
+                executionState: ["pending", "active", "blocked", "completed"][Math.floor(Math.random()*4)],
+                priority: ["critical", "high", "medium", "low"][Math.floor(Math.random()*4)],
+                actionability: Math.random() > 0.5
+            },
+
+            lifecycleMetadata: {
+                state: ["created", "revised", "archived", "invalidated"][Math.floor(Math.random()*4)],
+                revision: Math.floor(Math.random() * 5) + 1
+            },
+
+            relationalMetadata: relations,
+
+            generalMetadata: {
+                classification: ["Secret", "Internal", "Public"][Math.floor(Math.random()*3)],
+                domain: domains[Math.floor(Math.random() * domains.length)],
+                tags: tags[Math.floor(Math.random() * tags.length)]
+            }
+        };
+        sampleData.push(rec);
+    }
+}
+
+generateRecords(15);
+
+/**
+ * Application Logic
+ */
+const app = {
+    state: {
+        records: sampleData,
+        view: 'dashboard',
+        selectedRecord: null
+    },
+
+    init: function() {
+        this.updateTime();
+        setInterval(() => this.updateTime(), 1000);
+        this.renderDashboard();
+        this.renderTable();
+        this.renderTimeline();
+        this.initGraph();
+        document.getElementById('recordCount').innerText = this.state.records.length;
+    },
+
+    navigate: function(view) {
+        document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+        document.getElementById(`view-${view}`).classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+
+        if(view === 'graph') this.drawGraph();
+    },
+
+    updateTime: function() {
+        document.getElementById('currentTime').innerText = formatTime(new Date());
+    },
+
+    filter: function(type) {
+        // Simple mock filter
+        alert(`Filtering by: ${type}. (Demo only - functionality to filter the 'records' array)`);
+    },
+
+    // --- Renderers ---
+
+    renderDashboard: function() {
+        const container = document.getElementById('dashboardCards');
+        
+        const metrics = [
+            { title: "Active Tasks", value: this.state.records.filter(r => r.operationalMetadata.executionState === 'active').length, color: 'var(--accent-blue)' },
+            { title: "Blocked Items", value: this.state.records.filter(r => r.operationalMetadata.executionState === 'blocked').length, color: 'var(--accent-red)' },
+            { title: "Critical Priority", value: this.state.records.filter(r => r.operationalMetadata.priority === 'critical').length, color: 'var(--accent-yellow)' },
+            { title: "Speculative", value: this.state.records.filter(r => r.epistemicMetadata.validationState === 'speculative').length, color: 'var(--accent-purple)' }
+        ];
+
+        container.innerHTML = metrics.map(m => `
+            <div class="card">
+                <div class="card-title">${m.title}</div>
+                <div class="card-value" style="color: ${m.color}">${m.value}</div>
+                <div class="card-meta">System-wide</div>
+            </div>
+        `).join('');
+
+        // Recent Activity Table
+        const tbody = document.getElementById('recentActivity');
+        const recent = [...this.state.records].sort((a,b) => new Date(b.temporalMetadata.updatedAt) - new Date(a.temporalMetadata.updatedAt)).slice(0, 5);
+        
+        tbody.innerHTML = recent.map(r => `
+            <tr onclick="app.showDetail('${r.id}')" style="cursor: pointer;">
+                <td style="font-family: monospace; color: var(--accent-blue);">${r.id}</td>
+                <td>${r.content.substring(0, 40)}...</td>
+                <td><span class="badge badge-${r.operationalMetadata.executionState}">${r.operationalMetadata.executionState}</span></td>
+                <td><span class="badge badge-${r.operationalMetadata.priority}">${r.operationalMetadata.priority}</span></td>
+                <td>${r.contextualMetadata.projectContext}</td>
+            </tr>
+        `).join('');
+    },
+
+    renderTable: function() {
+        const tbody = document.getElementById('recordTable');
+        tbody.innerHTML = this.state.records.map(r => `
+            <tr onclick="app.showDetail('${r.id}')" style="cursor: pointer;">
+                <td style="font-family: monospace;">${r.id}</td>
+                <td>${r.generalMetadata.domain}</td>
+                <td>${r.content.substring(0, 50)}...</td>
+                <td><span class="badge badge-${r.epistemicMetadata.validationState}">${r.epistemicMetadata.validationState}</span></td>
+                <td>${r.lifecycleMetadata.state}</td>
+            </tr>
+        `).join('');
+    },
+
+    renderTimeline: function() {
+        const container = document.getElementById('timelineList');
+        const future = this.state.records
+            .filter(r => r.temporalMetadata.deadline)
+            .sort((a,b) => new Date(a.temporalMetadata.deadline) - new Date(b.temporalMetadata.deadline));
+
+        container.innerHTML = future.map(r => `
+            <div class="card" style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color:var(--accent-blue)">${r.temporalMetadata.deadline.split(' ')[0]}</strong>
+                    <span style="margin-left: 10px;">${r.content.substring(0, 30)}</span>
+                </div>
+                <span class="badge badge-${r.operationalMetadata.priority}">${r.operationalMetadata.priority}</span>
+            </div>
+        `).join('');
+    },
+
+    // --- Graph Visualization (Canvas) ---
+    initGraph: function() {
+        this.canvas = document.getElementById('graphCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.nodes = [];
+        this.links = [];
+        
+        // Resize handling
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+        window.addEventListener('resize', () => {
+            this.canvas.width = this.canvas.offsetWidth;
+            this.canvas.height = this.canvas.offsetHeight;
+            if(document.getElementById('view-graph').classList.contains('active')) this.drawGraph();
+        });
+    },
+
+    drawGraph: function() {
+        const ctx = this.ctx;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        
+        // Reset
+        this.nodes = [];
+        this.links = [];
+        
+        // Create Nodes
+        this.state.records.forEach(r => {
+            this.nodes.push({
+                id: r.id,
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 2, 
+                vy: (Math.random() - 0.5) * 2,
+                r: 10
+            });
+        });
+
+        // Create Links from grammar
+        this.state.records.forEach(r => {
+            r.relationalMetadata.forEach(relStr => {
+                // Parse "(REC-123, relationType)"
+                const match = relStr.match(/\(([^,]+),\s*([^)]+)\)/);
+                if (match) {
+                    const targetId = match[1];
+                    const type = match[2];
+                    const sourceNode = this.nodes.find(n => n.id === r.id);
+                    const targetNode = this.nodes.find(n => n.id === targetId);
+                    if (sourceNode && targetNode) {
+                        this.links.push({ source: sourceNode, target: targetNode, type: type });
+                    }
+                }
+            });
+        });
+
+        // Animation Loop
+        const animate = () => {
+            if(!document.getElementById('view-graph').classList.contains('active')) return;
+
+            ctx.fillStyle = '#1a1d2e';
+            ctx.fillRect(0, 0, w, h);
+
+            // Physics
+            this.nodes.forEach(n => {
+                // Center gravity
+                n.vx += (w/2 - n.x) * 0.0001;
+                n.vy += (h/2 - n.y) * 0.0001;
+                
+                // Repulsion
+                this.nodes.forEach(other => {
+                    if(n === other) return;
+                    const dx = n.x - other.x;
+                    const dy = n.y - other.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if(dist < 100) {
+                        n.vx += dx * 0.05;
+                        n.vy += dy * 0.05;
+                    }
+                });
+                
+                // Apply velocity
+                n.x += n.vx;
+                n.y += n.vy;
+                n.vx *= 0.9; n.vy *= 0.9; // Friction
+            });
+
+            // Draw Links
+            ctx.strokeStyle = '#3b4056';
+            ctx.lineWidth = 1;
+            this.links.forEach(link => {
+                ctx.beginPath();
+                ctx.moveTo(link.source.x, link.source.y);
+                ctx.lineTo(link.target.x, link.target.y);
+                ctx.stroke();
+                
+                // Label
+                const mx = (link.source.x + link.target.x)/2;
+                const my = (link.source.y + link.target.y)/2;
+                ctx.fillStyle = '#8b8fa3';
+                ctx.font = '10px Arial';
+                ctx.fillText(link.type, mx, my);
+            });
+
+            // Draw Nodes
+            this.nodes.forEach(n => {
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+                ctx.fillStyle = '#4ca6ff';
+                ctx.fill();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px Arial';
+                ctx.fillText(n.id, n.x + 12, n.y + 4);
+            });
+
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+
+    // --- Modal ---
+    showDetail: function(id) {
+        const r = this.state.records.find(rec => rec.id === id);
+        if(!r) return;
+
+        document.getElementById('modal-title').innerText = `Record: ${r.id}`;
+        
+        // Generate a "pseudo" raw grammar string for the UI bottom
+        const rawGrammar = `record ${r.id} {
+    content : "${r.content}"
+    retention-policy : ${r.retentionPolicy}
+    
+    temporal-metadata {
+        created-at : ${r.temporalMetadata.createdAt}
+        deadline   : ${r.temporalMetadata.deadline || 'none'}
+    }
+    
+    operational-metadata {
+        execution-state : ${r.operationalMetadata.executionState}
+        priority        : ${r.operationalMetadata.priority}
+    }
+    
+    relational-metadata {
+        ${r.relationalMetadata.map(rel => `relation ${rel}`).join('\n\t\t')}
+    }
+}`;
+
+        document.getElementById('modal-content').innerHTML = `
+            <div class="detail-section">
+                <h4>Core Content</h4>
+                <div class="detail-row"><span class="detail-key">Content:</span><span class="detail-val">${r.content}</span></div>
+                <div class="detail-row"><span class="detail-key">Detail:</span><span class="detail-val">${r.detail}</span></div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Operational State</h4>
+                <div class="detail-row"><span class="detail-key">State:</span><span class="detail-val">${r.operationalMetadata.executionState}</span></div>
+                <div class="detail-row"><span class="detail-key">Priority:</span><span class="detail-val">${r.operationalMetadata.priority}</span></div>
+                <div class="detail-row"><span class="detail-key">Actionable:</span><span class="detail-val">${r.operationalMetadata.actionability}</span></div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Epistemic Status</h4>
+                <div class="detail-row"><span class="detail-key">Validation:</span><span class="detail-val">${r.epistemicMetadata.validationState}</span></div>
+                <div class="detail-row"><span class="detail-key">Confidence:</span><span class="detail-val">${r.epistemicMetadata.confidence}</span></div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Context</h4>
+                <div class="detail-row"><span class="detail-key">Project:</span><span class="detail-val">${r.contextualMetadata.projectContext}</span></div>
+                <div class="detail-row"><span class="detail-key">Domain:</span><span class="detail-val">${r.generalMetadata.domain}</span></div>
+            </div>
+
+            <div class="detail-section" style="grid-column: 1 / -1;">
+                <h4>Relational Links</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    ${r.relationalMetadata.length > 0 ? r.relationalMetadata.map(rel => `<span class="badge badge-active">${rel}</span>`).join('') : '<span class="detail-key">No relations defined</span>'}
+                </div>
+            </div>
+
+            <div class="raw-grammar">${rawGrammar}</div>
+        `;
+
+        document.getElementById('modal-overlay').classList.add('active');
+    },
+
+    closeModal: function() {
+        document.getElementById('modal-overlay').classList.remove('active');
+    }
+};
+
+// Initialize App
+window.onload = () => app.init();
+
+</script>
+
+</body>
+</html>
