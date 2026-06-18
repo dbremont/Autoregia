@@ -1,0 +1,9 @@
+begin-record
+record bad-relation {
+  content : "x";
+  relational-metadata {
+    (other, unknown-type);
+  };
+}
+end-record
+---

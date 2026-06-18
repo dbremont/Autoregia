@@ -1,0 +1,14 @@
+begin-record
+record duration-retention {
+  content : "kept for ninety days";
+  retention-policy : "P90D";
+}
+end-record
+---
+begin-record
+record keyword-retention {
+  content : "kept permanently";
+  retention-policy : archive-on-completion;
+}
+end-record
+---

@@ -1,0 +1,6 @@
+begin-record
+foo not-a-record {
+  content : "x";
+}
+end-record
+---

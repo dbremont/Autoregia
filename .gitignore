@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# PRS runtime data (SQLite db, seed cache)
+/data/

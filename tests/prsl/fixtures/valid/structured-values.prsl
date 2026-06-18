@@ -1,0 +1,26 @@
+begin-record
+record list-content {
+  content : [1, 2, 3];
+  retention-policy : permanent;
+}
+end-record
+---
+begin-record
+record object-content {
+  content : { name: "x", active: true, nested: { k: null } };
+}
+end-record
+---
+begin-record
+record scalar-content {
+  content : 42;
+  detail : true;
+}
+end-record
+---
+begin-record
+record null-content {
+  content : null;
+}
+end-record
+---

@@ -1,0 +1,5 @@
+begin-record
+record missing-brace {
+  content : "x";
+end-record
+---

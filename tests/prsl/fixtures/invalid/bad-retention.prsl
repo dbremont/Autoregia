@@ -1,0 +1,7 @@
+begin-record
+record bad-retention {
+  content : "x";
+  retention-policy : bogus-keyword;
+}
+end-record
+---

@@ -1,0 +1,7 @@
+begin-record
+record unicode {
+  content : "café — raw unicode";
+  detail : "escape form \u00e9 and emoji \u2764";
+}
+end-record
+---
