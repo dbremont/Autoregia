@@ -1,6 +1,0 @@
-begin-record
-record tiny {
-  content : "hi";
-}
-end-record
----

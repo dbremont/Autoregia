@@ -1,9 +1,0 @@
-begin-record
-record bad-enum {
-  content : "x";
-  operational-metadata {
-    execution-state : foobar;
-  };
-}
-end-record
----

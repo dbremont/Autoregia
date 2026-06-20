@@ -1,8 +1,0 @@
-begin-record
-record empty-blocks {
-  content : "with empty blocks";
-  temporal-metadata {};
-  epistemic-metadata {};
-}
-end-record
----

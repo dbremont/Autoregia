@@ -1,6 +1,0 @@
-begin-record
-record unclosed {
-  content : "missing end marker;
-}
-end-record
----

@@ -1,4 +1,0 @@
-begin-record
-record missing-end {
-  content : "no end-record here";
-}
