@@ -43,10 +43,11 @@ A record is an **immutable unit** described by **core content** plus typed **met
 
 Every record carries the following core fields:
 
-| Field     | Purpose                                              |
-| --------- | ---------------------------------------------------- |
-| `content` | The primary semantic payload (structured value).     |
-| `detail`  | Supplementary detail / elaboration (structured value).|
+| Field          | Purpose                                              |
+| -------------- | ---------------------------------------------------- |
+| `content`      | The primary semantic payload (structured value).     |
+| `detail`       | Supplementary detail / elaboration (structured value).|
+| `annotations` | Append-only commentary log *about* the record (see §2.7). Does **not** mutate `content` or `detail`. |
 
 ### 2.2 The High-Value Core
 
@@ -103,6 +104,8 @@ Records are **immutable**. All mutations are modeled as the creation of a new re
 - The previous version's lifecycle transitions to `superseded`, with `superseded-by` pointing at the new version.
 - `state`, `revision`, `superseded-by`, and `archived-at` are automatically maintained by the system.
 
+> **Annotations are not revisions.** The annotation log (§2.7) is a separate, append-only commentary channel *about* a record. Appending an annotation never alters the record's `content`, `detail`, metadata, or revision history; it attaches commentary to the record without mutating it.
+
 ### 2.5 Record Links (Core Set)
 
 > Relations transform isolated records into a connected epistemic structure. Per [`Philosophia Naturalis.md`](./Philosophia%20Naturalis.md), *"Relation — The way in which two or more entities are connected"* is an ontological primitive.
@@ -137,6 +140,35 @@ The full tag ontology in [`README.md`](./README.md) §"Tags" spans **12 categori
 `event`, `commitment`, `decision`, `reflection`, `state`, `signal`, `risk`, `policy`, `artifact`, `consultation`, `interaction`, `task`, `project`
 
 > **Note:** The full tag ontology (including Temporal, Operational Status, Priority, Epistemic, Cognitive Processing, Relationship, Risk, Energy & Effort, Governance, and Intelligence categories) is documented in [`README.md`](./README.md) §"Tags". Note that several tag categories *partition* semantics that also live in dedicated metadata blocks (e.g., Temporal tags overlap with `orientation`; Epistemic tags overlap with `validation-state`).
+
+### 2.7 Annotation Log (Append-Only Commentary)
+
+> Every record carries an **annotation log**: an append-only sequence of commentary entries written *about* the record. Annotations let users attach reflection, questions, review notes, provenance commentary, and contextual updates **without changing the record's content**. This preserves the immutability guarantee (§2.4) while giving the record a living conversational surface.
+
+**Annotation ≠ Revision.** The defining rule of the annotation log:
+
+- Appending an annotation **never** mutates `content`, `detail`, metadata, relations, or the revision counter.
+- To *change what the record says*, the user must create a new **revision** (§2.4).
+- To *say something about the record* (reflect, question, comment, review), the user appends an **annotation**.
+
+**Annotation entry model:**
+
+| Field        | Purpose                                                                                |
+| ------------ | -------------------------------------------------------------------------------------- |
+| `id`         | Unique identifier for the annotation entry (UUID).                                     |
+| `created-at` | Auto-captured timestamp of the annotation.                                             |
+| `author`     | Originating actor (user, agent, or system).                                            |
+| `kind`       | Optional semantic class of the commentary (e.g., `comment`, `question`, `review`, `reflection`, `correction-request`, `provenance`). |
+| `text`       | The commentary payload (Markdown).                                                     |
+| `state`      | Optional lifecycle of the entry itself (`open` / `resolved`), e.g., to mark a question as answered or a correction as addressed. |
+
+**Rules:**
+
+- **Append-only:** entries can be added and (optionally) state-transitioned, but never silently edited or deleted; their own history is preserved as part of the audit trail.
+- **Non-authoritative:** annotations carry no authority over record content; they are *about* the record, not part of it.
+- **Promotable:** a high-value annotation (e.g., a confirmed correction) can be promoted into a new **revision**, or converted into a typed **relation** (§2.5) or a new **record** (e.g., `supports` / `contradicts`), at which point the immutable-record semantics apply to the promoted artifact.
+- **Searchable:** annotations are included in full-text search (§4.3) so commentary about a record is as discoverable as the record itself.
+- **Auditable:** annotations contribute to *Memory-Audit Structures* (§1.2) and the *Auditability* evaluation criteria (§6: Event Auditability, Change Traceability, Evidence Preservation).
 
 ---
 
@@ -196,11 +228,13 @@ Cross-checking against the 53 evaluation criteria across 14 categories (§6) con
 
 The client must let users capture, structure, and maintain records. Each metadata block is optional but, when present, must be validated against the grammar. PRSL-aware structured editors provide validation and autocomplete against reserved keywords and enumerations.
 
+The client must also support the **annotation log** (§2.7): users can append commentary to any record at any time without entering a revision/edit workflow. Record `content`/`detail` remain read-only while annotations are added.
+
 ### 4.3 Search
 
 The client must provide a search experience combining:
 
-- **Full-text search** over `content` and `detail`.
+- **Full-text search** over `content`, `detail`, and `annotations`.
 - **Structured filters** over metadata dimensions, e.g.:
   - Temporal ranges (`valid-from`/`valid-until`, `deadline`, `created-at`).
   - Classification: `tags`, `domain`, `classification`, `cognitive-category`, `operational-category`.

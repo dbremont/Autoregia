@@ -608,10 +608,17 @@ button { font-family: inherit; cursor: pointer; }
 const records = [
   { id:"r1", t:"Migrate PRS storage to SQLite + JSON", domain:"technical-work", orientation:"prospective", vs:"confirmed", es:"active", pr:"high", urgency:"high", conf:0.9, deadline:"2026-07-02", proj:"PRS Client", horizon:"30d", tags:["migration","storage"], rels:[["depends-on","r2"],["supports","r3"]], content:"Transition the storage layer from flat files to SQLite with JSON payloads to enable indexed semantic search.", created:"2026-06-18", updated:"2026-06-19", rev:3 },
   { id:"r2", t:"Define PRSL grammar v0.4 for typed relations", domain:"technical-work", orientation:"present", vs:"confirmed", es:"completed", pr:"high", urgency:"low", conf:0.95, deadline:"2026-06-15", proj:"PRS Client", horizon:null, tags:["grammar","spec"], rels:[["derived-from","r4"]], content:"Finalized the 8 core high-leverage relation types and reserved keyword enums.", created:"2026-05-30", updated:"2026-06-15", rev:5 },
-  { id:"r3", t:"Semantic indexing latency claim — sub-50ms at 10k records", domain:"technical-work", orientation:"present", vs:"disputed", es:"active", pr:"medium", urgency:"medium", conf:0.3, deadline:null, proj:"PRS Client", horizon:null, tags:["performance","claim"], rels:[["contradicts","r5"]], content:"Initial benchmarks suggest sub-50ms retrieval, but methodology disputed.", created:"2026-06-19", updated:"2026-06-19", rev:2 },
+  { id:"r3", t:"Semantic indexing latency claim — sub-50ms at 10k records", domain:"technical-work", orientation:"present", vs:"disputed", es:"active", pr:"medium", urgency:"medium", conf:0.3, deadline:null, proj:"PRS Client", horizon:null, tags:["performance","claim"], rels:[["contradicts","r5"]], content:"Initial benchmarks suggest sub-50ms retrieval, but methodology disputed.", created:"2026-06-19", updated:"2026-06-19", rev:2,
+    annotations:[
+      { id:"a1", at:"2026-06-19T11:30:00", author:"diego", kind:"question", state:"open", text:"What was the dataset size for these benchmarks? The claim may not hold at scale." },
+      { id:"a2", at:"2026-06-19T14:00:00", author:"agent", kind:"provenance", state:"resolved", text:"Benchmarked on 1k records; see r5 for the 10k counter-benchmark." },
+    ] },
   { id:"r4", t:"README record link taxonomy (80+ types, 10 categories)", domain:"knowledge-management", orientation:"present", vs:"confirmed", es:"completed", pr:"medium", urgency:"low", conf:0.95, deadline:null, proj:"PRS Spec", horizon:null, tags:["taxonomy"], rels:[["references","r2"]], content:"Full conceptual reference for relation types across structural, temporal, causal, operational, epistemic, governance, strategic, intelligence, human & social, artifact categories.", created:"2026-05-20", updated:"2026-05-22", rev:1 },
   { id:"r5", t:"FTS5 benchmark shows 120ms+ at 10k rows with embeddings", domain:"technical-work", orientation:"retrospective", vs:"confirmed", es:"completed", pr:"high", urgency:"low", conf:0.92, deadline:"2026-06-10", proj:"PRS Client", horizon:null, tags:["benchmark"], rels:[["contradicts","r3"],["causes","r6"]], content:"Measured average 124ms p95 on M2 Air, contradicting the sub-50ms claim.", created:"2026-06-09", updated:"2026-06-10", rev:2 },
-  { id:"r6", t:"Decision: adopt hybrid FTS5 + ANN index strategy", domain:"technical-work", orientation:"retrospective", vs:"confirmed", es:"completed", pr:"critical", urgency:"high", conf:0.9, deadline:"2026-06-12", proj:"PRS Client", horizon:null, tags:["decision","architecture"], rels:[["depends-on","r1"]], content:"Given FTS5 latency constraints, adopt a hybrid: FTS5 for lexical + sqlite-vec for ANN vector search. Trade-off: storage duplication, acceptable.", created:"2026-06-12", updated:"2026-06-12", rev:4 },
+  { id:"r6", t:"Decision: adopt hybrid FTS5 + ANN index strategy", domain:"technical-work", orientation:"retrospective", vs:"confirmed", es:"completed", pr:"critical", urgency:"high", conf:0.9, deadline:"2026-06-12", proj:"PRS Client", horizon:null, tags:["decision","architecture"], rels:[["depends-on","r1"]], content:"Given FTS5 latency constraints, adopt a hybrid: FTS5 for lexical + sqlite-vec for ANN vector search. Trade-off: storage duplication, acceptable.", created:"2026-06-12", updated:"2026-06-12", rev:4,
+    annotations:[
+      { id:"a3", at:"2026-06-12T15:00:00", author:"diego", kind:"review", state:"resolved", text:"Good trade-off analysis. Storage cost is minor vs the query-speed gain." },
+    ] },
   { id:"r7", t:"Weekly review — attention drift toward infra, away from strategy", domain:"planning", orientation:"retrospective", vs:"inferred", es:"completed", pr:"medium", urgency:"medium", conf:0.7, deadline:"2026-06-16", proj:"Personal Ops", horizon:null, tags:["reflection","meta"], rels:[["derived-from","r8"]], content:"Pattern detected: 74% infra vs 12% strategy over 14 days. Rebalance target 50/30.", created:"2026-06-16", updated:"2026-06-16", rev:1 },
   { id:"r8", t:"FX volatility weak signal — USD/DOP corridor risk", domain:"finance", orientation:"prospective", vs:"speculative", es:"pending", pr:"high", urgency:"high", conf:0.45, deadline:"2026-06-28", proj:"Finance Watch", horizon:"30d", tags:["signal","risk"], rels:[["causes","r9"]], content:"Three-week DOP weakening against historical band; monitor for structural break.", created:"2026-06-17", updated:"2026-06-18", rev:2 },
   { id:"r9", t:"Hedge review — increase DOP liquidity buffer to 18%", domain:"finance", orientation:"prospective", vs:"speculative", es:"active", pr:"high", urgency:"high", conf:0.5, deadline:"2026-06-30", proj:"Finance Watch", horizon:"30d", tags:["policy","hedge"], rels:[["supports","r8"]], content:"In response to FX signal, propose lifting DOP liquidity buffer from 12% to 18% pending confirmation.", created:"2026-06-18", updated:"2026-06-19", rev:1 },
@@ -1996,6 +2003,23 @@ function openDetail(id){
         <div class="field-row"><div class="k">id</div><div class="v"><code style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">${r.id}</code></div></div>
       </div>
     </div>
+    <div class="field-group ann-section">
+      <div class="glabel">Annotation Log (${(r.annotations||[]).length}) · Append-Only Commentary</div>
+      <div class="ann-list" id="ann-list-${r.id}">
+        ${(r.annotations||[]).map(a => renderAnnotationItem(r.id, a)).join("") || '<div class="ann-empty">No annotations yet. Add commentary below — this does not change the record content.</div>'}
+      </div>
+      <div class="ann-add">
+        <input id="ann-text-${r.id}" placeholder="Add an annotation (commentary, question, note)…" onkeydown="if(event.key==='Enter')addAnnotation('${r.id}')" />
+        <select id="ann-kind-${r.id}">
+          <option value="comment">comment</option>
+          <option value="question">question</option>
+          <option value="review">review</option>
+          <option value="reflection">reflection</option>
+          <option value="correction-request">correction</option>
+        </select>
+        <button onclick="addAnnotation('${r.id}')">Annotate</button>
+      </div>
+    </div>
     <div class="row gap2 mt4">
       <button class="new-record" style="flex:1;height:34px">Open Editor</button>
       <button class="icon-btn" style="border:1px solid var(--border)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
@@ -2004,6 +2028,65 @@ function openDetail(id){
   document.getElementById("detail").classList.add("open");
 }
 function closeDetail(){ document.getElementById("detail").classList.remove("open"); }
+
+/* ============================================================
+   ANNOTATION LOG — append-only commentary (never mutates content)
+   ============================================================ */
+function renderAnnotationItem(recordId, a){
+  const resolved = a.state === "resolved";
+  const dateStr = new Date(a.at).toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});
+  return `<div class="ann-item ${a.kind||""} ${resolved?"resolved":""}" id="ann-${a.id}">
+    <div class="ann-meta">
+      <span class="kind ${resolved?"resolved":""}">${a.kind||"comment"}</span>
+      <span>·</span>
+      <span>${a.author||"user"}</span>
+      <span>·</span>
+      <span>${dateStr}</span>
+      ${resolved ? '<span class="pill confirmed" style="margin-left:auto">resolved</span>' :
+        `<button onclick="resolveAnnotation('${recordId}','${a.id}')" style="margin-left:auto;background:none;border:none;color:var(--text-muted);font-size:11px;cursor:pointer">resolve</button>`}
+    </div>
+    <div class="ann-text ${resolved?'muted':''}">${a.text}</div>
+  </div>`;
+}
+
+function addAnnotation(recordId){
+  const textInput = document.getElementById("ann-text-"+recordId);
+  const kindSel = document.getElementById("ann-kind-"+recordId);
+  const text = (textInput.value||"").trim();
+  if(!text) return;
+  const kind = kindSel.value;
+  const r = recById[recordId];
+  if(!r.annotations) r.annotations = [];
+  const ann = {
+    id: "a"+Date.now(),
+    at: new Date().toISOString(),
+    author: "you",
+    kind: kind,
+    state: "open",
+    text: text,
+  };
+  r.annotations.push(ann);
+  // Re-render the annotation list without touching record content
+  const listEl = document.getElementById("ann-list-"+recordId);
+  if(listEl){
+    const empty = listEl.querySelector(".ann-empty");
+    if(empty) empty.remove();
+    listEl.insertAdjacentHTML("beforeend", renderAnnotationItem(recordId, ann));
+  }
+  textInput.value = "";
+  textInput.focus();
+}
+
+function resolveAnnotation(recordId, annId){
+  const r = recById[recordId];
+  if(!r || !r.annotations) return;
+  const ann = r.annotations.find(a => a.id === annId);
+  if(!ann) return;
+  ann.state = "resolved";
+  // Re-render this annotation item in place
+  const el = document.getElementById("ann-"+annId);
+  if(el) el.outerHTML = renderAnnotationItem(recordId, ann);
+}
 
 /* ============================================================
    COMMAND PALETTE
