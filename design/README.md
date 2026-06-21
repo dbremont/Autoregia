@@ -324,7 +324,7 @@ NVIM :
 
 The prototype in [`../prototype.html`](../prototype.html) mocks the **9-artifact consolidated set** defined in [`spec.md`](spec.md) §5:
 
-1. **Record Time Reference Line** — evolution of recorded reality through time.
+1. **Record Time Reference Evolution** — evolution of recorded reality through time.
 2. **Activity Heat Map** — activity density, bursts, inactivity, and rhythms.
 3. **Calendar** — central temporal hub consolidating logs, summaries, Google Calendar events, and commitments; the navigational anchor for all time-bound views.
 4. **Daily / Weekly / Monthly / Annual Summaries** — compressed descriptions of each temporal window.

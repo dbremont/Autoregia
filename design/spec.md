@@ -198,7 +198,7 @@ A dimension is "high-value" when it scores well across: **artifact leverage** (h
 
 | Artifact                  | Temporal | Relational | Epistemic | Operational | General | Contextual | Lifecycle |
 | ------------------------- | :------: | :--------: | :-------: | :---------: | :-----: | :--------: | :-------: |
-| Record Time Reference Line           | ●        |            |           |             |         |            |           |
+| Record Time Reference Evolution      | ●        |            |           |             |         |            |           |
 | Record Time Line           |          | ●          | ◐         |             |         |            |           |
 | Activity Heat Map         | ●        |            |           | ●           |         |            |           |
 | Daily/Weekly/Monthly/Annual Summaries | ● |          |           |             |         |            |           |
@@ -272,7 +272,7 @@ The client must provide a search experience combining:
 
 | Artifact                   | Derived From                            | Purpose                                                        |
 | -------------------------- | --------------------------------------- | -------------------------------------------------------------- |
-| Record Time Reference Line            | Temporal metadata                       | Display the evolution of recorded reality through time.        |
+| Record Time Reference Evolution      | Temporal metadata                       | Display the evolution of recorded reality through time.        |
 | Record Time Line           | Relational metadata (typed relations)   | Display the structure of recorded knowledge: how records depend on, cause, support, contradict, and derive from each other. |
 | Activity Heat Map          | `created-at`, `updated-at`, `execution-state` | Reveal activity density, bursts, inactivity, and rhythms. |
 | Calendar                   | `created-at`, `deadline`, `recurrence`, Google Calendar events | Central temporal hub: logs, summaries, events, and commitments in one navigable view. |
