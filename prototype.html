@@ -560,7 +560,7 @@ button { font-family: inherit; cursor: pointer; }
 
     <div class="nav-group">
       <div class="label">Epistemic Artifacts</div>
-      <a class="nav-item" data-route="timeline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Record Time Reference Line</a>
+      <a class="nav-item" data-route="timeline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Record Time Reference Evolution</a>
       <a class="nav-item" data-route="recordtimeline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 6h6M6 9v6"/></svg> Record Time Line</a>
       <a class="nav-item" data-route="heatmap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg> Activity Heat Map</a>
       <a class="nav-item" data-route="topic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18"/></svg> Topic Evolution</a>
@@ -711,7 +711,7 @@ function domainColor(d){ return DOMAIN_COLORS[d]||"var(--text-muted)"; }
 const ROUTES = {
   dashboard: { title:"Dashboard", render: renderDashboard },
   calendar: { title:"Calendar", render: renderCalendarPage },
-  timeline: { title:"Record Time Reference Line", render: renderTimelinePage },
+  timeline: { title:"Record Time Reference Evolution", render: renderTimelinePage },
   recordtimeline: { title:"Record Time Line", render: renderRecordTimeLinePage },
   heatmap: { title:"Activity Heat Map", render: renderHeatmapPage },
   daily: { title:"Daily Summary", render: renderDailyPage },
@@ -1110,23 +1110,13 @@ function renderDashboard(){
       <div class="head"><span class="title">Calendar</span><span class="sub">Google Calendar synced · click → full view</span></div>
       <div class="body" id="mini-cal"></div>
     </section>
-    <section class="card col-4 row-tall clickable" onclick="go('timeline')">
-      <div class="head"><span class="title">Epistemic Quality</span><span class="sub">validation-state</span></div>
-      <div class="body center">
-        <svg width="190" height="190" viewBox="0 0 42 42">
-          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--bg-panel)" stroke-width="6"/>
-          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--c-confirmed)" stroke-width="6" stroke-dasharray="48 52" stroke-dashoffset="25" transform="rotate(-90 21 21)"/>
-          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--c-inferred)" stroke-width="6" stroke-dasharray="22 78" stroke-dashoffset="-23" transform="rotate(-90 21 21)"/>
-          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--c-speculative)" stroke-width="6" stroke-dasharray="18 82" stroke-dashoffset="-45" transform="rotate(-90 21 21)"/>
-          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--c-disputed)" stroke-width="6" stroke-dasharray="7 93" stroke-dashoffset="-63" transform="rotate(-90 21 21)"/>
-          <text x="21" y="20" text-anchor="middle" font-size="6" fill="var(--text)" font-weight="600">4,218</text>
-          <text x="21" y="25" text-anchor="middle" font-size="3" fill="var(--text-muted)">records</text>
-        </svg>
-      </div>
+    <section class="card col-4 row-tall clickable" onclick="go('heatmap')">
+      <div class="head"><span class="title">Rate of Growth</span><span class="sub">dN/dt · derivative of cumulative records</span></div>
+      <div class="body"><div id="mini-growth"></div></div>
     </section>
     <section class="card col-12 row-tall clickable" onclick="go('timeline')">
-      <div class="head"><span class="title">Record Time Reference Line</span><span class="sub">past → present → future · click → full view</span></div>
-      <div class="body"><svg viewBox="0 0 1000 240" width="100%" height="240" id="mini-timeline"></svg></div>
+      <div class="head"><span class="title">Record Time Reference Evolution</span><span class="sub">sum of future-reference captured per day · click → full view</span></div>
+      <div class="body"><div id="mini-timeline"></div></div>
     </section>
     <section class="card col-8 row-tall clickable" onclick="go('heatmap')">
       <div class="head"><span class="title">Activity Heat Map</span><span class="sub">click → full view</span></div>
@@ -1149,6 +1139,81 @@ function renderDashboard(){
   renderTimelineInto("mini-timeline");
   renderHeatmapInto("mini-heatmap");
   renderTopicInto("mini-topic");
+  renderGrowthInto("mini-growth");
+}
+
+/* ============================================================
+   RATE OF GROWTH (shared)
+   Renders the derivative of the cumulative record curve over time:
+   N(t) = cumulative records up to day t  →  dN/dt = N(t) - N(t-1).
+   ============================================================ */
+function renderGrowthInto(elId, days=90){
+  const el=document.getElementById(elId);
+  if(!el) return;
+
+  // Build cumulative curve N(t) across the window (oldest -> newest).
+  const series=[];
+  let cumulative=0;
+  for(let i=-(days-1);i<=0;i++){
+    const iso=isoDate(dayOffset(i));
+    cumulative+=(activityByDay[iso]||0);
+    series.push({iso, cumulative});
+  }
+  // Derivative of the cumulative curve = per-day increment (records/day).
+  const deriv=series.map((s,idx)=>({
+    iso:s.iso,
+    rate: s.cumulative - (idx>0?series[idx-1].cumulative:0)
+  }));
+
+  const W=420,H=220,padL=34,padR=14,padT=16,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const maxRate=Math.max(1, ...deriv.map(d=>d.rate));
+  const avgRate=deriv.reduce((s,d)=>s+d.rate,0)/deriv.length;
+
+  const xOf=i=>padL + (deriv.length<=1?0:(i/(deriv.length-1))*plotW);
+  const yOf=v=>padT + plotH - (v/maxRate)*plotH;
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">`;
+
+  // y gridlines + labels
+  const ticks=4;
+  for(let t=0;t<=ticks;t++){
+    const val=(maxRate/ticks)*t;
+    const y=yOf(val);
+    svg+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-width="1" ${t===0?'':'stroke-dasharray="2,4"'} opacity="0.5"/>`;
+    svg+=`<text x="${padL-6}" y="${y+3}" font-size="9" fill="var(--text-dim)" text-anchor="end" font-family="var(--font-mono)">${Math.round(val)}</text>`;
+  }
+
+  // average-rate hint line
+  svg+=`<line x1="${padL}" y1="${yOf(avgRate)}" x2="${W-padR}" y2="${yOf(avgRate)}" stroke="var(--c-speculative)" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"><title>avg ${avgRate.toFixed(1)} records/day</title></line>`;
+
+  // derivative area + curve
+  let area=`M${xOf(0)},${yOf(0)} `;
+  let line="";
+  deriv.forEach((d,i)=>{
+    const x=xOf(i), y=yOf(d.rate);
+    area+=`L${x},${y} `;
+    line+=(i===0?"M":"L")+x+","+y+" ";
+  });
+  area+=`L${xOf(deriv.length-1)},${yOf(0)} Z`;
+  svg+=`<path d="${area}" fill="var(--accent)" fill-opacity="0.18"/>`;
+  svg+=`<path d="${line}" fill="none" stroke="var(--accent)" stroke-width="1.8"/>`;
+
+  // "now" marker (latest point)
+  const last=deriv[deriv.length-1];
+  const lx=xOf(deriv.length-1), ly=yOf(last.rate);
+  svg+=`<line x1="${lx}" y1="${padT}" x2="${lx}" y2="${padT+plotH}" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>`;
+  svg+=`<circle cx="${lx}" cy="${ly}" r="3.5" fill="var(--accent)"><title>${last.iso}: ${last.rate} records/day</title></circle>`;
+  svg+=`<text x="${lx-4}" y="${padT-4}" font-size="9" fill="var(--accent)" text-anchor="end" font-weight="600">now</text>`;
+
+  // x-axis labels (start / mid / end)
+  svg+=`<text x="${padL}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="start">${fmtDate(deriv[0].iso)}</text>`;
+  svg+=`<text x="${padL+plotW/2}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="middle">${fmtDate(deriv[Math.floor(deriv.length/2)].iso)}</text>`;
+  svg+=`<text x="${W-padR}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="end">${fmtDate(deriv[deriv.length-1].iso)}</text>`;
+
+  svg+=`<text x="${padL-26}" y="${padT-4}" font-size="8" fill="var(--text-dim)" font-family="var(--font-mono)">dN/dt</text>`;
+  svg+="</svg>";
+  el.innerHTML=svg;
 }
 
 /* ============================================================
@@ -1371,48 +1436,198 @@ function renderHeatmapInto(elId, weeks=52){
 }
 
 /* ============================================================
-   TIMELINE (shared)
+   FUTURE-REFERENCE METRIC (shared)
+   "Record Time Reference Evolution" — for each record captured at
+   day t, measure how much FUTURE it embeds (how far forward it
+   looks). The artifact plots the SUM of this metric per day:
+     E(t) = Σ futureReferenceScore(r)  over records created on day t
+   Components of the score (additive):
+     • orientation bonus   prospective=2, present=1, retrospective=0
+     • horizon             forward days the record addresses (7d/30d/90d…)
+     • deadline commitment days from created → deadline (0 if none/past)
    ============================================================ */
-function renderTimelineInto(elId){
-  const events=[
-    {x:40, t:"r4", label:"PRSL taxonomy v0.4", o:"present"},
-    {x:140, t:"r5", label:"FTS5 benchmark", o:"retrospective"},
-    {x:200, t:"r6", label:"Decision: hybrid index", o:"retrospective"},
-    {x:300, t:"r2", label:"Grammar finalized", o:"present"},
-    {x:380, t:"r7", label:"Weekly review", o:"retrospective"},
-    {x:450, t:"r11", label:"Sleep degraded", o:"present"},
-    {x:520, t:"r3", label:"Sub-50ms claim (disputed)", o:"present"},
-    {x:600, t:"r8", label:"FX weak signal", o:"prospective"},
-    {x:680, t:"r1", label:"Migrate storage", o:"prospective"},
-    {x:770, t:"r9", label:"Hedge review", o:"prospective"},
-    {x:860, t:"r10", label:"Q3 strategy draft", o:"prospective"},
-  ];
-  const oc={retrospective:"var(--c-retro)",present:"var(--c-present)",prospective:"var(--c-prospective)"};
-  let svg=`<defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--text-dim)"/></marker></defs>`;
-  svg+=`<line x1="20" y1="120" x2="980" y2="120" stroke="var(--border-strong)" stroke-width="1" marker-end="url(#arrow)"/>`;
-  for(let i=0;i<=10;i++){
-    const x=40+i*94;
-    svg+=`<line x1="${x}" y1="116" x2="${x}" y2="124" stroke="var(--border-strong)"/>`;
-    svg+=`<text x="${x}" y="138" font-size="9" fill="var(--text-dim)" text-anchor="middle">${["May 20","May 27","Jun 03","Jun 10","Jun 17","Jun 24","Jul 01","Jul 08","Jul 15","Jul 22","Jul 29"][i]}</text>`;
+function horizonDays(h){
+  if(!h) return 0;
+  const m = String(h).match(/(\d+)\s*(d|w|m|y)/i);
+  if(!m) return 0;
+  const n = parseInt(m[1],10); const u = m[2].toLowerCase();
+  if(u==="d") return n;
+  if(u==="w") return n*7;
+  if(u==="m") return n*30;
+  if(u==="y") return n*365;
+  return 0;
+}
+function dateDiffDays(aIso, bIso){
+  const a = new Date(aIso+"T00:00:00"), b = new Date(bIso+"T00:00:00");
+  return Math.round((a - b) / 86400000);
+}
+function futureReferenceScore(r){
+  const orientW = r.orientation==="prospective" ? 2 : r.orientation==="present" ? 1 : 0;
+  const hz = horizonDays(r.horizon);
+  const dd = r.deadline ? Math.max(0, dateDiffDays(r.deadline, r.created)) : 0;
+  return orientW + hz + dd;
+}
+/* Aggregate the metric per day across a window (oldest → newest).
+   orientationFilter: "all" | "prospective" | "present" | "retrospective". */
+function futureRefSeries(days, orientationFilter="all"){
+  const series = [];
+  for(let i = -(days-1); i <= 0; i++){
+    const iso = isoDate(dayOffset(i));
+    let dayRecords = records.filter(r => r.created === iso);
+    if(orientationFilter !== "all") dayRecords = dayRecords.filter(r => r.orientation === orientationFilter);
+    const sum = dayRecords.reduce((s,r) => s + futureReferenceScore(r), 0);
+    series.push({ iso, sum, count: dayRecords.length, records: dayRecords });
   }
-  svg+=`<rect x="20" y="20" width="330" height="8" fill="var(--c-retro)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="30" y="34" font-size="9" fill="var(--c-retro)">RETROSPECTIVE</text>`;
-  svg+=`<rect x="350" y="20" width="200" height="8" fill="var(--c-present)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="360" y="34" font-size="9" fill="var(--c-present)">PRESENT</text>`;
-  svg+=`<rect x="550" y="20" width="430" height="8" fill="var(--c-prospective)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="560" y="34" font-size="9" fill="var(--c-prospective)">PROSPECTIVE</text>`;
-  events.forEach((e,i)=>{
-    const y=i%2===0?80:160; const c=oc[e.o];
-    svg+=`<line x1="${e.x}" y1="120" x2="${e.x}" y2="${y}" stroke="${c}" stroke-width="1" opacity="0.5"/>`;
-    svg+=`<circle cx="${e.x}" cy="120" r="5" fill="${c}" class="tl-dot" data-id="${e.t}" style="cursor:pointer"/>`;
-    svg+=`<circle cx="${e.x}" cy="${y}" r="3" fill="var(--bg-elevated)" stroke="${c}" stroke-width="2"/>`;
-    svg+=`<text x="${e.x}" y="${i%2===0?y-8:y+18}" font-size="10" fill="var(--text)" text-anchor="middle">${e.label}</text>`;
-  });
-  svg+=`<line x1="430" y1="60" x2="430" y2="180" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3"/>`;
-  svg+=`<text x="436" y="72" font-size="9" fill="var(--accent)">NOW</text>`;
+  return series;
+}
+
+/* Dashboard mini: area-line of Σ future-reference captured per day. */
+function renderTimelineInto(elId, days=90){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  const series = futureRefSeries(days);
+  const W=1000,H=240,padL=40,padR=16,padT=18,padB=28;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const maxSum = Math.max(1, ...series.map(d=>d.sum));
+  const avg = series.reduce((s,d)=>s+d.sum,0)/series.length;
+  const xOf = i => padL + (series.length<=1?0:(i/(series.length-1))*plotW);
+  const yOf = v => padT + plotH - (v/maxSum)*plotH;
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">`;
+  // y gridlines + labels
+  const ticks=4;
+  for(let t=0;t<=ticks;t++){
+    const val=(maxSum/ticks)*t; const y=yOf(val);
+    svg+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-width="1" ${t===0?'':'stroke-dasharray="2,4"'} opacity="0.5"/>`;
+    svg+=`<text x="${padL-6}" y="${y+3}" font-size="9" fill="var(--text-dim)" text-anchor="end" font-family="var(--font-mono)">${Math.round(val)}</text>`;
+  }
+  // average hint line
+  svg+=`<line x1="${padL}" y1="${yOf(avg)}" x2="${W-padR}" y2="${yOf(avg)}" stroke="var(--c-speculative)" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"><title>avg ${avg.toFixed(1)}/day</title></line>`;
+  svg+=`<text x="${W-padR-4}" y="${yOf(avg)-4}" font-size="9" fill="var(--c-speculative)" text-anchor="end">avg ${avg.toFixed(1)}</text>`;
+  // area + line
+  let area=`M${xOf(0)},${yOf(0)} `;
+  let line="";
+  series.forEach((d,i)=>{ const x=xOf(i), y=yOf(d.sum); area+=`L${x},${y} `; line+=(i===0?"M":"L")+x+","+y+" "; });
+  area+=`L${xOf(series.length-1)},${yOf(0)} Z`;
+  svg+=`<path d="${area}" fill="var(--c-prospective)" fill-opacity="0.18"/>`;
+  svg+=`<path d="${line}" fill="none" stroke="var(--c-prospective)" stroke-width="1.8"/>`;
+  // now marker
+  const last=series[series.length-1];
+  const lx=xOf(series.length-1), ly=yOf(last.sum);
+  svg+=`<line x1="${lx}" y1="${padT}" x2="${lx}" y2="${padT+plotH}" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>`;
+  svg+=`<circle cx="${lx}" cy="${ly}" r="3.5" fill="var(--accent)"><title>${last.iso}: ${last.sum}</title></circle>`;
+  svg+=`<text x="${lx-4}" y="${padT-4}" font-size="9" fill="var(--accent)" text-anchor="end" font-weight="600">now</text>`;
+  // x-axis labels
+  svg+=`<text x="${padL}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="start">${fmtDate(series[0].iso)}</text>`;
+  svg+=`<text x="${padL+plotW/2}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="middle">${fmtDate(series[Math.floor(series.length/2)].iso)}</text>`;
+  svg+=`<text x="${W-padR}" y="${H-6}" font-size="9" fill="var(--text-dim)" text-anchor="end">${fmtDate(series[series.length-1].iso)}</text>`;
+  svg+=`<text x="${padL-30}" y="${padT-4}" font-size="8" fill="var(--text-dim)" font-family="var(--font-mono)">Σ future-ref</text>`;
   svg+="</svg>";
-  document.getElementById(elId).innerHTML=svg;
-  document.querySelectorAll(".tl-dot").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();openDetail(el.dataset.id);}));
+  el.innerHTML=svg;
+}
+/* ============================================================
+   PAGE: TIMELINE (full) — Record Time Reference Evolution
+   ============================================================ */
+function renderTimelinePage(){
+  const main=document.getElementById("main");
+  main.innerHTML = pageHeader("Record Time Reference Evolution","Σ future-reference embedded per day · orientation + horizon + deadline · looking forward", `
+    <div class="seg" id="tl-filter"><button class="active" data-f="all">All</button><button data-f="prospective">Prospective</button><button data-f="present">Present</button><button data-f="retrospective">Retrospective</button></div>`)
+    + `<div class="stat-row mb3" id="tl-stats"></div>
+       <div class="artifact-canvas"><svg viewBox="0 0 1000 380" class="full-svg" id="tl-full"></svg></div>
+       <div class="hint">Each day's height = sum of future-reference scores for records captured that day. Higher = more forward-looking commitment. Click a peak day to inspect its records.</div>
+       <div class="two-col mt3">
+         <div>
+           <h3 class="mb2">Metric definition</h3>
+           <div class="callout">
+             <strong>futureReferenceScore(r) =</strong> orientation bonus (prospective +2, present +1, retrospective +0)
+             + horizon days (7d/30d/90d → forward span addressed)
+             + deadline commitment (days from created → deadline).
+             The chart sums this across all records captured on each day.
+           </div>
+         </div>
+         <div>
+           <h3 class="mb2">Top contributing records (latest day)</h3>
+           <div class="card"><div class="body" id="tl-top"></div></div>
+         </div>
+       </div>`;
+  renderTimelineFull("all");
+  document.getElementById("tl-filter").addEventListener("click",e=>{
+    const b = e.target.closest("button"); if(!b) return;
+    document.querySelectorAll("#tl-filter button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    renderTimelineFull(b.dataset.f);
+  });
+}
+function renderTimelineFull(orientationFilter){
+  const days=120;
+  const series = futureRefSeries(days, orientationFilter);
+  // stats
+  const total = series.reduce((s,d)=>s+d.sum,0);
+  const avg = total/days;
+  let peak = series[0];
+  series.forEach(d=>{ if(d.sum>peak.sum) peak=d; });
+  const prospective = records.filter(r=>r.orientation==="prospective").length;
+  document.getElementById("tl-stats").innerHTML = `
+    <div class="stat"><div class="k">Σ future-ref (${days}d)</div><div class="v">${Math.round(total)}</div></div>
+    <div class="stat"><div class="k">Avg / day</div><div class="v">${avg.toFixed(1)}</div></div>
+    <div class="stat"><div class="k">Peak day</div><div class="v">${peak.sum} <span class="dim" style="font-size:12px">${fmtDate(peak.iso)}</span></div></div>
+    <div class="stat"><div class="k">Prospective records</div><div class="v">${prospective}</div></div>`;
+  // top contributors (latest non-zero day)
+  const lastNonZero = [...series].reverse().find(d=>d.records.length>0) || series[series.length-1];
+  const top = [...lastNonZero.records].sort((a,b)=>futureReferenceScore(b)-futureReferenceScore(a)).slice(0,5);
+  document.getElementById("tl-top").innerHTML = top.length
+    ? top.map(r=>`<div class="rel-link"><span class="pill ${r.orientation==='prospective'?'active':r.orientation==='present'?'confirmed':''}">${r.orientation}</span>
+        <a style="color:var(--accent);cursor:pointer" onclick="openDetail('${r.id}')">${r.t}</a>
+        <span class="dim" style="margin-left:auto">score ${futureReferenceScore(r)}</span></div>`).join("")
+    : '<div class="dim">No records on the latest day.</div>';
+
+  // chart
+  const W=1000,H=380,padL=44,padR=18,padT=24,padB=40;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const maxSum = Math.max(1, ...series.map(d=>d.sum));
+  const xOf = i => padL + (series.length<=1?0:(i/(series.length-1))*plotW);
+  const yOf = v => padT + plotH - (v/maxSum)*plotH;
+  let svg="";
+  const ticks=5;
+  for(let t=0;t<=ticks;t++){
+    const val=(maxSum/ticks)*t; const y=yOf(val);
+    svg+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-width="1" ${t===0?'':'stroke-dasharray="2,4"'} opacity="0.5"/>`;
+    svg+=`<text x="${padL-6}" y="${y+3}" font-size="9" fill="var(--text-dim)" text-anchor="end" font-family="var(--font-mono)">${Math.round(val)}</text>`;
+  }
+  svg+=`<line x1="${padL}" y1="${yOf(avg)}" x2="${W-padR}" y2="${yOf(avg)}" stroke="var(--c-speculative)" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"><title>avg ${avg.toFixed(1)}/day</title></line>`;
+  let area=`M${xOf(0)},${yOf(0)} `;
+  let line="";
+  series.forEach((d,i)=>{ const x=xOf(i), y=yOf(d.sum); area+=`L${x},${y} `; line+=(i===0?"M":"L")+x+","+y+" "; });
+  area+=`L${xOf(series.length-1)},${yOf(0)} Z`;
+  svg+=`<path d="${area}" fill="var(--c-prospective)" fill-opacity="0.2"/>`;
+  svg+=`<path d="${line}" fill="none" stroke="var(--c-prospective)" stroke-width="2"/>`;
+  // highlight non-zero days as clickable dots
+  series.forEach((d,i)=>{
+    if(d.sum<=0) return;
+    const x=xOf(i), y=yOf(d.sum);
+    svg+=`<circle cx="${x}" cy="${y}" r="${d.iso===peak.iso?5:3}" fill="${d.iso===peak.iso?'var(--c-high)':'var(--c-prospective)'}" class="tl-dot" data-iso="${d.iso}" style="cursor:pointer"><title>${d.iso}: ${d.sum} (${d.count} records)</title></circle>`;
+  });
+  // now marker
+  const last=series[series.length-1];
+  const lx=xOf(series.length-1);
+  svg+=`<line x1="${lx}" y1="${padT}" x2="${lx}" y2="${padT+plotH}" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>`;
+  svg+=`<text x="${lx-4}" y="${padT-6}" font-size="9" fill="var(--accent)" text-anchor="end" font-weight="600">now</text>`;
+  // x-axis labels
+  const labelIdx=[0, Math.floor(days/4), Math.floor(days/2), Math.floor(3*days/4), days-1];
+  labelIdx.forEach(i=>{
+    const x=xOf(i);
+    svg+=`<text x="${x}" y="${H-12}" font-size="9" fill="var(--text-dim)" text-anchor="middle">${fmtDate(series[i].iso)}</text>`;
+  });
+  svg+=`<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="var(--border-strong)" stroke-width="1"/>`;
+  svg+=`<text x="${padL-34}" y="${padT-8}" font-size="9" fill="var(--text-dim)" font-family="var(--font-mono)">Σ future-ref</text>`;
+  svg+=`<text x="${W-padR}" y="${H-12}" font-size="9" fill="var(--text-dim)" text-anchor="end" font-family="var(--font-mono)">day</text>`;
+  document.getElementById("tl-full").innerHTML=svg;
+  document.querySelectorAll("#tl-full .tl-dot").forEach(el=>el.addEventListener("click",e=>{
+    e.stopPropagation();
+    const iso = el.dataset.iso;
+    const dayRecords = records.filter(r=>r.created===iso);
+    if(dayRecords.length) openDetail(dayRecords.sort((a,b)=>futureReferenceScore(b)-futureReferenceScore(a))[0].id);
+  }));
 }
 
 /* ============================================================
@@ -1453,74 +1668,6 @@ function renderTopicInto(elId){
   topics.forEach((t,i)=>svg+=`<rect x="${W-160}" y="${10+i*16}" width="8" height="8" fill="${t.c}" opacity="0.6"/><text x="${W-147}" y="${17+i*16}" font-size="10" fill="var(--text-muted)">${t.k}</text>`);
   document.getElementById(elId).innerHTML=svg;
 }
-
-/* ============================================================
-   PAGE: TIMELINE (full)
-   ============================================================ */
-function renderTimelinePage(){
-  const main=document.getElementById("main");
-  main.innerHTML = pageHeader("Record Time Reference Line","Temporal metadata · past → present → future · swimlanes by domain", `
-    <div class="seg" id="tl-filter"><button class="active" data-f="all">All</button><button data-f="retrospective">Retrospective</button><button data-f="present">Present</button><button data-f="prospective">Prospective</button></div>`)
-    + `<div class="stat-row mb3">
-        <div class="stat"><div class="k">Retrospective</div><div class="v">1,204</div></div>
-        <div class="stat"><div class="k">Present</div><div class="v">683</div></div>
-        <div class="stat"><div class="k">Prospective</div><div class="v">412</div></div>
-        <div class="stat"><div class="k">Span</div><div class="v">14 mo</div></div>
-       </div>
-       <div class="artifact-canvas"><svg viewBox="0 0 1000 460" class="full-svg" id="tl-full"></svg></div>
-       <div class="hint">Event dots open the record detail. Bands group records by orientation; swimlanes separate domains.</div>`;
-  renderTimelineFull();
-  document.getElementById("tl-filter").addEventListener("click",e=>{});
-}
-function renderTimelineFull(){
-  const tlEvents=[
-    {x:60, t:"r4", label:"PRSL taxonomy v0.4", o:"present", d:"knowledge-management"},
-    {x:150, t:"r5", label:"FTS5 benchmark", o:"retrospective", d:"technical-work"},
-    {x:230, t:"r6", label:"Decision: hybrid index", o:"retrospective", d:"technical-work"},
-    {x:320, t:"r2", label:"Grammar finalized", o:"present", d:"technical-work"},
-    {x:400, t:"r7", label:"Weekly review", o:"retrospective", d:"planning"},
-    {x:470, t:"r11", label:"Sleep degraded", o:"present", d:"physical-health"},
-    {x:540, t:"r3", label:"Sub-50ms (disputed)", o:"present", d:"technical-work"},
-    {x:620, t:"r8", label:"FX weak signal", o:"prospective", d:"finance"},
-    {x:700, t:"r1", label:"Migrate storage", o:"prospective", d:"technical-work"},
-    {x:790, t:"r9", label:"Hedge review", o:"prospective", d:"finance"},
-    {x:880, t:"r10", label:"Q3 strategy draft", o:"prospective", d:"planning"},
-  ];
-  const oc={retrospective:"var(--c-retro)",present:"var(--c-present)",prospective:"var(--c-prospective)"};
-  const lanes=["technical-work","planning","finance","physical-health","knowledge-management"];
-  const laneY={};
-  lanes.forEach((l,i)=>laneY[l]=90+i*60);
-  let svg=`<defs><marker id="arrow2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--text-dim)"/></marker></defs>`;
-  svg+=`<rect x="20" y="30" width="330" height="10" fill="var(--c-retro)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="30" y="24" font-size="10" fill="var(--c-retro)" font-weight="600">RETROSPECTIVE</text>`;
-  svg+=`<rect x="350" y="30" width="200" height="10" fill="var(--c-present)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="360" y="24" font-size="10" fill="var(--c-present)" font-weight="600">PRESENT</text>`;
-  svg+=`<rect x="550" y="30" width="430" height="10" fill="var(--c-prospective)" opacity="0.25" rx="2"/>`;
-  svg+=`<text x="560" y="24" font-size="10" fill="var(--c-prospective)" font-weight="600">PROSPECTIVE</text>`;
-  lanes.forEach((l,i)=>{
-    const y=laneY[l];
-    svg+=`<line x1="20" y1="${y}" x2="980" y2="${y}" stroke="var(--border)" stroke-width="1" stroke-dasharray="2,4"/>`;
-    svg+=`<text x="0" y="${y+4}" font-size="9" fill="var(--text-dim)">${l.replace('physical-health','health').replace('knowledge-management','km')}</text>`;
-  });
-  for(let i=0;i<=10;i++){
-    const x=60+i*82;
-    svg+=`<line x1="${x}" y1="420" x2="${x}" y2="428" stroke="var(--border-strong)"/>`;
-    svg+=`<text x="${x}" y="442" font-size="9" fill="var(--text-dim)" text-anchor="middle">${["Apr 20","Apr 27","May 04","May 18","Jun 01","Jun 15","Jun 29","Jul 13","Jul 27","Aug 10","Aug 24"][i]}</text>`;
-  }
-  svg+=`<line x1="20" y1="420" x2="980" y2="420" stroke="var(--border-strong)" stroke-width="1" marker-end="url(#arrow2)"/>`;
-  tlEvents.forEach(e=>{
-    const y=laneY[e.d]; const c=oc[e.o];
-    svg+=`<line x1="${e.x}" y1="${y}" x2="${e.x}" y2="420" stroke="${c}" stroke-width="1" opacity="0.25"/>`;
-    svg+=`<circle cx="${e.x}" cy="${y}" r="7" fill="${c}" class="tl-dot" data-id="${e.t}" style="cursor:pointer"><title>${e.label}</title></circle>`;
-    svg+=`<text x="${e.x}" y="${y-12}" font-size="9.5" fill="var(--text)" text-anchor="middle">${e.label}</text>`;
-  });
-  svg+=`<line x1="460" y1="50" x2="460" y2="430" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3"/>`;
-  svg+=`<text x="466" y="56" font-size="10" fill="var(--accent)" font-weight="600">NOW</text>`;
-  svg+="</svg>";
-  document.getElementById("tl-full").innerHTML=svg;
-  document.querySelectorAll(".tl-dot").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();openDetail(el.dataset.id);}));
-}
-
 /* ============================================================
    PAGE: RECORD TIME LINE (relational graph)
    Records are nodes; typed relations are edges.
@@ -1898,7 +2045,7 @@ function renderTopicFull(){
     {k:"planning",c:"var(--c-inferred)"},
     {k:"house-mgmt",c:"var(--c-retro)"},
   ];
-  const months=12;
+  const months=12;1
   const rnd=seeded(11);
   const data=topics.map((t,ti)=>Array.from({length:months},(_,i)=>{
     const base=20+ti*6;
@@ -2098,7 +2245,7 @@ const commands=[
   {cat:"Record", k:"New reflection", sc:"R"},
   {cat:"Navigate", k:"Go to Dashboard", route:"dashboard"},
   {cat:"Navigate", k:"Go to Calendar", route:"calendar"},
-  {cat:"Navigate", k:"Go to Record Time Reference Line", route:"timeline"},
+  {cat:"Navigate", k:"Go to Record Time Reference Evolution", route:"timeline"},
   {cat:"Navigate", k:"Go to Record Time Line", route:"recordtimeline"},
   {cat:"Navigate", k:"Go to Activity Heat Map", route:"heatmap"},
   {cat:"Navigate", k:"Go to Topic Evolution", route:"topic"},
