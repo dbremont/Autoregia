@@ -8,7 +8,7 @@ Fundamentally, a PRS exists to maintain persistent representations of the states
 * **Internal Cognitive State** — intentions, plans, hypotheses, beliefs, decisions, reflections, mental models, and other cognitive structures that influence reasoning and action.
 * **Social Cognitive State** — shared commitments, expectations, agreements, delegations, coordination structures, and other forms of jointly maintained social context.
 
-> By preserving these states across time, a PRS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
+* By preserving these states across time, a PRS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
 
 ## Formulation
 
