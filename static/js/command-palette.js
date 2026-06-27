@@ -18,6 +18,8 @@ PRS.CommandPalette = {
     const commands = [
       {icon:'plus',title:'New Record',sub:'Create a new record',action:()=>PRS.record.openEditor()},
       {icon:'pencil-line',title:'Quick Capture',sub:'Open scratchpad for quick capture',action:()=>PRS.scratchpad.open()},
+      {icon:'inbox',title:'Working Memory',sub:'Open the browser-only working area',action:()=>{this.close();PRS.navigate('working');}},
+      {icon:'file-text',title:'Generate Log Records',sub:'Promote working todos/notes into formal records',action:()=>{this.close();PRS.navigate('working');setTimeout(()=>PRS.Working.generate(),120);}},
       {icon:'gauge',title:'Go to Dashboard',sub:'Navigate to dashboard view',action:()=>{this.close();PRS.navigate('dashboard');}},
       {icon:'list',title:'Browse All Records',sub:'View all records list',action:()=>{this.close();PRS.navigate('records');}},
       {icon:'clock',title:'View Timeline',sub:'Chronological record timeline',action:()=>{this.close();PRS.navigate('timeline');}},

@@ -301,8 +301,6 @@ A state is generally worth preserving if it is:
   - Automated Record Generation (Email Sources, ...)
   - Data Export & Import
   - Encryption
-  - Small Working Memory Note Area : That Supports, Todo (storage in the browser Only) - a kind of working area.
-    - It should support - the generation of log records.
 
 ### Technical Element Set
 

@@ -39,6 +39,7 @@
       <ul class="sidebar-nav">
         <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><prs-icon name="gauge" size="17"></prs-icon></span> Dashboard</a></li>
         <li><a href="#records" data-view="records" class="active"><span class="nav-icon"><prs-icon name="list" size="17"></prs-icon></span> All Records</a></li>
+        <li><a href="#working" data-view="working"><span class="nav-icon"><prs-icon name="inbox" size="17"></prs-icon></span> Working Memory</a></li>
         <li><a href="#timeline" data-view="timeline"><span class="nav-icon"><prs-icon name="clock" size="17"></prs-icon></span> Timeline</a></li>
         <li><a href="#heatmap" data-view="heatmap"><span class="nav-icon"><prs-icon name="layout-grid" size="17"></prs-icon></span> Activity Heatmap</a></li>
         <li><a href="#graph" data-view="graph"><span class="nav-icon"><prs-icon name="share-2" size="17"></prs-icon></span> Relationship Graph</a></li>
@@ -136,10 +137,26 @@
   </div>
 </div>
 
+<!-- ═══ Working Memory: Generate Review Modal ═══ -->
+<div class="modal-overlay hidden" id="wmReviewModal">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-header">
+      <h2>Generate Log Records</h2>
+      <button class="btn-icon" onclick="PRS.Working.closeReview()"><prs-icon name="x" size="17"></prs-icon></button>
+    </div>
+    <div class="modal-body" id="wmReviewBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="PRS.Working.closeReview()">Discard</button>
+      <button class="btn btn-primary btn-sm" id="wmApproveBtn" onclick="PRS.Working.approve()"><prs-icon name="check" size="15"></prs-icon> Approve &amp; Create</button>
+    </div>
+  </div>
+</div>
+
 <script src="/js/store.js"></script>
 <script src="/js/icons.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/record.js"></script>
+<script src="/js/working.js"></script>
 <script src="/js/dashboard.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/timeline.js"></script>
