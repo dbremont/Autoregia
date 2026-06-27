@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PKTS — Personal Keyword Tracking System</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/views.css">
+  <link rel="stylesheet" href="/css/command-palette.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h2"/><path d="M20 12h2"/><circle cx="12" cy="12" r="6"/><path d="m12 8 4 4-4 4"/></svg></span>
+      <span class="brand-wordmark">Personal <em>Keyword Tracking</em> System</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><pkts-icon name="search" size="16"></pkts-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search events, sessions, IDs…  ( / )" autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btnDocs" title="Documentation"><pkts-icon name="clipboard-list" size="15"></pkts-icon> Docs</button>
+      <button class="btn btn-ghost btn-sm" id="btnScratchpad" title="Quick Capture (Ctrl+Shift+N)"><pkts-icon name="pencil-line" size="15"></pkts-icon> Capture</button>
+      <button class="btn btn-primary btn-sm" id="btnExport" title="Export Dataset"><pkts-icon name="download" size="15"></pkts-icon> Export</button>
+    </div>
+  </header>
+
+  <!-- ═══ Tab Bar ═══ -->
+  <nav class="tab-bar" id="tabBar"></nav>
+
+  <!-- ═══ Main ═══ -->
+  <main class="app-main" id="appContent"></main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="app-footer">
+    <div class="footer-rule"></div>
+    <div class="footer-title">Personal Keyword Tracking System</div>
+    <span class="pill gold">Prototype · Mock Data</span>
+    <div class="footer-meta">v0.1.0 · schema 2020-12</div>
+  </footer>
+
+</div>
+
+<!-- ═══ Floating Toolbox ═══ -->
+<div class="toolbox">
+  <button class="btn btn-secondary btn-sm" id="btnBindings" title="Keyword Bindings"><pkts-icon name="keyboard" size="15"></pkts-icon> Bindings</button>
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette">
+    <div class="cmd-palette-search">
+      <span><pkts-icon name="search" size="18"></pkts-icon></span>
+      <input type="text" id="cmdInput" placeholder="Type a command or search events…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+  </div>
+</div>
+
+<!-- ═══ Scratchpad ═══ -->
+<div class="scratchpad-overlay hidden" id="scratchpadOverlay">
+  <div class="scratchpad">
+    <div class="scratchpad-header">
+      <h3 style="margin:0;font-size:var(--text-base);">Quick Capture</h3>
+      <button class="btn-icon" onclick="PKTS.scratchpad.close()"><pkts-icon name="x" size="17"></pkts-icon></button>
+    </div>
+    <div class="scratchpad-body">
+      <textarea id="scratchpadText" placeholder="Capture an observation, hypothesis, or keyword note…"></textarea>
+      <div style="display:flex;gap:var(--space-2);margin-top:var(--space-3);justify-content:flex-end;">
+        <button class="btn btn-secondary btn-sm" onclick="PKTS.scratchpad.close()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="PKTS.scratchpad.save()">Save Note</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ App Modal (Docs / Bindings) ═══ -->
+<div class="modal-overlay hidden" id="appModal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <h2 id="modalTitle">Documentation</h2>
+      <button class="btn-icon" onclick="PKTS.closeModal()"><pkts-icon name="x" size="17"></pkts-icon></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="PKTS.closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Scripts ═══ -->
+<script src="/js/vendor/echarts.min.js"></script>
+<script src="/js/store.js"></script>
+<script src="/js/icons.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/views.js"></script>
+<script src="/js/overview.js"></script>
+<script src="/js/signature.js"></script>
+<script src="/js/temporal.js"></script>
+<script src="/js/composition.js"></script>
+<script src="/js/cognitive.js"></script>
+<script src="/js/workflow.js"></script>
+<script src="/js/telemetry.js"></script>
+<script src="/js/command-palette.js"></script>
+<script src="/js/scratchpad.js"></script>
+<script>
+  // Render the tab bar from the TABS registry, then boot.
+  document.addEventListener('DOMContentLoaded', () => {
+    const bar = document.getElementById('tabBar');
+    bar.innerHTML = PKTS.TABS.map(t =>
+      `<a href="#${t.id}" data-tab="${t.id}"><span class="tab-icon"><pkts-icon name="${t.icon}" size="15"></pkts-icon></span>${t.label}</a>`
+    ).join('') + `<span class="tab-spacer"><span class="pill info" style="margin-right:var(--space-2);"><pkts-icon name="sparkles" size="12"></pkts-icon>&nbsp;telemetry lab</span></span>`;
+    PKTS.init();
+  });
+</script>
+
+</body>
+</html>

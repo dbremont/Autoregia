@@ -35,6 +35,13 @@ Autoregia/
 
 ## Formulation
 
+> Add
+
+- Information Catalog System
+- Technical Object Catalog System (https://github.com/csiglab/Index)
+- Note: The dayly - links - papers - etc- should be handdle by the PRS.
+- ...
+
 | **Part** | **Description** | **Level (VSM)** | **Implementation** |
 | --- | --- | --- | --- |
 | **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note |

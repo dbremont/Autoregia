@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/portable-keystroke-dataset.schema.json",
+  "title": "Keystroke Dataset",
+  "description": "Cross-platform keystroke telemetry schema restricted to data realistically recoverable from both X11 and Wayland without privileged access.",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/KeystrokeEvent"
+  },
+
+  "$defs": {
+    "KeystrokeEvent": {
+      "type": "object",
+
+      "required": [
+        "event_id",
+        "timestamp_utc",
+        "session_id",
+        "source",
+        "device",
+        "keyboard",
+        "event",
+        "timing"
+      ],
+
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "description": "Globally unique event identifier."
+        },
+
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "local_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone identifier."
+        },
+
+        "session_id": {
+          "type": "string",
+          "description": "Logical typing session identifier."
+        },
+
+        "source": {
+          "$ref": "#/$defs/Source"
+        },
+
+        "device": {
+          "$ref": "#/$defs/Device"
+        },
+
+        "keyboard": {
+          "$ref": "#/$defs/Keyboard"
+        },
+
+        "event": {
+          "$ref": "#/$defs/KeyEvent"
+        },
+
+        "timing": {
+          "$ref": "#/$defs/Timing"
+        },
+
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+
+        "environment": {
+          "$ref": "#/$defs/Environment"
+        },
+
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Source": {
+      "type": "object",
+
+      "required": [
+        "platform",
+        "capture_scope"
+      ],
+
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": [
+            "x11",
+            "wayland",
+            "unknown"
+          ]
+        },
+
+        "capture_scope": {
+          "type": "string",
+          "enum": [
+            "application_local",
+            "focused_window",
+            "global"
+          ]
+        },
+
+        "collector": {
+          "type": "string",
+          "description": "Collector implementation name."
+        },
+
+        "collector_version": {
+          "type": "string"
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Device": {
+      "type": "object",
+
+      "required": [
+        "device_id",
+        "hostname",
+        "os"
+      ],
+
+      "properties": {
+        "device_id": {
+          "type": "string"
+        },
+
+        "hostname": {
+          "type": "string"
+        },
+
+        "machine_type": {
+          "type": "string",
+          "enum": [
+            "desktop",
+            "laptop",
+            "tablet",
+            "virtual_machine",
+            "other"
+          ]
+        },
+
+        "os": {
+          "$ref": "#/$defs/OperatingSystem"
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "OperatingSystem": {
+      "type": "object",
+
+      "required": [
+        "family",
+        "version"
+      ],
+
+      "properties": {
+        "family": {
+          "type": "string",
+          "examples": [
+            "Linux",
+            "Windows",
+            "macOS"
+          ]
+        },
+
+        "distribution": {
+          "type": "string"
+        },
+
+        "version": {
+          "type": "string"
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Keyboard": {
+      "type": "object",
+
+      "required": [
+        "layout"
+      ],
+
+      "properties": {
+        "keyboard_id": {
+          "type": "string"
+        },
+
+        "layout": {
+          "type": "string",
+          "examples": [
+            "us",
+            "es",
+            "de"
+          ]
+        },
+
+        "connection_type": {
+          "type": "string",
+          "enum": [
+            "usb",
+            "bluetooth",
+            "integrated",
+            "other"
+          ]
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "KeyEvent": {
+      "type": "object",
+
+      "required": [
+        "event_type",
+        "key_code"
+      ],
+
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "key_down",
+            "key_up",
+            "auto_repeat"
+          ]
+        },
+
+        "key": {
+          "type": "string",
+          "description": "Logical key representation."
+        },
+
+        "key_code": {
+          "type": "string",
+          "description": "Normalized symbolic key code."
+        },
+
+        "modifiers": {
+          "type": "array",
+
+          "items": {
+            "type": "string",
+
+            "enum": [
+              "shift",
+              "ctrl",
+              "alt",
+              "meta",
+              "caps_lock"
+            ]
+          }
+        },
+
+        "is_composition": {
+          "type": "boolean"
+        },
+
+        "is_shortcut": {
+          "type": "boolean"
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Timing": {
+      "type": "object",
+
+      "required": [
+        "event_time_ms"
+      ],
+
+      "properties": {
+        "event_time_ms": {
+          "type": "integer",
+          "description": "Monotonic event timestamp in milliseconds."
+        },
+
+        "hold_time_ms": {
+          "type": "number",
+          "description": "Key press duration."
+        },
+
+        "flight_time_ms": {
+          "type": "number",
+          "description": "Latency from previous key release/press."
+        },
+
+        "digraph_latency_ms": {
+          "type": "number"
+        },
+
+        "typing_speed_wpm": {
+          "type": "number"
+        },
+
+        "session_elapsed_ms": {
+          "type": "number"
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Context": {
+      "type": "object",
+
+      "properties": {
+        "language": {
+          "type": "string"
+        },
+
+        "task_type": {
+          "type": "string",
+
+          "enum": [
+            "coding",
+            "writing",
+            "chatting",
+            "research",
+            "terminal",
+            "navigation",
+            "other"
+          ]
+        },
+
+        "application_name": {
+          "type": "string",
+          "description": "Available reliably only for application-local collection."
+        },
+
+        "input_field_type": {
+          "type": "string",
+
+          "enum": [
+            "editor",
+            "terminal",
+            "search",
+            "form",
+            "chat",
+            "other"
+          ]
+        }
+      },
+
+      "additionalProperties": false
+    },
+
+    "Environment": {
+      "type": "object",
+
+      "properties": {
+        "cpu_load_percent": {
+          "type": "number"
+        },
+
+        "memory_usage_percent": {
+          "type": "number"
+        },
+
+        "battery_percent": {
+          "type": "number"
+        }
+      },
+
+      "additionalProperties": false
+    }
+  }
+}

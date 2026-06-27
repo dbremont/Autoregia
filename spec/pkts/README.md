@@ -4,6 +4,12 @@
 
 > This sub-project is currently a skeleton. Conceptual foundations, architecture, and implementation are to be developed here.
 
+Parts:
+
+- Client
+- Data Capturing
+- Data Ingestion and Storage
+
 ## Relation to Autoregia
 
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
