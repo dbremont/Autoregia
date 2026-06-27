@@ -1,28 +1,27 @@
 # Personal Recording System
 
-> In this design document, we develop the conceptual foundations, architecture, and implementation of a **Personal Recording System (PRS)**: a cognitive infrastructure designed to preserve continuity of state, support coherent agency across time, and enable the systematic externalization of cognition.
+> This document establishes the conceptual foundations, architecture, and implementation of a **Personal Recording System (PRS)**. A **PRS** is a technical object engineered to `preserve the continuity and coherence of human agency` by externalizing relevant states and enabling their persistent recording, discovery, retrieval, and use over time.
 
 Fundamentally, a PRS exists to maintain persistent representations of the states that are relevant for effective action and orientation. These include:
 
-* **External World State** — relevant aspects of the environment, events, opportunities, constraints, resources, and ongoing processes.
-* **Internal Cognitive State** — intentions, plans, hypotheses, beliefs, decisions, reflections, mental models, and other cognitive structures that influence reasoning and action.
-* **Social Cognitive State** — shared commitments, expectations, agreements, delegations, coordination structures, and other forms of jointly maintained social context.
-
-* By preserving these states across time, a PRS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
+- **External World State** — relevant aspects of the environment, events, opportunities, constraints, resources, and ongoing processes.
+- **Internal Cognitive State** — intentions, plans, hypotheses, beliefs, decisions, reflections, mental models, and other cognitive structures that influence reasoning and action.
+- **Social Cognitive State** — shared commitments, expectations, agreements, delegations, coordination structures, and other forms of jointly maintained social context.
+- By preserving these states across time, a PRS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
 
 ## Formulation
 
 > How to think about a `Personal Recording System`?
 
-A sophisticated `Personal Recording System` is fundamentally a form of cognitive infrastructure. Its role is not simply to store information, but to:
+A `Personal Recording System` is a technical object with the role of externalizing **cognitive and intentional processes** to scaffold extended agency:
 
 - preserve temporal coherence,
 - stabilize intentional structures,
 - reduce cognitive state loss,
 - maintain coordination across time and agents,
-- and support consistent strategic action. 
+- and support consistent strategic action.
 
-###  What Should I Remember? What is the nature?
+### What Should I Remember? What is the nature?
 
 > There is a need of contituity, and a undeuying persitne, and consitency of action ....
 
@@ -77,7 +76,7 @@ Practical Categorization:
 NVIM :
 
 - Allow the extention of each `record` with a node link to the `id`.
-- ... 
+- ...
 
 ### Record Link
 
@@ -341,3 +340,4 @@ TODO:
 - [Self Management](https://www.notion.so/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link)
 - [A Guide to Daily Log](https://www.notion.so/A-Guide-to-Daily-Log-252c0f5171ec80fcb08cc98a46769479?source=copy_link)
 - [Modellum Systematis Viabilis Personalis](https://www.notion.so/Modellum-Systematis-Viabilis-Personalis-1a5d38c7497c8060851cec0681de4a8b?source=copy_link)
+- [New Audio APIs for Speech and Transcription](https://openrouter.ai/blog/announcements/announcing-audio-apis/)
