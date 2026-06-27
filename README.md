@@ -8,23 +8,46 @@
 
 Autoregia decomposes self-management into a set of cooperating systems, each mapped to a level of the Viable System Model. Some systems are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents.
 
+> **Start here:** [`index.html`](index.html) — the project landing page.
+
 ---
 
-## Systems
+## Repository Layout
 
-| **System** | **Role** | **VSM Level** | **Sub-system** |
+```
+Autoregia/
+├── README.md            # this document (about)
+├── index.html           # project landing / index page
+├── logos.log.md         # decision & design log
+├── records_schema.json  # shared record JSON Schema (PRS / PKTS)
+├── prs/                 # Personal Recording System (sub-project)
+│   ├── README.md
+│   ├── spec.md
+│   ├── server.py
+│   ├── requirements.txt
+│   ├── data/
+│   └── static/
+└── pkts/                # Personal Keyword Tracking System (sub-project)
+    └── README.md
+```
+
+---
+
+## Formulation
+
+| **Part** | **Description** | **Level (VSM)** | **Implementation** |
 | --- | --- | --- | --- |
-| Policy System | Long-term direction, identity, principles, life-policy | System 5 – Policy | Personal Constitution, Core Values Document |
-| Intelligence System | Scan environment, synthesize, learn, anticipate | System 4 – Intelligence | Research Notes, Learning Pipeline, Annual Review |
-| Documentation System | External memory: explicit knowledge & decision records | System 4 – Intelligence | Notion, Obsidian, Logseq |
-| Control System | Priority-setting, scheduling, day-to-day steering | System 3 – Control | Daily Planner, Weekly Review, Time-Blocking |
-| Accounting System | Track resource usage (time, money, energy, attention) | System 3 – Audit / Accounting | [PRS](design/prs/README.md) · [PKTS](design/pkts/README.md) |
-| Audit System | Diagnostics, deviation detection, performance evaluation | System 3 – Audit | Monthly Review, Error Logs, KPIs |
-| Task Management Assistance System | Organize action constructs (projects, tasks, routines) | System 1 – Operations | Trello, Todoist, Asana |
-| Notification System | Timely external triggers for commitments & events | System 2 – Coordination | Google Calendar, Alarms |
-| Coordination System | Resolve conflicts, harmonize schedules, avoid overload | System 2 – Coordination | Calendar + Integrations, Workflow Rules |
-| Execution System | Physical & cognitive tools used to perform work | System 1 – Operations | Laptop, IDEs, Email, Workspace |
-| Inventory System | Registry of assets, capabilities, reference objects | System 3 – Control | Asset Register, Tooling Catalog, Reading Lists |
+| **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note |
+| **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
+| **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
+| **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
+| **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PRS**, **PKTS** |
+| **Audit System** | Performs diagnostic checks, detects deviations, evaluates performance, and ensures compliance with standards. | **System 3 – Audit** | Monthly Review Template, Error Logs, KPIs |
+| **Task Management Assistance System** (Agential Operating Management System) | Organizes Action Constructs (projects, tasks, routines), maintains the work inventory, and supports execution. | **System 1 – Operations** | Trello, Todoist, Asana |
+| **Notification System** | Ensures timely external triggers for commitments, reminders, and events. | **System 2 – Coordination** | Google Calendar, Alarms |
+| **Coordination System** | Resolves conflicts, harmonizes schedules, syncs across domains, avoids overload. | **System 2 – Coordination** | Calendar + Integrations, Workflow Rules |
+| **Execution System** | Physical and cognitive tools used to perform work (doing, writing, computing, communicating). | **System 1 – Operations** | Laptop, IDEs, Email, Physical Workspace |
+| **Inventory System** | Maintains a structured registry of assets, capabilities, commitments, reference objects, and actionable resources (material, digital, cognitive); supports availability, reuse, and capacity awareness. | **System 3 – Control (Resource Visibility)** | Asset Register, Knowledge Index, Tooling Catalog, Reading Lists, Software & Subscription Ledger |
 
 ---
 
@@ -32,10 +55,10 @@ Autoregia decomposes self-management into a set of cooperating systems, each map
 
 The sub-systems developed within this workspace:
 
-- **[Personal Recording System (PRS)](design/prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. This repository (`tool-prs`) hosts the PRS prototype. See the PRS [specification](design/prs/spec.md), [record schema](design/records_schema.json), and [implementation](design/prs/README.md#prototype).
-- **[Personal Keyword Tracking System (PKTS)](design/pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
+- **[Personal Recording System (PRS)](prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](prs/spec.md), [record schema](records_schema.json), and [implementation](prs/README.md#prototype).
+- **[Personal Keyword Tracking System (PKTS)](pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
 
-> The full Autoregia formulation lives in [`design/README.md`](design/README.md).
+> The design rationale and decision log live in [`logos.log.md`](logos.log.md).
 
 ---
 

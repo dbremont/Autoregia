@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Keystroke Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --bg-elevated: #12161d;
+      --card: #181d26;
+      --border: #252d3a;
+      --fg: #e4e8ef;
+      --muted: #6b7a90;
+      --accent: #22d3ee;
+      --accent-dim: rgba(34, 211, 238, 0.15);
+      --focus: #22d3ee;
+      --casual: #a78bfa;
+      --tired: #fb923c;
+      --warning: #f59e0b;
+      --error: #f87171;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+    }
+
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    .bg-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(34, 211, 238, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.03) 0%, transparent 50%),
+        linear-gradient(rgba(37, 45, 58, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 45, 58, 0.4) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .stat-card {
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    .tab-btn {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+    }
+
+    .tab-btn:hover { color: var(--accent); }
+    .tab-btn.active { color: var(--accent); }
+    .tab-btn.active::after { transform: scaleX(1); }
+
+    .progress-bar {
+      background: var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-focus { background: rgba(34, 211, 238, 0.15); color: var(--focus); }
+    .tag-casual { background: rgba(167, 139, 250, 0.15); color: var(--casual); }
+    .tag-tired { background: rgba(251, 146, 60, 0.15); color: var(--tired); }
+
+    .data-row { transition: background 0.15s ease; }
+    .data-row:hover { background: rgba(34, 211, 238, 0.05); }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .stagger-1 { animation-delay: 0.05s; opacity: 0; }
+    .stagger-2 { animation-delay: 0.1s; opacity: 0; }
+    .stagger-3 { animation-delay: 0.15s; opacity: 0; }
+    .stagger-4 { animation-delay: 0.2s; opacity: 0; }
+
+    /* Artifact specific styles */
+    .artifact-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .gauge-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-text {
+      position: absolute;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+  </style>
+</head>
+<body class="bg-pattern">
+  <!-- Header -->
+  <header class="border-b border-[--border] bg-[--bg-elevated]/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-[--focus] to-[--casual] flex items-center justify-center">
+          <svg class="w-5 h-5 text-[--bg]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base font-semibold tracking-tight">Personal Keystroke Analytics</h1>
+          <p class="text-xs text-[--muted]">Behavioral patterns & epistemic artifacts</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-5">
+        <div class="hidden sm:flex items-center gap-2 text-sm text-[--muted]">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[--accent] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[--accent]"></span>
+          </span>
+          <span class="font-mono" id="headerCount">1,847 keystrokes</span>
+        </div>
+        <button id="generateBtn" class="px-4 py-2 bg-[--accent] text-[--bg] text-sm font-semibold rounded-lg hover:opacity-90 transition-all hover:shadow-lg hover:shadow-[--accent-dim]">
+          Generate New Data
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 py-6">
+    <!-- Tabs -->
+    <nav class="flex gap-1 border-b border-[--border] mb-6 overflow-x-auto no-scrollbar">
+      <button class="tab-btn active px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="overview">Overview</button>
+      <button class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="timing">Timing Analysis</button>
+      <button class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="sessions">Session Compare</button>
+      <button class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="patterns">Patterns</button>
+      <button class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="fatigue">Fatigue Detection</button>
+      <button class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap" data-tab="raw">Raw Data</button>
+    </nav>
+
+    <!-- Content Panels -->
+    <div id="tabContent">
+      
+      <!-- ---------- NEW OVERVIEW TAB ---------- -->
+      <div id="overview" class="tab-panel">
+        
+        <!-- Top Stats Row (Kept for context) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="card stat-card p-4 animate-in stagger-1">
+            <p class="text-xs text-[--muted] mb-1">Total Sessions</p>
+            <p class="text-2xl font-bold font-mono text-[--accent]" id="statSessions">32</p>
+          </div>
+          <div class="card stat-card p-4 animate-in stagger-2">
+            <p class="text-xs text-[--muted] mb-1">Avg Speed</p>
+            <p class="text-2xl font-bold font-mono" id="statWPM">68 WPM</p>
+          </div>
+          <div class="card stat-card p-4 animate-in stagger-3">
+            <p class="text-xs text-[--muted] mb-1">Consistency Score</p>
+            <p class="text-2xl font-bold font-mono" id="statConsistency">84%</p>
+          </div>
+          <div class="card stat-card p-4 animate-in stagger-4">
+            <p class="text-xs text-[--muted] mb-1">Fatigue Events</p>
+            <p class="text-2xl font-bold font-mono text-[--tired]" id="statFatigue">7</p>
+          </div>
+        </div>
+
+        <!-- Artifact Grid -->
+        <div class="grid lg:grid-cols-3 gap-6">
+          
+          <!-- Artifact 1: Behavioral Signature Profile -->
+          <div class="card p-6 lg:col-span-1 animate-in stagger-1">
+            <span class="artifact-label">Artifact I</span>
+            <h3 class="font-semibold text-lg mb-1">Behavioral Signature</h3>
+            <p class="text-xs text-[--muted] mb-6">Stable typing dynamics fingerprint</p>
+            
+            <div class="relative h-48 flex items-center justify-center">
+              <canvas id="signatureChart"></canvas>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="text-center">
+                   <!-- Optional center label -->
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4 text-xs border-t border-[--border] pt-4">
+              <div>
+                <span class="text-[--muted] block">Identity Match</span>
+                <span class="font-mono text-[--accent] text-lg font-bold">98.4%</span>
+              </div>
+              <div>
+                <span class="text-[--muted] block">Drift Level</span>
+                <span class="font-mono text-lg font-bold">Stable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Artifact 2: Cognitive Load & Fatigue Model -->
+          <div class="card p-6 lg:col-span-2 animate-in stagger-2">
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Left: Cognitive Load Estimator -->
+                <div>
+                    <span class="artifact-label">Artifact II</span>
+                    <h3 class="font-semibold text-lg mb-1">Cognitive Load</h3>
+                    <p class="text-xs text-[--muted] mb-4">Latent strain probability</p>
+                    
+                    <div class="flex items-center justify-center h-32">
+                        <div class="relative w-32 h-32">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <path class="text-[--border]" stroke="currentColor" stroke-width="3" fill="none"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <path id="loadArc" class="text-[--accent]" stroke="currentColor" stroke-width="3" fill="none"
+                                stroke-linecap="round" stroke-dasharray="0, 100"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center flex-col">
+                                <span class="font-mono text-2xl font-bold" id="loadValue">0.24</span>
+                                <span class="text-[10px] text-[--muted]">PROBABILITY</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs text-[--muted] mt-2">
+                        Status: <span class="text-[--accent]" id="loadStatus">Low Strain</span>
+                    </div>
+                </div>
+
+                <!-- Right: Fatigue Dynamics Model -->
+                <div>
+                    <span class="artifact-label">Artifact III</span>
+                    <h3 class="font-semibold text-lg mb-1">Fatigue Dynamics</h3>
+                    <p class="text-xs text-[--muted] mb-4">Degradation signal tracking</p>
+                    
+                    <div class="h-32 relative">
+                        <canvas id="fatigueMiniChart"></canvas>
+                    </div>
+                    <div class="flex justify-between text-xs mt-4 border-t border-[--border] pt-3">
+                        <div>
+                            <span class="text-[--muted] block">Degradation</span>
+                            <span class="font-mono text-[--warning]" id="degradeVal">+12%</span>
+                        </div>
+                        <div>
+                            <span class="text-[--muted] block">Cadence Δ</span>
+                            <span class="font-mono" id="cadenceDelta">-4bpm</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <!-- Artifact 3: Interaction Entropy Profile -->
+          <div class="card p-6 lg:col-span-1 animate-in stagger-3">
+            <span class="artifact-label">Artifact IV</span>
+            <h3 class="font-semibold text-lg mb-1">Interaction Entropy</h3>
+            <p class="text-xs text-[--muted] mb-4">Behavioral variability index</p>
+            
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-[--muted]">Regularitiy</span>
+                  <span class="font-mono text-[--accent]">High</span>
+                </div>
+                <div class="progress-bar h-1.5">
+                  <div class="progress-fill bg-[--accent]" id="entropyRegularBar" style="width: 82%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-[--muted]">Burstiness</span>
+                  <span class="font-mono text-[--casual]">Medium</span>
+                </div>
+                <div class="progress-bar h-1.5">
+                  <div class="progress-fill bg-[--casual]" id="entropyBurstBar" style="width: 55%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-[--muted]">Error Rate</span>
+                  <span class="font-mono text-[--tired]">Low</span>
+                </div>
+                <div class="progress-bar h-1.5">
+                  <div class="progress-fill bg-[--tired]" id="entropyErrorBar" style="width: 12%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-[--border] flex justify-between items-center">
+              <span class="text-xs text-[--muted]">H(t) Score</span>
+              <span class="font-mono text-xl font-bold" id="entropyScore">3.42 <span class="text-xs text-[--muted]">bits</span></span>
+            </div>
+          </div>
+
+          <!-- Artifact 4: Session Rhythm Profile -->
+          <div class="card p-6 lg:col-span-2 animate-in stagger-4">
+             <div class="flex justify-between items-start mb-4">
+                <div>
+                    <span class="artifact-label">Artifact V</span>
+                    <h3 class="font-semibold text-lg mb-1">Session Rhythm Profile</h3>
+                    <p class="text-xs text-[--muted]">Warm-up, flow, and degradation phases</p>
+                </div>
+                <div class="tag tag-focus">Active Session</div>
+             </div>
+             
+             <div class="relative h-40">
+                 <canvas id="rhythmChart"></canvas>
+             </div>
+
+             <div class="grid grid-cols-3 gap-4 mt-4 border-t border-[--border] pt-4 text-xs">
+                <div class="text-center">
+                    <span class="block text-[--muted] mb-1">Warm-up</span>
+                    <span class="font-mono text-sm">~2m 14s</span>
+                </div>
+                <div class="text-center border-x border-[--border]">
+                    <span class="block text-[--muted] mb-1">Peak Flow</span>
+                    <span class="font-mono text-sm text-[--accent]">Active Now</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-[--muted] mb-1">Fatigue Onset</span>
+                    <span class="font-mono text-sm">Est. +45m</span>
+                </div>
+             </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Timing (Unchanged) -->
+      <div id="timing" class="tab-panel hidden">
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Dwell Time Distribution</h3>
+            <div class="h-56"><canvas id="dwellChart"></canvas></div>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+              <div><p class="text-[--muted]">Min</p><p class="font-mono text-[--accent]" id="dwellMin">38ms</p></div>
+              <div><p class="text-[--muted]">Avg</p><p class="font-mono" id="dwellAvg">82ms</p></div>
+              <div><p class="text-[--muted]">Max</p><p class="font-mono text-[--tired]" id="dwellMax">215ms</p></div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Flight Time Distribution</h3>
+            <div class="h-56"><canvas id="flightChart"></canvas></div>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+              <div><p class="text-[--muted]">Min</p><p class="font-mono text-[--accent]" id="flightMin">22ms</p></div>
+              <div><p class="text-[--muted]">Avg</p><p class="font-mono" id="flightAvg">98ms</p></div>
+              <div><p class="text-[--muted]">Max</p><p class="font-mono text-[--tired]" id="flightMax">412ms</p></div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Percentile Breakdown</h3>
+            <div class="space-y-3" id="percentileBars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sessions (Unchanged) -->
+      <div id="sessions" class="tab-panel hidden">
+        <div class="grid lg:grid-cols-5 gap-5">
+          <div class="card p-5 lg:col-span-3">
+            <h3 class="font-semibold mb-4">Session Comparison</h3>
+            <div class="h-72"><canvas id="sessionCompareChart"></canvas></div>
+          </div>
+          <div class="card p-5 lg:col-span-2">
+            <h3 class="font-semibold mb-4">Session Log</h3>
+            <div class="overflow-y-auto max-h-64">
+              <table class="w-full text-xs">
+                <thead class="sticky top-0 bg-[--card]">
+                  <tr class="border-b border-[--border]">
+                    <th class="text-left py-2 text-[--muted]">Session</th>
+                    <th class="text-left py-2 text-[--muted]">State</th>
+                    <th class="text-right py-2 text-[--muted]">WPM</th>
+                    <th class="text-right py-2 text-[--muted]">Keys</th>
+                  </tr>
+                </thead>
+                <tbody id="sessionTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patterns (Unchanged) -->
+      <div id="patterns" class="tab-panel hidden">
+        <div class="grid lg:grid-cols-2 gap-5">
+          <div class="card p-5 lg:col-span-2">
+            <h3 class="font-semibold mb-4">Digraph Timing Heatmap (Flight ms)</h3>
+            <div class="overflow-x-auto">
+              <div id="digraphHeatmap" class="min-w-[600px]"></div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Frequent Bigrams</h3>
+            <div class="space-y-2" id="bigramList"></div>
+          </div>
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Error Patterns</h3>
+            <div class="space-y-3" id="errorPatterns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fatigue (Unchanged) -->
+      <div id="fatigue" class="tab-panel hidden">
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="card p-5">
+            <h3 class="font-semibold mb-4">Fatigue Indicators</h3>
+            <div class="h-56"><canvas id="fatigueChart"></canvas></div>
+          </div>
+          <div class="card p-5 lg:col-span-2">
+            <h3 class="font-semibold mb-4">Detected Events</h3>
+            <div class="overflow-y-auto max-h-72">
+              <table class="w-full text-xs">
+                <thead class="sticky top-0 bg-[--card]">
+                  <tr class="border-b border-[--border]">
+                    <th class="text-left py-2 text-[--muted]">Time</th>
+                    <th class="text-left py-2 text-[--muted]">Session</th>
+                    <th class="text-left py-2 text-[--muted]">Type</th>
+                    <th class="text-left py-2 text-[--muted]">Severity</th>
+                    <th class="text-left py-2 text-[--muted]">Metric</th>
+                  </tr>
+                </thead>
+                <tbody id="fatigueTable"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card p-5 lg:col-span-3">
+            <h3 class="font-semibold mb-4">Fatigue Timeline</h3>
+            <div class="h-48"><canvas id="fatigueTimelineChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw (Unchanged) -->
+      <div id="raw" class="tab-panel hidden">
+        <div class="card p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold">Raw Keystroke Log</h3>
+            <button id="exportBtn" class="px-3 py-1.5 border border-[--border] rounded text-xs hover:border-[--accent] hover:text-[--accent] transition-colors">
+              Export CSV
+            </button>
+          </div>
+          <div class="overflow-x-auto max-h-[500px]">
+            <table class="w-full text-xs font-mono">
+              <thead class="sticky top-0 bg-[--card]">
+                <tr class="border-b border-[--border]">
+                  <th class="text-left py-2 px-2 text-[--muted]">ID</th>
+                  <th class="text-left py-2 px-2 text-[--muted]">Session</th>
+                  <th class="text-left py-2 px-2 text-[--muted]">State</th>
+                  <th class="text-left py-2 px-2 text-[--muted]">Key</th>
+                  <th class="text-right py-2 px-2 text-[--muted]">Time</th>
+                  <th class="text-right py-2 px-2 text-[--muted]">Dwell</th>
+                  <th class="text-right py-2 px-2 text-[--muted]">Flight</th>
+                </tr>
+              </thead>
+              <tbody id="rawTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+// ============ Configuration & Data Generation ============
+const STATES = [
+  { id: 'focus', label: 'Focus', color: '#22d3ee', avgDwell: 72, dwellVar: 12, avgFlight: 85, flightVar: 18, wpm: 75 },
+  { id: 'casual', label: 'Casual', color: '#a78bfa', avgDwell: 88, dwellVar: 20, avgFlight: 115, flightVar: 30, wpm: 58 },
+  { id: 'tired', label: 'Tired', color: '#fb923c', avgDwell: 115, dwellVar: 35, avgFlight: 165, flightVar: 55, wpm: 42 }
+];
+
+const KEYS = ['a','s','d','f','g','h','j','k','l','e','t','o','i','n','r',' '];
+
+let keystrokeData = [];
+let sessions = [];
+let charts = {};
+
+function gaussian(mean, std) {
+  const u = 1 - Math.random();
+  const v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return Math.max(5, Math.round(mean + z * std));
+}
+
+function generateDataset() {
+  keystrokeData = [];
+  sessions = [];
+  let id = 1;
+  const baseTime = Date.now() - (7 * 86400000); // 7 days ago
+
+  for (let s = 0; s < 32; s++) {
+    const stateIdx = Math.random() < 0.5 ? 0 : (Math.random() < 0.6 ? 1 : 2);
+    const state = STATES[stateIdx];
+    const sessionId = `S${String(s + 1).padStart(3, '0')}`;
+    const sessionStart = baseTime + (s * 1800000) + Math.random() * 600000;
+    const keysCount = 40 + Math.floor(Math.random() * 60);
+    let ts = sessionStart;
+
+    sessions.push({
+      id: sessionId,
+      state: state.id,
+      start: sessionStart,
+      wpm: state.wpm + Math.floor(Math.random() * 12 - 6),
+      keys: keysCount
+    });
+
+    for (let k = 0; k < keysCount; k++) {
+      const key = KEYS[Math.floor(Math.random() * KEYS.length)];
+      const dwell = gaussian(state.avgDwell, state.dwellVar);
+      const flight = k === 0 ? 0 : gaussian(state.avgFlight, state.flightVar);
+      const isFatigue = state.id === 'tired' && Math.random() < 0.15;
+
+      keystrokeData.push({
+        id: id++,
+        sessionId,
+        state: state.id,
+        key,
+        timestamp: ts,
+        dwellTime: isFatigue ? dwell * 1.6 : dwell,
+        flightTime: isFatigue ? flight * 1.8 : flight,
+        isFatigue
+      });
+
+      ts += dwell + flight;
+    }
+  }
+
+  keystrokeData.sort((a, b) => a.timestamp - b.timestamp);
+  return keystrokeData;
+}
+
+// ============ Analysis ============
+function analyze() {
+  const dwellTimes = keystrokeData.map(k => k.dwellTime);
+  const flightTimes = keystrokeData.filter(k => k.flightTime > 0).map(k => k.flightTime);
+  const fatigueEvents = keystrokeData.filter(k => k.isFatigue);
+  
+  const meanDwell = dwellTimes.reduce((a,b) => a+b, 0) / dwellTimes.length;
+  const stdDwell = Math.sqrt(dwellTimes.reduce((a,b) => a + Math.pow(b - meanDwell, 2), 0) / dwellTimes.length);
+  const consistency = Math.max(0, Math.min(100, Math.round(100 - (stdDwell / meanDwell * 100))));
+
+  return {
+    sessions: sessions.length,
+    avgWPM: Math.round(keystrokeData.length / sessions.length * 0.18),
+    consistency,
+    fatigueCount: fatigueEvents.length,
+    dwellMin: Math.min(...dwellTimes),
+    dwellMax: Math.max(...dwellTimes),
+    dwellAvg: Math.round(meanDwell),
+    flightMin: Math.min(...flightTimes),
+    flightMax: Math.max(...flightTimes),
+    flightAvg: Math.round(flightTimes.reduce((a,b) => a+b, 0) / flightTimes.length)
+  };
+}
+
+// ============ New Overview Rendering ============
+function renderOverview() {
+  const stats = analyze();
+  
+  // Update Header
+  document.getElementById('headerCount').textContent = `${keystrokeData.length} keystrokes`;
+  
+  // Update Top Stats
+  document.getElementById('statSessions').textContent = stats.sessions;
+  document.getElementById('statWPM').textContent = `${stats.avgWPM} WPM`;
+  document.getElementById('statConsistency').textContent = `${stats.consistency}%`;
+  document.getElementById('statFatigue').textContent = stats.fatigueCount;
+
+  // 1. Behavioral Signature (Radar)
+  const sigCtx = document.getElementById('signatureChart').getContext('2d');
+  if (charts.signature) charts.signature.destroy();
+  
+  // Create profile data
+  const profileData = [
+    stats.dwellAvg, // Dwell
+    stats.flightAvg, // Flight
+    stats.consistency, // Consistency
+    100 - (stats.fatigueCount / keystrokeData.length * 1000), // Stability (inverted fatigue)
+    stats.avgWPM * 1.2 // Speed
+  ];
+
+  charts.signature = new Chart(sigCtx, {
+    type: 'radar',
+    data: {
+      labels: ['Dwell', 'Flight', 'Consistency', 'Stability', 'Speed'],
+      datasets: [{
+        data: profileData,
+        backgroundColor: 'rgba(34, 211, 238, 0.2)',
+        borderColor: '#22d3ee',
+        pointBackgroundColor: '#22d3ee',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#22d3ee',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: { color: 'rgba(37, 45, 58, 0.6)' },
+          grid: { color: 'rgba(37, 45, 58, 0.4)' },
+          pointLabels: { color: '#6b7a90', font: { size: 10 } },
+          ticks: { display: false }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // 2. Cognitive Load Estimator
+  // Heuristic: variance + backspace rate implies load
+  const backspaces = keystrokeData.filter(k => k.key === 'Backspace').length;
+  const variance = computeVariance(keystrokeData.map(k => k.dwellTime));
+  const load = Math.min(1, (variance / 800) + (backspaces / 50));
+  
+  document.getElementById('loadValue').textContent = load.toFixed(2);
+  document.getElementById('loadArc').setAttribute('stroke-dasharray', `${load * 100}, 100`);
+  
+  const loadStatus = load < 0.3 ? 'Low Strain' : load < 0.6 ? 'Moderate' : 'High';
+  document.getElementById('loadStatus').textContent = loadStatus;
+  document.getElementById('loadStatus').style.color = load < 0.3 ? 'var(--accent)' : load < 0.6 ? 'var(--warning)' : 'var(--error)';
+
+  // 3. Fatigue Dynamics (Mini Chart)
+  const fatCtx = document.getElementById('fatigueMiniChart').getContext('2d');
+  if (charts.fatigueMini) charts.fatigueMini.destroy();
+  
+  // Segment data into 10 parts to show trend
+  const segments = 10;
+  const segSize = Math.floor(keystrokeData.length / segments);
+  const trend = [];
+  for(let i=0; i<segments; i++) {
+    const slice = keystrokeData.slice(i*segSize, (i+1)*segSize);
+    trend.push(avg(slice.map(k => k.dwellTime)));
+  }
+
+  charts.fatigueMini = new Chart(fatCtx, {
+    type: 'line',
+    data: {
+      labels: trend.map((_, i) => `${i*10}%`),
+      datasets: [{
+        data: trend,
+        borderColor: '#fb923c',
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true,
+        backgroundColor: 'rgba(251, 146, 60, 0.1)'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+  
+  // Update fatigue stats
+  const firstHalf = trend.slice(0, 5);
+  const secondHalf = trend.slice(5);
+  const degradation = ((avg(secondHalf) - avg(firstHalf)) / avg(firstHalf) * 100).toFixed(0);
+  document.getElementById('degradeVal').textContent = `+${Math.max(0, degradation)}%`;
+  document.getElementById('cadenceDelta').textContent = `-${Math.max(0, degradation * 0.3).toFixed(0)}bpm`;
+
+  // 4. Entropy
+  const entropy = computeEntropy(keystrokeData.map(k => k.flightTime));
+  document.getElementById('entropyScore').innerHTML = `${entropy.toFixed(2)} <span class="text-xs text-[--muted]">bits</span>`;
+  
+  // Set entropy bars (simulated logic)
+  document.getElementById('entropyRegularBar').style.width = `${stats.consistency}%`;
+  document.getElementById('entropyBurstBar').style.width = `${50 + (Math.random() * 20)}%`;
+  document.getElementById('entropyErrorBar').style.width = `${(backspaces / keystrokeData.length) * 200}%`;
+
+  // 5. Rhythm Profile
+  const rhythmCtx = document.getElementById('rhythmChart').getContext('2d');
+  if (charts.rhythm) charts.rhythm.destroy();
+
+  const rhythmData = keystrokeData.slice(0, 100).map(k => k.flightTime < 120 ? 1 : 0.2);
+
+  charts.rhythm = new Chart(rhythmCtx, {
+    type: 'line',
+    data: {
+      labels: rhythmData.map((_, i) => i),
+      datasets: [{
+        data: rhythmData,
+        borderColor: '#a78bfa',
+        backgroundColor: 'rgba(167, 139, 250, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        borderWidth: 1.5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+}
+
+// ============ Other Tab Rendering (Condensed) ============
+function renderTiming() {
+  const stats = analyze();
+  document.getElementById('dwellMin').textContent = `${stats.dwellMin}ms`;
+  document.getElementById('dwellAvg').textContent = `${stats.dwellAvg}ms`;
+  document.getElementById('dwellMax').textContent = `${stats.dwellMax}ms`;
+  document.getElementById('flightMin').textContent = `${stats.flightMin}ms`;
+  document.getElementById('flightAvg').textContent = `${stats.flightAvg}ms`;
+  document.getElementById('flightMax').textContent = `${stats.flightMax}ms`;
+
+  const dwellCtx = document.getElementById('dwellChart').getContext('2d');
+  if (charts.dwell) charts.dwell.destroy();
+  const dwellBuckets = Array(10).fill(0);
+  keystrokeData.forEach(k => {
+    const bucket = Math.min(9, Math.floor(k.dwellTime / 25));
+    dwellBuckets[bucket]++;
+  });
+  charts.dwell = new Chart(dwellCtx, {
+    type: 'bar', data: { labels: ['0-25','25-50','50-75','75-100','100-125','125-150','150-175','175-200','200-225','225+'], datasets: [{ data: dwellBuckets, backgroundColor: 'rgba(34, 211, 238, 0.7)', borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#6b7a90', font: { size: 9 } } }, y: { grid: { color: 'rgba(37, 45, 58, 0.6)' }, ticks: { color: '#6b7a90' } } } }
+  });
+
+  const flightCtx = document.getElementById('flightChart').getContext('2d');
+  if (charts.flight) charts.flight.destroy();
+  const flightBuckets = Array(10).fill(0);
+  keystrokeData.filter(k => k.flightTime > 0).forEach(k => {
+    const bucket = Math.min(9, Math.floor(k.flightTime / 45));
+    flightBuckets[bucket]++;
+  });
+  charts.flight = new Chart(flightCtx, {
+    type: 'bar', data: { labels: ['0-45','45-90','90-135','135-180','180-225','225-270','270-315','315-360','360-405','405+'], datasets: [{ data: flightBuckets, backgroundColor: 'rgba(167, 139, 250, 0.7)', borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#6b7a90', font: { size: 9 } } }, y: { grid: { color: 'rgba(37, 45, 58, 0.6)' }, ticks: { color: '#6b7a90' } } } }
+  });
+
+  const sortedDwell = keystrokeData.map(k => k.dwellTime).sort((a,b) => a-b);
+  const percentiles = [10, 25, 50, 75, 90];
+  document.getElementById('percentileBars').innerHTML = percentiles.map(p => {
+    const val = sortedDwell[Math.floor(sortedDwell.length * p / 100)];
+    return `<div class="flex items-center gap-3"><span class="text-xs text-[--muted] w-10">P${p}</span><div class="flex-1 progress-bar h-2"><div class="progress-fill bg-gradient-to-r from-[--focus] to-[--casual]" style="width: ${(val / stats.dwellMax) * 100}%"></div></div><span class="font-mono text-xs w-14 text-right">${val}ms</span></div>`;
+  }).join('');
+}
+
+function renderSessions() {
+  const ctx = document.getElementById('sessionCompareChart').getContext('2d');
+  if (charts.sessionCompare) charts.sessionCompare.destroy();
+  const recentSessions = sessions.slice(-5);
+  charts.sessionCompare = new Chart(ctx, {
+    type: 'radar', data: { labels: ['Speed', 'Consistency', 'Flow', 'Dwell', 'Rhythm'], datasets: recentSessions.map((s, i) => ({ label: s.id, data: [s.wpm, 70 + Math.random() * 25, 60 + Math.random() * 30, 50 + Math.random() * 40, 55 + Math.random() * 35], borderColor: STATES.find(st => st.id === s.state).color, backgroundColor: STATES.find(st => st.id === s.state).color + '15', borderWidth: 2 })) },
+    options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: 'rgba(37, 45, 58, 0.6)' }, angleLines: { color: 'rgba(37, 45, 58, 0.6)' }, ticks: { display: false }, pointLabels: { color: '#6b7a90', font: { size: 11 } } } }, plugins: { legend: { position: 'bottom', labels: { color: '#6b7a90' } } } }
+  });
+  document.getElementById('sessionTable').innerHTML = sessions.slice(-15).reverse().map(s => `<tr class="border-b border-[--border] data-row"><td class="py-2 font-mono">${s.id}</td><td class="py-2"><span class="tag tag-${s.state}">${s.state}</span></td><td class="py-2 text-right font-mono">${s.wpm}</td><td class="py-2 text-right text-[--muted]">${s.keys}</td></tr>`).join('');
+}
+
+function renderPatterns() {
+  const heatmap = document.getElementById('digraphHeatmap');
+  const keys = ['a','s','d','f','g','h','j','k','l','e','t','o','i','n','r'];
+  const digraphs = {};
+  keystrokeData.forEach((k, i) => { if (i > 0 && keystrokeData[i-1].sessionId === k.sessionId) { const pair = `${keystrokeData[i-1].key}-${k.key}`; digraphs[pair] = digraphs[pair] || []; digraphs[pair].push(k.flightTime); } });
+  const getAvg = arr => arr.length ? Math.round(arr.reduce((a,b) => a+b, 0) / arr.length) : 0;
+  const maxTime = 200;
+  heatmap.innerHTML = `<div class="flex"><div class="w-10"></div><div class="flex-1 flex">${keys.map(k => `<div class="flex-1 text-center text-xs text-[--muted] py-1 font-mono">${k}</div>`).join('')}</div></div>${keys.map(row => `<div class="flex"><div class="w-10 text-right pr-2 text-xs text-[--muted] py-1 font-mono">${row}</div><div class="flex-1 flex gap-0.5">${keys.map(col => { const time = getAvg(digraphs[`${row}-${col}`] || []); const intensity = Math.min(1, time / maxTime); return `<div class="flex-1 aspect-square rounded-sm transition-all hover:scale-125 hover:z-10 cursor-pointer" style="background: ${time ? `rgba(34, 211, 238, ${intensity})` : 'var(--border)'}" title="${row}-${col}: ${time}ms"></div>`; }).join('')}</div></div>`).join('')}`;
+  const sortedDigraphs = Object.entries(digraphs).map(([pair, times]) => ({ pair, avg: getAvg(times), count: times.length })).filter(d => d.count >= 3).sort((a, b) => b.count - a.count).slice(0, 8);
+  document.getElementById('bigramList').innerHTML = sortedDigraphs.map(d => `<div class="flex items-center gap-3"><span class="font-mono text-sm w-12">${d.pair}</span><div class="flex-1 progress-bar h-2"><div class="progress-fill bg-[--focus]" style="width: ${Math.min(100, d.avg / 1.5)}%"></div></div><span class="font-mono text-xs text-[--muted] w-12 text-right">${d.avg}ms</span></div>`).join('');
+  const errorTypes = ['Backspace after n', 'Slow o-i transition', 'Extended dwell on Space', 'Erratic flight times'];
+  document.getElementById('errorPatterns').innerHTML = errorTypes.map((e, i) => `<div class="flex items-center justify-between p-3 bg-[--bg] rounded-lg"><span class="text-sm">${e}</span><span class="font-mono text-xs text-[--tired]">${Math.floor(Math.random() * 8 + 2)}x</span></div>`).join('');
+}
+
+function renderFatigue() {
+  const ctx = document.getElementById('fatigueChart').getContext('2d');
+  if (charts.fatigue) charts.fatigue.destroy();
+  const fatigueData = keystrokeData.filter(k => k.isFatigue);
+  const normalCount = keystrokeData.length - fatigueData.length;
+  charts.fatigue = new Chart(ctx, { type: 'pie', data: { labels: ['Normal', 'Fatigue'], datasets: [{ data: [normalCount, fatigueData.length], backgroundColor: ['#22d3ee', '#fb923c'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#6b7a90' } } } } });
+  document.getElementById('fatigueTable').innerHTML = fatigueData.slice(0, 25).map(f => { const type = f.dwellTime > 120 ? 'Slow Dwell' : f.flightTime > 200 ? 'Slow Flight' : 'Erratic'; const severity = f.dwellTime > 180 || f.flightTime > 350 ? 'High' : 'Medium'; return `<tr class="border-b border-[--border] data-row"><td class="py-2 font-mono">${new Date(f.timestamp).toLocaleTimeString()}</td><td class="py-2">${f.sessionId}</td><td class="py-2">${type}</td><td class="py-2"><span class="tag ${severity === 'High' ? 'tag-tired' : 'tag-casual'}">${severity}</span></td><td class="py-2 text-[--muted]">D:${f.dwellTime}ms F:${f.flightTime}ms</td></tr>`; }).join('');
+  const tlCtx = document.getElementById('fatigueTimelineChart').getContext('2d');
+  if (charts.fatigueTimeline) charts.fatigueTimeline.destroy();
+  const hourlyFatigue = {}; fatigueData.forEach(f => { const hour = new Date(f.timestamp).getHours(); hourlyFatigue[hour] = (hourlyFatigue[hour] || 0) + 1; });
+  charts.fatigueTimeline = new Chart(tlCtx, { type: 'bar', data: { labels: Array.from({length: 24}, (_, i) => `${i}:00`), datasets: [{ data: Array.from({length: 24}, (_, i) => hourlyFatigue[i] || 0), backgroundColor: 'rgba(251, 146, 60, 0.7)', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#6b7a90' } }, y: { grid: { color: 'rgba(37, 45, 58, 0.6)' }, ticks: { color: '#6b7a90' } } } } });
+}
+
+function renderRaw() {
+  const table = document.getElementById('rawTable');
+  table.innerHTML = keystrokeData.slice(0, 150).map(k => `<tr class="border-b border-[--border] data-row ${k.isFatigue ? 'bg-[--tired]/5' : ''}"><td class="py-1.5 px-2 text-[--muted]">${k.id}</td><td class="py-1.5 px-2">${k.sessionId}</td><td class="py-1.5 px-2"><span class="tag tag-${k.state}">${k.state}</span></td><td class="py-1.5 px-2">${k.key === ' ' ? 'Space' : k.key}</td><td class="py-1.5 px-2 text-right text-[--muted]">${new Date(k.timestamp).toLocaleTimeString()}</td><td class="py-1.5 px-2 text-right">${k.dwellTime}</td><td class="py-1.5 px-2 text-right">${k.flightTime}</td></tr>`).join('');
+}
+
+// ============ Helpers ============
+function avg(arr) { return arr.length ? arr.reduce((a,b) => a+b, 0) / arr.length : 0; }
+function computeVariance(arr) { const mean = avg(arr); return avg(arr.map(x => Math.pow(x - mean, 2))); }
+function computeEntropy(arr) {
+  const bins = {}; const binSize = 20; arr.forEach(x => { const b = Math.floor(x / binSize); bins[b] = (bins[b] || 0) + 1; });
+  let entropy = 0; const total = arr.length; Object.values(bins).forEach(count => { const p = count / total; if (p > 0) entropy -= p * Math.log2(p); });
+  return entropy;
+}
+
+// ============ Navigation ============
+const tabs = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.tab-panel');
+
+function switchTab(name) {
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.add('hidden'));
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  document.getElementById(name).classList.remove('hidden');
+
+  if (name === 'overview') renderOverview();
+  if (name === 'timing') renderTiming();
+  if (name === 'sessions') renderSessions();
+  if (name === 'patterns') renderPatterns();
+  if (name === 'fatigue') renderFatigue();
+  if (name === 'raw') renderRaw();
+}
+
+tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ============ Export ============
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const headers = ['id,session,state,key,timestamp,dwellTime,flightTime,isFatigue'];
+  const rows = keystrokeData.map(k => `${k.id},${k.sessionId},${k.state},${k.key},${k.timestamp},${k.dwellTime},${k.flightTime},${k.isFatigue}`);
+  const blob = new Blob([headers.concat(rows).join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'personal_keystroke_data.csv';
+  a.click();
+});
+
+// ============ Generate ============
+document.getElementById('generateBtn').addEventListener('click', () => {
+  generateDataset();
+  switchTab('overview');
+});
+
+// ============ Init ============
+document.addEventListener('DOMContentLoaded', () => {
+  generateDataset();
+  renderOverview();
+});
+</script>
+</body>
+</html>

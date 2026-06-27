@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tool-prs.local/design/records_schema.json",
+  "$id": "https://autoregia.local/records_schema.json",
   "title": "PRS Record",
-  "description": "JSON Schema for a Personal Recording System (PRS) record. A record is the atomic unit of externalized state, composed of a primary content payload together with metadata categories: Temporal, Contextual, Epistemic, Operational, Lifecycle, Relational, and Classification, plus an append-only Annotation Log. Field naming follows snake_case to match the PRS codebase conventions. All enums are constrained to the allowed value sets defined in design/spec.md.",
+  "description": "JSON Schema for an Autoregia record (Personal Recording System / Personal Keyword Tracking System). A record is the atomic unit of externalized state, composed of a primary content payload together with metadata categories: Temporal, Contextual, Epistemic, Operational, Lifecycle, Relational, and Classification, plus an append-only Annotation Log. Field naming follows snake_case to match the codebase conventions. All enums are constrained to the allowed value sets defined in prs/spec.md.",
   "type": "object",
   "additionalProperties": false,
 
