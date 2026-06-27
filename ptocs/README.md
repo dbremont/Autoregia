@@ -71,7 +71,7 @@ generator validates every entry against `spec/ptocs/schema.json`.
 
 Per [`../spec/ptocs/spec.md`](../spec/ptocs/spec.md):
 
-- **Catalog (CRUD):** insert, update, delete, and retrieve entries.
+- **Catalog (CRUD):** insert, update, delete, retrieve, and pin/unpin entries.
 - **Retrieval & Navigation:** search (scored), browse by facet, capability
   discovery via the relationship graph, and entry detail with the full
   classification/provenance/delivery/cost/usage/epistemic/strategic metadata.

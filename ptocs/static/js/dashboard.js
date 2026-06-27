@@ -4,18 +4,28 @@ PT.Dashboard = {
     const s = PT.Store.getStats();
     const entries = PT.Store.getAll();
     const recent = entries.slice(0, 8);
+    const pinned = PT.Store.getPinned();
     return '<div class="content-header"><div><span class="eyebrow">At a Glance</span><h1>Dashboard</h1></div></div>' +
       '<div class="dashboard-stats animate-in">' +
         stat(s.total, 'Total Objects', null) +
         stat(s.active, 'Active', 'var(--status-active)') +
         stat(s.critical, 'Critical', 'var(--priority-critical)') +
-        stat(Object.keys(s.byKind).length, 'Object Kinds', null) +
+        stat(s.pinned, 'Pinned', 'var(--gold)') +
       '</div>' +
       '<div class="dashboard-grid">' +
         '<div class="card animate-in delay-1"><div class="card-header"><h3>Coverage by Kind</h3></div><div class="card-body"><div class="mini-chart-echart" id="chartByKind"></div></div></div>' +
         '<div class="card animate-in delay-2"><div class="card-header"><h3>By Status</h3></div><div class="card-body"><div class="mini-chart-echart" id="chartByStatus"></div></div></div>' +
         '<div class="card animate-in delay-3"><div class="card-header"><h3>By System Served</h3></div><div class="card-body"><div class="mini-chart-echart" id="chartBySystem"></div></div></div>' +
-        '<div class="card animate-in delay-4"><div class="card-header"><h3>Recent Entries</h3></div><div class="card-body" style="max-height:260px;overflow-y:auto;">' +
+        '<div class="card animate-in delay-4"><div class="card-header"><h3>Pinned Entries</h3></div><div class="card-body" style="max-height:260px;overflow-y:auto;">' +
+          (pinned.length ? pinned.map(function (e) {
+            return '<div style="padding:var(--space-2) 0;border-bottom:1px solid var(--color-border-light);display:flex;gap:var(--space-3);align-items:center;cursor:pointer;" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
+              '<span style="width:8px;height:8px;border-radius:50%;background:' + PT.kindColor(e.object_kind) + ';flex-shrink:0;"></span>' +
+              PT.icon('pin', 14) +
+              '<span style="flex:1;font-size:var(--text-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + PT.esc(e.name) + '</span>' +
+              '<span style="font-size:10px;color:var(--color-text-muted);font-family:var(--font-mono);">' + PT.prettyEnum(e.object_kind).substring(0, 10) + '</span></div>';
+          }).join('') : '<p class="text-muted text-sm">No pinned entries yet. Pin an entry to promote it here.</p>') +
+        '</div></div>' +
+        '<div class="card animate-in delay-5"><div class="card-header"><h3>Recent Entries</h3></div><div class="card-body" style="max-height:260px;overflow-y:auto;">' +
           (recent.length ? recent.map(function (e) {
             return '<div style="padding:var(--space-2) 0;border-bottom:1px solid var(--color-border-light);display:flex;gap:var(--space-3);align-items:center;cursor:pointer;" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
               '<span style="width:8px;height:8px;border-radius:50%;background:' + PT.kindColor(e.object_kind) + ';flex-shrink:0;"></span>' +

@@ -11,7 +11,7 @@
   "functions": {
     "catalog": {
       "description": "Registry of technical object entries.",
-      "operations": ["insert", "update", "delete", "retrieve"]
+      "operations": ["insert", "update", "delete", "retrieve", "pin"]
     },
     "retrieval_navigation": [
       "search by name, keyword, domain, capability, or free text",

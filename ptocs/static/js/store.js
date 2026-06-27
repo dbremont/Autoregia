@@ -81,6 +81,19 @@ PT.Store = (() => {
     }
   }
 
+  async function togglePin(id) {
+    try {
+      await fetch(`/api/entries/${id}/pin`, { method: 'POST' });
+      await refreshFromAPI();
+    } catch (e) {
+      const e2 = getById(id); if (!e2) return;
+      e2.pinned = !e2.pinned; e2.updated_at = new Date().toISOString();
+      saveLocal(); notify();
+    }
+  }
+
+  function getPinned() { return entries.filter(e => e.pinned); }
+
   function subscribe(fn) { listeners.push(fn); return () => { listeners = listeners.filter(f => f !== fn); }; }
 
   function getStats() {
@@ -100,6 +113,7 @@ PT.Store = (() => {
       critical: entries.filter(e => e.priority === 'critical').length,
       withRelations: entries.filter(e => e.relations && e.relations.length).length,
       withAnnotations: entries.filter(e => e.annotations && e.annotations.length).length,
+      pinned: entries.filter(e => e.pinned).length,
       deprecatedRetired: entries.filter(e => ['deprecated','retired'].includes(e.status)).length };
   }
 
@@ -130,5 +144,5 @@ PT.Store = (() => {
   }
 
   return { load, refreshFromAPI, getAll, getById, add, update, remove,
-           addAnnotation, subscribe, getStats, search, generateId };
+           addAnnotation, togglePin, getPinned, subscribe, getStats, search, generateId };
 })();

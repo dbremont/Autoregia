@@ -52,10 +52,12 @@ PT.Entry = {
   _card(e) {
     const color = PT.kindColor(e.object_kind);
     const kindIcon = PT.KIND_ICONS[e.object_kind] || 'circle';
-    return '<div class="entry-card" style="--kind-color:' + color + '" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
+    const pinned = e.pinned ? ' is-pinned' : '';
+    const pinBtn = '<button class="entry-card-pin' + pinned + '" title="' + (e.pinned ? 'Unpin' : 'Pin to Dashboard') + '" onclick="event.stopPropagation();PT.togglePin(\'' + e.id + '\')">' + PT.icon('pin', 15) + '</button>';
+    return '<div class="entry-card' + pinned + '" style="--kind-color:' + color + '" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
       '<div class="entry-card-head"><div><div class="entry-card-name">' + PT.esc(e.name) + '</div>' +
       '<div class="entry-card-id">' + PT.esc(e.id) + '</div></div>' +
-      '<pt-icon name="' + kindIcon + '" size="20" style="color:' + color + '"></pt-icon></div>' +
+      '<div class="entry-card-head-actions">' + pinBtn + '<pt-icon name="' + kindIcon + '" size="20" style="color:' + color + '"></pt-icon></div></div>' +
       '<div class="entry-card-summary">' + PT.esc(e.summary) + '</div>' +
       '<div class="entry-card-meta">' +
         PT.badge('badge-status-' + e.status, PT.prettyEnum(e.status)) +
@@ -253,6 +255,7 @@ PT.Entry = {
       '</div>';
     // Footer actions
     html += '<div class="detail-section"><div class="card-footer"><button class="btn btn-secondary btn-sm" onclick="PT.Entry.openEditor(PT.Store.getById(\'' + e.id + '\'))"><pt-icon name="edit" size="15"></pt-icon> Edit</button>' +
+      '<button class="btn ' + (e.pinned ? 'btn-primary' : 'btn-ghost') + ' btn-sm" onclick="PT.togglePin(\'' + e.id + '\')"><pt-icon name="pin" size="15"></pt-icon> ' + (e.pinned ? 'Unpin' : 'Pin') + '</button>' +
       '<button class="btn btn-ghost btn-sm" onclick="PT.retire(\'' + e.id + '\')"><pt-icon name="inbox" size="15"></pt-icon> Retire</button>' +
       '<button class="btn btn-ghost btn-sm" onclick="PT.confirmDelete(\'' + e.id + '\')" style="color:var(--color-danger)"><pt-icon name="trash-2" size="15"></pt-icon> Delete</button></div></div>';
     html += '</div>';
@@ -276,6 +279,15 @@ PT.retire = async function (id) {
   PT.toast('Entry retired');
   PT.Entry.closeDetail();
   if (PT.currentView === 'catalog') PT.navigate('catalog');
+};
+PT.togglePin = async function (id) {
+  await PT.Store.togglePin(id);
+  const e = PT.Store.getById(id);
+  PT.toast(e && e.pinned ? 'Entry pinned' : 'Entry unpinned');
+  // refresh whichever modal/view is open
+  if (!document.getElementById('detailModal').classList.contains('hidden')) PT.Entry.showDetail(id);
+  if (PT.currentView === 'catalog') PT.navigate('catalog');
+  if (PT.currentView === 'dashboard') PT.navigate('dashboard');
 };
 PT.confirmDelete = function (id) {
   const e = PT.Store.getById(id); if (!e) return;

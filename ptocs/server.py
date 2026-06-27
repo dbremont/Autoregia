@@ -115,6 +115,8 @@ def _apply_filters(entries, args):
         out = [e for e in out if e.get("category") == category]
     if hosting:
         out = [e for e in out if e.get("hosting_model") == hosting]
+    if args.get("pinned", "").lower() == "true":
+        out = [e for e in out if e.get("pinned", False)]
     if q:
         out = [e for e in out if _matches(e, q)]
     return out
@@ -155,6 +157,7 @@ def create_entry():
         "status": data.get("status", "provisional"),
         "priority": data.get("priority", "medium"),
         "owner": data.get("owner", "self"),
+        "pinned": bool(data.get("pinned", False)),
         "workflow_state": data.get("workflow_state", "candidate"),
         "lifecycle_state": data.get("lifecycle_state", "provisional"),
         "hosting_model": data.get("hosting_model", "local"),
@@ -230,6 +233,19 @@ def add_annotation(entry_id):
     e["updated_at"] = now_iso()
     save_entries(entries)
     return jsonify(ann), 201
+
+
+@app.route("/api/entries/<entry_id>/pin", methods=["POST"])
+def toggle_pin(entry_id):
+    """Toggle the `pinned` flag on an entry (promote to Dashboard quick-access)."""
+    entries = load_entries()
+    e = next((x for x in entries if x["id"] == entry_id), None)
+    if e is None:
+        return jsonify({"error": "Entry not found"}), 404
+    e["pinned"] = not bool(e.get("pinned", False))
+    e["updated_at"] = now_iso()
+    save_entries(entries)
+    return jsonify({"id": e["id"], "pinned": e["pinned"]})
 
 
 @app.route("/api/entries/<entry_id>/relations", methods=["GET"])
@@ -323,6 +339,10 @@ def dashboard_stats():
         "critical": sum(1 for e in entries if e.get("priority") == "critical"),
         "with_relations": sum(1 for e in entries if e.get("relations")),
         "with_annotations": sum(1 for e in entries if e.get("annotations")),
+        "pinned_count": sum(1 for e in entries if e.get("pinned", False)),
+        "pinned": [{"id": e["id"], "name": e["name"],
+                    "object_kind": e.get("object_kind")}
+                   for e in entries if e.get("pinned", False)],
         "deprecated_retired": sum(1 for e in entries
                                   if e.get("status") in ("deprecated", "retired")),
     })

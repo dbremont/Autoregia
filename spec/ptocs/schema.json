@@ -99,6 +99,11 @@
       "type": ["string", "null"],
       "description": "Operational metadata: person, team, or organization owning the entry."
     },
+    "pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Operational/presentation metadata: when true the entry is pinned (promoted to the Dashboard and surfaced above the catalog) as a quick-access capability of special operational relevance."
+    },
     "workflow_state": {
       "$ref": "#/$defs/workflowStateEnum",
       "description": "Operational metadata: workflow state."

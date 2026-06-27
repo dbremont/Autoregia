@@ -41,6 +41,22 @@
 .entry-card-meta { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-border-light); }
 .entry-card-meta .mini-badge { font-size: var(--text-2xs); font-family: var(--font-body); font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--color-surface-2); color: var(--color-text-secondary); border: var(--hairline) solid var(--color-border-light); text-transform: capitalize; letter-spacing: var(--tracking-wide); font-variant: small-caps; }
 
+/* ── Pin toggle (entry card + detail) ────────────────── */
+.entry-card-head-actions { display: flex; align-items: center; gap: var(--space-2); }
+.entry-card.is-pinned { border-color: var(--gold-soft); box-shadow: 0 0 0 1px var(--gold-tint); }
+.entry-card.is-pinned::after {
+  content: ""; position: absolute; right: 0; top: 0; width: 3px; height: 100%;
+  background: var(--gold); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; opacity: 0.7;
+}
+.entry-card-pin {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; padding: 0; border-radius: var(--radius-sm);
+  border: var(--hairline) solid transparent; background: transparent;
+  color: var(--color-text-muted); cursor: pointer; transition: background var(--transition-fast), color var(--transition-fast);
+}
+.entry-card-pin:hover { background: var(--color-surface-2); color: var(--gold); }
+.entry-card-pin.is-pinned { color: var(--gold); background: var(--gold-tint); }
+
 /* ── Badges (status / priority / kind) ──────────────── */
 .badge { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--text-2xs); font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); letter-spacing: var(--tracking-wide); font-variant: small-caps; text-transform: capitalize; border: var(--hairline) solid transparent; white-space: nowrap; }
 .badge-status-active    { background: var(--color-success-light); color: var(--color-success); border-color: rgba(63,110,80,0.2); }

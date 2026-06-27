@@ -129,7 +129,7 @@ Conversely, an object should generally not be cataloged when it is:
 | Classification Dimension | Purpose                                                       | Field Set                                                  |
 | ------------------------ | ------------------------------------------------------------- | ---------------------------------------------------------- |
 | **Identity**             | What is this object?                                          | Object Kind, Category, Domain, Keywords, Aliases          |
-| **Operational**          | How is this object managed or acted upon?                     | Status, Priority, Owner, Workflow State                   |
+| **Operational**          | How is this object managed or acted upon?                     | Status, Priority, Owner, Workflow State, Pinned           |
 | **Lifecycle**            | Where is this object in its life?                             | Lifecycle State, Version                                   |
 | **Provenance**           | Where does this object come from?                             | Source URL, Vendor, License, Acquisition                   |
 | **Delivery**             | How is the object reached and run?                            | Hosting Model, Access Model, Interface                     |
@@ -150,6 +150,7 @@ Conversely, an object should generally not be cataloged when it is:
 | **Operational** | **Status**            | Provisional, Active, Trial, Backup, Deprecated, Retired                                                    |
 | **Operational** | **Priority**          | Critical, High, Medium, Low                                                                                |
 | **Operational** | **Workflow State**    | Candidate, Adopted, In Review, Phasing Out, Removed                                                        |
+| **Operational** | **Pinned**            | `true`, `false`                                                                                            |
 | **Lifecycle**   | **Lifecycle State**   | Provisional, Active, Deprecated, Retired, Superseded                                                       |
 | **Delivery**    | **Hosting Model**     | `local`, `self-hosted`, `cloud`, `hybrid`, `physical`                                                      |
 | **Delivery**    | **Access Model**      | `open`, `free`, `freemium`, `paid`, `subscription`, `api_key`, `oauth`, `license`, `invitation`, `offline` |
@@ -170,6 +171,7 @@ Conversely, an object should generally not be cataloged when it is:
   - **Insert** — register a new technical object entry (with classification, provenance, usage, relations).
   - **Update** — revise an entry (provenance-preserving; edits are logged).
   - **Delete** — retire or remove an entry; soft-retire (`retired`) preferred over hard delete.
+  - **Pin / Unpin** — toggle a boolean flag (`pinned`) that promotes an entry as a quick-access capability on the Dashboard and sorts it above the catalog.
   - **Retrieval** — read by id, name, alias, or slug; full-text and structured search.
 
 - **Retrieval & Navigation:**

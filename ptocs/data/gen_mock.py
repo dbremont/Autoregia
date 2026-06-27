@@ -42,7 +42,7 @@ def E(id, name, kind, category, domain, status, priority, system,
       summary, purpose, function, vendor, version, lic, source, host,
       access, iface, cost_kind, install, docs, invoke, fit, evidence,
       rating, tags, last_used, acquired, currency=None, amount=None,
-      period=None):
+      period=None, pinned=False):
     """Compact entry builder returning a fully-formed entry dict."""
     return {
         "id": id, "name": name, "slug": slug(name), "aliases": [],
@@ -52,7 +52,7 @@ def E(id, name, kind, category, domain, status, priority, system,
         "provenance": {"source_url": source, "vendor": vendor,
                        "version": version, "license": lic,
                        "acquired_at": acquired},
-        "status": status, "priority": priority, "owner": "self",
+        "status": status, "priority": priority, "owner": "self", "pinned": pinned,
         "workflow_state": ("adopted" if status in ("active", "backup")
                            else "in_review" if status == "trial"
                            else "phasing_out" if status == "deprecated"
@@ -78,9 +78,9 @@ def E(id, name, kind, category, domain, status, priority, system,
 
 
 ENTRIES = [
-  E("OBJ-2026-0001","Obsidian","software_tool","note-taking","Knowledge Management","active","critical","system_4_intelligence","Local-first Markdown knowledge base with bidirectional links.","External memory / note store — primary thinking substrate.","Bidirectional-link Markdown editing over local vault files.","Obsidian","1.7.4","proprietary","https://obsidian.md","local","free","gui","free","AppImage download","https://help.obsidian.md","obsidian","high","established",4.5,["daily-driver","pkm"],1,days(540)),
-  E("OBJ-2026-0002","VS Code","software_tool","code-editor","Software Engineering","active","critical","system_1_operations","Extensible source-code editor.","Primary development environment.","Text editing, debugging, extensions, integrated terminal.","Microsoft","1.99","MIT","https://code.visualstudio.com","local","free","gui","free","apt install code","https://code.visualstudio.com/docs","code","high","established",4.5,["daily-driver","editor"],0,days(700)),
-  E("OBJ-2026-0003","git","software_tool","version-control","Software Engineering","active","critical","system_1_operations","Distributed version control system.","Track change history of text artifacts.","Commit, branch, merge, and synchronize repositories.","Git project","2.45","GPL-2.0","https://git-scm.com","local","open","cli","free","apt install git","https://git-scm.com/docs","git","high","established",5,["daily-driver","vcs"],0,days(800)),
+  E("OBJ-2026-0001","Obsidian","software_tool","note-taking","Knowledge Management","active","critical","system_4_intelligence","Local-first Markdown knowledge base with bidirectional links.","External memory / note store — primary thinking substrate.","Bidirectional-link Markdown editing over local vault files.","Obsidian","1.7.4","proprietary","https://obsidian.md","local","free","gui","free","AppImage download","https://help.obsidian.md","obsidian","high","established",4.5,["daily-driver","pkm"],1,days(540),pinned=True),
+  E("OBJ-2026-0002","VS Code","software_tool","code-editor","Software Engineering","active","critical","system_1_operations","Extensible source-code editor.","Primary development environment.","Text editing, debugging, extensions, integrated terminal.","Microsoft","1.99","MIT","https://code.visualstudio.com","local","free","gui","free","apt install code","https://code.visualstudio.com/docs","code","high","established",4.5,["daily-driver","editor"],0,days(700),pinned=True),
+  E("OBJ-2026-0003","git","software_tool","version-control","Software Engineering","active","critical","system_1_operations","Distributed version control system.","Track change history of text artifacts.","Commit, branch, merge, and synchronize repositories.","Git project","2.45","GPL-2.0","https://git-scm.com","local","open","cli","free","apt install git","https://git-scm.com/docs","git","high","established",5,["daily-driver","vcs"],0,days(800),pinned=True),
   E("OBJ-2026-0004","Flask","library_framework","web-framework","Software Engineering","active","high","system_1_operations","Lightweight Python WSGI web framework.","Serve mock APIs and prototypes for Autoregia tools.","Routing, request/response, JSON serialization.","Pallets","3.0","BSD-3-Clause","https://flask.palletsprojects.com","self_hosted","open","library","free","pip install flask","https://flask.palletsprojects.com","from flask import Flask","high","experimental",4,["backend"],2,days(120)),
   E("OBJ-2026-0005","Apache ECharts","library_framework","charting","Data Science","active","medium","system_4_intelligence","Declarative data-visualization library.","Render analytical charts for the Statistical Overlay.","Bar, pie, graph, and treemap visualizations from data.","Apache","5.5","Apache-2.0","https://echarts.apache.org","self_hosted","open","library","free","npm install echarts","https://echarts.apache.org/en/option.html","echarts.init(dom)","high","observational",4,["viz"],3,days(90)),
   E("OBJ-2026-0006","OpenAI Chat Completions API","service_platform","llm-inference","Software Engineering","active","high","system_4_intelligence","Hosted large-language-model inference service.","Augment catalog workflows via LLM suggestions.","Generate text, classify, propose relations, summarize entries.","OpenAI","gpt-4o","proprietary","https://platform.openai.com","cloud","api_key","api","usage_based","pip install openai","https://platform.openai.com/docs","client.chat.completions.create","high","experimental",4.5,["ai","paid"],0,days(200),currency="USD",amount=40.0,period="monthly"),
