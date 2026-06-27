@@ -38,14 +38,14 @@ Autoregia/
 > Add
 
 - Information Catalog System
-- Technical Object Catalog System (https://github.com/csiglab/Index)
+- Personal Technical Object Catalog System (PTOCS) (https://github.com/csiglab/Index)
 - Note: The dayly - links - papers - etc- should be handdle by the PRS.
 - ...
 
 | **Part** | **Description** | **Level (VSM)** | **Implementation** |
 | --- | --- | --- | --- |
 | **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note |
-| **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
+| **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Personal Technical Object Catalog System (PTOCS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
 | **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
 | **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
 | **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PRS**, **PKTS** |
@@ -64,6 +64,7 @@ The sub-systems developed within this workspace:
 
 - **[Personal Recording System (PRS)](prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](prs/spec.md), [record schema](records_schema.json), and [implementation](prs/README.md#prototype).
 - **[Personal Keyword Tracking System (PKTS)](pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
+- Personal Technical Object Catalog System (PTOCS): ...
 
 > The design rationale and decision log live in [`logos.log.md`](logos.log.md).
 

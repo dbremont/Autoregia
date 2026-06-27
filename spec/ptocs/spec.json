@@ -1,0 +1,94 @@
+{
+  "title": "Personal Technical Object Catalog System (PTOCS)",
+  "description": "PTOCS is the Autoregia Intelligence System (VSM System 4). It builds and maintains a structured, persistent catalog of the technical objects (software, services, hardware, references, methods, capabilities, and infrastructure) the agent relies on, enabling their discovery, retrieval, navigation, and analysis over time.",
+  "role": {
+    "vsm_level": "System 4 - Intelligence",
+    "parent": "Autoregia",
+    "siblings": ["PRS", "PKTS"]
+  },
+  "purpose": "Provide a centralized index of available technical objects and their capabilities, enabling efficient discovery of the capabilities available to the agent and exposing gaps, redundancy, and dependency exposure through a statistical overlay.",
+
+  "functions": {
+    "catalog": {
+      "description": "Registry of technical object entries.",
+      "operations": ["insert", "update", "delete", "retrieve"]
+    },
+    "retrieval_navigation": [
+      "search by name, keyword, domain, capability, or free text",
+      "browse by kind, category, domain, status, or system served",
+      "capability discovery for a task or objective",
+      "retrieve descriptions, specifications, and usage information",
+      "navigate related and complementary objects via the relationship graph",
+      "explain how an object contributes to overall capabilities"
+    ],
+    "statistical_overlay_analysis": [
+      "coverage and composition by kind, domain, category, system served, hosting model",
+      "capability-gap analysis",
+      "redundancy / overlap detection (alternative_to, complements clusters)",
+      "dependency-graph analytics (depth, fan-in/out, single points of failure)",
+      "cost exposure (aggregate, by domain/system, paid-vs-free)",
+      "lifecycle / freshness distribution and staleness",
+      "ecosystem health (orphans, broken links, license/vendor concentration)",
+      "provenance and trust distribution"
+    ],
+    "derivative": [
+      "catalog snapshots, diffs, export/import (JSON, CSV)",
+      "entry study: relation graph, capability map, dependency tree",
+      "adoption / retirement summaries"
+    ],
+    "complementary": [
+      "auto-import from tool manifests",
+      "documentation fetching and link health checks",
+      "LLM-assisted entry extraction and enrichment",
+      "PRS integration (adoption/retirement decisions, entry linking)",
+      "cost and license monitoring; renewal reminders"
+    ]
+  },
+
+  "inputs": [
+    "search query",
+    "capability query",
+    "domain or category filter",
+    "object kind filter",
+    "entry identifier",
+    "new entry payload (per schema.json)",
+    "external tool manifests (auto-import)"
+  ],
+
+  "outputs": [
+    "matching entries",
+    "entry summaries",
+    "entry specifications",
+    "related entries",
+    "capability mappings",
+    "navigation references",
+    "statistical-overlay projections (coverage, gaps, redundancy, dependency, cost, freshness, health)"
+  ],
+
+  "implementation": {
+    "storage": "JSON + SQLite",
+    "api": "Simple Python Flask",
+    "ui": "CSS, JS, HTML (libraries permitted, frameworks not)",
+    "analysis_charts": "Apache ECharts (within the Autoregia design system)",
+    "ai_integration": "LLM-assisted entry extraction, classification, relation proposal, capability inference",
+    "notes": [
+      "First iteration may hard-code the catalog data.",
+      "Designed to be extensible and implementation-agnostic.",
+      "Supports configurable storage, indexing backends, and ranking/retrieval strategies.",
+      "UI must conform to spec/ui.spec (warm-parchment Oxford aesthetic, shared tokens)."
+    ]
+  },
+
+  "schema": "./schema.json",
+  "spec_doc": "./spec.md",
+  "ui_spec": "../ui.spec",
+
+  "references": [
+    { "label": "csiglab/Index", "url": "https://github.com/csiglab/Index" },
+    { "label": "Autoregia", "url": "../../README.md" },
+    { "label": "PRS spec", "url": "../prs/spec.md" },
+    { "label": "Autoregia UI Specification", "url": "../ui.spec" },
+    { "label": "Personal Viable System Model (PVSM)", "url": "https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link" },
+    { "label": "Self-Management", "url": "https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link" }
+  ]
+}

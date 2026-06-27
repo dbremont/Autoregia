@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoregia.local/ptocs_entry_schema.json",
+  "title": "PTOCS Catalog Entry",
+  "description": "JSON Schema for an Autoregia PTOCS (Personal Technical Object Catalog System) catalog entry. An entry is the atomic unit of externalized technical capability: one technical object (software, service, hardware, reference, method, capability, or infrastructure) the agent relies on, composed of identity, description, classification, provenance, operational state, lifecycle, delivery, usage, epistemic, strategic, and relational metadata, plus an append-only Annotation Log. Field naming follows snake_case to match the codebase conventions. All enums are constrained to the allowed value sets defined in ptocs/spec.md.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "id",
+    "name",
+    "object_kind",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Entry Id. Globally unique identifier used for traceability, referencing, synchronization, and relational linking. Examples: 'OBJ-2026-00042', UUID, or slug-based identifier.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical name of the technical object."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "URL/file-safe slug derived from the name."
+    },
+    "aliases": {
+      "type": "array",
+      "default": [],
+      "items": { "type": "string" },
+      "description": "Alternate names, product names, or identifiers under which the object is known."
+    },
+    "summary": {
+      "type": "string",
+      "default": "",
+      "description": "One-line description of what the object is."
+    },
+    "detail": {
+      "type": "string",
+      "default": "",
+      "description": "Extended explanatory, analytical, or supporting information about the object."
+    },
+    "purpose": {
+      "type": "string",
+      "default": "",
+      "description": "The role the object plays in the agent's workflow (what it is for)."
+    },
+    "function": {
+      "type": "string",
+      "default": "",
+      "description": "The concrete capability the object provides (what it does)."
+    },
+
+    "object_kind": {
+      "$ref": "#/$defs/objectKindEnum",
+      "description": "Identity metadata: class of technical object."
+    },
+    "category": {
+      "type": ["string", "null"],
+      "description": "Refined functional category within the kind (e.g. 'note-taking', 'llm-inference', 'version-control')."
+    },
+    "domain": {
+      "type": ["string", "null"],
+      "description": "Subject domain the object serves (e.g. 'Software Engineering', 'Knowledge Management')."
+    },
+    "keywords": {
+      "type": "array",
+      "default": [],
+      "items": { "type": "string" },
+      "description": "Controlled vocabulary of terms for search and retrieval."
+    },
+    "tags": {
+      "type": "array",
+      "default": [],
+      "items": { "type": "string" },
+      "description": "Free-form user-defined labels."
+    },
+
+    "provenance": {
+      "$ref": "#/$defs/provenanceMetadata",
+      "description": "Provenance metadata: origin of the object."
+    },
+    "status": {
+      "$ref": "#/$defs/statusEnum",
+      "description": "Operational metadata: current status."
+    },
+    "priority": {
+      "$ref": "#/$defs/priorityEnum",
+      "description": "Operational metadata: priority."
+    },
+    "owner": {
+      "type": ["string", "null"],
+      "description": "Operational metadata: person, team, or organization owning the entry."
+    },
+    "workflow_state": {
+      "$ref": "#/$defs/workflowStateEnum",
+      "description": "Operational metadata: workflow state."
+    },
+    "lifecycle_state": {
+      "$ref": "#/$defs/lifecycleStateEnum",
+      "description": "Lifecycle metadata: evolutionary/historical state."
+    },
+    "hosting_model": {
+      "$ref": "#/$defs/hostingModelEnum",
+      "description": "Delivery metadata: how the object is hosted."
+    },
+    "access_model": {
+      "$ref": "#/$defs/accessModelEnum",
+      "description": "Delivery metadata: how the object is accessed."
+    },
+    "cost": {
+      "$ref": "#/$defs/costMetadata",
+      "description": "Cost metadata: resource cost of the object."
+    },
+    "usage": {
+      "$ref": "#/$defs/usageMetadata",
+      "description": "Usage metadata: how the agent engages the object."
+    },
+
+    "epistemic": {
+      "$ref": "#/$defs/epistemicMetadata",
+      "description": "Epistemic metadata: confidence in fit, evidence level, and personal rating."
+    },
+    "strategic": {
+      "$ref": "#/$defs/strategicMetadata",
+      "description": "Strategic metadata: how the object relates to long-term objectives and the VSM system it serves."
+    },
+    "relations": {
+      "type": "array",
+      "default": [],
+      "description": "Relational metadata: explicit graph relationships connecting the entry to other entries, entities, or dependencies.",
+      "items": { "$ref": "#/$defs/relation" }
+    },
+    "annotations": {
+      "type": "array",
+      "default": [],
+      "description": "Annotation Log. Append-only commentary written about the entry, without mutating name, detail, or revision history.",
+      "items": { "$ref": "#/$defs/annotation" }
+    },
+
+    "created_at": {
+      "$ref": "#/$defs/iso8601Timestamp",
+      "description": "Temporal metadata: creation timestamp."
+    },
+    "updated_at": {
+      "$ref": "#/$defs/iso8601Timestamp",
+      "description": "Temporal metadata: last modification timestamp."
+    },
+    "last_used_at": {
+      "oneOf": [
+        { "$ref": "#/$defs/iso8601Timestamp" },
+        { "type": "null" }
+      ],
+      "description": "Temporal metadata: last time the agent used the object."
+    }
+  },
+
+  "$defs": {
+    "iso8601Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp."
+    },
+    "objectKindEnum": {
+      "type": "string",
+      "enum": [
+        "software_tool",
+        "library_framework",
+        "service_platform",
+        "data_source",
+        "infrastructure",
+        "hardware_device",
+        "physical_instrument",
+        "reference_artifact",
+        "workflow_method",
+        "capability_skill"
+      ]
+    },
+    "statusEnum": {
+      "type": "string",
+      "enum": ["provisional", "active", "trial", "backup", "deprecated", "retired"]
+    },
+    "priorityEnum": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "workflowStateEnum": {
+      "type": "string",
+      "enum": ["candidate", "adopted", "in_review", "phasing_out", "removed"]
+    },
+    "lifecycleStateEnum": {
+      "type": "string",
+      "enum": ["provisional", "active", "deprecated", "retired", "superseded"]
+    },
+    "hostingModelEnum": {
+      "type": "string",
+      "enum": ["local", "self_hosted", "cloud", "hybrid", "physical"]
+    },
+    "accessModelEnum": {
+      "type": "string",
+      "enum": ["open", "free", "freemium", "paid", "subscription", "api_key", "oauth", "license", "invitation", "offline"]
+    },
+    "interfaceEnum": {
+      "type": "string",
+      "enum": ["gui", "cli", "tui", "api", "library", "web", "hardware", "document", "none"]
+    },
+    "fitConfidenceEnum": {
+      "type": "string",
+      "enum": ["very_low", "low", "medium", "high", "very_high"]
+    },
+    "evidenceLevelEnum": {
+      "type": "string",
+      "enum": ["none", "anecdotal", "observational", "experimental", "established"]
+    },
+    "systemServedEnum": {
+      "type": "string",
+      "enum": [
+        "system_1_operations",
+        "system_2_coordination",
+        "system_3_control",
+        "system_3_audit_accounting",
+        "system_4_intelligence",
+        "system_5_policy"
+      ]
+    },
+    "costKindEnum": {
+      "type": "string",
+      "enum": ["free", "one_time", "subscription", "usage_based", "maintenance", "opportunity"]
+    },
+    "relationKindEnum": {
+      "type": "string",
+      "enum": [
+        "references",
+        "related_to",
+        "part_of",
+        "contains",
+        "extends",
+        "version_of",
+        "supersedes",
+        "duplicates",
+        "depends_on",
+        "required_by",
+        "integrates_with",
+        "consumes",
+        "produces",
+        "alternative_to",
+        "complements",
+        "provided_by",
+        "enables",
+        "serves",
+        "precedes",
+        "replaced_by",
+        "recommends",
+        "root_cause_of"
+      ]
+    },
+    "annotationKindEnum": {
+      "type": "string",
+      "enum": ["comment", "question", "review", "correction", "migration", "cost_change", "provenance_note"]
+    },
+    "annotationStateEnum": {
+      "type": "string",
+      "enum": ["open", "resolved", "superseded"]
+    },
+    "provenanceMetadata": {
+      "type": "object",
+      "description": "Provenance metadata: origin of the object.",
+      "additionalProperties": false,
+      "properties": {
+        "source_url": { "type": ["string", "null"], "description": "Canonical source URL of the object." },
+        "vendor": { "type": ["string", "null"], "description": "Vendor, publisher, or maintainer." },
+        "version": { "type": ["string", "null"], "description": "Version of the object in use." },
+        "license": { "type": ["string", "null"], "description": "License or terms (e.g. 'MIT', 'proprietary', 'Apache-2.0')." },
+        "acquired_at": {
+          "oneOf": [
+            { "$ref": "#/$defs/iso8601Timestamp" },
+            { "type": "null" }
+          ],
+          "description": "Date the object was acquired or first adopted."
+        }
+      }
+    },
+    "costMetadata": {
+      "type": "object",
+      "description": "Cost metadata: resource cost of the object.",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "$ref": "#/$defs/costKindEnum" },
+        "currency": { "type": ["string", "null"], "description": "ISO 4217 currency code, when monetary." },
+        "amount": { "type": ["number", "null"], "description": "Cost amount, when monetary." },
+        "period": { "type": ["string", "null"], "description": "Billing period (e.g. 'monthly', 'annual', 'per_use')." },
+        "notes": { "type": ["string", "null"], "description": "Free-form cost notes." }
+      }
+    },
+    "usageMetadata": {
+      "type": "object",
+      "description": "Usage metadata: how the agent engages the object.",
+      "additionalProperties": false,
+      "properties": {
+        "interface": { "$ref": "#/$defs/interfaceEnum" },
+        "install": { "type": ["string", "null"], "description": "Install or deployment instructions." },
+        "config": { "type": ["string", "null"], "description": "Configuration reference or notes." },
+        "docs_url": { "type": ["string", "null"], "description": "Documentation URL." },
+        "invocation": { "type": ["string", "null"], "description": "How the object is invoked or opened (command, URL, path)." }
+      }
+    },
+    "epistemicMetadata": {
+      "type": "object",
+      "description": "Epistemic metadata: confidence in fit, evidence level, and personal rating.",
+      "additionalProperties": false,
+      "properties": {
+        "fit_confidence": { "$ref": "#/$defs/fitConfidenceEnum" },
+        "evidence_level": { "$ref": "#/$defs/evidenceLevelEnum" },
+        "rating": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Personal rating on a 0-5 scale."
+        }
+      }
+    },
+    "strategicMetadata": {
+      "type": "object",
+      "description": "Strategic metadata: how the object relates to long-term objectives and the VSM system it serves.",
+      "additionalProperties": false,
+      "properties": {
+        "system_served": { "$ref": "#/$defs/systemServedEnum" },
+        "goal": { "type": ["string", "null"], "description": "Strategic goal identifier this object relates to." },
+        "objective": { "type": ["string", "null"], "description": "Strategic objective identifier." },
+        "capability": { "type": ["string", "null"], "description": "Capability identifier this object provides." },
+        "initiative": { "type": ["string", "null"], "description": "Initiative identifier." }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "description": "A directed relationship from this entry to another entry, entity, or dependency.",
+      "required": ["target", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "target": { "type": "string", "description": "Identifier (entry id) or name of the related object." },
+        "kind": { "$ref": "#/$defs/relationKindEnum" },
+        "notes": { "type": ["string", "null"], "description": "Optional context for the relationship." }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "description": "An append-only annotation entry written about the catalog entry.",
+      "required": ["id", "created_at", "author", "kind", "text", "state"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the annotation entry (e.g. 'ann-001')." },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "author": { "type": "string", "description": "Person or entity that authored the annotation." },
+        "kind": { "$ref": "#/$defs/annotationKindEnum" },
+        "text": { "type": "string", "description": "The annotation body text." },
+        "state": { "$ref": "#/$defs/annotationStateEnum" }
+      }
+    }
+  }
+}
