@@ -36,7 +36,7 @@ Conversely, information should generally not be preserved when it is:
 - Operationally irrelevant.
 - More costly to maintain than the value it provides.
 
-#### State Recording Case Set
+#### (Case Set) When to record an state?
 
 A state is generally worth preserving if it is:
 
@@ -100,12 +100,7 @@ A state is generally worth preserving if it is:
 | **Operational Metadata**    | Metadata related to execution, coordination, workflows, operational status, and actionability.                                                   | Pending, active, blocked, delegated, completed, execution priority.                                   |
 | **Lifecycle Metadata**      | Metadata describing the evolutionary state and historical progression of the record through time.                                                | Created, revised, deprecated, archived, invalidated, superseded.                                      |
 | **Relational Metadata**     | Explicit graph relationships connecting the record to other records, entities, systems, or dependencies.                                         | `[(REC-104, depends-on), (REC-221, supersedes), (REC-89, supports)]`                                  |
-| **Record General Metadata** | High-level semantic and classificatory metadata enabling indexing, organization, retrieval, and ontology alignment.                              | Classification, tags, domain, cognitive category, operational category, priority class.               |
-
-NVIM :
-
-- Allow the extention of each `record` with a node link to the `id`.
-- ...
+| **Classification Metadata** | High-level semantic and classificatory metadata enabling indexing, organization, retrieval, and ontology alignment.                              | Classification, tags, domain, cognitive category, operational category, priority class.               |
 
 ### Record Link
 
@@ -178,103 +173,49 @@ NVIM :
 | Artifact & Knowledge | `explains`                  | Provides interpretive or instructional clarification           |
 | Artifact & Knowledge | `indexes`                   | Organizes or catalogs another information structure            |
 
-### Tags
+### Classification Metadata
 
 > How to classify the **record**?
 
-> Add: Temporal Tags (historical, immediate, scheduled, deferred).
+#### Dimension
 
-| Category               | Tag                          | Description                                                                            |
-| ---------------------- | ---------------------------- | -------------------------------------------------------------------------------------- |
-| Domain                 | `physical-health`            | Physical health maintenance, exercise, sleep, nutrition, and medical management        |
-| Domain                 | `cognitive-development`      | Study, research, intellectual growth, and learning activities                          |
-| Domain                 | `administration`             | Personal administrative logistics, documentation, banking, and compliance              |
-| Domain                 | `house-management`           | Governance and coordination of household operations                                    |
-| Domain                 | `domestic-infrastructure`    | Maintenance and operation of home infrastructure and supplies                          |
-| Domain                 | `technical-work`             | Engineering, software development, debugging, architecture, and technical production   |
-| Domain                 | `business-development`       | Opportunity discovery, partnerships, market research, and growth initiatives           |
-| Domain                 | `finance`                    | Financial operations, budgeting, investments, and resource allocation                  |
-| Domain                 | `organizational-development` | Internal systems building, SOPs, capability development, and governance infrastructure |
-| Domain                 | `infrastructure`             | Devices, tooling, environments, software configuration, and operational infrastructure |
-| Domain                 | `planning`                   | Scheduling, prioritization, coordination, and execution planning                       |
-| Domain                 | `knowledge-management`       | Knowledge organization, documentation, and cognitive externalization                   |
-| Record Type            | `event`                      | Something that occurred in the past                                                    |
-| Record Type            | `commitment`                 | Promise, obligation, or future responsibility                                          |
-| Record Type            | `decision`                   | Governance or strategic determination                                                  |
-| Record Type            | `reflection`                 | Meta-cognitive or analytical evaluation                                                |
-| Record Type            | `state`                      | Snapshot of a system condition                                                         |
-| Record Type            | `signal`                     | Weak observation requiring monitoring or interpretation                                |
-| Record Type            | `risk`                       | Threat, instability, or possible negative condition                                    |
-| Record Type            | `policy`                     | Governing principle or persistent constraint                                           |
-| Record Type            | `artifact`                   | Produced output such as documents, code, diagrams, or reports                          |
-| Record Type            | `consultation`               | Record of external information or resource consumption                                 |
-| Record Type            | `interaction`                | Human interaction, meeting, conversation, or coordination exchange                     |
-| Record Type            | `task`                       | Executable operational unit                                                            |
-| Record Type            | `project`                    | Coordinated multi-step objective                                                       |
-| Temporal               | `immediate`                  | Requires attention now or very soon                                                    |
-| Temporal               | `short-term`                 | Relevant within days or weeks                                                          |
-| Temporal               | `mid-term`                   | Relevant within months                                                                 |
-| Temporal               | `long-term`                  | Strategic or distant-future relevance                                                  |
-| Temporal               | `historical`                 | Primarily historical or archival significance                                          |
-| Temporal               | `recurring`                  | Repeats periodically                                                                   |
-| Temporal               | `deferred`                   | Intentionally postponed                                                                |
-| Temporal               | `scheduled`                  | Assigned to a specific future time                                                     |
-| Operational Status     | `active`                     | Currently being worked on or operational                                               |
-| Operational Status     | `blocked`                    | Cannot proceed due to dependency or obstacle                                           |
-| Operational Status     | `completed`                  | Successfully finished                                                                  |
-| Operational Status     | `failed`                     | Did not succeed                                                                        |
-| Operational Status     | `suspended`                  | Temporarily paused                                                                     |
-| Operational Status     | `cancelled`                  | Explicitly terminated                                                                  |
-| Operational Status     | `pending-review`             | Awaiting analysis, validation, or approval                                             |
-| Operational Status     | `archived`                   | Preserved for historical reference                                                     |
-| Priority & Criticality | `critical`                   | Severe importance or high operational impact                                           |
-| Priority & Criticality | `high-priority`              | Important and time-sensitive                                                           |
-| Priority & Criticality | `routine`                    | Standard operational relevance                                                         |
-| Priority & Criticality | `low-priority`               | Minor urgency or importance                                                            |
-| Priority & Criticality | `strategic`                  | Long-term systemic importance                                                          |
-| Priority & Criticality | `maintenance`                | Sustains continuity or stability                                                       |
-| Epistemic              | `hypothesis`                 | Unverified explanatory interpretation                                                  |
-| Epistemic              | `confirmed`                  | Verified or validated information                                                      |
-| Epistemic              | `uncertain`                  | Confidence level is low                                                                |
-| Epistemic              | `speculative`                | Exploratory or conjectural idea                                                        |
-| Epistemic              | `observed`                   | Directly witnessed or measured                                                         |
-| Epistemic              | `inferred`                   | Derived through reasoning                                                              |
-| Epistemic              | `assumption`                 | Working premise accepted temporarily                                                   |
-| Cognitive Processing   | `capture-only`               | Store without immediate processing                                                     |
-| Cognitive Processing   | `deep-work`                  | Requires uninterrupted concentration                                                   |
-| Cognitive Processing   | `requires-reflection`        | Needs analytical review                                                                |
-| Cognitive Processing   | `research-later`             | Deferred investigation                                                                 |
-| Cognitive Processing   | `decision-needed`            | Requires governance or strategic action                                                |
-| Cognitive Processing   | `context-heavy`              | Difficult to resume without supporting context                                         |
-| Cognitive Processing   | `interruptible`              | Can tolerate interruptions                                                             |
-| Cognitive Processing   | `non-interruptible`          | Requires continuity of attention                                                       |
-| Relationship           | `stakeholder`                | Relevant external or internal actor                                                    |
-| Relationship           | `dependency`                 | Depends on another entity or process                                                   |
-| Relationship           | `vendor`                     | Supplier or external service provider                                                  |
-| Relationship           | `collaboration`              | Joint effort with others                                                               |
-| Relationship           | `political`                  | Involves power, influence, or organizational dynamics                                  |
-| Relationship           | `trust-sensitive`            | Reliability or trust implications exist                                                |
-| Risk                   | `burnout-risk`               | Cognitive or emotional exhaustion risk                                                 |
-| Risk                   | `financial-risk`             | Economic instability or financial exposure                                             |
-| Risk                   | `coordination-risk`          | Scheduling or synchronization instability                                              |
-| Risk                   | `security-risk`              | Information or infrastructure security concern                                         |
-| Risk                   | `technical-debt`             | Structural engineering degradation or shortcuts                                        |
-| Risk                   | `operational-fragility`      | Low resilience or stability                                                            |
-| Risk                   | `single-point-of-failure`    | Dangerous dependency concentration                                                     |
-| Energy & Effort        | `low-energy`                 | Minimal cognitive or physical expenditure                                              |
-| Energy & Effort        | `high-energy`                | Significant expenditure required                                                       |
-| Energy & Effort        | `attention-intensive`        | Requires sustained focus                                                               |
-| Energy & Effort        | `administrative-overhead`    | Primarily bureaucratic or coordination work                                            |
-| Energy & Effort        | `cognitively-expensive`      | Heavy mental processing required                                                       |
-| Governance             | `policy-aligned`             | Consistent with declared principles                                                    |
-| Governance             | `policy-conflict`            | Contradicts governance principles                                                      |
-| Governance             | `audit-required`             | Requires inspection or review                                                          |
-| Governance             | `traceability-required`      | Must preserve reasoning and evidence                                                   |
-| Intelligence           | `emerging-pattern`           | Potential recurring structure or trend                                                 |
-| Intelligence           | `opportunity`                | Possible future advantage                                                              |
-| Intelligence           | `anomaly`                    | Unexpected deviation                                                                   |
-| Intelligence           | `drift`                      | Gradual deviation from intended state                                                  |
-| Intelligence           | `systemic-issue`             | Structural recurring problem                                                           |
+| Classification Dimension | Purpose                                                  | Field Set                                             |
+| ------------------------ | -------------------------------------------------------- | --------------------------------------------------------- |
+| **Semantic**             | What does this record represent?                         | Type, Domain, Subject, Topic, Keywords                    |
+| **Operational**          | How is this record managed or acted upon?                | Status, Priority, Owner, Workflow State, Project          |
+| **Temporal**             | How is this record situated in time?                     | Created, Updated, Deadline, Validity, Horizon, Recurrence |
+| **Epistemic**            | What is the knowledge status of this record?             | Confidence, Evidence, Verification, Source, Certainty     |
+| **Strategic**            | How does this record relate to long-term objectives?     | Objective, Initiative, Goal, Capability, Theme            |
+| **Free**                 | What additional user-defined classifications are useful? | Custom Tags, Labels                                       |
+
+#### Field Set
+
+> Which are the allow values foe every field?
+
+| Dimension       | Field               | Allowed Value Set                                                                                                       |
+| --------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Semantic**    | **State Class**     | Internal Cognitive, External World, Social / Shared                                                                     |
+|                 | **Record Type**     | Goal, Decision, Task, Project, Event, Observation, Hypothesis, Question, Principle, Reference, Procedure, Meeting, Idea |
+|                 | **Domain**          | Software Engineering, Biology, Economics, Medicine, Physics, Management, ...                                            |
+|                 | **Subject**         | Any entity, concept, technology, person, organization, artifact, or phenomenon                                          |
+|                 | **Topic**           | Controlled taxonomy of topics                                                                                           |
+| **Operational** | Status              | Draft, Active, Pending, Blocked, Completed, Archived, Cancelled                                                         |
+|                 | Priority            | Critical, High, Medium, Low                                                                                             |
+|                 | Owner               | Person, Team, Organization                                                                                              |
+|                 | Project             | Project identifier                                                                                                      |
+|                 | Workflow State      | Planned, In Progress, Under Review, Approved, Deprecated                                                                |
+| **Temporal**    | Horizon             | Immediate, Short-term, Medium-term, Long-term                                                                           |
+|                 | Relevance           | Historical, Current, Future                                                                                             |
+|                 | Recurrence          | None, Daily, Weekly, Monthly, Yearly, Custom                                                                            |
+|                 | Validity            | Permanent, Temporary, Expired                                                                                           |
+| **Epistemic**   | Verification Status | Unverified, Verified, Falsified, Disputed                                                                               |
+|                 | Confidence          | Very Low, Low, Medium, High, Very High                                                                                  |
+|                 | Evidence Level      | None, Anecdotal, Observational, Experimental, Formal Proof                                                              |
+|                 | Source Type         | Personal Memory, Observation, Measurement, Document, Expert, External System                                            |
+| **Strategic**   | Goal                | Strategic goal identifier                                                                                               |
+|                 | Objective           | Strategic objective identifier                                                                                          |
+|                 | Initiative          | Initiative identifier                                                                                                   |
+|                 | Capability          | Capability identifier                                                                                                   |
 
 ## Evaluation
 
