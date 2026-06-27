@@ -194,7 +194,7 @@ A state is generally worth preserving if it is:
 
 | Dimension       | Field               | Allowed Value Set                                                                                                       |
 | --------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| **Semantic**    | **State Class**     | Internal Cognitive, External World, Social / Shared                                                                     |
+| **Semantic**    | **State Class**     | Internal Cognitive, External World,  Social (Joint State ) |
 |                 | **Record Type**     | Goal, Decision, Task, Project, Event, Observation, Hypothesis, Question, Principle, Reference, Procedure, Meeting, Idea |
 |                 | **Domain**          | Software Engineering, Biology, Economics, Medicine, Physics, Management, ...                                            |
 |                 | **Subject**         | Any entity, concept, technology, person, organization, artifact, or phenomenon                                          |
@@ -279,31 +279,57 @@ A state is generally worth preserving if it is:
 
 ## Implementation
 
-- File Type: .prs
-- Pluging Set: ...
+### Functionality Set
+
+- Record: Insert, Annotation, Search, Remeinder,  Share Link (To Visualization View), Quick Capture (Scratchpad)
+- Dashbord: Statistics, Sub Views, etc.
+- Derivative Functionality
+  - Record Study (Analysis):  Record Time Reference Evolution, Record Time Line, Activity Heat Map, Topic Landscape Evolution, Record Embedding Graph, Recurrence Map
+  - Record Summary:   (Daily, Weekly, Montly, Annual)
+- Complementary Functionalty:
+  - Google Calendar Integration
+  - Keyword Navigation Mechanisms
+  - Intelligent Autocomplete - Power by LLM API's
+  - Browser Based Autosaved.
+  - Intelligent Suggestions
+  - Voice Input & Transcription
+  - Email & Communication Integration
+  - Task Management Integration
+  - Multi-Calendar Integration
+  - Recurrence & Pattern Mining
+  - Automated Summary Generation
+  - Automated Record Generation (Email Sources, ...)
+  - Data Export & Import
+  - Encryption
+
+### Technical Element Set
 
 | Layer             | Recommendation              |
 | ----------------- | --------------------------- |
 | Storage           | JSON + SQLIte               |
-| Semantic indexing | SQLite                      |
-| Navigation        | Custom commands             |
-| Graph links       | UUID-based                  |
+| API               | Simpel Python Flask         |
+| UI                | CSS, JS, HTML (Can Use Librarie, Not Framework)|
 
-### Concrete Epistemic Artifact Set (Consolidated)
+#### UI - UX Guiding Principle
 
-The prototype in [`../prototype.html`](../prototype.html) mocks the **9-artifact consolidated set** defined in [`spec.md`](spec.md) §5:
+> The interface should be visually calm, consistent, and minimal, with aesthetics emerging from clarity, hierarchy, and purposeful design rather than decoration.
 
-1. **Record Time Reference Evolution** — evolution of recorded reality through time.
-2. **Activity Heat Map** — activity density, bursts, inactivity, and rhythms.
-3. **Calendar** — central temporal hub consolidating logs, summaries, Google Calendar events, and commitments; the navigational anchor for all time-bound views.
-4. **Daily / Weekly / Monthly / Annual Summaries** — compressed descriptions of each temporal window.
-5. **Recurrence Map** — recurring activities and patterns.
-6. **Topic Landscape Evolution** — emergence, growth, decline, and disappearance of topics through time.
+> The interface should follow an elegant, timeless, Oxford-inspired aesthetic characterized by clarity, restraint, refined typography, balanced composition, and the absence of unnecessary ornamentation.
 
-TODO:
-
-- Change Log
-- Docs
+| Category                     | Principle                           | Description                                                                                                                                                   |
+| ---------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Interaction Model**        | Keyboard shortcuts                  | The most relevant actions should be accessible via keyboard, including command palette, shortcuts, bulk operations, and navigation optimized for power users. |
+| **Interaction Model**        | Progressive disclosure              | Expose essential information first; reveal advanced metadata, provenance, diagnostics, and configuration only when needed.                                    |
+| **Data Integrity & Trust**   | Validity in the editor              | Surface schema violations, grammar errors, broken references, and enum mismatches inline.                                                                     |
+| **Data Integrity & Trust**   | Immutable-by-default model          | Make revisions explicit; keep history and diffs always discoverable.                                                                                          |
+| **Data Integrity & Trust**   | Transparent system state            | Clearly communicate save status, synchronization, validation, and background processing states.                                                               |
+| **Data Integrity & Trust**   | Explainability over magic           | Generated suggestions, automations, and inferences should be inspectable.                                                                                     |
+| **Visual Design**            | Sophisticated restraint             | Prioritize typography, spacing, clarity, and composition over decoration.                                                                                     |
+| **Visual Design**            | Whitespace as structure             | Use spacing intentionally to create cognitive grouping and improve scanning.                                                                                  |
+| **Visual Design**            | Semantic color usage                | Colors should communicate meaning rather than serve as decoration.                                                                                            |
+| **Visual Design**            | Consistent visual language          | Maintain predictable patterns, components, iconography, and behaviors.                                                                                        |
+| **Visual Design**            | Motion with purpose                 | Animations should communicate causality, continuity, and state transitions.                                                                                   |
+| **Expert User Experience**   | Command palette everywhere          | Provide a universal command interface for actions and navigation.                                                                                             |
 
 ## References
 

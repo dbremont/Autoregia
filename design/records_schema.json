@@ -1,0 +1,593 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tool-prs.local/design/records_schema.json",
+  "title": "PRS Record",
+  "description": "JSON Schema for a Personal Recording System (PRS) record. A record is the atomic unit of externalized state, composed of a primary content payload together with metadata categories: Temporal, Contextual, Epistemic, Operational, Lifecycle, Relational, and Classification, plus an append-only Annotation Log. Field naming follows snake_case to match the PRS codebase conventions. All enums are constrained to the allowed value sets defined in design/spec.md.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "id",
+    "content",
+    "record_type",
+    "state_class",
+    "created_at",
+    "updated_at",
+    "status"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Record Id. Globally unique identifier used for traceability, referencing, synchronization, and relational linking. Examples: 'REC-2026-00124', UUID, or hash identifier.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Record Content. The primary semantic payload of the record: the core informational, cognitive, operational, or observational substance."
+    },
+    "detail": {
+      "type": "string",
+      "default": "",
+      "description": "Record Detail. Extended explanatory, analytical, contextual, or supporting information expanding the primary content."
+    },
+    "annotations": {
+      "type": "array",
+      "default": [],
+      "description": "Annotation Log. Append-only commentary written about the record, without mutating content, detail, or revision history.",
+      "items": {
+        "$ref": "#/$defs/annotation"
+      }
+    },
+    "created_at": {
+      "$ref": "#/$defs/iso8601Timestamp",
+      "description": "Temporal metadata: creation timestamp."
+    },
+    "updated_at": {
+      "$ref": "#/$defs/iso8601Timestamp",
+      "description": "Temporal metadata: last modification timestamp."
+    },
+    "deadline": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/iso8601Timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Temporal metadata: deadline by which an action must occur."
+    },
+    "horizon": {
+      "$ref": "#/$defs/horizonEnum",
+      "description": "Temporal metadata: temporal horizon."
+    },
+    "relevance": {
+      "$ref": "#/$defs/relevanceEnum",
+      "description": "Temporal metadata: temporal relevance."
+    },
+    "recurrence": {
+      "$ref": "#/$defs/recurrenceEnum",
+      "description": "Temporal metadata: recurrence cadence."
+    },
+    "validity": {
+      "$ref": "#/$defs/validityEnum",
+      "description": "Temporal metadata: validity status."
+    },
+    "context": {
+      "$ref": "#/$defs/contextualMetadata",
+      "description": "Contextual metadata: situational, environmental, institutional, emotional, strategic, or operational context."
+    },
+    "confidence": {
+      "$ref": "#/$defs/confidenceEnum",
+      "description": "Epistemic metadata: degree of confidence."
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/evidenceLevelEnum",
+      "description": "Epistemic metadata: strength of supporting evidence."
+    },
+    "source_type": {
+      "$ref": "#/$defs/sourceTypeEnum",
+      "description": "Epistemic metadata: origin type of the information."
+    },
+    "verification_status": {
+      "$ref": "#/$defs/verificationStatusEnum",
+      "description": "Epistemic metadata: verification status."
+    },
+    "status": {
+      "$ref": "#/$defs/statusEnum",
+      "description": "Operational metadata: operational status."
+    },
+    "priority": {
+      "$ref": "#/$defs/priorityEnum",
+      "description": "Operational metadata: execution priority."
+    },
+    "owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Operational metadata: responsible person, team, or organization."
+    },
+    "project": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Operational metadata: project identifier."
+    },
+    "workflow_state": {
+      "$ref": "#/$defs/workflowStateEnum",
+      "description": "Operational metadata: workflow / management state."
+    },
+    "lifecycle_state": {
+      "$ref": "#/$defs/lifecycleStateEnum",
+      "description": "Lifecycle metadata: evolutionary state through time (Created / Revised / Deprecated / Archived / Invalidated / Superseded)."
+    },
+    "links": {
+      "type": "array",
+      "default": [],
+      "description": "Relational metadata: explicit graph relationships connecting this record to other records, entities, systems, or dependencies.",
+      "items": {
+        "$ref": "#/$defs/recordLink"
+      }
+    },
+    "state_class": {
+      "$ref": "#/$defs/stateClassEnum",
+      "description": "Classification metadata: semantic class of state."
+    },
+    "record_type": {
+      "$ref": "#/$defs/recordTypeEnum",
+      "description": "Classification metadata: semantic record type."
+    },
+    "domain": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Classification metadata: knowledge domain (open taxonomy)."
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Classification metadata: specific subject entity, concept, technology, person, organization, artifact, or phenomenon."
+    },
+    "topic": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Classification metadata: controlled taxonomy topic."
+    },
+    "keywords": {
+      "type": "array",
+      "default": [],
+      "description": "Classification metadata: free-form keywords for indexing and retrieval. (Aliased as 'tags' in the codebase.)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "default": [],
+      "description": "Classification metadata: user-defined tags. Codebase alias for 'keywords'.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategic": {
+      "$ref": "#/$defs/strategicMetadata",
+      "description": "Strategic classification: how this record relates to long-term objectives (goal / objective / initiative / capability)."
+    }
+  },
+  "$defs": {
+    "iso8601Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 date-time string (UTC recommended), e.g. '2026-06-15T14:30:00Z'."
+    },
+    "stateClassEnum": {
+      "type": "string",
+      "description": "Semantic classification: which class of state this record represents.",
+      "enum": [
+        "Internal Cognitive",
+        "External World",
+        "Social (Joint State)"
+      ]
+    },
+    "recordTypeEnum": {
+      "type": "string",
+      "description": "Semantic type of the record's content.",
+      "enum": [
+        "Goal",
+        "Decision",
+        "Task",
+        "Project",
+        "Event",
+        "Observation",
+        "Hypothesis",
+        "Question",
+        "Principle",
+        "Reference",
+        "Procedure",
+        "Meeting",
+        "Idea"
+      ]
+    },
+    "statusEnum": {
+      "type": "string",
+      "description": "Operational status of the record.",
+      "enum": [
+        "Draft",
+        "Active",
+        "Pending",
+        "Blocked",
+        "Completed",
+        "Archived",
+        "Cancelled"
+      ]
+    },
+    "priorityEnum": {
+      "type": "string",
+      "description": "Relative execution priority.",
+      "enum": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low"
+      ]
+    },
+    "workflowStateEnum": {
+      "type": "string",
+      "description": "Workflow / management state of the record.",
+      "enum": [
+        "Planned",
+        "In Progress",
+        "Under Review",
+        "Approved",
+        "Deprecated"
+      ]
+    },
+    "horizonEnum": {
+      "type": "string",
+      "description": "Temporal horizon over which the record remains relevant.",
+      "enum": [
+        "Immediate",
+        "Short-term",
+        "Medium-term",
+        "Long-term"
+      ]
+    },
+    "relevanceEnum": {
+      "type": "string",
+      "description": "Temporal relevance of the record relative to the present.",
+      "enum": [
+        "Historical",
+        "Current",
+        "Future"
+      ]
+    },
+    "recurrenceEnum": {
+      "type": "string",
+      "description": "Recurrence cadence of the record.",
+      "enum": [
+        "None",
+        "Daily",
+        "Weekly",
+        "Monthly",
+        "Yearly",
+        "Custom"
+      ]
+    },
+    "validityEnum": {
+      "type": "string",
+      "description": "Validity status of the record.",
+      "enum": [
+        "Permanent",
+        "Temporary",
+        "Expired"
+      ]
+    },
+    "verificationStatusEnum": {
+      "type": "string",
+      "description": "Epistemic verification status.",
+      "enum": [
+        "Unverified",
+        "Verified",
+        "Falsified",
+        "Disputed"
+      ]
+    },
+    "confidenceEnum": {
+      "type": "string",
+      "description": "Degree of confidence in the record's content.",
+      "enum": [
+        "Very Low",
+        "Low",
+        "Medium",
+        "High",
+        "Very High"
+      ]
+    },
+    "evidenceLevelEnum": {
+      "type": "string",
+      "description": "Strength of supporting evidence.",
+      "enum": [
+        "None",
+        "Anecdotal",
+        "Observational",
+        "Experimental",
+        "Formal Proof"
+      ]
+    },
+    "sourceTypeEnum": {
+      "type": "string",
+      "description": "Origin type of the information in the record.",
+      "enum": [
+        "Personal Memory",
+        "Observation",
+        "Measurement",
+        "Document",
+        "Expert",
+        "External System"
+      ]
+    },
+    "lifecycleStateEnum": {
+      "type": "string",
+      "description": "Lifecycle / evolutionary state of the record.",
+      "enum": [
+        "Created",
+        "Revised",
+        "Deprecated",
+        "Archived",
+        "Invalidated",
+        "Superseded"
+      ]
+    },
+    "annotationKindEnum": {
+      "type": "string",
+      "description": "Kind of annotation written about the record.",
+      "enum": [
+        "reflection",
+        "question",
+        "review",
+        "correction",
+        "provenance",
+        "comment",
+        "progress"
+      ]
+    },
+    "annotationStateEnum": {
+      "type": "string",
+      "description": "State of an annotation entry.",
+      "enum": [
+        "active",
+        "resolved",
+        "superseded"
+      ]
+    },
+    "linkTypeEnum": {
+      "type": "string",
+      "description": "Typed relationship from this record to another record, entity, system, or dependency. Categories: Structural, Temporal, Causal, Operational, Epistemic, Governance, Strategic, Intelligence, Human & Social, Artifact & Knowledge.",
+      "enum": [
+        "references",
+        "related-to",
+        "derived-from",
+        "supersedes",
+        "duplicates",
+        "contains",
+        "part-of",
+        "extends",
+        "version-of",
+        "precedes",
+        "follows",
+        "simultaneous-with",
+        "recurs-from",
+        "scheduled-after",
+        "historically-caused",
+        "causes",
+        "contributes-to",
+        "mitigates",
+        "escalates",
+        "resolves",
+        "enables",
+        "inhibits",
+        "blocks",
+        "depends-on",
+        "required-by",
+        "assigned-to",
+        "coordinates-with",
+        "implements",
+        "tracks",
+        "spawned-from",
+        "supports",
+        "contradicts",
+        "validates",
+        "questions",
+        "corroborates",
+        "hypothesizes-about",
+        "based-on",
+        "governed-by",
+        "violates",
+        "audits",
+        "authorizes",
+        "constrained-by",
+        "aligned-with",
+        "advances",
+        "threatens",
+        "opportunistically-enables",
+        "degrades",
+        "strengthens",
+        "signals",
+        "predicts",
+        "indicates-drift",
+        "clusters-with",
+        "root-cause-of",
+        "communicated-to",
+        "requested-by",
+        "approved-by",
+        "collaborates-with",
+        "affects",
+        "documents",
+        "evidenced-by",
+        "visualizes",
+        "summarizes",
+        "explains",
+        "indexes"
+      ]
+    },
+    "recordLink": {
+      "type": "object",
+      "description": "Explicit graph relationship connecting this record to another record, entity, system, or dependency.",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "type"
+      ],
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Identifier of the target record, entity, or artifact being linked to."
+        },
+        "type": {
+          "$ref": "#/$defs/linkTypeEnum"
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional free-text note describing the relationship."
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "description": "Append-only commentary entry written about the record. Annotations attach reflection, questions, review notes, and provenance commentary without mutating the record's content, detail, or revision history.",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "created_at",
+        "author",
+        "kind",
+        "text",
+        "state"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the annotation entry (e.g. 'ann-001')."
+        },
+        "created_at": {
+          "$ref": "#/$defs/iso8601Timestamp"
+        },
+        "author": {
+          "type": "string",
+          "description": "Person or entity that authored the annotation."
+        },
+        "kind": {
+          "$ref": "#/$defs/annotationKindEnum"
+        },
+        "text": {
+          "type": "string",
+          "description": "The annotation body text."
+        },
+        "state": {
+          "$ref": "#/$defs/annotationStateEnum"
+        }
+      }
+    },
+    "contextualMetadata": {
+      "type": "object",
+      "description": "Contextual metadata: the situational, environmental, institutional, emotional, strategic, or operational context under which the record exists.",
+      "additionalProperties": true,
+      "properties": {
+        "project": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Project context the record belongs to."
+        },
+        "meeting": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Meeting context the record originated from."
+        },
+        "organizational_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Relevant organizational state."
+        },
+        "emotional_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Emotional / motivational context of the agent."
+        },
+        "geopolitical_condition": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Relevant geopolitical / macro-environmental condition."
+        },
+        "strategic_context": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Strategic context under which the record exists."
+        },
+        "operational_context": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Operational context (workflow, environment, tooling state)."
+        }
+      }
+    },
+    "strategicMetadata": {
+      "type": "object",
+      "description": "Strategic classification: how this record relates to long-term objectives.",
+      "additionalProperties": false,
+      "properties": {
+        "goal": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Strategic goal identifier this record relates to."
+        },
+        "objective": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Strategic objective identifier."
+        },
+        "initiative": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Initiative identifier."
+        },
+        "capability": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Capability identifier."
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRS — Personal Recording System</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/views.css">
+  <link rel="stylesheet" href="/css/command-palette.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4v16M5 12h6M11 4v16M14 4l4 8-4 8M14 4l4 8M18 12l-4 8M18 12h2"/></svg></span>
+      <span class="brand-wordmark">Personal <em>Recording</em> System</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><prs-icon name="search" size="16"></prs-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search records…" autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btnScratchpad" title="Quick Capture (Ctrl+Shift+N)"><prs-icon name="pencil-line" size="15"></prs-icon> Capture</button>
+      <button class="btn btn-primary btn-sm" id="btnNewRecord" title="New Record (N)"><prs-icon name="plus" size="15"></prs-icon> New Record</button>
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <ul class="sidebar-nav">
+        <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><prs-icon name="gauge" size="17"></prs-icon></span> Dashboard</a></li>
+        <li><a href="#records" data-view="records" class="active"><span class="nav-icon"><prs-icon name="list" size="17"></prs-icon></span> All Records</a></li>
+        <li><a href="#timeline" data-view="timeline"><span class="nav-icon"><prs-icon name="clock" size="17"></prs-icon></span> Timeline</a></li>
+        <li><a href="#heatmap" data-view="heatmap"><span class="nav-icon"><prs-icon name="layout-grid" size="17"></prs-icon></span> Activity Heatmap</a></li>
+        <li><a href="#graph" data-view="graph"><span class="nav-icon"><prs-icon name="share-2" size="17"></prs-icon></span> Relationship Graph</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Analysis</div>
+      <ul class="sidebar-nav">
+        <li><a href="#study" data-view="study"><span class="nav-icon"><prs-icon name="chart-spline" size="17"></prs-icon></span> Record Study</a></li>
+        <li><a href="#summary" data-view="summary"><span class="nav-icon"><prs-icon name="clipboard-list" size="17"></prs-icon></span> Record Summary</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">By Type</div>
+      <ul class="sidebar-nav" id="typeNav"></ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Complementary</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" data-view="calendar" id="navCalendar"><span class="nav-icon"><prs-icon name="calendar" size="17"></prs-icon></span> Calendar</a></li>
+        <li><a href="#" data-view="suggestions" id="navSuggestions"><span class="nav-icon"><prs-icon name="sparkles" size="17"></prs-icon></span> Suggestions</a></li>
+        <li><a href="#" data-view="export" id="navExport"><span class="nav-icon"><prs-icon name="download" size="17"></prs-icon></span> Export / Import</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">Personal Recording System</div>
+      <div class="colophon-meta">PROTOTYPE v0.1 · MOCKED</div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="app-main" id="appContent">
+    <!-- Views rendered here by JS -->
+  </main>
+
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette">
+    <div class="cmd-palette-search">
+      <span><prs-icon name="search" size="17"></prs-icon></span>
+      <input type="text" id="cmdInput" placeholder="Type a command or search…" autocomplete="off">
+      <span class="kbd">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+  </div>
+</div>
+
+<!-- ═══ Scratchpad (Quick Capture) ═══ -->
+<div class="scratchpad-overlay hidden" id="scratchpadOverlay">
+  <div class="scratchpad">
+    <div class="scratchpad-header">
+      <h3 style="margin:0;font-size:var(--text-base);">Quick Capture</h3>
+      <button class="btn-icon" onclick="PRS.scratchpad.close()"><prs-icon name="x" size="17"></prs-icon></button>
+    </div>
+    <div class="scratchpad-body">
+      <textarea id="scratchpadText" placeholder="Capture a thought, observation, or idea…"></textarea>
+      <div style="display:flex;gap:var(--space-2);margin-top:var(--space-3);justify-content:flex-end;">
+        <button class="btn btn-secondary btn-sm" onclick="PRS.scratchpad.close()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="PRS.scratchpad.save()">Save as Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Record Editor Modal ═══ -->
+<div class="modal-overlay hidden" id="recordModal">
+  <div class="modal" style="max-width:800px;">
+    <div class="modal-header">
+      <h2 id="modalTitle">New Record</h2>
+      <button class="btn-icon" onclick="PRS.record.closeModal()"><prs-icon name="x" size="17"></prs-icon></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="PRS.record.closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btnSaveRecord">Save Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Record Detail Modal ═══ -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="modal" style="max-width:820px;">
+    <div class="modal-header">
+      <h2 id="detailTitle">Record Detail</h2>
+      <button class="btn-icon" onclick="PRS.record.closeDetail()"><prs-icon name="x" size="17"></prs-icon></button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<script src="/js/store.js"></script>
+<script src="/js/icons.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/record.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/timeline.js"></script>
+<script src="/js/heatmap.js"></script>
+<script src="/js/graph.js"></script>
+<script src="/js/command-palette.js"></script>
+<script src="/js/scratchpad.js"></script>
+<script src="/js/complementary.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/study.js"></script>
+<script src="/js/summary.js"></script>
+<script>
+  // Initialize app
+  document.addEventListener('DOMContentLoaded', () => { PRS.init(); });
+</script>
+
+</body>
+</html>
