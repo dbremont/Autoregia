@@ -1,0 +1,1702 @@
+[
+  {
+    "id": "OBJ-2026-0001",
+    "name": "Obsidian",
+    "slug": "obsidian",
+    "aliases": [],
+    "summary": "Local-first Markdown knowledge base with bidirectional links.",
+    "detail": "",
+    "purpose": "External memory / note store \u2014 primary thinking substrate.",
+    "function": "Bidirectional-link Markdown editing over local vault files.",
+    "object_kind": "software_tool",
+    "category": "note-taking",
+    "domain": "Knowledge Management",
+    "keywords": [
+      "note-taking"
+    ],
+    "tags": [
+      "daily-driver",
+      "pkm"
+    ],
+    "provenance": {
+      "source_url": "https://obsidian.md",
+      "vendor": "Obsidian",
+      "version": "1.7.4",
+      "license": "proprietary",
+      "acquired_at": "2027-04-25T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "free",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "gui",
+      "install": "AppImage download",
+      "config": null,
+      "docs_url": "https://help.obsidian.md",
+      "invocation": "obsidian"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "note-taking",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0003",
+        "kind": "integrates_with",
+        "notes": "Vault versioned in git"
+      },
+      {
+        "target": "OBJ-2026-0021",
+        "kind": "integrates_with",
+        "notes": "Export notes via pandoc"
+      },
+      {
+        "target": "OBJ-2026-0008",
+        "kind": "complements",
+        "notes": "Papers feed the vault"
+      }
+    ],
+    "annotations": [
+      {
+        "id": "ann-0001",
+        "created_at": "2027-03-16T00:00:00Z",
+        "author": "self",
+        "kind": "comment",
+        "text": "Switched to local-first after Notion sync issues.",
+        "state": "resolved"
+      },
+      {
+        "id": "ann-0002",
+        "created_at": "2026-06-20T10:30:00Z",
+        "author": "self",
+        "kind": "review",
+        "text": "Still the best daily driver; plugins stable.",
+        "state": "open"
+      }
+    ],
+    "created_at": "2027-04-25T00:00:00Z",
+    "updated_at": "2027-04-25T00:00:00Z",
+    "last_used_at": "2026-06-26T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0002",
+    "name": "VS Code",
+    "slug": "vs-code",
+    "aliases": [],
+    "summary": "Extensible source-code editor.",
+    "detail": "",
+    "purpose": "Primary development environment.",
+    "function": "Text editing, debugging, extensions, integrated terminal.",
+    "object_kind": "software_tool",
+    "category": "code-editor",
+    "domain": "Software Engineering",
+    "keywords": [
+      "code-editor"
+    ],
+    "tags": [
+      "daily-driver",
+      "editor"
+    ],
+    "provenance": {
+      "source_url": "https://code.visualstudio.com",
+      "vendor": "Microsoft",
+      "version": "1.99",
+      "license": "MIT",
+      "acquired_at": "2027-10-02T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "free",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "gui",
+      "install": "apt install code",
+      "config": null,
+      "docs_url": "https://code.visualstudio.com/docs",
+      "invocation": "code"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "code-editor",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0003",
+        "kind": "depends_on",
+        "notes": "Editor calls git"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2027-10-02T00:00:00Z",
+    "updated_at": "2027-10-02T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0003",
+    "name": "git",
+    "slug": "git",
+    "aliases": [],
+    "summary": "Distributed version control system.",
+    "detail": "",
+    "purpose": "Track change history of text artifacts.",
+    "function": "Commit, branch, merge, and synchronize repositories.",
+    "object_kind": "software_tool",
+    "category": "version-control",
+    "domain": "Software Engineering",
+    "keywords": [
+      "version-control"
+    ],
+    "tags": [
+      "daily-driver",
+      "vcs"
+    ],
+    "provenance": {
+      "source_url": "https://git-scm.com",
+      "vendor": "Git project",
+      "version": "2.45",
+      "license": "GPL-2.0",
+      "acquired_at": "2028-01-10T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "cli",
+      "install": "apt install git",
+      "config": null,
+      "docs_url": "https://git-scm.com/docs",
+      "invocation": "git"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "version-control",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2028-01-10T00:00:00Z",
+    "updated_at": "2028-01-10T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0004",
+    "name": "Flask",
+    "slug": "flask",
+    "aliases": [],
+    "summary": "Lightweight Python WSGI web framework.",
+    "detail": "",
+    "purpose": "Serve mock APIs and prototypes for Autoregia tools.",
+    "function": "Routing, request/response, JSON serialization.",
+    "object_kind": "library_framework",
+    "category": "web-framework",
+    "domain": "Software Engineering",
+    "keywords": [
+      "web-framework"
+    ],
+    "tags": [
+      "backend"
+    ],
+    "provenance": {
+      "source_url": "https://flask.palletsprojects.com",
+      "vendor": "Pallets",
+      "version": "3.0",
+      "license": "BSD-3-Clause",
+      "acquired_at": "2026-03-01T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "library",
+      "install": "pip install flask",
+      "config": null,
+      "docs_url": "https://flask.palletsprojects.com",
+      "invocation": "from flask import Flask"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "experimental",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "web-framework",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0010",
+        "kind": "depends_on",
+        "notes": "Catalog stored in SQLite"
+      },
+      {
+        "target": "OBJ-2026-0007",
+        "kind": "integrates_with",
+        "notes": "Mirrors repos to GitHub"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-06-25T10:30:00Z",
+    "last_used_at": "2026-06-25T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0005",
+    "name": "Apache ECharts",
+    "slug": "apache-echarts",
+    "aliases": [],
+    "summary": "Declarative data-visualization library.",
+    "detail": "",
+    "purpose": "Render analytical charts for the Statistical Overlay.",
+    "function": "Bar, pie, graph, and treemap visualizations from data.",
+    "object_kind": "library_framework",
+    "category": "charting",
+    "domain": "Data Science",
+    "keywords": [
+      "charting"
+    ],
+    "tags": [
+      "viz"
+    ],
+    "provenance": {
+      "source_url": "https://echarts.apache.org",
+      "vendor": "Apache",
+      "version": "5.5",
+      "license": "Apache-2.0",
+      "acquired_at": "2026-01-30T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "library",
+      "install": "npm install echarts",
+      "config": null,
+      "docs_url": "https://echarts.apache.org/en/option.html",
+      "invocation": "echarts.init(dom)"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "observational",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "charting",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0004",
+        "kind": "integrates_with",
+        "notes": "Charts served by Flask app"
+      },
+      {
+        "target": "OBJ-2026-0002",
+        "kind": "depends_on",
+        "notes": "Developed in VS Code"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-01-30T00:00:00Z",
+    "updated_at": "2026-06-24T10:30:00Z",
+    "last_used_at": "2026-06-24T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0006",
+    "name": "OpenAI Chat Completions API",
+    "slug": "openai-chat-completions-api",
+    "aliases": [],
+    "summary": "Hosted large-language-model inference service.",
+    "detail": "",
+    "purpose": "Augment catalog workflows via LLM suggestions.",
+    "function": "Generate text, classify, propose relations, summarize entries.",
+    "object_kind": "service_platform",
+    "category": "llm-inference",
+    "domain": "Software Engineering",
+    "keywords": [
+      "llm-inference"
+    ],
+    "tags": [
+      "ai",
+      "paid"
+    ],
+    "provenance": {
+      "source_url": "https://platform.openai.com",
+      "vendor": "OpenAI",
+      "version": "gpt-4o",
+      "license": "proprietary",
+      "acquired_at": "2026-05-20T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "api_key",
+    "cost": {
+      "kind": "usage_based",
+      "currency": "USD",
+      "amount": 40.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "pip install openai",
+      "config": null,
+      "docs_url": "https://platform.openai.com/docs",
+      "invocation": "client.chat.completions.create"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "experimental",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "llm-inference",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0019",
+        "kind": "alternative_to",
+        "notes": "Two LLM providers, same capability"
+      },
+      {
+        "target": "OBJ-2026-0022",
+        "kind": "depends_on",
+        "notes": "Routed via Cloudflare"
+      }
+    ],
+    "annotations": [
+      {
+        "id": "ann-0003",
+        "created_at": "2026-06-24T10:30:00Z",
+        "author": "self",
+        "kind": "cost_change",
+        "text": "Usage crossed $40/mo; consider budget cap.",
+        "state": "open"
+      }
+    ],
+    "created_at": "2026-05-20T00:00:00Z",
+    "updated_at": "2026-06-27T10:30:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0007",
+    "name": "GitHub",
+    "slug": "github",
+    "aliases": [],
+    "summary": "Hosted Git repository and collaboration platform.",
+    "detail": "",
+    "purpose": "Remote source-code hosting and version synchronization.",
+    "function": "Repository hosting, pull requests, issues, CI.",
+    "object_kind": "service_platform",
+    "category": "code-hosting",
+    "domain": "Software Engineering",
+    "keywords": [
+      "code-hosting"
+    ],
+    "tags": [
+      "daily-driver"
+    ],
+    "provenance": {
+      "source_url": "https://github.com",
+      "vendor": "GitHub",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2028-01-10T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "oauth",
+    "cost": {
+      "kind": "subscription",
+      "currency": "USD",
+      "amount": 4.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "git remote add origin",
+      "config": null,
+      "docs_url": "https://docs.github.com",
+      "invocation": "https://github.com"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "code-hosting",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0003",
+        "kind": "integrates_with",
+        "notes": "Git host"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2028-01-10T00:00:00Z",
+    "updated_at": "2028-01-10T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0008",
+    "name": "arXiv API",
+    "slug": "arxiv-api",
+    "aliases": [],
+    "summary": "Programmatic access to the arXiv preprint corpus.",
+    "detail": "",
+    "purpose": "Surface research papers for the Intelligence System.",
+    "function": "Query and retrieve metadata/abstracts of preprints.",
+    "object_kind": "data_source",
+    "category": "academic-feed",
+    "domain": "Research",
+    "keywords": [
+      "academic-feed"
+    ],
+    "tags": [
+      "research"
+    ],
+    "provenance": {
+      "source_url": "https://arxiv.org",
+      "vendor": "Cornell University",
+      "version": "v1",
+      "license": "CC0",
+      "acquired_at": "2026-08-28T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "HTTP GET",
+      "config": null,
+      "docs_url": "https://info.arxiv.org/help/api",
+      "invocation": "export.arxiv.org/api/query"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "observational",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "academic-feed",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0006",
+        "kind": "integrates_with",
+        "notes": "Summarize papers via LLM"
+      },
+      {
+        "target": "OBJ-2026-0001",
+        "kind": "complements",
+        "notes": "Store papers in vault"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-08-28T00:00:00Z",
+    "updated_at": "2026-08-28T00:00:00Z",
+    "last_used_at": "2026-06-21T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0009",
+    "name": "NixOS Server",
+    "slug": "nixos-server",
+    "aliases": [],
+    "summary": "Declarative Linux server running Autoregia services.",
+    "detail": "",
+    "purpose": "Host self-managed services and persistent data stores.",
+    "function": "Provide a reproducible compute and storage environment.",
+    "object_kind": "infrastructure",
+    "category": "os-runtime",
+    "domain": "Infrastructure",
+    "keywords": [
+      "os-runtime"
+    ],
+    "tags": [
+      "self-hosted"
+    ],
+    "provenance": {
+      "source_url": "https://nixos.org",
+      "vendor": "NixOS",
+      "version": "24.05",
+      "license": "MIT",
+      "acquired_at": "2026-12-06T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "license",
+    "cost": {
+      "kind": "maintenance",
+      "currency": "EUR",
+      "amount": 12.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "cli",
+      "install": "declarative configuration",
+      "config": null,
+      "docs_url": "https://nixos.org/manual",
+      "invocation": "ssh autoregia-ws"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "observational",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_3_control",
+      "goal": null,
+      "objective": null,
+      "capability": "os-runtime",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0022",
+        "kind": "depends_on",
+        "notes": "Public access via Cloudflare"
+      },
+      {
+        "target": "OBJ-2026-0010",
+        "kind": "contains",
+        "notes": "Runs SQLite-backed services"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-12-06T00:00:00Z",
+    "updated_at": "2026-12-06T00:00:00Z",
+    "last_used_at": "2026-06-26T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0010",
+    "name": "SQLite",
+    "slug": "sqlite",
+    "aliases": [],
+    "summary": "Embedded relational database engine.",
+    "detail": "",
+    "purpose": "Persistent structured storage for catalog records.",
+    "function": "Transactional SQL storage in a single file.",
+    "object_kind": "infrastructure",
+    "category": "embedded-db",
+    "domain": "Software Engineering",
+    "keywords": [
+      "embedded-db"
+    ],
+    "tags": [
+      "storage"
+    ],
+    "provenance": {
+      "source_url": "https://sqlite.org",
+      "vendor": "SQLite Consortium",
+      "version": "3.46",
+      "license": "public-domain",
+      "acquired_at": "2027-03-16T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "library",
+      "install": "built into Python stdlib",
+      "config": null,
+      "docs_url": "https://sqlite.org/docs.html",
+      "invocation": "sqlite3 db.sqlite"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 5
+    },
+    "strategic": {
+      "system_served": "system_3_audit_accounting",
+      "goal": null,
+      "objective": null,
+      "capability": "embedded-db",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0020",
+        "kind": "alternative_to",
+        "notes": "SQLite vs Postgres scaling path"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2027-03-16T00:00:00Z",
+    "updated_at": "2027-03-16T00:00:00Z",
+    "last_used_at": "2026-06-26T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0011",
+    "name": "ThinkPad X1 Carbon",
+    "slug": "thinkpad-x1-carbon",
+    "aliases": [],
+    "summary": "Primary personal computing device.",
+    "detail": "",
+    "purpose": "Run the agent operative software stack.",
+    "function": "General-purpose portable computation.",
+    "object_kind": "hardware_device",
+    "category": "laptop",
+    "domain": "Productivity",
+    "keywords": [
+      "laptop"
+    ],
+    "tags": [
+      "daily-driver"
+    ],
+    "provenance": {
+      "source_url": "https://www.lenovo.com",
+      "vendor": "Lenovo",
+      "version": "Gen 11",
+      "license": "proprietary",
+      "acquired_at": "2026-12-26T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "physical",
+    "access_model": "offline",
+    "cost": {
+      "kind": "one_time",
+      "currency": "EUR",
+      "amount": 1900.0,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "hardware",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://pcsupport.lenovo.com",
+      "invocation": "power button"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "laptop",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0002",
+        "kind": "contains",
+        "notes": "Runs the editor"
+      },
+      {
+        "target": "OBJ-2026-0001",
+        "kind": "contains",
+        "notes": "Runs the vault"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-12-26T00:00:00Z",
+    "updated_at": "2026-12-26T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0012",
+    "name": "Kindle e-reader",
+    "slug": "kindle-e-reader",
+    "aliases": [],
+    "summary": "Dedicated long-form reading device.",
+    "detail": "",
+    "purpose": "Read books and papers without digital distraction.",
+    "function": "E-ink display for prolonged reading sessions.",
+    "object_kind": "hardware_device",
+    "category": "e-reader",
+    "domain": "Knowledge Management",
+    "keywords": [
+      "e-reader"
+    ],
+    "tags": [
+      "reading"
+    ],
+    "provenance": {
+      "source_url": "https://www.amazon.com",
+      "vendor": "Amazon",
+      "version": "Paperwhite",
+      "license": "proprietary",
+      "acquired_at": "2027-06-24T00:00:00Z"
+    },
+    "status": "backup",
+    "priority": "low",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "physical",
+    "access_model": "offline",
+    "cost": {
+      "kind": "one_time",
+      "currency": "USD",
+      "amount": 150.0,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "hardware",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://www.amazon.com/kindle",
+      "invocation": "power button"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "anecdotal",
+      "rating": 3.5
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "e-reader",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2027-06-24T00:00:00Z",
+    "updated_at": "2027-06-24T00:00:00Z",
+    "last_used_at": "2026-05-18T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0013",
+    "name": "Standing Desk",
+    "slug": "standing-desk",
+    "aliases": [],
+    "summary": "Height-adjustable workstation surface.",
+    "detail": "",
+    "purpose": "Sustain ergonomics during long working sessions.",
+    "function": "Supports sit/stand posture variation.",
+    "object_kind": "physical_instrument",
+    "category": "furniture",
+    "domain": "Health",
+    "keywords": [
+      "furniture"
+    ],
+    "tags": [
+      "ergonomics"
+    ],
+    "provenance": {
+      "source_url": "https://www.ikea.com",
+      "vendor": "IKEA",
+      "version": "Bekant",
+      "license": "proprietary",
+      "acquired_at": "2027-10-02T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "physical",
+    "access_model": "offline",
+    "cost": {
+      "kind": "one_time",
+      "currency": "EUR",
+      "amount": 500.0,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "hardware",
+      "install": "assembly",
+      "config": null,
+      "docs_url": "n/a",
+      "invocation": "raise/lower controls"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "observational",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "furniture",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2027-10-02T00:00:00Z",
+    "updated_at": "2027-10-02T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0014",
+    "name": "RFC 9110",
+    "slug": "rfc-9110",
+    "aliases": [],
+    "summary": "HTTP Semantics standard.",
+    "detail": "",
+    "purpose": "Normative reference for HTTP service design.",
+    "function": "Defines HTTP methods, status codes, and semantics.",
+    "object_kind": "reference_artifact",
+    "category": "standard",
+    "domain": "Software Engineering",
+    "keywords": [
+      "standard"
+    ],
+    "tags": [
+      "standard",
+      "reference"
+    ],
+    "provenance": {
+      "source_url": "https://www.rfc-editor.org/rfc/rfc9110",
+      "vendor": "IETF",
+      "version": "9110",
+      "license": "BSD",
+      "acquired_at": "2026-05-20T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "document",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://www.rfc-editor.org/rfc/rfc9110",
+      "invocation": "https://www.rfc-editor.org/rfc/rfc9110"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 5
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "standard",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0004",
+        "kind": "references",
+        "notes": "Flask follows HTTP semantics"
+      },
+      {
+        "target": "OBJ-2026-0006",
+        "kind": "references",
+        "notes": "OpenAI API follows HTTP"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-05-20T00:00:00Z",
+    "updated_at": "2026-06-22T10:30:00Z",
+    "last_used_at": "2026-06-22T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0015",
+    "name": "Release Pipeline",
+    "slug": "release-pipeline",
+    "aliases": [],
+    "summary": "Automated build, test, and publish procedure.",
+    "detail": "",
+    "purpose": "Codify the path from commit to released artifact.",
+    "function": "Run tests on push, build containers, deploy on tag.",
+    "object_kind": "workflow_method",
+    "category": "ci-cd",
+    "domain": "Software Engineering",
+    "keywords": [
+      "ci-cd"
+    ],
+    "tags": [
+      "automation"
+    ],
+    "provenance": {
+      "source_url": "https://github.com/autoregia/.github",
+      "vendor": "self",
+      "version": "v2",
+      "license": "proprietary",
+      "acquired_at": "2026-03-31T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "oauth",
+    "cost": {
+      "kind": "maintenance",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "workflow YAML",
+      "config": null,
+      "docs_url": "internal",
+      "invocation": "git tag && git push --tags"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "observational",
+      "rating": 3.5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "ci-cd",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0007",
+        "kind": "depends_on",
+        "notes": "Runs on GitHub Actions"
+      },
+      {
+        "target": "OBJ-2026-0009",
+        "kind": "depends_on",
+        "notes": "Deploys to NixOS"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-03-31T00:00:00Z",
+    "updated_at": "2026-06-24T10:30:00Z",
+    "last_used_at": "2026-06-24T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0016",
+    "name": "Prompt Engineering",
+    "slug": "prompt-engineering",
+    "aliases": [],
+    "summary": "Method for eliciting reliable behaviour from LLMs.",
+    "detail": "",
+    "purpose": "Improve quality of AI-assisted catalog enrichment.",
+    "function": "Compose structured prompts, few-shot examples, and constraints.",
+    "object_kind": "capability_skill",
+    "category": "ai-skill",
+    "domain": "Software Engineering",
+    "keywords": [
+      "ai-skill"
+    ],
+    "tags": [
+      "skill",
+      "ai"
+    ],
+    "provenance": {
+      "source_url": "internal notes",
+      "vendor": "self",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2026-02-09T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "opportunity",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "none",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "internal",
+      "invocation": "mental"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "experimental",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "ai-skill",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0006",
+        "kind": "enables",
+        "notes": "Skill improves API usage"
+      },
+      {
+        "target": "OBJ-2026-0019",
+        "kind": "enables",
+        "notes": null
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-02-09T00:00:00Z",
+    "updated_at": "2026-06-27T10:30:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0017",
+    "name": "Notion",
+    "slug": "notion",
+    "aliases": [],
+    "summary": "Hosted collaborative workspace and database.",
+    "detail": "",
+    "purpose": "Evaluate as alternative/complement to Obsidian.",
+    "function": "Blocks, databases, and shared pages over the web.",
+    "object_kind": "service_platform",
+    "category": "note-taking",
+    "domain": "Knowledge Management",
+    "keywords": [
+      "note-taking"
+    ],
+    "tags": [
+      "trial",
+      "pkm"
+    ],
+    "provenance": {
+      "source_url": "https://notion.so",
+      "vendor": "Notion Labs",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2025-12-31T00:00:00Z"
+    },
+    "status": "trial",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "in_review",
+    "lifecycle_state": "provisional",
+    "hosting_model": "cloud",
+    "access_model": "subscription",
+    "cost": {
+      "kind": "subscription",
+      "currency": "USD",
+      "amount": 8.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://developers.notion.com",
+      "invocation": "https://notion.so"
+    },
+    "epistemic": {
+      "fit_confidence": "low",
+      "evidence_level": "anecdotal",
+      "rating": 3
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "note-taking",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0001",
+        "kind": "alternative_to",
+        "notes": "Hosted vs local PKM"
+      }
+    ],
+    "annotations": [
+      {
+        "id": "ann-0004",
+        "created_at": "2026-06-15T10:30:00Z",
+        "author": "self",
+        "kind": "question",
+        "text": "Does Notion replace Obsidian or complement it?",
+        "state": "open"
+      }
+    ],
+    "created_at": "2025-12-31T00:00:00Z",
+    "updated_at": "2026-06-15T10:30:00Z",
+    "last_used_at": "2026-06-15T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0018",
+    "name": "Logseq",
+    "slug": "logseq",
+    "aliases": [],
+    "summary": "Open-source local-first outliner knowledge base.",
+    "detail": "",
+    "purpose": "Evaluate as open-source alternative to Obsidian.",
+    "function": "Block-based outliner with backlinks and queries.",
+    "object_kind": "software_tool",
+    "category": "note-taking",
+    "domain": "Knowledge Management",
+    "keywords": [
+      "note-taking"
+    ],
+    "tags": [
+      "trial",
+      "pkm"
+    ],
+    "provenance": {
+      "source_url": "https://logseq.com",
+      "vendor": "Logseq",
+      "version": "0.10",
+      "license": "AGPL-3.0",
+      "acquired_at": "2025-12-16T00:00:00Z"
+    },
+    "status": "trial",
+    "priority": "low",
+    "owner": "self",
+    "workflow_state": "in_review",
+    "lifecycle_state": "provisional",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "gui",
+      "install": "AppImage",
+      "config": null,
+      "docs_url": "https://docs.logseq.com",
+      "invocation": "logseq"
+    },
+    "epistemic": {
+      "fit_confidence": "low",
+      "evidence_level": "anecdotal",
+      "rating": 3
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "note-taking",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0001",
+        "kind": "alternative_to",
+        "notes": "Open-source outliner vs Obsidian"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2025-12-16T00:00:00Z",
+    "updated_at": "2026-06-07T10:30:00Z",
+    "last_used_at": "2026-06-07T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0019",
+    "name": "Anthropic Claude API",
+    "slug": "anthropic-claude-api",
+    "aliases": [],
+    "summary": "Hosted large-language-model inference service (alternative).",
+    "detail": "",
+    "purpose": "Compare against OpenAI for catalog enrichment.",
+    "function": "Generate, summarize, classify over long contexts.",
+    "object_kind": "service_platform",
+    "category": "llm-inference",
+    "domain": "Software Engineering",
+    "keywords": [
+      "llm-inference"
+    ],
+    "tags": [
+      "ai",
+      "paid",
+      "trial"
+    ],
+    "provenance": {
+      "source_url": "https://anthropic.com",
+      "vendor": "Anthropic",
+      "version": "claude-3.5",
+      "license": "proprietary",
+      "acquired_at": "2025-12-01T00:00:00Z"
+    },
+    "status": "trial",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "in_review",
+    "lifecycle_state": "provisional",
+    "hosting_model": "cloud",
+    "access_model": "api_key",
+    "cost": {
+      "kind": "usage_based",
+      "currency": "USD",
+      "amount": 15.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "pip install anthropic",
+      "config": null,
+      "docs_url": "https://docs.anthropic.com",
+      "invocation": "client.messages.create"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "anecdotal",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "llm-inference",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0006",
+        "kind": "alternative_to",
+        "notes": null
+      }
+    ],
+    "annotations": [],
+    "created_at": "2025-12-01T00:00:00Z",
+    "updated_at": "2026-06-19T10:30:00Z",
+    "last_used_at": "2026-06-19T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0020",
+    "name": "Postgres",
+    "slug": "postgres",
+    "aliases": [],
+    "summary": "Client-server relational database.",
+    "detail": "",
+    "purpose": "Considered as scaling path beyond SQLite.",
+    "function": "Full SQL with extensions, concurrent access.",
+    "object_kind": "infrastructure",
+    "category": "relational-db",
+    "domain": "Software Engineering",
+    "keywords": [
+      "relational-db"
+    ],
+    "tags": [
+      "storage",
+      "backup"
+    ],
+    "provenance": {
+      "source_url": "https://postgresql.org",
+      "vendor": "PostgreSQL Global Group",
+      "version": "16",
+      "license": "PostgreSQL",
+      "acquired_at": "2026-07-09T00:00:00Z"
+    },
+    "status": "backup",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "open",
+    "cost": {
+      "kind": "maintenance",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "apt install postgresql",
+      "config": null,
+      "docs_url": "https://postgresql.org/docs",
+      "invocation": "psql"
+    },
+    "epistemic": {
+      "fit_confidence": "low",
+      "evidence_level": "anecdotal",
+      "rating": 3.5
+    },
+    "strategic": {
+      "system_served": "system_3_audit_accounting",
+      "goal": null,
+      "objective": null,
+      "capability": "relational-db",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0010",
+        "kind": "alternative_to",
+        "notes": null
+      }
+    ],
+    "annotations": [
+      {
+        "id": "ann-0005",
+        "created_at": "2026-03-01T00:00:00Z",
+        "author": "self",
+        "kind": "migration",
+        "text": "Hold Postgres until >100k records.",
+        "state": "resolved"
+      }
+    ],
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "last_used_at": "2026-03-29T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0021",
+    "name": "Pandoc",
+    "slug": "pandoc",
+    "aliases": [],
+    "summary": "Universal document converter.",
+    "detail": "",
+    "purpose": "Transform Markdown specs into polished documents.",
+    "function": "Convert between Markdown, HTML, PDF, LaTeX.",
+    "object_kind": "software_tool",
+    "category": "document-conversion",
+    "domain": "Writing",
+    "keywords": [
+      "document-conversion"
+    ],
+    "tags": [
+      "writing"
+    ],
+    "provenance": {
+      "source_url": "https://pandoc.org",
+      "vendor": "John MacFarlane",
+      "version": "3.2",
+      "license": "GPL-2.0",
+      "acquired_at": "2027-03-16T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "cli",
+      "install": "apt install pandoc",
+      "config": null,
+      "docs_url": "https://pandoc.org/MANUAL.html",
+      "invocation": "pandoc input.md -o out.pdf"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "document-conversion",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2027-03-16T00:00:00Z",
+    "updated_at": "2027-03-16T00:00:00Z",
+    "last_used_at": "2026-06-23T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0022",
+    "name": "Cloudflare",
+    "slug": "cloudflare",
+    "aliases": [],
+    "summary": "Edge network for DNS, CDN, and TLS.",
+    "detail": "",
+    "purpose": "Expose self-hosted services reliably and securely.",
+    "function": "Resolve DNS, cache assets, terminate TLS.",
+    "object_kind": "service_platform",
+    "category": "cdn-dns",
+    "domain": "Infrastructure",
+    "keywords": [
+      "cdn-dns"
+    ],
+    "tags": [
+      "infra"
+    ],
+    "provenance": {
+      "source_url": "https://cloudflare.com",
+      "vendor": "Cloudflare",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2026-10-17T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "api_key",
+    "cost": {
+      "kind": "subscription",
+      "currency": "USD",
+      "amount": 5.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "DNS delegation",
+      "config": null,
+      "docs_url": "https://developers.cloudflare.com",
+      "invocation": "https://dash.cloudflare.com"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "observational",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_2_coordination",
+      "goal": null,
+      "objective": null,
+      "capability": "cdn-dns",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0009",
+        "kind": "complements",
+        "notes": "Edge in front of origin"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-10-17T00:00:00Z",
+    "updated_at": "2026-10-17T00:00:00Z",
+    "last_used_at": "2026-06-25T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0023",
+    "name": "Zoom H5 Recorder",
+    "slug": "zoom-h5-recorder",
+    "aliases": [],
+    "summary": "Portable audio recorder for lectures and notes.",
+    "detail": "",
+    "purpose": "Capture spoken content for later transcription.",
+    "function": "Record multi-track audio to SD card.",
+    "object_kind": "hardware_device",
+    "category": "audio-recorder",
+    "domain": "Communication",
+    "keywords": [
+      "audio-recorder"
+    ],
+    "tags": [
+      "audio",
+      "deprecated"
+    ],
+    "provenance": {
+      "source_url": "https://zoom-na.com",
+      "vendor": "Zoom",
+      "version": "H5",
+      "license": "proprietary",
+      "acquired_at": "2028-04-19T00:00:00Z"
+    },
+    "status": "deprecated",
+    "priority": "low",
+    "owner": "self",
+    "workflow_state": "phasing_out",
+    "lifecycle_state": "deprecated",
+    "hosting_model": "physical",
+    "access_model": "offline",
+    "cost": {
+      "kind": "one_time",
+      "currency": "USD",
+      "amount": 280.0,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "hardware",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://zoom-na.com/products/field-video-recording",
+      "invocation": "record button"
+    },
+    "epistemic": {
+      "fit_confidence": "low",
+      "evidence_level": "anecdotal",
+      "rating": 2.5
+    },
+    "strategic": {
+      "system_served": "system_2_coordination",
+      "goal": null,
+      "objective": null,
+      "capability": "audio-recorder",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [
+      {
+        "id": "ann-0006",
+        "created_at": "2026-04-30T00:00:00Z",
+        "author": "self",
+        "kind": "comment",
+        "text": "Phone recording is sufficient now.",
+        "state": "resolved"
+      }
+    ],
+    "created_at": "2028-04-19T00:00:00Z",
+    "updated_at": "2028-04-19T00:00:00Z",
+    "last_used_at": "2025-12-29T10:30:00Z"
+  }
+]

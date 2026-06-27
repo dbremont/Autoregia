@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PTOCS — Personal Technical Object Catalog System</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/views.css">
+  <link rel="stylesheet" href="/css/command-palette.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h4M16 14v4M20 18v3M14 18h3"/></svg></span>
+      <span class="brand-wordmark">Personal <em>Catalog</em> System</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><pt-icon name="search" size="16"></pt-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search the catalog…" autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btnImport" title="Import (JSON)"><pt-icon name="upload" size="15"></pt-icon> Import</button>
+      <button class="btn btn-primary btn-sm" id="btnNewEntry" title="New Entry (N)"><pt-icon name="plus" size="15"></pt-icon> New Entry</button>
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <ul class="sidebar-nav">
+        <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><pt-icon name="gauge" size="17"></pt-icon></span> Dashboard</a></li>
+        <li><a href="#catalog" data-view="catalog" class="active"><span class="nav-icon"><pt-icon name="list" size="17"></pt-icon></span> Catalog</a></li>
+        <li><a href="#browse" data-view="browse"><span class="nav-icon"><pt-icon name="layout-grid" size="17"></pt-icon></span> Browse</a></li>
+        <li><a href="#graph" data-view="graph"><span class="nav-icon"><pt-icon name="share-2" size="17"></pt-icon></span> Relationship Graph</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Analysis</div>
+      <ul class="sidebar-nav">
+        <li><a href="#analysis" data-view="analysis"><span class="nav-icon"><pt-icon name="bar-chart-3" size="17"></pt-icon></span> Statistical Overlay</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">By Kind</div>
+      <ul class="sidebar-nav" id="kindNav"></ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Complementary</div>
+      <ul class="sidebar-nav">
+        <li><a href="#export" data-view="export"><span class="nav-icon"><pt-icon name="download" size="17"></pt-icon></span> Export</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">PTOCS · Intelligence System</div>
+      <div class="colophon-meta">VSM SYSTEM 4 — v0.1</div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="app-main" id="appContent"></main>
+
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette">
+    <div class="cmd-palette-search">
+      <span><pt-icon name="search" size="18"></pt-icon></span>
+      <input type="text" id="cmdInput" placeholder="Type a command or search entries…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+  </div>
+</div>
+
+<!-- ═══ Entry Editor Modal ═══ -->
+<div class="modal-overlay hidden" id="entryModal">
+  <div class="modal" style="max-width:860px;">
+    <div class="modal-header">
+      <h2 id="entryModalTitle">New Entry</h2>
+      <button class="btn-icon" onclick="PT.Entry.closeEditor()"><pt-icon name="x" size="17"></pt-icon></button>
+    </div>
+    <div class="modal-body" id="entryModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="PT.Entry.closeEditor()">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btnSaveEntry">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Entry Detail Modal ═══ -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="modal" style="max-width:880px;">
+    <div class="modal-header">
+      <h2 id="detailTitle">Entry Detail</h2>
+      <button class="btn-icon" onclick="PT.Entry.closeDetail()"><pt-icon name="x" size="17"></pt-icon></button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- ═══ Hidden file input for import ═══ -->
+<input type="file" id="importFile" accept="application/json" style="display:none">
+
+<!-- ═══ Toast ═══ -->
+<div class="toast" id="toast"></div>
+
+<script src="/js/vendor/echarts.min.js"></script>
+<script src="/js/store.js"></script>
+<script src="/js/icons.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/entry.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/browse.js"></script>
+<script src="/js/relations.js"></script>
+<script src="/js/analysis.js"></script>
+<script src="/js/command-palette.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { PT.init(); });
+</script>
+
+</body>
+</html>

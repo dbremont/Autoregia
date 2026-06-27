@@ -1,0 +1,182 @@
+/* ════════════════════════════════════════════════════════════
+   PRS Design Tokens — Editorial / Scholarly Aesthetic
+   Oxford-inspired palette · refined restraint · classic craft
+   ════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Warm Neutral Ramp (ink: 0 near-black → 9 paper) ────── */
+  --ink-0:  #1E1C19;
+  --ink-1:  #2C2A26;   /* primary text */
+  --ink-2:  #44413B;
+  --ink-3:  #5B574E;   /* secondary text */
+  --ink-4:  #6B665B;
+  --ink-5:  #8C877B;   /* muted */
+  --ink-6:  #A7A296;
+  --ink-7:  #C9C4B8;   /* hairline-strong */
+  --ink-8:  #E2DED4;   /* borders */
+  --ink-9:  #EEEAE0;   /* light borders */
+  --ink-10: #F4F1EA;   /* surface-warm tint */
+  --paper:  #FAFAF6;   /* page background */
+
+  /* ── Surfaces (tonal layering) ──────────────────────────── */
+  --color-bg:           var(--paper);
+  --color-surface:      #FFFFFF;
+  --color-surface-1:    #FDFCF8;
+  --color-surface-2:    var(--ink-10);
+  --color-surface-warm: #FBF9F4;
+
+  /* ── Borders ────────────────────────────────────────────── */
+  --color-border:        var(--ink-8);
+  --color-border-light:  var(--ink-9);
+  --color-border-strong: var(--ink-7);
+  --color-border-focus:  var(--oxford);
+
+  /* ── Text ───────────────────────────────────────────────── */
+  --color-text:           var(--ink-1);
+  --color-text-secondary: var(--ink-3);
+  --color-text-muted:     var(--ink-5);
+  --color-text-faint:     var(--ink-6);
+
+  /* ── Oxford Accent (library binding red, deepened) ─────── */
+  --oxford:        #7A1A2A;
+  --oxford-deep:   #641020;
+  --oxford-bright: #962030;
+  --oxford-tint:   #F4E8EA;
+  --oxford-bg:     #FAF1F2;
+  --color-accent:        var(--oxford);
+  --color-accent-hover:  var(--oxford-deep);
+  --color-accent-light:  var(--oxford-tint);
+  --color-accent-bg:     var(--oxford-bg);
+
+  /* ── Signature Gold Rule ───────────────────────────────── */
+  --gold:        #A8854A;
+  --gold-soft:   #C7A972;
+  --gold-tint:   #F6EFE1;
+  --rule-gold:   var(--gold-soft);
+  --color-gold:  var(--gold);
+  --color-gold-light: var(--gold-tint);
+
+  /* ── Semantic / Status ─────────────────────────────────── */
+  --color-success:        #3F6E50;
+  --color-success-light:  #ECF3EE;
+  --color-warning:        #B4742A;
+  --color-warning-light:  #FBF1E3;
+  --color-danger:         #A33434;
+  --color-danger-light:   #FAECEC;
+  --color-info:           #3F6092;
+  --color-info-light:     #EAEFF6;
+
+  /* Status colors */
+  --status-active:    #2D6A4F;
+  --status-draft:     var(--ink-5);
+  --status-pending:   #B4742A;
+  --status-blocked:   #A33434;
+  --status-completed: #3F6092;
+  --status-archived:  var(--ink-5);
+  --status-scheduled: #3F6092;
+  --status-cancelled: #A33434;
+
+  /* Priority colors */
+  --priority-critical: var(--oxford);
+  --priority-high:     #B4742A;
+  --priority-medium:   var(--gold);
+  --priority-low:      var(--ink-5);
+
+  /* State class colors */
+  --class-internal:      var(--oxford);
+  --class-external:      #3F6E50;
+  --class-social:        #3F6092;
+  --class-reflective:    var(--gold);
+  --class-identity:      #5C4E78;
+  --class-knowledge:     #2D6A4F;
+  --class-task:          #B4742A;
+  --class-environmental: #3F6E50;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-display: 'Spectral', 'Georgia', 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'IBM Plex Mono', 'SF Mono', 'Consolas', monospace;
+
+  /* Modular type scale — 1.250 (major third) */
+  --text-2xs:  0.625rem;   /* 10px  — kbd, folio micro */
+  --text-xs:   0.6875rem;  /* 11px  — labels, eyebrow */
+  --text-sm:   0.8125rem;  /* 13px  — body small */
+  --text-base: 0.875rem;   /* 14px  — body */
+  --text-md:   1rem;       /* 16px  — body lead */
+  --text-lg:   1.25rem;    /* 20px  — h3 */
+  --text-xl:   1.5rem;     /* 24px  — h2 */
+  --text-2xl:  1.953rem;   /* ~31px — h1 */
+  --text-3xl:  2.441rem;   /* ~39px — display */
+  --text-4xl:  3.052rem;   /* ~49px — hero */
+
+  --leading-tight:   1.18;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.7;
+
+  /* Tracking tuned per role */
+  --tracking-tight:   -0.02em;
+  --tracking-snug:    -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-wider:   0.08em;
+  --tracking-widest:  0.16em;
+
+  /* Reading measure */
+  --measure:        64ch;
+  --measure-narrow: 52ch;
+
+  /* ── Spacing — 4/8 baseline grid ───────────────────────── */
+  --space-0:  0;
+  --space-px: 1px;
+  --space-1:  0.25rem;  /* 4 */
+  --space-2:  0.5rem;   /* 8 */
+  --space-3:  0.75rem;  /* 12 */
+  --space-4:  1rem;     /* 16 */
+  --space-5:  1.25rem;  /* 20 */
+  --space-6:  1.5rem;   /* 24 */
+  --space-8:  2rem;     /* 32 */
+  --space-10: 2.5rem;   /* 40 */
+  --space-12: 3rem;     /* 48 */
+  --space-16: 4rem;     /* 64 */
+  --space-20: 5rem;     /* 80 */
+  --space-24: 6rem;     /* 96 */
+
+  /* ── Layout ────────────────────────────────────────────── */
+  --sidebar-width: 268px;
+  --header-height: 58px;
+  --content-max: 1200px;
+
+  /* Architectural radii (sharper = more classic) */
+  --radius-xs:  2px;
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  7px;
+  --radius-xl:  10px;
+  --radius-pill: 999px;
+
+  --hairline: 1px;
+
+  /* ── Shadows — multi-layer ambient elevation ──────────── */
+  --shadow-sm:  0 1px 2px rgba(30,28,25,0.04);
+  --shadow-md:  0 1px 2px rgba(30,28,25,0.04), 0 4px 12px rgba(30,28,25,0.06);
+  --shadow-lg:  0 1px 3px rgba(30,28,25,0.05), 0 8px 24px rgba(30,28,25,0.08);
+  --shadow-xl:  0 2px 6px rgba(30,28,25,0.06), 0 18px 48px rgba(30,28,25,0.14);
+  --ring-focus: 0 0 0 3px rgba(122,26,42,0.16);
+
+  /* ── Motion — easing vocabulary ───────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.25, 0.8, 0.4, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.4, 0.64, 1);
+  --transition-fast:   110ms var(--ease-out-soft);
+  --transition-normal: 200ms var(--ease-out-soft);
+  --transition-slow:   360ms var(--ease-out-expo);
+
+  /* ── Z-index layers ───────────────────────────────────── */
+  --z-dropdown: 100;
+  --z-sticky:    200;
+  --z-overlay:   300;
+  --z-modal:     400;
+  --z-palette:   500;
+  --z-toast:     600;
+}
