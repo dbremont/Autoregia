@@ -1,289 +1,195 @@
 /* ════════════════════════════════════════════════════════════
-   PRS Working Memory — Browser-only working area (Todos + Notes)
-   Supports user-mediated generation of formal PRS log records.
+   PRS Working Memory — Browser-only working area (Todos + Notes).
+   Generation captures the DELTA between the current working state
+   and the last-logged baseline, producing ONE summary log record.
+   The baseline is the only extra state stored to compute deltas.
+   Flow is user-mediated: generate → review → approve / discard.
    ════════════════════════════════════════════════════════════ */
 PRS.Working = (() => {
   const TODO_KEY = 'prs_working_todos';
   const NOTE_KEY = 'prs_working_notes';
+  const BASELINE_KEY = 'prs_working_baseline';
   let noteSaveTimer = null;
-  const reviewSel = {};
+  let pending = null; // proposed summary record awaiting approval
 
   /* ── Persistence (browser only) ─────────────────────── */
-  function loadTodos() {
-    try { return JSON.parse(localStorage.getItem(TODO_KEY)) || []; }
-    catch { return []; }
-  }
-  function saveTodos(todos) {
-    localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-  }
-  function loadNote() {
-    try {
-      const n = JSON.parse(localStorage.getItem(NOTE_KEY));
-      return n || { text: '', updated_at: null };
-    } catch { return { text: '', updated_at: null }; }
-  }
-  function saveNote(text) {
-    const note = { text, updated_at: new Date().toISOString() };
-    localStorage.setItem(NOTE_KEY, JSON.stringify(note));
-    updateSaveStatus(note.updated_at);
-  }
-
-  function genId() {
-    return 'wm-' + Math.random().toString(36).substr(2, 7);
-  }
-
-  function esc(s) {
-    if (!s) return '';
-    const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
-  }
+  const get = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+  const setKV = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+  const loadTodos = () => get(TODO_KEY) || [];
+  const saveTodos = t => setKV(TODO_KEY, t);
+  const loadNote = () => get(NOTE_KEY) || { text: '', updated_at: null };
+  const loadBaseline = () => get(BASELINE_KEY) || { todos: [], note: { text: '' }, generated_at: null };
+  const saveBaseline = b => setKV(BASELINE_KEY, { ...b, generated_at: new Date().toISOString() });
+  const snapshot = () => ({ todos: loadTodos(), note: { text: loadNote().text || '' } });
+  const genId = () => 'wm-' + Math.random().toString(36).substr(2, 7);
+  const esc = s => { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
 
   function counts() {
-    const todos = loadTodos();
-    return {
-      open: todos.filter(t => !t.done).length,
-      done: todos.filter(t => t.done).length,
-      logged: todos.filter(t => t.logged).length,
-      total: todos.length
-    };
+    const t = loadTodos();
+    return { open: t.filter(x => !x.done).length, done: t.filter(x => x.done).length, total: t.length };
   }
 
   /* ── Todo operations ────────────────────────────────── */
   function addTodo() {
-    const input = document.getElementById('wmTodoInput');
-    const text = (input?.value || '').trim();
-    if (!text) return;
-    const todos = loadTodos();
-    todos.unshift({ id: genId(), text, done: false, logged: false, created_at: new Date().toISOString() });
-    saveTodos(todos);
-    input.value = '';
-    input.focus();
-    renderTodos();
-    renderActions();
+    const i = document.getElementById('wmTodoInput');
+    const tx = (i?.value || '').trim();
+    if (!tx) return;
+    const t = loadTodos();
+    t.unshift({ id: genId(), text: tx, done: false, created_at: new Date().toISOString() });
+    saveTodos(t); i.value = ''; i.focus(); renderTodos(); renderActions();
   }
   function toggleTodo(id) {
-    const todos = loadTodos();
-    const t = todos.find(x => x.id === id);
-    if (t) { t.done = !t.done; saveTodos(todos); renderTodos(); renderActions(); }
+    const t = loadTodos(); const x = t.find(z => z.id === id);
+    if (x) { x.done = !x.done; saveTodos(t); renderTodos(); renderActions(); }
   }
-  function removeTodo(id) {
-    saveTodos(loadTodos().filter(x => x.id !== id));
-    renderTodos();
-    renderActions();
-  }
-  function clearCompleted() {
-    saveTodos(loadTodos().filter(t => !(t.done && !t.logged)));
-    renderTodos();
-    renderActions();
-  }
+  function removeTodo(id) { saveTodos(loadTodos().filter(z => z.id !== id)); renderTodos(); renderActions(); }
+  function clearCompleted() { saveTodos(loadTodos().filter(t => !t.done)); renderTodos(); renderActions(); }
 
   function renderTodos() {
     const el = document.getElementById('wmTodoList');
     if (!el) return;
-    const todos = loadTodos();
-    if (!todos.length) {
-      el.innerHTML = '<div class="wm-empty">No todos yet — add one above.</div>';
-    } else {
-      el.innerHTML = todos.map(t => `
-        <div class="wm-todo ${t.done ? 'done' : ''} ${t.logged ? 'logged' : ''}" data-id="${t.id}">
-          <button class="wm-check" onclick="PRS.Working.toggleTodo('${t.id}')" aria-label="Toggle complete">
-            ${t.done ? PRS.icon('check', 13) : ''}
-          </button>
-          <span class="wm-todo-text">${esc(t.text)}</span>
-          ${t.logged ? '<span class="wm-logged-badge">logged</span>' : ''}
-          <button class="wm-del" onclick="PRS.Working.removeTodo('${t.id}')" aria-label="Delete todo">${PRS.icon('x', 13)}</button>
-        </div>
-      `).join('');
-    }
+    const t = loadTodos();
+    el.innerHTML = t.length ? t.map(x => `
+      <div class="wm-todo ${x.done ? 'done' : ''}" data-id="${x.id}">
+        <button class="wm-check" onclick="PRS.Working.toggleTodo('${x.id}')" aria-label="Toggle complete">${x.done ? PRS.icon('check', 13) : ''}</button>
+        <span class="wm-todo-text">${esc(x.text)}</span>
+        <button class="wm-del" onclick="PRS.Working.removeTodo('${x.id}')" aria-label="Delete todo">${PRS.icon('x', 13)}</button>
+      </div>`).join('') : '<div class="wm-empty">No todos yet — add one above.</div>';
     const c = counts();
-    const stat = document.getElementById('wmTodoStat');
-    if (stat) stat.textContent = `${c.open} open · ${c.done} done${c.logged ? ` · ${c.logged} logged` : ''}`;
-  }
-
-  /* ── Action bar state ───────────────────────────────── */
-  function renderActions() {
-    const candidates = countCandidates(loadTodos(), loadNote());
-    const btn = document.getElementById('wmGenBtn');
-    if (btn) {
-      btn.disabled = candidates === 0;
-      const badge = document.getElementById('wmGenCount');
-      if (badge) badge.textContent = candidates > 0 ? candidates : '';
-    }
-  }
-  function countCandidates(todos, note) {
-    const t = Array.isArray(todos) ? todos : loadTodos();
-    const n = note || loadNote();
-    let c = t.filter(x => !x.logged).length;
-    if (n.text && n.text.trim()) c++;
-    return c;
-  }
-
-  /* ── Record generation (user-mediated) ──────────────── */
-  function generate() {
-    const candidates = buildCandidates(loadTodos(), loadNote());
-    if (!candidates.length) { flash('Nothing to generate yet.'); return; }
-    openReview(candidates);
-  }
-
-  function buildCandidates(todos, note) {
-    const candidates = [];
-    const tag = 'working-memory';
-    const unlogged = todos.filter(t => !t.logged);
-    unlogged.forEach(t => {
-      candidates.push({
-        sourceId: t.id, kind: 'todo',
-        record: {
-          content: t.text, detail: '', record_type: 'Task',
-          status: t.done ? 'Completed' : 'Active', priority: 'Medium',
-          domain: 'General', tags: [tag], state_class: 'Task State', confidence: 'Medium'
-        }
-      });
-    });
-    if (note.text && note.text.trim()) {
-      candidates.push({
-        sourceId: 'note', kind: 'note',
-        record: {
-          content: summarizeNote(note.text), detail: note.text.trim(),
-          record_type: 'Observation', status: 'Active', priority: 'Medium',
-          domain: 'General', tags: [tag], state_class: 'Reflective State', confidence: 'Medium'
-        }
-      });
-    }
-    return candidates;
-  }
-
-  function summarizeNote(text) {
-    const first = text.trim().split('\n')[0];
-    return first.length > 70 ? first.slice(0, 67) + '…' : first;
+    const s = document.getElementById('wmTodoStat');
+    if (s) s.textContent = `${c.open} open · ${c.done} done`;
   }
 
   /* ── Notes (autosaved) ──────────────────────────────── */
   function onNoteInput() {
     const ta = document.getElementById('wmNoteText');
     if (!ta) return;
-    const status = document.getElementById('wmNoteStatus');
-    if (status) status.textContent = 'saving…';
+    const s = document.getElementById('wmNoteStatus');
+    if (s) s.textContent = 'saving…';
     clearTimeout(noteSaveTimer);
     noteSaveTimer = setTimeout(() => saveNote(ta.value), 500);
   }
-  function updateSaveStatus(updatedAt) {
-    const status = document.getElementById('wmNoteStatus');
-    if (!status) return;
-    const time = new Date(updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    status.textContent = `saved ${time}`;
+  function saveNote(text) {
+    const n = { text, updated_at: new Date().toISOString() };
+    setKV(NOTE_KEY, n); updSave(n.updated_at);
+  }
+  function updSave(u) {
+    const s = document.getElementById('wmNoteStatus');
+    if (!s) return;
+    s.textContent = `saved ${new Date(u).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   }
 
-  function openReview(candidates) {
+  /* ── Delta computation vs baseline ──────────────────── */
+  function computeDelta() {
+    const cur = snapshot(), base = loadBaseline();
+    const curById = Object.fromEntries(cur.todos.map(t => [t.id, t]));
+    const baseById = Object.fromEntries(base.todos.map(t => [t.id, t]));
+    const added = cur.todos.filter(t => !baseById[t.id]);
+    const removed = base.todos.filter(t => !curById[t.id]);
+    const completed = [], reopened = [];
+    cur.todos.forEach(t => {
+      const b = baseById[t.id];
+      if (b && b.done !== t.done) (t.done ? completed : reopened).push(t);
+    });
+    const noteBefore = base.note?.text || '';
+    const noteAfter = cur.note?.text || '';
+    const noteChanged = noteAfter.trim().length > 0 && noteAfter !== noteBefore;
+    const size = added.length + removed.length + completed.length + reopened.length + (noteChanged ? 1 : 0);
+    return { added, removed, completed, reopened, noteChanged, noteAfter, size };
+  }
+
+  function buildRecord(delta) {
+    const parts = [];
+    if (delta.added.length)    parts.push(`+ Added (${delta.added.length}): ${delta.added.map(t => t.text).join('; ')}`);
+    if (delta.completed.length)parts.push(`✓ Completed (${delta.completed.length}): ${delta.completed.map(t => t.text).join('; ')}`);
+    if (delta.reopened.length) parts.push(`↺ Reopened (${delta.reopened.length}): ${delta.reopened.map(t => t.text).join('; ')}`);
+    if (delta.removed.length)  parts.push(`− Removed (${delta.removed.length}): ${delta.removed.map(t => t.text).join('; ')}`);
+    if (delta.noteChanged)     parts.push('✎ Notes updated');
+    const detail = (parts.length ? parts.join('\n') + '\n' : '') + 'Generated ' + new Date().toLocaleString();
+    const content = `Working log — ${delta.size} change${delta.size === 1 ? '' : 's'}`;
+    return {
+      content, detail, record_type: 'Observation', status: 'Active', priority: 'Medium',
+      domain: 'General', tags: ['working-memory', 'log'], state_class: 'Reflective State', confidence: 'Medium'
+    };
+  }
+
+  /* ── Generation (user-mediated) ─────────────────────── */
+  function generate() {
+    const delta = computeDelta();
+    if (delta.size === 0) { flash('No changes since last log.'); return; }
+    pending = buildRecord(delta);
+    openReview(pending, delta);
+  }
+
+  function openReview(rec, delta) {
     const body = document.getElementById('wmReviewBody');
-    const count = candidates.length;
+    const tc = TYPE_COLORS[rec.record_type] || '#888';
     body.innerHTML = `
       <p class="wm-review-intro">
-        Review the ${count} record${count === 1 ? '' : 's'} proposed from your working area.
-        Toggle which to commit, then <strong>Approve</strong> to persist them as formal PRS records
-        or <strong>Discard</strong> to leave working-memory unchanged.
+        A single log record will be created summarizing the
+        <strong>${delta.size} change${delta.size === 1 ? '' : 's'}</strong> since the last log.
+        On approval, the baseline advances to the current state, so the next delta
+        starts fresh.
       </p>
-      <div class="wm-review-list">
-        ${candidates.map((c, i) => reviewCardHTML(c, i)).join('')}
+      <div class="wm-review-card">
+        <span class="rc-type" style="background:${tc}15;color:${tc};align-self:flex-start;">${rec.record_type}</span>
+        <div class="wm-review-content">${esc(rec.content)}</div>
+        <div class="wm-review-detail">${esc(rec.detail)}</div>
+        <div class="wm-review-meta">${rec.tags.map(t => `<span class="rc-tag">#${t}</span>`).join(' ')}</div>
       </div>`;
-    for (const k in reviewSel) delete reviewSel[k];
-    candidates.forEach((_, i) => { reviewSel[i] = true; });
-    updateReviewCount();
     document.getElementById('wmReviewModal').classList.remove('hidden');
   }
-
-  function reviewCardHTML(c, i) {
-    const r = c.record;
-    const tc = TYPE_COLORS[r.record_type] || '#888';
-    return `
-      <div class="wm-review-card" data-idx="${i}">
-        <label class="wm-review-check">
-          <input type="checkbox" checked onchange="PRS.Working.toggleReviewSel(${i})">
-          <span class="rc-type" style="background:${tc}15;color:${tc};">${r.record_type}</span>
-        </label>
-        <div class="wm-review-body">
-          <div class="wm-review-content">${esc(r.content)}</div>
-          ${r.detail ? `<div class="wm-review-detail">${esc(r.detail)}</div>` : ''}
-          <div class="wm-review-meta">
-            <span class="badge badge-${r.status.toLowerCase()}">${r.status}</span>
-            ${r.tags.map(t => `<span class="rc-tag">#${t}</span>`).join(' ')}
-          </div>
-        </div>
-      </div>`;
-  }
-
-  function toggleReviewSel(i) { reviewSel[i] = !reviewSel[i]; updateReviewCount(); }
-  function updateReviewCount() {
-    const sel = Object.keys(reviewSel).filter(k => reviewSel[k]).length;
-    const btn = document.getElementById('wmApproveBtn');
-    if (btn) btn.disabled = sel === 0;
-  }
-  function closeReview() {
-    document.getElementById('wmReviewModal').classList.add('hidden');
-    for (const k in reviewSel) delete reviewSel[k];
-  }
+  function closeReview() { document.getElementById('wmReviewModal').classList.add('hidden'); pending = null; }
 
   async function approve() {
-    const candidates = buildCandidates(loadTodos(), loadNote());
-    const todos = loadTodos();
-    let created = 0;
-    const loggedTodoIds = new Set();
-    let noteApproved = false;
-    for (let i = 0; i < candidates.length; i++) {
-      if (!reviewSel[i]) continue;
-      const c = candidates[i];
-      await PRS.Store.add({ ...c.record });
-      created++;
-      if (c.kind === 'todo') loggedTodoIds.add(c.sourceId);
-      if (c.kind === 'note') noteApproved = true;
-    }
-    if (loggedTodoIds.size) {
-      saveTodos(todos.map(t => loggedTodoIds.has(t.id) ? { ...t, logged: true } : t));
-    }
-    if (noteApproved) localStorage.removeItem(NOTE_KEY);
-    closeReview();
-    renderTodos();
-    const ta = document.getElementById('wmNoteText');
-    if (ta && noteApproved) { ta.value = ''; const s = document.getElementById('wmNoteStatus'); if (s) s.textContent = 'empty'; }
-    renderActions();
-    flash(`${created} record${created === 1 ? '' : 's'} created from working memory.`);
+    if (!pending) { closeReview(); return; }
+    await PRS.Store.add({ ...pending });   // commit the reviewed delta summary
+    saveBaseline(snapshot());              // advance baseline → next delta is relative to now
+    closeReview(); renderTodos(); renderActions();
+    flash('Log record created; baseline advanced.');
   }
 
   /* ── Tiny toast ─────────────────────────────────────── */
   function flash(msg) {
     const t = document.getElementById('wmToast');
     if (!t) return;
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     clearTimeout(flash._t);
     flash._t = setTimeout(() => t.classList.remove('show'), 2600);
   }
 
+  function renderActions() {
+    const n = computeDelta().size;
+    const btn = document.getElementById('wmGenBtn');
+    if (btn) btn.disabled = n === 0;
+    const b = document.getElementById('wmGenCount');
+    if (b) b.textContent = n > 0 ? n : '';
+  }
+
   /* ── Main render ────────────────────────────────────── */
   function render() {
-    const note = loadNote();
-    const c = counts();
+    const note = loadNote(), c = counts(), bl = loadBaseline();
+    const blTime = bl.generated_at ? new Date(bl.generated_at).toLocaleString() : 'never';
     return `
       <div class="content-header">
-        <div>
-          <span class="eyebrow">Working Area</span>
-          <h1>Working Memory</h1>
-        </div>
+        <div><span class="eyebrow">Working Area</span><h1>Working Memory</h1></div>
         <div class="actions">
           <button class="btn btn-primary btn-sm" id="wmGenBtn" onclick="PRS.Working.generate()">
-            ${PRS.icon('inbox', 15)} Generate Log Records
+            ${PRS.icon('inbox', 15)} Generate Log Record
             <span class="wm-gen-count" id="wmGenCount"></span>
           </button>
         </div>
       </div>
       <p class="wm-lede">
-        A lightweight, browser-only working area for todos and notes.
-        Nothing here is a formal record until you <strong>generate</strong> it
-        and approve the proposal.
+        A browser-only working area. “Generate” captures the <strong>delta</strong> since the
+        last log as a single summary record — nothing is committed until you approve.
       </p>
+      <p class="wm-baseline">Last log baseline: <span>${blTime}</span></p>
       <div class="grid-2 wm-grid animate-in">
         <div class="card wm-card">
           <div class="card-header">
             <h3>${PRS.icon('list', 16)} Todos</h3>
-            <span class="wm-stat" id="wmTodoStat">${c.open} open · ${c.done} done${c.logged ? ` · ${c.logged} logged` : ''}</span>
+            <span class="wm-stat" id="wmTodoStat">${c.open} open · ${c.done} done</span>
           </div>
           <div class="wm-todo-add">
             <input type="text" id="wmTodoInput" placeholder="Add a todo, press Enter…" onkeydown="if(event.key==='Enter'){event.preventDefault();PRS.Working.addTodo();}">
@@ -306,13 +212,11 @@ PRS.Working = (() => {
   }
 
   function afterRender() {
-    renderTodos();
-    renderActions();
+    renderTodos(); renderActions();
     const ta = document.getElementById('wmNoteText');
     if (ta) ta.addEventListener('blur', () => { clearTimeout(noteSaveTimer); saveNote(ta.value); });
   }
 
   return { render, afterRender, addTodo, toggleTodo, removeTodo, clearCompleted,
-           onNoteInput, generate, toggleReviewSel, closeReview, approve };
+           onNoteInput, generate, closeReview, approve };
 })();
-

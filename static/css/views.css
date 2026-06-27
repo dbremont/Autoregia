@@ -237,6 +237,11 @@
   color: var(--color-text-secondary); line-height: var(--leading-relaxed);
   max-width: var(--measure); margin: 0 0 var(--space-6);
 }
+.wm-baseline {
+  font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-5);
+  font-family: var(--font-mono); letter-spacing: var(--tracking-wide);
+}
+.wm-baseline span { color: var(--color-text-secondary); font-family: var(--font-body); }
 .wm-grid { align-items: start; }
 .wm-card { display: flex; flex-direction: column; }
 .wm-stat {
@@ -268,13 +273,6 @@
 .wm-todo.done .wm-check { background: var(--status-active); border-color: var(--status-active); }
 .wm-todo-text { flex: 1; font-size: var(--text-sm); color: var(--ink-1); line-height: var(--leading-snug); }
 .wm-todo.done .wm-todo-text { text-decoration: line-through; color: var(--color-text-muted); }
-.wm-todo.logged .wm-todo-text { color: var(--color-text-faint); }
-.wm-todo.logged { opacity: 0.62; }
-.wm-logged-badge {
-  font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--status-completed); background: var(--color-info-light);
-  padding: 1px 7px; border-radius: var(--radius-pill); letter-spacing: var(--tracking-wide);
-}
 .wm-del {
   width: 24px; height: 24px; flex-shrink: 0; border: none; background: transparent;
   color: var(--color-text-faint); cursor: pointer; border-radius: var(--radius-sm);
@@ -306,7 +304,7 @@
 }
 .wm-review-list { display: flex; flex-direction: column; gap: var(--space-3); }
 .wm-review-card {
-  display: flex; gap: var(--space-4); align-items: flex-start;
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2);
   padding: var(--space-4); border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius-md); background: var(--color-surface-1);
 }
