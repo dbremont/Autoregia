@@ -23,39 +23,68 @@ A `Personal Recording System` is a technical object with the role of externalizi
 
 ### What Should I Remember? What is the nature?
 
-> There is a need of contituity, and a undeuying persitne, and consitency of action ....
+#### Principle
 
-The things that must be remembered can be categorized in a principled manner into fundamental classes of state:
+> A PRS should preserve any state whose disappearance would reduce an agent's ability to reason, decide, coordinate, or act effectively in the future.
+> The objective is not exhaustive recording, but selective persistence of operationally relevant state. Every recorded state should improve future orientation, continuity, or decision-making.
 
-- Internal Cognitive State:
-  - The dynamically evolving configuration of internal mental structures that govern interpretation, reasoning, intention formation, emotional disposition, valuation, and decision-making within an individual cognitive system.
-  - Intentions, plans, hypotheses, beliefs, emotional states, strategic reasoning, assumptions, motivations, mental models, interpretations, preferences, reflections, future projections, ...
-- External World State:
-  - The maintained representation of relevant external conditions, entities, constraints, events, and environmental dynamics necessary for orientation and effective action.
-  - (row state recording) events, institutional changes, economic conditions, project states, opportunities, threats, deadlines, resource availability, infrastructure conditions, market signals, operational constraints.
-  - Projections, or derivations - are part of the Internal Cogntive State.
-- Social Cognitive State: ...
-  - The distributed configuration of shared intentions, agreements, assumptions, coordination structures, and relational context existing across multiple agents or social systems.
-  - agreements, shared assumptions, joint plans, delegations, commitments, coordination states, relationship contexts, institutional memory, collaborative strategies, communication states.
+Conversely, information should generally not be preserved when it is:
 
-Practical Categorization:
+- Easily recoverable from authoritative sources.
+- Ephemeral and unlikely to influence future action.
+- Redundant with existing records.
+- Operationally irrelevant.
+- More costly to maintain than the value it provides.
 
-| Category                                | Description                                                                                                                                                                               | Instance(s)                                                                                                                                                                                                                                                                                                         |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Temporal Projection Structures**      | Cognitive structures representing anticipated, intended, simulated, scheduled, or strategically projected future states, transitions, and trajectories across time.                       | Goals, forecasts, plans, schedules, milestones, strategic roadmaps, dependency chains, scenario models, contingency plans, future commitments, risk projections, expected transitions, investment horizons, execution timelines, projected system states.                                                           |
-| **Meta-Cognitive State**                | Reflective and evaluative structures through which a cognitive system monitors, critiques, regulates, models, and adapts its own cognition, reasoning processes, and epistemic condition. | Self-reflection, epistemic uncertainty, confidence assessments, reasoning audits, learning progress, knowledge gaps, cognitive biases, decision evaluations, methodological critiques, assumption tracking, error analysis, attention allocation, comprehension assessments, priority reevaluation.                 |
-| **Operational State**                   | The actively executable coordination state integrating internal cognition, environmental conditions, resource configurations, and social coordination into actionable structures.         | Active tasks, execution workflows, pending decisions, communication queues, synchronization states, coordination flows, operational constraints, execution status, resource allocations, active projects, meeting states, deployment states, logistics coordination, process pipelines, responsibility assignments. |
-| **Identity-Continuity Structures**      | Persistent structures preserving continuity of identity, orientation, values, commitments, behavioral consistency, and long-term self-coherence across temporal change.                   | Values, principles, ideological frameworks, role identities, mission orientation, long-term commitments, personal narratives, historical trajectories, stable preferences, identity anchors, organizational affiliations, ethical constraints, worldview structures, civilizational orientation, life objectives.   |
-| **Knowledge Structures**                | Organized and stabilized representations of acquired understanding, conceptual frameworks, procedural knowledge, and informational models used for reasoning and action.                  | Conceptual models, taxonomies, theories, technical notes, research insights, procedural knowledge, heuristics, reference material, ontologies, causal models, design patterns, domain expertise, operational doctrines, educational material.                                                                       |
-| **Decision Structures**                 | Recorded structures related to decisions, their rationale, evaluation criteria, trade-offs, and downstream consequences.                                                                  | Decisions, decision rationale, alternatives considered, trade-off analysis, approval states, policy choices, rejected options, escalation paths, governance decisions, optimization criteria, strategic selections.                                                                                                 |
-| **Constraint Structures**               | Representations of limitations, prohibitions, dependencies, boundaries, and conditions constraining cognition, planning, or execution.                                                    | Budget constraints, time limitations, legal restrictions, technical limitations, dependency constraints, resource scarcity, organizational policies, capability boundaries, physical limitations, compliance requirements, coordination bottlenecks.                                                                |
-| **Relationship Structures**             | Persistent representations of relational dynamics, interaction histories, influence patterns, and social dependencies between agents or institutions.                                     | Trust relationships, collaboration history, influence networks, reporting lines, stakeholder mappings, alliance structures, interpersonal dynamics, negotiation states, authority structures, mentorship relations.                                                                                                 |
-| **Environmental Monitoring Structures** | Continuously updated representations of changing external conditions relevant to adaptation, prediction, and strategic orientation.                                                       | Market monitoring, geopolitical developments, technological trends, competitive intelligence, infrastructure status, ecosystem changes, regulatory updates, risk environments, economic indicators, environmental observations.                                                                                     |
-| **Intentional Structures**              | Structured representations of desired states, motivations, directional commitments, and purposive orientation guiding cognition and action.                                               | Intentions, ambitions, motivations, strategic objectives, mission goals, desired outcomes, transformation agendas, optimization targets, behavioral commitments, organizational aims.                                                                                                                               |
-| **Memory-Audit Structures**             | Structures preserving historical traceability, revision history, and longitudinal reconstruction of cognition, action, and system evolution across time.                                  | Journals, revision logs, change histories, execution records, historical snapshots, decision histories, event timelines, audit trails, archival states, progress records, retrospective analyses.                                                                                                                   |
-| **Coordination Structures**             | Structures enabling synchronization, cooperation, delegation, and distributed execution across multiple agents or systems.                                                                | Delegations, coordination protocols, task assignments, communication plans, synchronization checkpoints, governance workflows, escalation procedures, collaborative schedules, operational handoffs, shared execution states.                                                                                       |
-| **Risk Structures**                     | Representations of uncertainty, vulnerability, instability, and potential failure modes affecting plans, systems, or actions.                                                             | Threat models, uncertainty maps, failure scenarios, contingency risks, dependency vulnerabilities, strategic risks, operational hazards, security risks, systemic fragility, probabilistic assessments.                                                                                                             |
-| **Resource Structures**                 | Representations of available, allocated, required, or constrained resources necessary for operation and execution.                                                                        | Financial resources, personnel availability, computational capacity, infrastructure assets, inventories, energy availability, time budgets, knowledge assets, institutional support, logistical capacity.                                                                                                           |
+#### State Recording Case Set
+
+A state is generally worth preserving if it is:
+
+| Case                         | Description                                                                  | Examples                                                        |
+| ---------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Difficult to Reconstruct** | Recreating the state would require significant time, effort, or information. | Research findings, meeting notes, design rationale.             |
+| **Action-Critical**          | Future actions depend on the state remaining available.                      | Pending tasks, commitments, deadlines, execution plans.         |
+| **Decision-Critical**        | The state influences future choices or judgments.                            | Trade-off analyses, assumptions, hypotheses, constraints.       |
+| **Coordination-Critical**    | Multiple agents rely on a shared understanding.                              | Agreements, responsibilities, shared goals, protocols.          |
+| **Long-Lived**               | The state remains relevant over an extended period.                          | Personal principles, strategic objectives, reference knowledge. |
+| **Time-Sensitive**           | The value of the state depends on acting before a deadline or event.         | Opportunities, appointments, renewal dates, reminders.          |
+| **Volatile**                 | The state changes frequently and requires tracking over time.                | Project status, metrics, finances, health observations.         |
+| **Non-Obvious**              | The information is unlikely to be recalled accurately from memory alone.     | Insights, lessons learned, subtle observations, ideas.          |
+| **Expensive to Lose**        | Losing the state would impose significant cognitive or operational cost.     | System architectures, project history, legal obligations.       |
+| **Identity-Defining**        | The state contributes to maintaining consistency of behavior over time.      | Values, policies, operating principles, personal standards.     |
+
+#### State Recording Taxonomy
+
+| State Type              | Category         | Description                                   | Example Instances                                    |
+| ----------------------- | ---------------- | --------------------------------------------- | ---------------------------------------------------- |
+| **Intentional State**   | Goals            | Desired future states to achieve.             | Finish PRS implementation; Learn Rust.               |
+|                         | Plans            | Ordered courses of action.                    | Weekly implementation roadmap.                       |
+|                         | Decisions        | Commitments to specific alternatives.         | Adopt SQLite as storage backend.                     |
+|                         | Priorities       | Relative importance of ongoing work.          | PRS > Website redesign.                              |
+| **Knowledge State**     | Facts            | Information believed to be true.              | API supports OAuth2.                                 |
+|                         | Mental Models    | Internal explanatory structures.              | Model of Linux process scheduling.                   |
+|                         | Hypotheses       | Provisional explanations awaiting validation. | Memory retrieval improves with tagging.              |
+|                         | References       | Sources and supporting material.              | Research papers, books, documentation.               |
+| **Task State**          | Tasks            | Units of actionable work.                     | Implement search index.                              |
+|                         | Projects         | Collections of coordinated tasks.             | Personal Recording System.                           |
+|                         | Progress         | Current execution state.                      | 65% complete.                                        |
+|                         | Blockers         | Constraints preventing progress.              | Waiting for design decision.                         |
+| **Environmental State** | Opportunities    | Favorable external conditions.                | Conference CFP deadline.                             |
+|                         | Constraints      | External limitations.                         | Budget limits; legal requirements.                   |
+|                         | Resources        | Available assets.                             | GPU server; documentation.                           |
+|                         | Events           | Time-dependent occurrences.                   | Meeting tomorrow; software release.                  |
+| **Social State**        | Commitments      | Promises and obligations.                     | Deliver draft by Friday.                             |
+|                         | Agreements       | Shared decisions.                             | Team coding standard.                                |
+|                         | Delegations      | Assigned responsibilities.                    | Alice owns deployment.                               |
+|                         | Contacts         | Relevant people and organizations.            | Research collaborators.                              |
+| **Reflective State**    | Observations     | Recorded experiences.                         | Search workflow is too slow.                         |
+|                         | Lessons          | Generalized learning.                         | Prefer incremental indexing.                         |
+|                         | Questions        | Open uncertainties.                           | Should embeddings be versioned?                      |
+|                         | Rationales       | Why decisions were made.                      | SQLite chosen for portability.                       |
+| **Identity State**      | Principles       | Stable operating values.                      | Favor reproducibility over convenience.              |
+|                         | Preferences      | Persistent choices.                           | Markdown-first workflow.                             |
+|                         | Standards        | Personal quality criteria.                    | Every project requires documentation.                |
+|                         | Long-term Vision | Enduring direction.                           | Build cognitive infrastructure for engineering work. |
 
 ### What should be the structure of such **record**?
 
