@@ -65,7 +65,7 @@ Feedback
 
 ## Personal Viable System Model (PVSM)
 
-### ### Agent Control Loop
+### Agent Control Loop
 
 ```txt
 World: Environment | Internal Environment
