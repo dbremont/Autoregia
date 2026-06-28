@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoregia.local/pwos_schema.json",
+  "title": "PWOS Data Models",
+  "description": "JSON Schemas for the Personal Work Organization System (PWOS). PWOS extends PRS action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), and Dependency edges. snake_case naming. Enums match spec/pwos/spec.md.",
+
+  "$defs": {
+    "actionKindEnum": { "type": "string", "enum": ["Routine", "Task", "Project", "Commitment", "Initiative", "Objective"] },
+    "schedulingStateEnum": { "type": "string", "enum": ["unscheduled", "scheduled", "deferred", "in-progress", "done"] },
+    "confidenceEnum": { "type": "string", "enum": ["Low", "Medium", "High"] },
+    "effortUnitEnum": { "type": "string", "enum": ["hours", "points", "sessions"] },
+    "capacityResourceEnum": { "type": "string", "enum": ["time", "focus", "energy", "attention"] },
+    "capacityBandEnum": { "type": "string", "enum": ["deep", "shallow", "low"] },
+    "blockStatusEnum": { "type": "string", "enum": ["tentative", "confirmed", "cancelled", "completed"] },
+    "syncStateEnum": { "type": "string", "enum": ["synced", "dirty-local", "dirty-remote", "conflict"] },
+    "iso8601Timestamp": { "type": "string", "format": "date-time" },
+    "dependencyKindEnum": {
+      "type": "string",
+      "enum": ["part-of", "contains", "implements-objective", "depends-on", "blocked-by", "required-by", "enables", "uses-capability", "fulfills-commitment", "governed-by", "scheduled-in", "recurs-from", "spawned-from", "mirrors-external"]
+    },
+
+    "effortEstimate": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "unit": { "$ref": "#/$defs/effortUnitEnum" },
+        "confidence": { "$ref": "#/$defs/confidenceEnum" }
+      }
+    },
+    "capacityProfile": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "resource": { "$ref": "#/$defs/capacityResourceEnum" },
+        "band": { "$ref": "#/$defs/capacityBandEnum" }
+      }
+    },
+    "externalMapping": {
+      "type": "object", "required": ["platform", "external_id"], "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "string" },
+        "external_id": { "type": "string" },
+        "sync_state": { "$ref": "#/$defs/syncStateEnum" },
+        "synced_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "url": { "type": ["string", "null"] }
+      }
+    },
+    "dependency": {
+      "type": "object", "required": ["target", "kind"], "additionalProperties": false,
+      "properties": {
+        "target": { "type": "string" },
+        "kind": { "$ref": "#/$defs/dependencyKindEnum" },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "annotation": {
+      "type": "object", "required": ["id", "created_at", "author", "kind", "text", "state"], "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "author": { "type": "string" },
+        "kind": { "type": "string", "enum": ["comment", "progress", "blocker", "review", "reflection"] },
+        "text": { "type": "string" },
+        "state": { "type": "string", "enum": ["open", "resolved", "superseded"] }
+      }
+    },
+    "conflictFlag": {
+      "type": "object", "required": ["kind"], "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "enum": ["overlap", "overload", "policy-violation"] },
+        "with": { "type": ["string", "null"] },
+        "detail": { "type": ["string", "null"] }
+      }
+    },
+    "recurrenceSource": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "action_id": { "type": "string" },
+        "rule": { "type": "string", "description": "RRULE-like recurrence rule, e.g. 'FREQ=WEEKLY'." }
+      }
+    },
+
+    "actionConstruct": {
+      "$comment": "Atomic unit of Component A. Operates over a PRS record (record_id) plus the PWOS operational extension.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "record_id", "kind", "scheduling_state", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "PWOS action id, e.g. 'ACT-2026-00042'." },
+        "record_id": { "type": "string", "description": "The underlying PRS record id this action manages." },
+        "kind": { "$ref": "#/$defs/actionKindEnum" },
+        "scheduling_state": { "$ref": "#/$defs/schedulingStateEnum" },
+        "effort_estimate": { "oneOf": [{ "$ref": "#/$defs/effortEstimate" }, { "type": "null" }] },
+        "capacity_profile": { "oneOf": [{ "$ref": "#/$defs/capacityProfile" }, { "type": "null" }] },
+        "dependencies": { "type": "array", "default": [], "items": { "$ref": "#/$defs/dependency" } },
+        "external_mappings": { "type": "array", "default": [], "items": { "$ref": "#/$defs/externalMapping" } },
+        "pinned": { "type": "boolean", "default": false },
+        "strategic": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "objective": { "type": ["string", "null"] },
+            "initiative": { "type": ["string", "null"] },
+            "project": { "type": ["string", "null"] },
+            "capability": { "type": ["string", "null"] }
+          }
+        },
+        "annotations": { "type": "array", "default": [], "items": { "$ref": "#/$defs/annotation" } },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "calendarBlock": {
+      "$comment": "Atomic temporal unit produced by Component B: a concrete placement of work on the timeline.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "action_id", "starts_at", "ends_at", "calendar_id", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "Block id, e.g. 'BLK-2026-06-28-001'." },
+        "action_id": { "type": "string" },
+        "starts_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "ends_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "all_day": { "type": "boolean", "default": false },
+        "calendar_id": { "type": "string" },
+        "recurrence_source": { "oneOf": [{ "$ref": "#/$defs/recurrenceSource" }, { "type": "null" }] },
+        "external_mapping": { "oneOf": [{ "$ref": "#/$defs/externalMapping" }, { "type": "null" }] },
+        "conflict_flags": { "type": "array", "default": [], "items": { "$ref": "#/$defs/conflictFlag" } },
+        "status": { "$ref": "#/$defs/blockStatusEnum" },
+        "title": { "type": ["string", "null"] },
+        "domain": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWOS — Documentation</title>
+  <style>
+    :root {
+      --paper:#F7F1E6; --paper-warm:#F1E9D8; --paper-2:#FBF6EC;
+      --ink-0:#1C1A17; --ink-1:#2E2A24; --ink-2:#4A443B;
+      --muted:#6B6459; --faint:#9A9589;
+      --rule:#DCD3BE; --rule-soft:#E6DEC9;
+      --oxford:#7A1A2A; --oxford-deep:#5F1320; --gold:#B4742A;
+      --sage:#2D6A4F; --slate:#3F6092; --code-bg:#2A2620;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink-1);font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    .mono{font-family:"SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,Menlo,monospace}
+    .layout{display:grid;grid-template-columns:264px 1fr;max-width:1180px;margin:0 auto}
+    nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:36px 22px 48px;border-right:1px solid var(--rule);font-family:"Inter","Segoe UI",system-ui,sans-serif;font-size:13.5px;background:var(--paper-warm)}
+    main{padding:48px 56px 96px;max-width:860px}
+    .toc-brand{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:19px;color:var(--ink-0);margin-bottom:2px}
+    .toc-brand em{font-style:italic;color:var(--oxford)}
+    .toc-tag{font-family:"SF Mono","IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:26px}
+    .toc-search{width:100%;padding:7px 11px;border:1px solid var(--rule);border-radius:6px;background:var(--paper-2);font-size:13px;color:var(--ink-1);margin-bottom:20px;font-family:inherit}
+    .toc-search:focus{outline:2px solid var(--oxford);outline-offset:1px}
+    .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+    .toc ol>li{counter-increment:toc;margin-bottom:2px}
+    .toc>ol>li>a::before{content:counter(toc) ".  ";color:var(--faint);font-variant-numeric:tabular-nums}
+    .toc a{display:block;padding:5px 9px;border-radius:5px;color:var(--ink-2);text-decoration:none;transition:background .15s,color .15s;line-height:1.4}
+    .toc a:hover{background:var(--paper-2);color:var(--oxford)}
+    .toc ol ol{margin:2px 0 8px 22px}
+    .toc ol ol a{font-size:12.5px;color:var(--muted);padding:3px 9px}
+    .toc ol ol a::before{content:"\203A  ";color:var(--faint)}
+    .toc .back-link{margin-top:28px;font-size:12.5px}
+    .toc .back-link a{color:var(--muted)}
+    h1,h2,h3,h4{font-family:"Iowan Old Style",Palatino,Georgia,serif;color:var(--ink-0);line-height:1.2;font-weight:600}
+    h1{font-size:2.5rem;letter-spacing:-.01em;margin:0 0 8px}
+    h2{font-size:1.65rem;margin:56px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
+    h2 .num{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:.55em}
+    h3{font-size:1.2rem;margin:32px 0 8px;color:var(--ink-0);scroll-margin-top:20px}
+    h4{font-size:1rem;margin:22px 0 6px;color:var(--ink-1);font-family:"Inter",system-ui,sans-serif;font-weight:600}
+    p{margin:0 0 16px} a{color:var(--oxford);text-decoration:none;border-bottom:1px solid rgba(122,26,42,.25)} a:hover{border-bottom-color:var(--oxford)} strong{color:var(--ink-0)}
+    .lede{font-size:1.18rem;color:var(--ink-2);margin-bottom:28px;line-height:1.55}
+    .lead-rule{width:48px;height:2px;background:var(--gold);margin:0 0 28px;border:0}
+    blockquote{margin:22px 0;padding:14px 20px;border-left:3px solid var(--gold);background:var(--paper-warm);border-radius:0 6px 6px 0;color:var(--ink-2);font-size:.96rem}
+    blockquote p{margin:0} blockquote p+p{margin-top:10px}
+    code{font-family:"SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;font-size:.86em;background:var(--paper-warm);padding:1px 6px;border-radius:4px;border:1px solid var(--rule-soft);color:var(--oxford-deep)}
+    pre{background:var(--code-bg);color:#E8E2D4;padding:18px 20px;border-radius:8px;overflow-x:auto;margin:18px 0;font-size:13.5px;line-height:1.55}
+    pre code{background:none;border:none;padding:0;color:inherit;font-size:inherit}
+    ul,ol{padding-left:1.4em;margin:0 0 16px} li{margin-bottom:5px} li>p{margin:0 0 8px}
+    .callout{display:flex;gap:14px;padding:16px 20px;border-radius:8px;margin:22px 0;font-size:.95rem;border:1px solid var(--rule);background:var(--paper-2)}
+    .callout .ct-icon{flex-shrink:0;font-family:monospace;font-weight:700;width:26px;height:26px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+    .callout.note{border-color:rgba(63,96,146,.3)} .callout.note .ct-icon{background:var(--slate)}
+    .callout.tip{border-color:rgba(45,106,79,.3)} .callout.tip .ct-icon{background:var(--sage)}
+    .callout.warn{border-color:rgba(180,116,42,.4)} .callout.warn .ct-icon{background:var(--gold)}
+    .callout p{margin:2px 0}
+    .comp-grid{display:grid;gap:16px;margin:22px 0}
+    .comp-card{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:20px 22px;border:1px solid var(--rule);border-radius:10px;background:var(--paper-2)}
+    .comp-card .ctag{width:44px;height:44px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:"SF Mono",monospace;font-weight:700;font-size:18px}
+    .comp-card h4{margin:0 0 6px;font-size:1.05rem}
+    .comp-card .crole{font-family:"SF Mono",monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+    .comp-card p{margin:0;font-size:.95rem;color:var(--ink-2)}
+    .ctag.a{background:var(--oxford)} .ctag.b{background:var(--slate)} .ctag.c{background:var(--sage)}
+    .table-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);border-radius:8px}
+    table{border-collapse:collapse;width:100%;font-size:14.5px;font-family:"Inter",system-ui,sans-serif}
+    th{text-align:left;background:var(--paper-warm);padding:10px 14px;font-weight:600;color:var(--ink-0);border-bottom:1px solid var(--rule);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+    td{padding:10px 14px;border-bottom:1px solid var(--rule-soft);color:var(--ink-2);vertical-align:top} tr:last-child td{border-bottom:none} td code{font-size:12.5px}
+    .kbd{display:inline-block;font-family:"SF Mono","IBM Plex Mono",monospace;font-size:12px;background:var(--paper-warm);color:var(--ink-1);padding:2px 8px;border-radius:4px;border:1px solid var(--rule);box-shadow:0 1px 0 rgba(0,0,0,.05);border-bottom:2px solid var(--rule);margin:0 1px}
+    .doc-head{padding:64px 0 8px;max-width:1180px;margin:0 auto}
+    .doc-eyebrow{font-family:"SF Mono",monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+    .doc-sub{font-family:"Inter",system-ui,sans-serif;font-size:14px;color:var(--muted);margin-top:4px}
+    .doc-divider{max-width:1180px;margin:36px auto 0;border:0;border-top:1px solid var(--rule)}
+    .doc-foot{max-width:1180px;margin:0 auto;padding:36px 56px 72px;border-top:1px solid var(--rule);font-family:"Inter",system-ui,sans-serif;font-size:13px;color:var(--muted)}
+    .doc-foot a{font-family:inherit} .foot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+    .pill{display:inline-block;font-family:"SF Mono",monospace;font-size:11px;background:var(--paper-warm);border:1px solid var(--rule);color:var(--ink-2);padding:2px 9px;border-radius:20px;margin-left:8px}
+    @media(max-width:860px){.layout{grid-template-columns:1fr} nav.toc{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)} main{padding:32px 24px 64px} .doc-foot{padding:32px 24px 64px}}
+  </style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="doc-eyebrow">Autoregia · Operations System · VSM S1</div>
+  <h1>PWOS — Documentation</h1>
+  <p class="doc-sub"><strong>Personal Work Organization System.</strong> Detailed user documentation for the PWOS prototype. <span class="pill">v0.1</span></p>
+</div>
+<hr class="doc-divider">
+
+<div class="layout">
+
+<nav class="toc">
+  <div class="toc-brand">Work <em>Organization</em> System</div>
+  <div class="toc-tag">PWOS · USER DOCS</div>
+  <input class="toc-search" id="tocSearch" type="search" placeholder="Filter contents…" autocomplete="off">
+  <ol id="tocList">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#components">The three components</a>
+      <ol><li><a href="#comp-a">A — Work Organization</a></li><li><a href="#comp-b">B — Calendarization</a></li><li><a href="#comp-c">C — Platforms</a></li></ol>
+    </li>
+    <li><a href="#getting-started">Getting started</a>
+      <ol><li><a href="#install">Run the prototype</a></li><li><a href="#first-steps">First steps</a></li></ol>
+    </li>
+    <li><a href="#concepts">Core concepts</a>
+      <ol><li><a href="#action-constructs">Action constructs</a></li><li><a href="#dependencies">Dependencies</a></li><li><a href="#calendar-blocks">Calendar blocks</a></li></ol>
+    </li>
+    <li><a href="#ui-guide">Using the interface</a>
+      <ol><li><a href="#views">Views</a></li><li><a href="#shortcuts">Keyboard shortcuts</a></li><li><a href="#command-palette">Command palette</a></li><li><a href="#help-modal">Quick help</a></li></ol>
+    </li>
+    <li><a href="#data-model">Data model</a></li>
+    <li><a href="#api">API reference</a></li>
+    <li><a href="#google-calendar">Google Calendar setup</a></li>
+    <li><a href="#import-export">Import &amp; export</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+  <div class="back-link"><a href="/">&larr; Back to PWOS app</a></div>
+</nav>
+
+<main>
+
+  <h2 id="overview"><span class="num">01</span>Overview</h2>
+  <hr class="lead-rule">
+  <p class="lede">PWOS organizes the agent's operative action. It lifts the action-bearing states recorded elsewhere (in the PRS) into a steerable, dependency-aware, capacity-checked, and calendar-coordinated execution structure — and keeps that structure synchronized with the platforms you actually operate through.</p>
+  <p>Within the Autoregia <strong>Personal Viable System Model (PVSM)</strong>, PWOS is the <strong>Operations System</strong> (VSM System 1 – Operations): the layer that <em>does things</em>. By making action explicit, ordered, and accountable, it converts an implicit, scattered, anxiety-prone work life into an intelligible, navigable, and steerable operative structure.</p>
+
+  <div class="callout note">
+    <span class="ct-icon">i</span>
+    <div><p><strong>What PWOS is <em>not</em>.</strong> PWOS does not own the underlying record store — that role belongs to the <a href="#references">PRS</a>. PWOS operates <em>over</em> PRS records plus a thin operational extension: dependencies, effort estimates, and scheduling state.</p></div>
+  </div>
+
+  <h2 id="components"><span class="num">02</span>The three components</h2>
+  <p>PWOS is a single System 1 composite of three cooperating components. The conceptual separation between them is real; the deployment boundary is one project.</p>
+
+  <div class="comp-grid">
+    <div class="comp-card" id="comp-a">
+      <div class="ctag a">A</div>
+      <div><div class="crole">“What to do”</div><h4>Work Organization &amp; Registration</h4>
+        <p>The action hierarchy — action constructs (tasks, projects, routines, commitments, initiatives, objectives) plus their dependency graph, effort estimates, and logical ordering. Operates <em>over</em> PRS records plus a thin operational extension.</p></div>
+    </div>
+    <div class="comp-card" id="comp-b">
+      <div class="ctag b">B</div>
+      <div><div class="crole">“When, against the real calendar”</div><h4>Work Calendarization</h4>
+        <p>Takes the logical action structure and resolves it against a concrete timeline: recurrence expansion, deadline projection, conflict detection, workload-vs-capacity checks, and policy gating. Block lifecycle: tentative → confirmed → completed.</p></div>
+    </div>
+    <div class="comp-card" id="comp-c">
+      <div class="ctag c">C</div>
+      <div><div class="crole">“How it connects”</div><h4>Platforms Integration</h4>
+        <p>The boundary with the outside world. Adapters normalize external systems into PWOS terms. <strong>Google Calendar</strong> is the primary platform (OAuth 2.0, two-way sync); future platforms plug in via the adapter interface.</p></div>
+    </div>
+  </div>
+
+  <blockquote><p>Components [B] and [C] together realize what the original formulation called <em>Work Calendarization</em>: [C] brings the platform's calendar <em>in</em>; [B] reasons <em>over</em> it.</p></blockquote>
+
+  <h2 id="getting-started"><span class="num">03</span>Getting started</h2>
+
+  <h3 id="install">Run the prototype</h3>
+  <p>PWOS ships as a Flask mock-API server plus a vanilla HTML/CSS/JS client. It runs in <strong>mock mode</strong> by default — fully functional on local data, no credentials required.</p>
+  <pre><code># from the repository root
+python3 -m venv env &amp;&amp; source env/bin/activate     # once, shared venv
+pip install -r pwos/requirements.txt
+python3 pwos/server.py
+
+# open http://localhost:5005\</code\>\</pre\>
+  <p>The server listens on <strong>port 5005</strong>. Override it with the <code>PWOS_PORT</code> environment variable. Seed data lives in <code>pwos/data/mock_actions.json</code> and <code>mock_blocks.json</code>; regenerate it with <span class="mono">python3 pwos/data/gen_mock.py</span>.</p>
+
+  <h3 id="first-steps">First steps</h3>
+  <ol>
+    <li>Open the <strong>Dashboard</strong> for an at-a-glance summary of your action inventory and schedule.</li>
+    <li>Go to <strong>Actions</strong> and press <span class="kbd">N</span> (or <em>New Action</em>) to create your first action construct — set its kind, effort, and scheduling state.</li>
+    <li>Open an action's <strong>detail</strong> to add dependencies and schedule a calendar block.</li>
+    <li>Visit the <strong>Calendar</strong> to see your blocks across day / week / month / year views; conflicts are surfaced automatically.</li>
+    <li>Connect <strong>Google Calendar</strong> when you want live two-way sync (see <a href="#google-calendar">setup</a>).</li>
+  </ol>
+
+  <h2 id="concepts"><span class="num">04</span>Core concepts</h2>
+
+  <h3 id="action-constructs">Action constructs</h3>
+  <p>An <strong>action construct</strong> is the structured unit of work the agent is (or may be) performing. PWOS recognizes six kinds, forming a logical hierarchy:</p>
+  <div class="table-wrap">
+    <table><thead><tr><th>Kind</th><th>Role</th></tr></thead><tbody>
+      <tr><td><code>Objective</code></td><td>Long-horizon outcome; the top of a hierarchy.</td></tr>
+      <tr><td><code>Initiative</code></td><td>A coherent program that advances one or more objectives.</td></tr>
+      <tr><td><code>Project</code></td><td>A bounded body of work producing a deliverable.</td></tr>
+      <tr><td><code>Task</code></td><td>A discrete, actionable unit of work.</td></tr>
+      <tr><td><code>Routine</code></td><td>A recurring, repeatable activity.</td></tr>
+      <tr><td><code>Commitment</code></td><td>A promise or obligation to an external party.</td></tr>
+    </tbody></table>
+  </div>
+  <p>Each construct carries <strong>scheduling state</strong> (<code>unscheduled</code>, <code>scheduled</code>, <code>deferred</code>, <code>in-progress</code>, <code>done</code>), an optional <strong>effort estimate</strong> (hours, points, or sessions, with a confidence), and a <strong>capacity profile</strong> (time, focus, energy, attention; deep / shallow / low).</p>
+
+  <h3 id="dependencies">Dependencies</h3>
+  <p>Constructs are connected by typed edges forming a dependency graph. Common edge kinds:</p>
+  <div class="table-wrap">
+    <table><thead><tr><th>Edge kind</th><th>Meaning</th></tr></thead><tbody>
+      <tr><td><code>part-of</code> / <code>contains</code></td><td>Composition / hierarchy membership.</td></tr>
+      <tr><td><code>depends-on</code> / <code>blocked-by</code></td><td>Ordering: cannot start until the target resolves.</td></tr>
+      <tr><td><code>enables</code> / <code>required-by</code></td><td>Enabling / requirement relations.</td></tr>
+      <tr><td><code>implements-objective</code></td><td>Links a project/initiative to an objective.</td></tr>
+      <tr><td><code>fulfills-commitment</code></td><td>Links work to an obligation.</td></tr>
+      <tr><td><code>uses-capability</code></td><td>References a PTOCS capability.</td></tr>
+      <tr><td><code>governed-by</code></td><td>References a PPS policy.</td></tr>
+      <tr><td><code>recurs-from</code> / <code>spawned-from</code></td><td>Links a routine instance to its origin.</td></tr>
+    </tbody></table>
+  </div>
+  <p>PWOS computes the <strong>critical path</strong>, surfaces <strong>blockers</strong>, and offers a <strong>next-action</strong> surface (unblocked, in-horizon, capacity-available constructs).</p>
+
+  <h3 id="calendar-blocks">Calendar blocks</h3>
+  <p>A <strong>calendar block</strong> is the concrete temporal placement of work: a start, an end, a status, and an optional link to a construct or external event. Blocks have a lifecycle — <code>tentative</code> → <code>confirmed</code> → <code>completed</code> (or <code>cancelled</code>) — and carry <strong>conflict flags</strong> when they overlap, overload a period, or violate a policy.</p>
+
+  <h2 id="ui-guide"><span class="num">05</span>Using the interface</h2>
+  <p>The interface follows the <strong>Autoregia UI specification</strong> — a warm-parchment Oxford aesthetic, calm and consistent, with shared design tokens, the Spectral / Inter / IBM Plex Mono type system, and self-hosted Lucide icons.</p>
+
+  <h3 id="views">Views</h3>
+  <div class="table-wrap">
+    <table><thead><tr><th>View</th><th>What it does</th></tr></thead><tbody>
+      <tr><td><strong>Dashboard</strong></td><td>At-a-glance statistics: counts by kind and scheduling state, pinned items, scheduled minutes, conflicts, blocked actions.</td></tr>
+      <tr><td><strong>Actions</strong></td><td>The action inventory with filters (kind, scheduling state, project, objective, pinned) and global search.</td></tr>
+      <tr><td><strong>Action Hierarchy</strong></td><td>The Objective → Initiative → Project → Task / Routine tree with the dependency graph.</td></tr>
+      <tr><td><strong>Calendar</strong></td><td>Four views — <em>Day</em>, <em>Week</em>, <em>Month</em>, <em>Year</em> — over your blocks, with conflict surfacing and workload aggregation.</td></tr>
+      <tr><td><strong>Google Calendar</strong></td><td>OAuth connect / disconnect, calendar selection, and manual sync.</td></tr>
+      <tr><td><strong>Export</strong></td><td>Download the full dataset as JSON conforming to <code>spec/pwos/schema.json</code>.</td></tr>
+    </tbody></table>
+  </div>
+
+  <h3 id="shortcuts">Keyboard shortcuts</h3>
+  <div class="table-wrap">
+    <table><thead><tr><th>Action</th><th>Shortcut</th></tr></thead><tbody>
+      <tr><td>Quick help</td><td><span class="kbd">F1</span> &nbsp;or&nbsp; <span class="kbd">?</span></td></tr>
+      <tr><td>Command palette</td><td><span class="kbd">Ctrl</span>/<span class="kbd">⌘</span> + <span class="kbd">K</span></td></tr>
+      <tr><td>New action</td><td><span class="kbd">Ctrl</span>/<span class="kbd">⌘</span> + <span class="kbd">N</span> &nbsp;·&nbsp; <span class="kbd">N</span></td></tr>
+      <tr><td>Global search</td><td>Header search box</td></tr>
+      <tr><td>Close any dialog</td><td><span class="kbd">Esc</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <h3 id="command-palette">Command palette</h3>
+  <p>Press <span class="kbd">Ctrl</span>/<span class="kbd">⌘</span> + <span class="kbd">K</span> to open the universal command palette. Type to jump to any view, run a command (new action, sync, export, open help, open these docs), or find an action by its record id or kind.</p>
+
+  <h3 id="help-modal">Quick help (F1)</h3>
+  <p>Press <span class="kbd">F1</span> anywhere for a compact overlay of shortcuts, views, and the three components — the short-form companion to this document. It links here for the full reference.</p>
+
+  <div class="callout tip"><span class="ct-icon">✦</span><div><p>Both the palette and the help modal close on <span class="kbd">Esc</span> and on outside click.</p></div></div>
+
+  <h2 id="data-model"><span class="num">06</span>Data model</h2>
+  <p>Records live in the PRS (single source of truth). PWOS adds a thin operational extension persisted as JSON + SQLite: action constructs, dependency edges, calendar blocks, external mappings, and sync state. The authoritative shapes are defined in <a href="#references"><code>spec/pwos/schema.json</code></a>; the export endpoint returns data conforming to it.</p>
+  <pre><code>// action construct (abridged)
+{
+  "id": "act_...",
+  "record_id": "...",          // PRS record id (source of truth)
+  "kind": "Task",
+  "scheduling_state": "scheduled",
+  "pinned": false,
+  "strategic": { "project": "...", "objective": "..." },
+  "effort": { "value": 3, "unit": "hours", "confidence": "Medium" },
+  "capacity": { "resource": "focus", "band": "deep" },
+  "dependencies": [ { "kind": "blocked-by", "target": "act_..." } ]
+}
+
+// calendar block (abridged)
+{
+  "id": "blk_...",
+  "title": "...",
+  "starts_at": "2026-06-29T09:00:00Z",
+  "ends_at":   "2026-06-29T11:00:00Z",
+  "status": "confirmed",      // tentative | confirmed | completed | cancelled
+  "action_id": "act_...",
+  "external_id": "...",        // set when mirrored from Google Calendar
+  "sync_state": "clean",       // clean | dirty | conflict
+  "conflict_flags": []
+}</code></pre>
+
+  <h2 id="api"><span class="num">07</span>API reference</h2>
+  <p>The Flask backend exposes the three components as a REST API. All endpoints are JSON; times are ISO-8601 (UTC, <code>Z</code> suffix).</p>
+  <div class="table-wrap">
+    <table><thead><tr><th>Endpoint</th><th>Comp.</th><th>Description</th></tr></thead><tbody>
+      <tr><td><code>GET&nbsp;/api/actions</code></td><td>A</td><td>List actions (filter: <code>kind</code>, <code>scheduling_state</code>, <code>project</code>, <code>objective</code>, <code>pinned</code>, <code>q</code>).</td></tr>
+      <tr><td><code>POST&nbsp;/api/actions</code></td><td>A</td><td>Create an action construct.</td></tr>
+      <tr><td><code>GET/PUT/DELETE&nbsp;/api/actions/&lt;id&gt;</code></td><td>A</td><td>Retrieve / update / delete an action.</td></tr>
+      <tr><td><code>POST&nbsp;/api/actions/&lt;id&gt;/pin</code></td><td>A</td><td>Toggle pin.</td></tr>
+      <tr><td><code>GET&nbsp;/api/hierarchy</code></td><td>A</td><td>Objective → Initiative → Project → Task tree.</td></tr>
+      <tr><td><code>GET&nbsp;/api/blocks</code></td><td>B</td><td>List blocks (filterable).</td></tr>
+      <tr><td><code>POST&nbsp;/api/blocks</code></td><td>B</td><td>Create a block (with automatic conflict detection).</td></tr>
+      <tr><td><code>GET/PUT/DELETE&nbsp;/api/blocks/&lt;id&gt;</code></td><td>B</td><td>Retrieve / update / delete a block.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/day?start=</code></td><td>B</td><td>Blocks for a single day.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/week?start=</code></td><td>B</td><td>Blocks grouped by day with scheduled minutes.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/month?year=&amp;month=</code></td><td>B</td><td>6×7 weekday-aligned grid for a month.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/year?year=</code></td><td>B</td><td>Per-month workload summary.</td></tr>
+      <tr><td><code>GET&nbsp;/api/dashboard/stats</code></td><td>A/B/C</td><td>Aggregate dashboard statistics.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/google/status</code></td><td>C</td><td>Mock / authorized / connected status.</td></tr>
+      <tr><td><code>POST&nbsp;/api/calendar/google/auth</code></td><td>C</td><td>Begin OAuth consent flow.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/google/callback</code></td><td>C</td><td>OAuth redirect endpoint.</td></tr>
+      <tr><td><code>GET&nbsp;/api/calendar/google/calendars</code></td><td>C</td><td>List remote calendars (connected).</td></tr>
+      <tr><td><code>POST&nbsp;/api/calendar/google/sync</code></td><td>C</td><td>Two-way incremental sync.</td></tr>
+      <tr><td><code>GET&nbsp;/api/export</code></td><td>—</td><td>Download JSON (actions + blocks).</td></tr>
+      <tr><td><code>POST&nbsp;/api/import</code></td><td>—</td><td>Import JSON (merge-by-id).</td></tr>
+    </tbody></table>
+  </div>
+
+  <h2 id="google-calendar"><span class="num">08</span>Google Calendar setup</h2>
+  <p>The prototype runs in <strong>mock mode</strong> by default — fully functional on local block data, no credentials required. To enable live two-way sync:</p>
+  <ol>
+    <li>Create a Google Cloud project; enable the <strong>Google Calendar API</strong>.</li>
+    <li>Create an <strong>OAuth 2.0 Client ID</strong> (application type: <em>Desktop app</em>).</li>
+    <li>Download the client secret as <code>config/client_secret.json</code> inside <code>pwos/</code> (or set <code>PWOS_GC_CLIENT_SECRET</code> to its absolute path). <strong>Never commit it.</strong></li>
+    <li>Install the Google libraries (already in <code>requirements.txt</code>): <span class="mono">google-auth-oauthlib google-api-python-client</span>.</li>
+    <li>Open the <em>Google Calendar</em> view and click <strong>Connect</strong>; complete the consent flow. The refresh token is stored in <code>config/token.json</code>.</li>
+    <li>Click <strong>Sync</strong> (header) or <strong>Sync Now</strong> to pull remote events and push local dirty blocks.</li>
+  </ol>
+  <p>Scope: <code>https://www.googleapis.com/auth/calendar\</code\> (read/write) for two-way sync. The header pill (<code>GC: …</code>) shows the live connection state at a glance.</p>
+
+  <div class="callout warn"><span class="ct-icon">!</span><div><p><strong>Security.</strong> OAuth credentials are <em>not</em> part of this repository. The agent provides them out-of-band. Tokens are stored locally only; the <code>config/</code> directory is gitignored.</p></div></div>
+
+  <h2 id="import-export"><span class="num">09</span>Import &amp; export</h2>
+  <p>Use <strong>Export</strong> to download the full dataset (actions + blocks) as JSON conforming to <code>spec/pwos/schema.json</code>. Use <strong>Import</strong> to merge a file back in — entries are matched by <code>id</code> (merge-by-id), so existing records are never duplicated or overwritten by import.</p>
+
+  <h2 id="troubleshooting"><span class="num">10</span>Troubleshooting</h2>
+  <div class="table-wrap">
+    <table><thead><tr><th>Symptom</th><th>Resolution</th></tr></thead><tbody>
+      <tr><td><code>GC: mock</code> in the header</td><td>Expected in mock mode. Add <code>client_secret.json</code> and connect from the Google view to go live.</td></tr>
+      <tr><td>Sync reports conflicts</td><td>Open the offending block in the calendar; the detail view lists conflict flags (overlap, overload, policy violation).</td></tr>
+      <tr><td>Port already in use</td><td>Set <code>PWOS_PORT</code> to a free port and reopen <code>http://localhost:\&lt\;port\&gt\;\</code\>.\</td\>\</tr\>
+      <tr><td>Fonts / icons missing</td><td>Ensure you're serving via the Flask server (which mounts <code>static/</code>), not opening the HTML file directly.</td></tr>
+      <tr><td>Help modal won't open</td><td>Make sure focus is not in a text field; <span class="kbd">?</span> is suppressed while typing (use <span class="kbd">F1</span> instead).</td></tr>
+    </tbody></table>
+  </div>
+
+  <h2 id="references"><span class="num">11</span>References</h2>
+  <ul>
+    <li><strong>PWOS specification</strong> — <code>spec/pwos/spec.md</code> (conceptual foundations, data model, calendar &amp; integration architecture).</li>
+    <li><strong>PWOS schema</strong> — <code>spec/pwos/schema.json</code> (authoritative JSON shapes).</li>
+    <li><strong>Prototype README</strong> — <code>pwos/README.md</code>.</li>
+    <li><strong>Autoregia UI specification</strong> — <code>spec/ui.spec</code>.</li>
+    <li><strong>PRS</strong> — sibling recording system; PWOS operates over its action-bearing records.</li>
+    <li><strong>PTOCS</strong> — capability catalog referenced by <code>uses-capability</code> edges.</li>
+    <li><strong>PPS</strong> — policy corpus referenced by <code>governed-by</code> edges.</li>
+    <li><strong>Google Calendar API</strong> — Events reference &amp; OAuth 2.0 for desktop apps.</li>
+  </ul>
+
+</main>
+</div>
+
+<div class="doc-foot">
+  <div class="foot-grid">
+    <div>
+      <div class="doc-eyebrow" style="margin-bottom:8px;">Autoregia</div>
+      <p style="margin:0;">PWOS — Personal Work Organization System · Operations System (VSM S1).</p>
+    </div>
+    <div>
+      <div class="doc-eyebrow" style="margin-bottom:8px;">Navigate</div>
+      <p style="margin:0;"><a href="/">&larr; PWOS app</a> · <a href="#overview">Top</a></p>
+    </div>
+    <div>
+      <div class="doc-eyebrow" style="margin-bottom:8px;">Companion</div>
+      <p style="margin:0;">Press <span class="kbd">F1</span> in the app for quick help.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // TOC filter
+  (function () {
+    var input = document.getElementById('tocSearch');
+    var links = Array.prototype.slice.call(document.querySelectorAll('#tocList a'));
+    input.addEventListener('input', function () {
+      var q = input.value.toLowerCase().trim();
+      links.forEach(function (a) { a.style.display = (!q || a.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none'; });
+      links.forEach(function (a) {
+        if (a.parentElement.parentElement.id !== 'tocList') return;
+        var sub = a.parentElement.querySelector('ol');
+        if (!sub) return;
+        var anyVisible = Array.prototype.some.call(sub.querySelectorAll('a'), function (c){ return c.style.display !== 'none'; });
+        sub.style.display = anyVisible ? '' : 'none';
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
