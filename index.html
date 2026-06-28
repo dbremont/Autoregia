@@ -34,12 +34,10 @@
     .card h2{font-size:21px;font-weight:500;margin-bottom:8px;letter-spacing:-.01em}
     .card p{font-size:15px;color:var(--muted);line-height:1.5}
     .card .arrow{font-family:var(--sans);font-size:13px;color:var(--accent);margin-top:14px;display:block;font-weight:600}
-    section.systems{padding:8px 0 64px}
-    table.vsm{width:100%;border-collapse:collapse;font-size:14.5px}
-    table.vsm th,table.vsm td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
-    table.vsm th{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:2px solid var(--ink)}
-    table.vsm td.level{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap}
     footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
+    footer .footer-links{margin-bottom:16px}
+    footer .footer-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin:0 12px;transition:color .18s}
+    footer .footer-links a:hover{color:var(--accent)}
     footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
     @media (max-width:560px){header.masthead{padding:56px 0 32px}.lede{font-size:18px}}
   </style>
@@ -53,43 +51,29 @@
     <div class="gold-rule"></div>
   </header>
   <section class="define">
-    <blockquote>Self-management is the praxis of constructing and sustaining an agential hierarchy, so that operative processes evolve from implicit, unexamined routines into explicit, intelligible, and systematically steerable structures.</blockquote>
+    <blockquote>Every person can be understood as an adaptive control system operating within a changing environment. Autoregia starts from that premise: rather than designing productivity tools from intuition or convention, it identifies the fundamental functional architecture that every viable agent must implement.</blockquote>
+    <blockquote>The method has three stages — model the agent control loop independently of any implementation; formalize the functional components that make an agent viable (perception, decision, execution, regulation, learning, identity); then map concrete personal systems onto those functions in order to analyze, engineer, and continuously improve personal agency.</blockquote>
+    <blockquote>The output is a reference architecture, not a prescription. Note-taking systems, task managers, calendars, and reflection practices are not independent solutions — they are concrete implementations of specific functions within a larger cybernetic architecture of agency.</blockquote>
+    <blockquote>Self-management is the praxis of constructing and sustaining that architecture, so that operative processes evolve from implicit, unexamined routines into explicit, intelligible, and systematically steerable structures.</blockquote>
     <blockquote>Autoregia decomposes self-management into a set of cooperating systems, each mapped to a level of the Viable System Model. Some are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents.</blockquote>
   </section>
   <section class="index">
-    <div class="section-label">Project Index</div>
+    <div class="section-label">Agent Loop · Implementation</div>
     <div class="grid">
-      <a class="card" href="README.md"><span class="tag">about</span><h2>README</h2><p>The Autoregia overview: formulation, system map, and materialized sub-systems.</p><span class="arrow">Open README.md →</span></a>
-      <a class="card" href="prs/README.md"><span class="tag">sub-project · System 3</span><h2>Personal Recording System</h2><p>PRS — the Accounting System component. Externalizes relevant states for persistent recording, discovery, and retrieval. Includes a working prototype.</p><span class="arrow">Enter prs/ →</span></a>
-      <a class="card" href="pkts/README.md"><span class="tag">sub-project · System 3</span><h2>Personal Keyword Tracking System</h2><p>PKTS — a sibling accounting component tracking resource usage and keyword attention.</p><span class="arrow">Enter pkts/ →</span></a>
-      <a class="card" href="ptocs/README.md"><span class="tag">sub-project · System 4</span><h2>Personal Technical Object Catalog System</h2><p>PTOCS — the Intelligence System component. A catalog of the technical objects (software, services, hardware, references, capabilities, infrastructure) the agent relies on, with retrieval, navigation, and a statistical overlay. Includes a working prototype.</p><span class="arrow">Enter ptocs/ →</span></a>
-      <a class="card" href="pps/README.md"><span class="tag">sub-project · System 5</span><h2>Personal Policy System</h2><p>PPS — the Policy System component. A set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search.</p><span class="arrow">Enter pps/ →</span></a>
-      <a class="card" href="pwos/README.md"><span class="tag">sub-project · System 1</span><h2>Personal Work Organization System</h2><p>PWOS — the Operations System component. Organizes action constructs (tasks, projects, routines) over PRS records, with a dependency graph, work calendarization, and Google Calendar two-way sync. Includes a working prototype.</p><span class="arrow">Enter pwos/ →</span></a>
-      <a class="card" href="logos.log.md"><span class="tag">rationale</span><h2>Decision Log</h2><p>logos.log — the conceptual and design rationale connecting reality with its representation.</p><span class="arrow">Open logos.log.md →</span></a>
-      <a class="card" href="records_schema.json"><span class="tag">schema</span><h2>Record Schema</h2><p>The shared JSON Schema defining the atomic record unit across PRS and PKTS.</p><span class="arrow">Open records_schema.json →</span></a>
-      <a class="card" href="prs/static/index.html"><span class="tag">live prototype</span><h2>PRS Application</h2><p>The interactive Personal Recording System web prototype (served via prs/server.py).</p><span class="arrow">Launch app →</span></a>
+      <a class="card" href="spec/prs/README.md"><span class="tag">loop stage · Perception</span><h2>Personal Recording System</h2><p>PRS — supplies the <em>Perception</em> stage: externalizes relevant internal &amp; environmental state for persistent recording, discovery, and retrieval. The sense organs of the loop. Includes a working prototype.</p><span class="arrow">Enter prs/ →</span></a>
+      <a class="card" href="pkts/README.md"><span class="tag">loop stage · Perception</span><h2>Personal Keyword Tracking System</h2><p>PKTS — a <em>Perception</em> / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
+      <a class="card" href="ptocs/README.md"><span class="tag">loop stage · Situation Model</span><h2>Personal Technical Object Catalog System</h2><p>PTOCS — builds the <em>Situation Model</em>: a catalog of the technical objects (software, services, hardware, references, capabilities, infrastructure) the agent relies on, integrated into a queryable state estimate, with retrieval, navigation, and a statistical overlay. Includes a working prototype.</p><span class="arrow">Enter ptocs/ →</span></a>
+      <a class="card" href="pps/README.md"><span class="tag">loop stage · Decision</span><h2>Personal Policy System</h2><p>PPS — feeds the <em>Decision</em> stage with objectives and constraints (and preserves identity): policy documents (charter, principles, values, commitments, domain policies) defining direction and limits, with a main entry and full-text search.</p><span class="arrow">Enter pps/ →</span></a>
+      <a class="card" href="pwos/README.md"><span class="tag">loop stage · Action Selection</span><h2>Personal Work Organization System</h2><p>PWOS — drives <em>Action Selection</em>: organizes action constructs (tasks, projects, routines) over PRS records into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time via Google Calendar two-way sync. Includes a working prototype.</p><span class="arrow">Enter pwos/ →</span></a>
     </div>
   </section>
-  <section class="systems">
-    <div class="section-label">System Map · Viable System Model</div>
-    <table class="vsm">
-      <thead><tr><th>System</th><th>Role</th><th class="level">VSM Level</th></tr></thead>
-      <tbody>
-        <tr><td>Policy</td><td>Long-term direction, identity, principles, life-policy</td><td class="level">S5 – Policy</td></tr>
-        <tr><td>Intelligence</td><td>Scan environment, synthesize, learn, anticipate</td><td class="level">S4 – Intelligence</td></tr>
-        <tr><td>Documentation</td><td>External memory: explicit knowledge &amp; decision records</td><td class="level">S4 – Intelligence</td></tr>
-        <tr><td>Control</td><td>Priority-setting, scheduling, day-to-day steering</td><td class="level">S3 – Control</td></tr>
-        <tr><td>Accounting</td><td>Track resource usage (time, money, energy, attention)</td><td class="level">S3 – Audit / Accounting</td></tr>
-        <tr><td>Audit</td><td>Diagnostics, deviation detection, performance evaluation</td><td class="level">S3 – Audit</td></tr>
-        <tr><td>Task Management</td><td>Organize action constructs (projects, tasks, routines)</td><td class="level">S1 – Operations</td></tr>
-        <tr><td>Notification</td><td>Timely external triggers for commitments &amp; events</td><td class="level">S2 – Coordination</td></tr>
-        <tr><td>Coordination</td><td>Resolve conflicts, harmonize schedules, avoid overload</td><td class="level">S2 – Coordination</td></tr>
-        <tr><td>Execution</td><td>Physical &amp; cognitive tools used to perform work</td><td class="level">S1 – Operations</td></tr>
-        <tr><td>Inventory</td><td>Registry of assets, capabilities, reference objects</td><td class="level">S3 – Control</td></tr>
-      </tbody>
-    </table>
-  </section>
-  <footer><span class="mono">Autoregia · Personal Viable System Model</span></footer>
+  <footer>
+    <div class="footer-links">
+      <a href="spec/README.md">Docs</a>
+      <a href="about.html">About</a>
+    </div>
+    <span class="mono">Autoregia · Personal Viable System Model</span>
+  </footer>
 </div>
 </body>
 </html>

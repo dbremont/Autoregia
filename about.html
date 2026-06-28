@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Autoregia — Personal Viable System Model</title>
+  <style>
+    :root {
+      --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
+      --rule: #d8d0c4; --parchment: #f7f3ea; --surface: #fffdf8;
+      --accent: #7A1A2A; --gold: #b8893a;
+      --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+      --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:880px;margin:0 auto;padding:0 28px}
+    a.back{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
+    a.back:hover{color:var(--accent)}
+    a.back::before{content:"← "}
+    header.masthead{padding:24px 0 40px;text-align:center}
+    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:22px}
+    .eyebrow::before,.eyebrow::after{content:"—";margin:0 12px;color:var(--rule)}
+    h1.title{font-size:clamp(44px,7vw,68px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:24px}
+    h1.title em{font-style:italic;color:var(--accent)}
+    .lede{font-size:20px;color:var(--ink-soft);max-width:640px;margin:0 auto;font-style:italic;line-height:1.55}
+    .gold-rule{height:1px;background:var(--gold);width:64px;margin:40px auto;opacity:.7}
+    section{padding:8px 0 48px}
+    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:28px}
+    .section-title{font-size:28px;font-weight:400;letter-spacing:-.01em;margin-bottom:20px;text-align:center}
+    blockquote{border-left:2px solid var(--gold);padding:4px 0 4px 24px;margin:18px 0;color:var(--ink-soft);font-size:17px}
+    p.body{font-size:17px;color:var(--ink-soft);margin:14px 0}
+    .stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:8px}
+    .stage{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:22px 20px}
+    .stage .num{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.04em;display:block;margin-bottom:10px}
+    .stage h3{font-size:17px;font-weight:500;margin-bottom:8px}
+    .stage p{font-size:14.5px;color:var(--muted);line-height:1.5}
+    table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:8px}
+    table.t th,table.t td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+    table.t th{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:2px solid var(--ink)}
+    table.t td.code{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap}
+    .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:28px 16px;margin:10px 0 6px}
+    .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
+    .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:14px}
+    ul.refs{list-style:none;padding:0;margin:0}
+    ul.refs li{padding:12px 0;border-bottom:1px solid var(--rule)}
+    ul.refs a{color:var(--accent);text-decoration:none;font-size:16px;transition:color .18s}
+    ul.refs a:hover{color:var(--ink)}
+    footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
+    footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+    .diagram svg g.hot,.diagram svg text.hot{cursor:pointer}
+    .diagram svg g.hot rect{transition:fill .15s,stroke .15s}
+    .diagram svg g.hot:hover .node,.diagram svg g.hot:hover .p-node{fill:#f4ecdd;stroke:#1c1916;stroke-width:1.9}
+    .diagram svg g.hot:hover .node-loop,.diagram svg g.hot:hover .p-loop{fill:#f4ecdd;stroke:#7A1A2A}
+    .diagram svg text.hot{transition:fill .15s}
+    .diagram svg text.hot:hover{fill:#1c1916}
+    .modal-overlay{position:fixed;inset:0;background:rgba(28,25,22,.46);display:flex;align-items:center;justify-content:center;padding:24px;z-index:60;visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
+    .modal-overlay.open{visibility:visible;opacity:1}
+    .modal{background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--gold);border-radius:8px;max-width:440px;width:100%;padding:30px 32px 26px;position:relative;box-shadow:0 30px 60px -24px rgba(28,25,22,.5);transform:translateY(10px);transition:transform .18s}
+    .modal-overlay.open .modal{transform:none}
+    .modal-close{position:absolute;top:8px;right:14px;border:0;background:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;font-family:var(--serif);transition:color .15s}
+    .modal-close:hover{color:var(--accent)}
+    .modal-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+    .modal-title{font-size:24px;font-weight:400;letter-spacing:-.01em;margin-bottom:12px;line-height:1.2}
+    .modal-body{font-size:15.5px;color:var(--ink-soft);line-height:1.6}
+    .modal-link{display:inline-block;margin-top:16px;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);text-decoration:none;font-weight:600}
+    .modal-link:hover{color:var(--ink)}
+    @media (max-width:560px){header.masthead{padding:16px 0 32px}.lede{font-size:18px}.diagram{padding:18px 6px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">Index</a>
+  <header class="masthead">
+    <div class="eyebrow">About · Personal Viable System Model</div>
+    <h1 class="title">Autoregia</h1>
+    <p class="lede">A self-management system understood as an adaptive control system — a reference architecture for the functional components every viable agent must implement.</p>
+    <div class="gold-rule"></div>
+  </header>
+
+  <!-- The Agent -->
+  <section>
+    <div class="section-label">The Agent</div>
+    <blockquote>An agent is a system that maintains its continued existence and pursues objectives through regulated interaction with an environment.</blockquote>
+    <blockquote>An agent is a system that deliberately transforms states of itself and its environment by selecting and executing actions according to internal objectives while regulating those actions using feedback.</blockquote>
+    <table class="t">
+      <thead><tr><th>Component</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="code">Identity</td><td>what persists through time</td></tr>
+        <tr><td class="code">Objectives</td><td>desired future states</td></tr>
+        <tr><td class="code">World</td><td>(Internal, External)</td></tr>
+        <tr><td class="code">Internal State</td><td>beliefs, memory, resources, capabilities</td></tr>
+        <tr><td class="code">Perception</td><td>acquisition of information</td></tr>
+        <tr><td class="code">Decision</td><td>selection among alternatives</td></tr>
+        <tr><td class="code">Action</td><td>modification of world or self</td></tr>
+        <tr><td class="code">Feedback</td><td>observation of consequences</td></tr>
+        <tr><td class="code">Regulation</td><td>correction of deviations</td></tr>
+        <tr><td class="code">Learning</td><td>modification of internal models</td></tr>
+      </tbody>
+    </table>
+    <div class="section-label" style="margin-top:40px">Functional Problems Every Agent Must Solve</div>
+    <table class="t">
+      <thead><tr><th>Functional Problem</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="code">Identity Maintenance</td><td>preserve the agent</td></tr>
+        <tr><td class="code">Situation Assessment</td><td>understand environment</td></tr>
+        <tr><td class="code">Goal Formation</td><td>determine desired future</td></tr>
+        <tr><td class="code">Planning</td><td>generate possible actions</td></tr>
+        <tr><td class="code">Resource Allocation</td><td>distribute limited resources</td></tr>
+        <tr><td class="code">Coordination</td><td>synchronize concurrent activities</td></tr>
+        <tr><td class="code">Execution</td><td>perform actions</td></tr>
+        <tr><td class="code">Monitoring</td><td>observe progress</td></tr>
+        <tr><td class="code">Regulation</td><td>compensate disturbances</td></tr>
+        <tr><td class="code">Learning</td><td>improve future behavior</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <!-- Agent Control Loop -->
+  <section>
+    <div class="section-label">Agent Control Loop</div>
+    <h2 class="section-title">The Control Loop</h2>
+    <p class="body">The agent control loop is an <strong>outer loop</strong> that closes the world on itself through the agent. It contains an inner <strong>Deliberative Cycle</strong> — the sense→decide arc that turns raw information into a committed action — followed by an <strong>Execution</strong> arc that carries the action out and a <strong>Feedback</strong> path that re-enters the cycle.</p>
+    <blockquote>The <strong>Deliberative Cycle</strong> is the sub-loop spanning Perception → Situation Model → Decision → Action Selection: it observes the world, builds a state estimate, evaluates alternatives, and commits to an action. It does <em>not</em> act; it produces a <em>selected</em> action that the outer loop then executes.</blockquote>
+    <div class="section-label" style="margin-top:40px">Stages</div>
+    <table class="t">
+      <thead><tr><th>Stage</th><th>Loop</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="code">Perception</td><td>Deliberative</td><td>acquire information from the internal and external world</td></tr>
+        <tr><td class="code">Situation Model</td><td>Deliberative</td><td>integrate perception into a current state estimate</td></tr>
+        <tr><td class="code">Decision</td><td>Deliberative</td><td>evaluate and choose among alternative courses of action</td></tr>
+        <tr><td class="code">Action Selection</td><td>Deliberative</td><td>commit to a specific action or plan to carry out</td></tr>
+        <tr><td class="code">Execution</td><td>Outer</td><td>carry out the selected action in the world or self</td></tr>
+        <tr><td class="code">Feedback</td><td>Outer</td><td>observe consequences and regulate the Deliberative Cycle</td></tr>
+      </tbody>
+    </table>
+    <div class="diagram">
+      <svg data-scope="acl" viewBox="0 0 880 450" role="img" aria-label="Agent control loop: World feeds the Deliberative Cycle (Perception, Situation Model, Decision, Action Selection), which commits to Execution; execution modifies the World, while Feedback observes the modified world and regulates the Deliberative Cycle. Each stage is clickable.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/>
+          </marker>
+          <marker id="arrow-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/>
+          </marker>
+        </defs>
+        <style>
+          .lbl{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:15px;fill:#1c1916}
+          .sub{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#7a736a}
+          .arc{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
+          .fba{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
+          .cyc-lbl{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+          .leg{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
+          .node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
+          .node-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
+          .cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
+          .edge{stroke:#b8893a;stroke-width:1.6;fill:none}
+          .edge-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+          .tap{fill:#7A1A2A}
+        </style>
+
+        <rect class="cycle" x="140" y="95" width="565" height="170" rx="12"/>
+        <text class="cyc-lbl hot" data-stage="cycle" x="422" y="118" text-anchor="middle">Deliberative Cycle</text>
+
+        <path class="edge" d="M 80 212 L 80 158 L 153 158" marker-end="url(#arrow)"/>
+        <text class="arc" x="58" y="185" text-anchor="middle" transform="rotate(-90 58 185)">perceive</text>
+        <path class="edge" d="M 287 158 L 343 158" marker-end="url(#arrow)"/>
+        <path class="edge" d="M 517 158 L 558 158" marker-end="url(#arrow)"/>
+        <path class="edge" d="M 620 181 L 620 203" marker-end="url(#arrow)"/>
+        <path class="edge" d="M 697 228 L 738 228" marker-end="url(#arrow)"/>
+        <text class="arc" x="717" y="220" text-anchor="middle">commit</text>
+        <path class="edge" d="M 800 251 L 800 370 L 80 370 L 80 260" marker-end="url(#arrow)"/>
+        <text class="arc" x="300" y="362" text-anchor="middle">act · modify world</text>
+
+        <circle class="tap" cx="540" cy="370" r="3.4"/>
+        <path class="edge-fb" d="M 540 370 L 540 343" marker-end="url(#arrow-accent)"/>
+        <text class="fba" x="552" y="361" text-anchor="start">observe</text>
+        <path class="edge-fb" d="M 540 293 L 540 267" marker-end="url(#arrow-accent)"/>
+        <text class="fba" x="552" y="288" text-anchor="start">regulate</text>
+
+        <g class="hot" data-stage="world" transform="translate(80,235)">
+          <rect class="node-loop" x="-60" y="-23" width="120" height="46" rx="23"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">World</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">Environment · Internal</text>
+        </g>
+        <g class="hot" data-stage="perception" transform="translate(220,158)">
+          <rect class="node" x="-65" y="-23" width="130" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Perception</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">acquire information</text>
+        </g>
+        <g class="hot" data-stage="situation" transform="translate(430,158)">
+          <rect class="node" x="-85" y="-23" width="170" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Situation Model</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">state estimate</text>
+        </g>
+        <g class="hot" data-stage="decision" transform="translate(620,158)">
+          <rect class="node" x="-60" y="-23" width="120" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Decision</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">choose alternatives</text>
+        </g>
+        <g class="hot" data-stage="action" transform="translate(620,228)">
+          <rect class="node" x="-75" y="-23" width="150" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Action Selection</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">commit to action</text>
+        </g>
+        <g class="hot" data-stage="execution" transform="translate(800,228)">
+          <rect class="node" x="-60" y="-23" width="120" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Execution</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">carry out action</text>
+        </g>
+        <g class="hot" data-stage="feedback" transform="translate(540,318)">
+          <rect class="node" x="-70" y="-23" width="140" height="46" rx="8"/>
+          <text class="lbl" x="0" y="-3" text-anchor="middle">Feedback</text>
+          <text class="sub" x="0" y="12" text-anchor="middle">observe · regulate</text>
+        </g>
+
+        <g transform="translate(120,425)">
+          <line class="edge" x1="0" y1="0" x2="24" y2="0"/>
+          <text class="leg" x="32" y="4">forward · sense → decide → act</text>
+          <line class="edge-fb" x1="220" y1="0" x2="244" y2="0"/>
+          <text class="leg" x="252" y="4">feedback · regulation</text>
+          <rect class="cycle" x="370" y="-7" width="24" height="14"/>
+          <text class="leg" x="402" y="4">deliberative cycle · inner sub-loop</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Agent control loop · a closed loop — World → Deliberative Cycle → Execution → World — regulated by Feedback · click any stage for detail</div>
+    </div>
+  </section>
+
+  <!-- Viable System Model (VSM) -->
+  <section>
+    <div class="section-label">Viable System Model</div>
+    <h2 class="section-title">The Reference Architecture</h2>
+    <blockquote>A Viable System Model (VSM) is a formal cybernetic model of the organizational structure required for an autonomous system to remain viable in a changing environment. It specifies the minimum set of interacting subsystems necessary to regulate operations, coordinate activities, adapt to environmental change, and preserve the identity and continuity of the system over time.</blockquote>
+    <p class="body">Where the <strong>agent control loop</strong> describes the <em>temporal</em> arc of agency — sense, decide, act, regulate — the Viable System Model describes its <em>structural</em> complement: the minimum set of interacting subsystems any viable system must implement to keep that loop running. Autoregia uses the VSM as its reference architecture, mapping every personal system to one of these functions.</p>
+    <div class="section-label" style="margin-top:40px">The Five Systems</div>
+    <table class="t">
+      <thead><tr><th>System</th><th>Name</th><th>Function</th></tr></thead>
+      <tbody>
+        <tr><td class="code">System 1</td><td>Operational Units</td><td>The primary units that perform the agent's basic operations. Each unit is semi-autonomous and responsible for delivering specific outputs or services.</td></tr>
+        <tr><td class="code">System 2</td><td>Coordination</td><td>Ensures the harmonious operation of System 1 units by providing coordination and conflict resolution, managing the interactions and synergies between operational units.</td></tr>
+        <tr><td class="code">System 3</td><td>Control</td><td>Provides resource allocation, monitoring, and control over the operational units; ensures the system is functioning efficiently and effectively.</td></tr>
+        <tr><td class="code">System 3*</td><td>Audit</td><td>A subset of System 3 focused on monitoring and auditing the operational units to ensure compliance and performance standards.</td></tr>
+        <tr><td class="code">System 4</td><td>Intelligence</td><td>Focuses on the external environment and future planning; adapts the system to environmental change, drives innovation and strategic development.</td></tr>
+        <tr><td class="code">System 5</td><td>Policy</td><td>Sets the system's overall goals, values, and direction; balances internal and external focus and maintains identity and cohesion.</td></tr>
+      </tbody>
+    </table>
+    <div class="section-label" style="margin-top:40px">System Map · Autoregia Systems</div>
+    <p class="body">Autoregia decomposes self-management into a set of cooperating systems. Some are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents. Each maps to a level of the Viable System Model.</p>
+    <table class="t">
+      <thead><tr><th>System</th><th>Role</th><th class="code">VSM Level</th></tr></thead>
+      <tbody>
+        <tr><td>Policy</td><td>Long-term direction, identity, principles, life-policy</td><td class="code">S5 – Policy</td></tr>
+        <tr><td>Intelligence</td><td>Scan environment, synthesize, learn, anticipate</td><td class="code">S4 – Intelligence</td></tr>
+        <tr><td>Documentation</td><td>External memory: explicit knowledge & decision records</td><td class="code">S4 – Intelligence</td></tr>
+        <tr><td>Control</td><td>Priority-setting, scheduling, day-to-day steering</td><td class="code">S3 – Control</td></tr>
+        <tr><td>Accounting</td><td>Track resource usage (time, money, energy, attention)</td><td class="code">S3 – Audit / Accounting</td></tr>
+        <tr><td>Audit</td><td>Diagnostics, deviation detection, performance evaluation</td><td class="code">S3 – Audit</td></tr>
+        <tr><td>Task Management</td><td>Organize action constructs (projects, tasks, routines)</td><td class="code">S1 – Operations</td></tr>
+        <tr><td>Notification</td><td>Timely external triggers for commitments & events</td><td class="code">S2 – Coordination</td></tr>
+        <tr><td>Coordination</td><td>Resolve conflicts, harmonize schedules, avoid overload</td><td class="code">S2 – Coordination</td></tr>
+        <tr><td>Execution</td><td>Physical & cognitive tools used to perform work</td><td class="code">S1 – Operations</td></tr>
+        <tr><td>Inventory</td><td>Registry of assets, capabilities, reference objects</td><td class="code">S3 – Control</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Personal Viable System Model (PVSM) -->
+  <section>
+    <div class="section-label">Personal Viable System Model</div>
+    <h2 class="section-title">The Personalized Control Loop</h2>
+    <p class="body">The PVSM instantiates the agent control loop with concrete personal systems. The <strong>Deliberative Cycle</strong> is supplied by the recording, reflection, and planning instruments; the <strong>Execution</strong> arc is supplied by production tools; and <strong>Feedback</strong> closes the loop through reflection.</p>
+    <div class="section-label" style="margin-top:40px">Stages (PVSM Mapping)</div>
+    <table class="t">
+      <thead><tr><th>Stage</th><th>Loop</th><th>PVSM Component</th></tr></thead>
+      <tbody>
+        <tr><td class="code">Perception</td><td>Deliberative</td><td>Personal Recording System (PRS), Audit Process</td></tr>
+        <tr><td class="code">Situation Model</td><td>Deliberative</td><td>Reflection, Documentation</td></tr>
+        <tr><td class="code">Decision</td><td>Deliberative</td><td>Task Registry Mechanism, Reflection</td></tr>
+        <tr><td class="code">Action Selection</td><td>Deliberative</td><td>Calendar, Time Tracker</td></tr>
+        <tr><td class="code">Execution</td><td>Outer</td><td>Production</td></tr>
+        <tr><td class="code">Feedback</td><td>Outer</td><td>Reflection (Intelligence Layer)</td></tr>
+      </tbody>
+    </table>
+    <div class="diagram">
+      <svg data-scope="pvsm" viewBox="0 0 880 450" role="img" aria-label="Personal viable system model: a closed control loop. World feeds the Deliberative Cycle (Perception, Situation Model, Decision, Action Selection), which commits to Execution; execution modifies the World, while Feedback observes and regulates the cycle. Node labels are abstract; each stage is clickable to reveal the concrete personal system that instantiates it.">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/>
+          </marker>
+          <marker id="arrow2-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/>
+          </marker>
+        </defs>
+        <style>
+          .p-lbl{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:15px;fill:#1c1916}
+          .p-sub{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#7a736a}
+          .p-arc{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
+          .p-fba{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
+          .p-cyc{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+          .p-leg{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
+          .p-node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
+          .p-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
+          .p-cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
+          .p-edge{stroke:#b8893a;stroke-width:1.6;fill:none}
+          .p-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+          .p-tap{fill:#7A1A2A}
+        </style>
+
+        <rect class="p-cycle" x="140" y="95" width="565" height="170" rx="12"/>
+        <text class="p-cyc hot" data-stage="cycle" x="422" y="118" text-anchor="middle">Deliberative Cycle</text>
+
+        <path class="p-edge" d="M 80 212 L 80 158 L 153 158" marker-end="url(#arrow2)"/>
+        <text class="p-arc" x="58" y="185" text-anchor="middle" transform="rotate(-90 58 185)">perceive</text>
+        <path class="p-edge" d="M 287 158 L 343 158" marker-end="url(#arrow2)"/>
+        <path class="p-edge" d="M 517 158 L 558 158" marker-end="url(#arrow2)"/>
+        <path class="p-edge" d="M 620 181 L 620 203" marker-end="url(#arrow2)"/>
+        <path class="p-edge" d="M 697 228 L 738 228" marker-end="url(#arrow2)"/>
+        <text class="p-arc" x="717" y="220" text-anchor="middle">commit</text>
+        <path class="p-edge" d="M 800 251 L 800 370 L 80 370 L 80 260" marker-end="url(#arrow2)"/>
+        <text class="p-arc" x="300" y="362" text-anchor="middle">act · modify world</text>
+
+        <circle class="p-tap" cx="540" cy="370" r="3.4"/>
+        <path class="p-fb" d="M 540 370 L 540 343" marker-end="url(#arrow2-accent)"/>
+        <text class="p-fba" x="552" y="361" text-anchor="start">observe</text>
+        <path class="p-fb" d="M 540 293 L 540 267" marker-end="url(#arrow2-accent)"/>
+        <text class="p-fba" x="552" y="288" text-anchor="start">regulate</text>
+
+        <g class="hot" data-stage="world" transform="translate(80,235)">
+          <rect class="p-loop" x="-60" y="-23" width="120" height="46" rx="23"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">World</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">Environment · Internal</text>
+        </g>
+        <g class="hot" data-stage="perception" transform="translate(220,158)">
+          <rect class="p-node" x="-65" y="-23" width="130" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Perception</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">acquire information</text>
+        </g>
+        <g class="hot" data-stage="situation" transform="translate(430,158)">
+          <rect class="p-node" x="-85" y="-23" width="170" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Situation Model</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">state estimate</text>
+        </g>
+        <g class="hot" data-stage="decision" transform="translate(620,158)">
+          <rect class="p-node" x="-60" y="-23" width="120" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Decision</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">choose alternatives</text>
+        </g>
+        <g class="hot" data-stage="action" transform="translate(620,228)">
+          <rect class="p-node" x="-75" y="-23" width="150" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Action Selection</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">commit to action</text>
+        </g>
+        <g class="hot" data-stage="execution" transform="translate(800,228)">
+          <rect class="p-node" x="-60" y="-23" width="120" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Execution</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">carry out action</text>
+        </g>
+        <g class="hot" data-stage="feedback" transform="translate(540,318)">
+          <rect class="p-node" x="-70" y="-23" width="140" height="46" rx="8"/>
+          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Feedback</text>
+          <text class="p-sub" x="0" y="12" text-anchor="middle">observe · regulate</text>
+        </g>
+
+        <g transform="translate(120,425)">
+          <line class="p-edge" x1="0" y1="0" x2="24" y2="0"/>
+          <text class="p-leg" x="32" y="4">forward · sense → decide → act</text>
+          <line class="p-fb" x1="220" y1="0" x2="244" y2="0"/>
+          <text class="p-leg" x="252" y="4">feedback · regulation</text>
+          <rect class="p-cycle" x="370" y="-7" width="24" height="14"/>
+          <text class="p-leg" x="402" y="4">deliberative cycle · inner sub-loop</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Personal Viable System Model — the control loop instantiated by concrete personal systems · click any stage for detail</div>
+    </div>
+  </section>
+
+  <!-- References -->
+  <section>
+    <div class="section-label">References</div>
+    <h2 class="section-title">Further Reading</h2>
+    <ul class="refs">
+      <li><a href="https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link" target="_blank" rel="noopener">Personal Viable System Model (PVSM) →</a></li>
+      <li><a href="https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link" target="_blank" rel="noopener">Self-Management →</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <span class="mono">Autoregia · Personal Viable System Model</span>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="modal-eyebrow"></div>
+    <h3 class="modal-title" id="modal-title"></h3>
+    <p class="modal-body"></p>
+    <a class="modal-link"></a>
+  </div>
+</div>
+
+<script>
+(function () {
+  var CONTENT = {
+    acl: {
+      world: { eyebrow: "Boundary · Outer loop", title: "World", body: "The environment the agent is embedded in — the external world together with the agent's internal state (beliefs, memory, resources, capabilities). Perception reads from it, Execution writes to it, and Feedback observes its modified state to close the loop." },
+      cycle: { eyebrow: "Inner sub-loop", title: "Deliberative Cycle", body: "Perception → Situation Model → Decision → Action Selection. It observes the world, builds a state estimate, evaluates alternatives, and commits to an action. It does not act; it produces a selected action that the outer loop then executes." },
+      perception: { eyebrow: "Deliberative", title: "Perception", body: "Acquire information from the internal and external world — the senses of the loop, turning raw state into signal the agent can reason about." },
+      situation: { eyebrow: "Deliberative", title: "Situation Model", body: "Integrate perception into a current state estimate: a working model of how the world and the self actually are right now." },
+      decision: { eyebrow: "Deliberative", title: "Decision", body: "Evaluate and choose among alternative courses of action, given the situation model and the agent's objectives." },
+      action: { eyebrow: "Deliberative", title: "Action Selection", body: "Commit to a specific action or plan to carry out. The output of the deliberative cycle is a selected action — not yet executed." },
+      execution: { eyebrow: "Outer loop", title: "Execution", body: "Carry out the selected action in the world or self — the moment a committed decision actually changes state." },
+      feedback: { eyebrow: "Outer loop", title: "Feedback", body: "Observe the consequences of execution — the modified world — and regulate the Deliberative Cycle. This is where deviations are corrected and where learning enters the loop." }
+    },
+    pvsm: {
+      world: { eyebrow: "Boundary · Outer loop", title: "World", body: "Your lived environment: the external world (people, places, tools, obligations) and your internal state (energy, attention, memory, resources). Everything the loop reads from and acts upon." },
+      cycle: { eyebrow: "Inner sub-loop", title: "Deliberative Cycle", body: "Supplied by the recording, reflection, and planning instruments — PRS, Reflection, Task Registry, Calendar, Time Tracker. Together they turn raw experience into a committed plan." },
+      perception: { eyebrow: "Deliberative · Perception", title: "Personal Recording System (PRS)", body: "Externalize and capture relevant internal and environmental state for persistent recording, discovery, and retrieval — the sense organs of your loop.", link: { href: "spec/prs/README.md", label: "Enter PRS →" } },
+      situation: { eyebrow: "Deliberative · Situation Model", title: "Reflection · Documentation", body: "Integrate records into a current state estimate — what is actually going on, made explicit and retrievable.", link: { href: "ptocs/README.md", label: "Enter PTOCS →" } },
+      decision: { eyebrow: "Deliberative · Decision", title: "Task Registry · Reflection", body: "Evaluate alternatives and choose what to do, held against the objectives and constraints made explicit by policy.", link: { href: "pps/README.md", label: "Enter PPS →" } },
+      action: { eyebrow: "Deliberative · Action Selection", title: "Calendar · Time Tracker", body: "Commit a chosen action to specific time and capacity — turning an intention into a scheduled, resourced commitment.", link: { href: "pwos/README.md", label: "Enter PWOS →" } },
+      execution: { eyebrow: "Outer loop", title: "Production", body: "The physical and cognitive tools you actually use to perform the work — where committed plans become done work." },
+      feedback: { eyebrow: "Outer loop · Intelligence Layer", title: "Reflection", body: "Observe the consequences of what you executed and regulate the deliberative cycle — the layer where you learn, correct deviations, and steer the next iteration." }
+    }
+  };
+
+  var overlay = document.getElementById('modal');
+  var ey = overlay.querySelector('.modal-eyebrow');
+  var ti = overlay.querySelector('.modal-title');
+  var bo = overlay.querySelector('.modal-body');
+  var lk = overlay.querySelector('.modal-link');
+
+  function open(c) {
+    ey.textContent = c.eyebrow || '';
+    ti.textContent = c.title || '';
+    bo.textContent = c.body || '';
+    if (c.link) { lk.setAttribute('href', c.link.href); lk.textContent = c.link.label; lk.style.display = ''; }
+    else { lk.removeAttribute('href'); lk.textContent = ''; lk.style.display = 'none'; }
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('svg[data-scope]'), function (svg) {
+    var scope = svg.getAttribute('data-scope');
+    Array.prototype.forEach.call(svg.querySelectorAll('[data-stage]'), function (el) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function () {
+        var c = CONTENT[scope] && CONTENT[scope][el.getAttribute('data-stage')];
+        if (c) open(c);
+      });
+    });
+  });
+
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  overlay.querySelector('.modal-close').addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>
+
