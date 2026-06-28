@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PPS index metadata (consumed by the search server) -->
+  <meta name="pp-title" content="Personal Policy System — Index">
+  <meta name="pp-summary" content="The main entry: the charter that governs the policy set, plus search and an index of all policy documents.">
+  <meta name="pp-domain" content="Index">
+  <meta name="pp-tags" content="index, charter, main, search, policy, pps">
+  <title>PPS — Personal Policy System</title>
+  <link rel="stylesheet" href="/static/css/policy.css">
+</head>
+<body>
+  <div class="index-shell">
+
+    <!-- ═══ Masthead ═══ -->
+    <header class="index-masthead">
+      <div class="index-eyebrow">VSM System 5 — Policy</div>
+      <h1 class="index-title">Personal <em>Policy</em> System</h1>
+      <p class="index-lede">The set of governing documents — charter, principles, values, and domain policies — that define long-term direction and constraints.</p>
+      <div class="gold-rule"></div>
+    </header>
+
+    <!-- ═══ Search ═══ -->
+    <div class="search-wrap">
+      <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="searchInput" class="search-box" placeholder="Search the policy corpus…" autocomplete="off">
+    </div>
+    <div class="search-results" id="searchResults"></div>
+
+    <!-- ═══ Main Entry → Charter ═══ -->
+    <div id="docIndex">
+      <div class="section-label">Main Entry</div>
+      <a class="charter-card" id="charterCard" href="/policies/charter.html">
+        <span class="charter-tag">★ Apex Document</span>
+        <h2>Personal Charter</h2>
+        <p>The apex of the system: identity, purpose, and the constitution from which every other policy derives. The starting point that points to the rest of the policy set.</p>
+        <span class="charter-arrow">Open the Charter →</span>
+      </a>
+
+      <div class="section-label">All Policy Documents</div>
+      <div id="domainGroups"></div>
+    </div>
+
+    <footer class="index-footer">
+      <span class="mono">Personal Policy System · Autoregia · VSM System 5</span>
+    </footer>
+  </div>
+
+  <script src="/static/js/search.js"></script>
+</body>
+</html>

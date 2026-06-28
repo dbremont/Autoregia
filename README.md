@@ -35,16 +35,14 @@ Autoregia/
 
 ## Formulation
 
-> Add
-
-- Information Catalog System
-- Personal Technical Object Catalog System (PTOCS) (https://github.com/csiglab/Index)
+- Information Catalog System: Source, Document
+- Personal Policy System (PPS)
 - Note: The dayly - links - papers - etc- should be handdle by the PRS.
 - ...
 
 | **Part** | **Description** | **Level (VSM)** | **Implementation** |
 | --- | --- | --- | --- |
-| **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note |
+| **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note  (Personal Policy System (PPS)) |
 | **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Personal Technical Object Catalog System (PTOCS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
 | **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
 | **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
@@ -64,7 +62,8 @@ The sub-systems developed within this workspace:
 
 - **[Personal Recording System (PRS)](prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](prs/spec.md), [record schema](records_schema.json), and [implementation](prs/README.md#prototype).
 - **[Personal Keyword Tracking System (PKTS)](pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
-- Personal Technical Object Catalog System (PTOCS): ...
+- **[Personal Technical Object Catalog System (PTOCS)](ptocs/README.md)** — the Intelligence System component; a structured catalog of the technical objects the agent relies on, with retrieval, navigation, and a statistical overlay.
+- **[Personal Policy System (PPS)](pps/README.md)** — the Policy System component (VSM System 5); a set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search over the corpus.
 
 > The design rationale and decision log live in [`logos.log.md`](logos.log.md).
 
