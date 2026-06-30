@@ -27,6 +27,7 @@ PW.CommandPalette.close = function () {
 PW.CommandPalette._commands = function () {
   return [
     { label: 'Go to Dashboard', icon: 'gauge', run: () => PW.navigate('dashboard') },
+    { label: 'Go to Analytics', icon: 'bar-chart-3', run: () => PW.navigate('analytics') },
     { label: 'Go to Actions', icon: 'list-checks', run: () => PW.navigate('actions') },
     { label: 'Go to Hierarchy', icon: 'git-fork', run: () => PW.navigate('hierarchy') },
     { label: 'Go to Calendar', icon: 'calendar', run: () => PW.navigate('calendar') },

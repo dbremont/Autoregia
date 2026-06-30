@@ -33,7 +33,9 @@
 
 The conceptual foundations, data model, calendar model, Google Calendar
 integration architecture, evaluation criteria, and implementation guidance live
-in [`spec.md`](spec.md).
+in [`spec.md`](spec.md). The Analytics Dashboard (an S3\* audit surface over a
+synthetic `app.todoist` dataset) is specified separately in
+[`analytics.md`](analytics.md).
 
 ## Documentation
 

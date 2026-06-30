@@ -41,6 +41,7 @@
       <div class="sidebar-label">Main</div>
       <ul class="sidebar-nav">
         <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><pw-icon name="gauge" size="17"></pw-icon></span> Dashboard</a></li>
+        <li><a href="#analytics" data-view="analytics"><span class="nav-icon"><pw-icon name="bar-chart-3" size="17"></pw-icon></span> Analytics</a></li>
         <li><a href="#actions" data-view="actions" class="active"><span class="nav-icon"><pw-icon name="list-checks" size="17"></pw-icon></span> Actions</a></li>
         <li><a href="#hierarchy" data-view="hierarchy"><span class="nav-icon"><pw-icon name="git-fork" size="17"></pw-icon></span> Action Hierarchy</a></li>
         <li><a href="#calendar" data-view="calendar"><span class="nav-icon"><pw-icon name="calendar" size="17"></pw-icon></span> Calendar</a></li>
@@ -141,6 +142,7 @@
         <h3>Views</h3>
         <div class="shortcut-grid">
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="gauge" size="15"></pw-icon></span> Dashboard</span><span>at-a-glance stats &amp; summaries</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="bar-chart-3" size="15"></pw-icon></span> Analytics</span><span>throughput, backlog, deadline adherence (app.todoist)</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="list-checks" size="15"></pw-icon></span> Actions</span><span>filter, search, create, edit</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="git-fork" size="15"></pw-icon></span> Hierarchy</span><span>Objective → Initiative → Project → Task</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="calendar" size="15"></pw-icon></span> Calendar</span><span>day / week / month / year blocks</span></div>
@@ -167,12 +169,14 @@
 
 <script src="/js/store.js"></script>
 <script src="/js/icons.js"></script>
+<script src="/js/vendor/echarts.min.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/actions.js"></script>
 <script src="/js/hierarchy.js"></script>
 <script src="/js/calendar.js"></script>
 <script src="/js/google.js"></script>
 <script src="/js/dashboard.js"></script>
+<script src="/js/analytics.js"></script>
 <script src="/js/command-palette.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => { PW.init(); });

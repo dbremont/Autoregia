@@ -46,19 +46,22 @@ PW.setupRouter = function () {
 PW.getHashView = function () { return location.hash.slice(1); };
 
 PW.navigate = function (view) {
+  if (this.currentView === 'analytics' && view !== 'analytics' && PW.Analytics && PW.Analytics._teardown) {
+    PW.Analytics._teardown();
+  }
   this.currentView = view; location.hash = '#' + view;
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
   const active = document.querySelector('.sidebar-nav a[data-view="' + view + '"]');
   if (active) active.classList.add('active');
   const c = document.getElementById('appContent');
   const views = { dashboard: 'Dashboard', actions: 'Actions', hierarchy: 'Hierarchy',
-                  calendar: 'Calendar', google: 'Google', export: 'Export' };
+                  calendar: 'Calendar', google: 'Google', analytics: 'Analytics', export: 'Export' };
   if (view === 'dashboard') c.innerHTML = PW.DashboardView();
   else if (view === 'actions') c.innerHTML = PW.ActionsView();
-  else if (view === 'hierarchy') c.innerHTML = PW.HierarchyView();
   else if (view === 'hierarchy') { c.innerHTML = PW.HierarchyView(); PW.renderHierarchy(); }
   else if (view === 'calendar') { c.innerHTML = PW.CalendarView(); PW.Calendar.bind(); }
   else if (view === 'google') { c.innerHTML = PW.GoogleView(); PW.Google.bind(); }
+  else if (view === 'analytics') { c.innerHTML = PW.AnalyticsView(); PW.Analytics.bind(); }
   else if (view === 'export') c.innerHTML = PW.ExportView();
   else c.innerHTML = '<div class="content-header"><h1>Not found</h1></div>';
   if (view === 'dashboard') PW.bindDashboard();

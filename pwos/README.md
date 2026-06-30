@@ -19,6 +19,13 @@ all three PWOS components:
   (Day / Week / Month / Year), conflict detection, workload aggregation.
 - **[C] Platforms Integration** — Google Calendar OAuth 2.0 two-way sync, with
   graceful **mock mode** when credentials are absent.
+- **Analytics Dashboard** — an S3\* (Audit) read-only surface over a synthetic
+  `app.todoist` dataset: a **Personal Performance scorecard** (generic,
+  measurable operational-health goals), composite indices (Productivity / Backlog
+  Pressure / Fragmentation), throughput, backlog aging, deadline adherence,
+  priority mix, label spread, weekly rhythm, hourly productivity heatmap, monthly
+  comparison, cycle-time & priority-debt, project momentum, radar comparison, and
+  auto-insights. Specified in [`../spec/pwos/analytics.md`](../spec/pwos/analytics.md).
 
 ### Run
 
@@ -36,6 +43,7 @@ To regenerate the seed data:
 
 ```bash
 python3 data/gen_mock.py   # deterministic (seeded) -> data/mock_actions.json + mock_blocks.json
+python3 data/gen_todoist_mock.py   # analytics dataset -> data/mock_todoist.json
 ```
 
 If [`jsonschema`](https://pypi.org/project/jsonschema/) is installed, the
@@ -73,6 +81,31 @@ Scope: `https://www.googleapis.com/auth/calendar` (read/write) for two-way sync.
 | `GET /api/calendar/month?year=&month=` | B | 6×7 weekday-aligned grid for a month (month view) |
 | `GET /api/calendar/year?year=` | B | Per-month workload summary for a year (year view) |
 | `GET /api/dashboard/stats` | A/B/C | Aggregate statistics |
+| `GET /api/analytics/summary` | S3\* | Headline KPIs (completion rate, backlog, overdue, streak, cycle p50) |
+| `GET /api/analytics/performance` | S3\* | Personal Performance scorecard: 5 generic goals × 3 key results, live progress & status |
+| `GET /api/analytics/indices` | S3\* | Composite indices (Productivity / Backlog Pressure / Fragmentation) decomposed |
+| `GET /api/analytics/throughput` | S3\* | Daily created/completed series + 7-day rolling velocity |
+| `GET /api/analytics/trajectory` | S3\* | Cumulative created − completed backlog trajectory |
+| `GET /api/analytics/funnel` | S3\* | Completion funnel: created → due → completed → on-time |
+| `GET /api/analytics/rhythm` | S3\* | Weekly rhythm: per-weekday completion means + peak day |
+| `GET /api/analytics/hourly` | S3\* | Hour × weekday completion-density matrix + peak focus window |
+| `GET /api/analytics/monthly` | S3\* | Month-over-month comparison + trajectory verdicts |
+| `GET /api/analytics/cycletime` | S3\* | Cycle-time p50/p90 by priority |
+| `GET /api/analytics/priority-debt` | S3\* | Cumulative high-priority (P1+P2) open items over time |
+| `GET /api/analytics/markov` | S3\* | Markov transition matrix over item lifecycle states + empirical fate |
+| `GET /api/analytics/markov-evolution` | S3\* | Monthly sequence of matrices + key-transition time series |
+| `GET /api/analytics/projects` | S3\* | Per-project item/open/overdue/completed counts |
+| `GET /api/analytics/projects-intelligence` | S3\* | Per-project momentum: recent velocity vs baseline (heating/cooling) |
+| `GET /api/analytics/priority` | S3\* | Counts + completion rate by priority band |
+| `GET /api/analytics/labels` | S3\* | Top labels by items touched |
+| `GET /api/analytics/habits` | S3\* | Streak history + recurring-item consistency |
+| `GET /api/analytics/activity` | S3\* | Recent activity stream (timeline, grouped, session-detected) |
+| `GET /api/analytics/radar` | S3\* | This-period vs previous-period across 6 dimensions |
+| `GET /api/analytics/insights` | S3\* | Auto-generated plain-language findings |
+| `GET /api/analytics/heatmap` | S3\* | 365-day daily completion intensity |
+| `GET /api/analytics/reliability` | S3\* | Deadline adherence + overdue age buckets |
+| `GET /api/analytics/aging` | S3\* | Open backlog age histogram |
+| `GET /api/analytics/export` | S3\* | Full computed indicator payload (JSON download) |
 | `GET /api/calendar/google/status` | C | Mock / authorized / connected status |
 | `POST /api/calendar/google/auth` | C | Begin OAuth consent flow |
 | `GET /api/calendar/google/callback` | C | OAuth redirect endpoint |
@@ -92,13 +125,15 @@ Lucide icons (`<pw-icon>`), a command palette (`Ctrl/Cmd+K`), keyboard shortcuts
 
 ```
 pwos/
-├── server.py              # Flask API: actions, blocks, hierarchy, Google Calendar
+├── server.py              # Flask API: actions, blocks, hierarchy, Google Calendar, analytics
 ├── requirements.txt       # flask, flask-cors, google-auth-oauthlib, google-api-python-client
 ├── README.md              # this document
 ├── data/
 │   ├── mock_actions.json  # seed action constructs (conforms to schema.json)
 │   ├── mock_blocks.json   # seed calendar blocks
-│   └── gen_mock.py        # deterministic generator (+ optional schema validation)
+│   ├── mock_todoist.json  # synthetic app.todoist dataset (analytics dashboard)
+│   ├── gen_mock.py        # deterministic generator (+ optional schema validation)
+│   └── gen_todoist_mock.py # deterministic Todoist-style dataset generator
 ├── config/                # (gitignored) client_secret.json + token.json
 └── static/
     ├── index.html         # app-shell: header, sidebar, views, modals, command palette
@@ -107,12 +142,15 @@ pwos/
     └── js/
         ├── store.js       # data layer (localStorage + API)
         ├── icons.js       # self-hosted Lucide icon set (<pw-icon>)
+        ├── vendor/
+        │   └── echarts.min.js  # Apache ECharts (self-hosted, offline-first)
         ├── app.js         # router, view switching, keyboard, shared helpers
         ├── actions.js     # action list, filters, editor & detail modals
         ├── hierarchy.js   # objective tree (Component A)
         ├── calendar.js    # multi-view calendar (day/week/month/year) + block scheduling (Component B)
         ├── google.js      # Google Calendar status/auth/sync (Component C)
         ├── dashboard.js   # at-a-glance statistics
+        ├── analytics.js   # S3* analytics dashboard (KPIs, ECharts, heatmap)
         └── command-palette.js  # Ctrl/Cmd+K universal command interface
 ```
 
@@ -121,7 +159,8 @@ pwos/
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Role:** **Operations System** (VSM System 1 – Operations).
 - **Spec:** [`../spec/pwos/spec.md`](../spec/pwos/spec.md) ·
-  [`../spec/pwos/schema.json`](../spec/pwos/schema.json).
+  [`../spec/pwos/schema.json`](../spec/pwos/schema.json) ·
+  [`../spec/pwos/analytics.md`](../spec/pwos/analytics.md).
 - **Storage substrate:** [PRS](../prs/) — PWOS operates over PRS records; it is
   not a competing record store.
 - **Sibling sub-projects:** [PRS](../prs/), [PKTS](../pkts/), [PTOCS](../ptocs/), [PPS](../pps/).
@@ -129,6 +168,6 @@ pwos/
 
 ## References
 
-- [PWOS — spec](../spec/pwos/spec.md) · [schema](../spec/pwos/schema.json)
+- [PWOS — spec](../spec/pwos/spec.md) · [schema](../spec/pwos/schema.json) · [analytics](../spec/pwos/analytics.md)
 - [Agency — Execution Architecture](https://bremontix.xyz/lab/ar/Locus-Social-Realitatis/Onto/Guide/Agency/#execution-architecture)
 - [Google Calendar API](https://developers.google.com/calendar/api/v3/reference/events)
