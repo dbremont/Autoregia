@@ -14,6 +14,7 @@ index at the root.
     /ptocs/...   Personal Technical Object Catalog (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /pwos/...    Personal Work Organization System (System 1 — Operations)
+    /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
 
 Sub-systems are not independent apps: they are functional organs of one
 system, surfaced here through one router.
@@ -58,6 +59,7 @@ SUBSYSTEMS = [
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
     ("pwos", "Personal Work Organization System", "pwos/server.py"),
+    ("pras", "Personal Reflection & Adaptation System", "pras/server.py"),
 ]
 
 MOUNTS = {prefix: _load_app(f"{prefix}_server", rel)
@@ -86,6 +88,11 @@ def index():
 @app.route("/about.html")
 def about():
     return send_from_directory(ROOT, "about.html")
+
+
+@app.route("/docs.html")
+def docs():
+    return send_from_directory(ROOT, "docs.html")
 
 
 # ── WSGI dispatcher: mount each tool under /<prefix>/ ───────────────────────

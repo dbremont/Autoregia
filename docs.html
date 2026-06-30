@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Guide — Autoregia</title>
+  <style>
+    :root {
+      --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
+      --rule: #d8d0c4; --rule-soft: #e8e1d4; --parchment: #f7f3ea; --surface: #fffdf8; --surface-2: #f1ebde;
+      --accent: #7A1A2A; --gold: #b8893a; --gold-soft: #d4b87a;
+      --built: #3F6E50; --warn: #B4742A;
+      --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+      --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:880px;margin:0 auto;padding:0 28px}
+    a.back{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
+    a.back:hover{color:var(--accent)}
+    a.back::before{content:"\2190 "}
+    header.masthead{padding:24px 0 32px;text-align:center}
+    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:20px}
+    .eyebrow::before,.eyebrow::after{content:"—";margin:0 12px;color:var(--rule)}
+    h1.title{font-size:clamp(40px,6.5vw,60px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:20px}
+    h1.title em{font-style:italic;color:var(--accent)}
+    .lede{font-size:19px;color:var(--ink-soft);max-width:620px;margin:0 auto;font-style:italic;line-height:1.55}
+    .gold-rule{height:1px;background:var(--gold);width:64px;margin:32px auto;opacity:.7}
+
+    section{padding:8px 0 40px}
+    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:8px}
+    .section-title{font-size:27px;font-weight:400;letter-spacing:-.01em;text-align:center;margin-bottom:10px}
+    .section-sub{font-size:15px;color:var(--muted);text-align:center;margin-bottom:28px;font-style:italic;max-width:600px;margin-left:auto;margin-right:auto}
+    p.body{font-size:16.5px;color:var(--ink-soft);margin:14px auto;max-width:680px}
+
+    code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);padding:1px 5px;border-radius:3px;color:var(--accent)}
+    kbd{font-family:var(--mono);font-size:12px;background:linear-gradient(var(--surface),var(--surface-2));border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:2px 7px;color:var(--ink);white-space:nowrap}
+
+    /* numbered steps */
+    ol.steps{list-style:none;counter-reset:s;padding:0;margin:6px 0 4px}
+    ol.steps>li{counter-increment:s;position:relative;padding:0 0 14px 38px;color:var(--ink-soft);font-size:16px}
+    ol.steps>li::before{content:counter(s);position:absolute;left:0;top:-1px;width:25px;height:25px;border-radius:50%;background:var(--surface);border:1px solid var(--gold-soft);color:var(--gold);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+    ol.steps>li strong{color:var(--ink);font-weight:600}
+
+    /* tables */
+    table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0 4px}
+    table.t th,table.t td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+    table.t th{font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:2px solid var(--ink)}
+    table.t td.code{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap}
+    table.t td.kbd-cell{white-space:nowrap}
+
+    /* callouts */
+    .callout{background:var(--surface-2);border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 6px 6px 0;margin:18px 0;font-size:14.5px;color:var(--ink-soft)}
+    .callout.warn{border-left-color:var(--warn);background:#fbf1e3}
+    .callout strong{color:var(--ink);font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;font-weight:700}
+
+    /* mini sub-label inside a tool guide */
+    h3.mini{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:22px 0 8px}
+
+    /* tool guide block */
+    article.tool{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:0;margin:0 0 22px;overflow:hidden;scroll-margin-top:24px}
+    .tool-head{display:flex;align-items:baseline;gap:16px;padding:22px 26px 16px;border-bottom:1px solid var(--rule-soft)}
+    .tool-code{font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:600;letter-spacing:.05em}
+    .tool-name{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--ink);letter-spacing:-.01em;flex:1}
+    .tool-open{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;font-weight:600;border:1px solid var(--gold-soft);padding:5px 12px;border-radius:99px;transition:background .15s,color .15s;white-space:nowrap}
+    .tool-open:hover{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+    .tool-body{padding:6px 26px 24px}
+    .tool-tag{font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+
+    /* jump cards */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:4px}
+    a.jump{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;transition:transform .16s,box-shadow .16s,border-color .16s}
+    a.jump:hover{transform:translateY(-2px);box-shadow:0 12px 24px -18px rgba(28,25,22,.35);border-color:var(--gold-soft)}
+    a.jump .k{font-family:var(--mono);font-size:11px;color:var(--gold);display:block;margin-bottom:4px}
+    a.jump .n{font-size:15px;font-weight:500;color:var(--ink)}
+    a.jump .d{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+    footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
+    footer .footer-links{margin-bottom:14px}
+    footer .footer-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin:0 12px;transition:color .18s}
+    footer .footer-links a:hover{color:var(--accent)}
+    footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+    @media (max-width:560px){header.masthead{padding:16px 0 28px}.tool-head{flex-wrap:wrap}.lede{font-size:17px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">Index</a>
+  <header class="masthead">
+    <div class="eyebrow">User Guide</div>
+    <h1 class="title">Docs</h1>
+    <p class="lede">How to use Autoregia's six tools — the Personal Recording System, Keyword Tracking System, Technical Object Catalog, Policy System, Work Organization System, and Reflection &amp; Adaptation System.</p>
+    <div class="gold-rule"></div>
+  </header>
+
+  <!-- ═══ The Tools ═══ -->
+  <section>
+    <div class="section-label">The Tools</div>
+    <h2 class="section-title">Guides</h2>
+    <p class="section-sub">Jump to a tool, or read through. Every tool shares the same calm interface and command palette.</p>
+    <div class="grid">
+      <a class="jump" href="#prs"><span class="k">PRS · /prs/</span><span class="n">Recording</span><span class="d">Capture &amp; find records</span></a>
+      <a class="jump" href="#pkts"><span class="k">PKTS · /pkts/</span><span class="n">Tracking</span><span class="d">Keystroke telemetry</span></a>
+      <a class="jump" href="#ptocs"><span class="k">PTOCS · /ptocs/</span><span class="n">Catalog</span><span class="d">Your tools &amp; capabilities</span></a>
+      <a class="jump" href="#pps"><span class="k">PPS · /pps/</span><span class="n">Policy</span><span class="d">Read &amp; search policies</span></a>
+      <a class="jump" href="#pwos"><span class="k">PWOS · /pwos/</span><span class="n">Work</span><span class="d">Organize &amp; schedule</span></a>
+      <a class="jump" href="#pras"><span class="k">PRAS · /pras/</span><span class="n">Reflection</span><span class="d">Deliberations &amp; adaptation</span></a>
+    </div>
+  </section>
+
+  <!-- PRS -->
+  <article class="tool" id="prs">
+    <div class="tool-head">
+      <span class="tool-code">PRS</span>
+      <span class="tool-name">Personal Recording System</span>
+      <a class="tool-open" href="http://localhost:8080/prs/">Open /prs/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Perception · capture &amp; retrieve</div>
+      <p class="body" style="margin:8px 0 0">Your personal archive: capture anything worth remembering — an idea, a decision, a task, an observation — then find it again through search, timelines, and graphs.</p>
+
+      <h3 class="mini">Capture a record</h3>
+      <ol class="steps">
+        <li>Press <kbd>N</kbd> (or click <strong>New Record</strong>) for the full editor, or <kbd>Ctrl</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd> for quick capture.</li>
+        <li>In the editor, enter <strong>Content</strong> (required), then choose <strong>Type</strong>, <strong>Status</strong>, <strong>Priority</strong>, <strong>Domain</strong>, and add <strong>Tags</strong>. Save.</li>
+        <li>In quick capture, the first line becomes the title. Prefix a line to auto-classify it: <code>TODO</code>→Task, <code>DECISION</code>→Decision, <code>GOAL</code>→Goal, <code>?</code>→Question; otherwise it becomes an Idea.</li>
+      </ol>
+
+      <h3 class="mini">Find things</h3>
+      <ol class="steps">
+        <li>Use the header <strong>Search</strong> — it matches content, notes, tags, subject, domain, and type.</li>
+        <li>Browse by view from the sidebar: <strong>Dashboard</strong>, <strong>All Records</strong>, <strong>Timeline</strong>, <strong>Activity Heatmap</strong>, <strong>Relationship Graph</strong>, or <strong>By Type</strong>.</li>
+        <li>Filter <strong>All Records</strong> by Status, Priority, or Type with the dropdowns.</li>
+      </ol>
+
+      <h3 class="mini">Working memory</h3>
+      <p class="body" style="margin:6px 0">Press <kbd>Ctrl</kbd>+<kbd>⇧</kbd>+<kbd>W</kbd> to open a scratchpad of todos and notes. Click <strong>Generate Log Record</strong> to fold what you did into an Observation record.</p>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Command palette</td></tr>
+          <tr><td class="kbd-cell"><kbd>N</kbd></td><td>New record</td></tr>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture</td></tr>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>W</kbd></td><td>Working memory</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        New records are saved in your browser (localStorage), not yet to the server — clearing browser storage loses them. The workspace ships with 30 sample records. Editing currently creates a new copy rather than updating in place, and there is no delete control in the UI.
+      </div>
+    </div>
+  </article>
+
+  <!-- PKTS -->
+  <article class="tool" id="pkts">
+    <div class="tool-head">
+      <span class="tool-code">PKTS</span>
+      <span class="tool-name">Personal Keyword Tracking System</span>
+      <a class="tool-open" href="http://localhost:8080/pkts/">Open /pkts/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Audit · read-only telemetry</div>
+      <p class="body" style="margin:8px 0 0">A telemetry lab: it analyzes a dataset of keystroke events to surface your typing rhythm, cognitive-load signals, and workflow patterns.</p>
+
+      <h3 class="mini">Read the analysis</h3>
+      <ol class="steps">
+        <li>Land on <strong>Overview</strong> for volume, speed, consistency, and fatigue at a glance.</li>
+        <li>Work through the tabs: <strong>Behavioral Signature</strong> (your typing fingerprint &amp; ergonomics), <strong>Temporal Dynamics</strong> (timing structure), <strong>Composition Process</strong> (how you draft), <strong>Cognitive State</strong> (load, fatigue, flow), <strong>Workflow &amp; Expertise</strong> (editing-state mining), and <strong>Raw Telemetry</strong> (the source rows).</li>
+        <li>On <strong>Raw Telemetry</strong>, use the filter box to narrow events by key, session, or key code.</li>
+      </ol>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Command palette</td></tr>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture (notes are not persisted)</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        Despite the name, the current client analyzes keyboard telemetry (not keywords or attention). It runs entirely on bundled sample data (11 sessions, 1,143 events) and is read-only — there is no live capture yet.
+      </div>
+    </div>
+  </article>
+
+  <!-- PTOCS -->
+  <article class="tool" id="ptocs">
+    <div class="tool-head">
+      <span class="tool-code">PTOCS</span>
+      <span class="tool-name">Personal Technical Object Catalog System</span>
+      <a class="tool-open" href="http://localhost:8080/ptocs/">Open /ptocs/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Intelligence · catalog &amp; analyze</div>
+      <p class="body" style="margin:8px 0 0">A catalog of everything you rely on to work — software, services, hardware, references, capabilities — with search, faceted browsing, a relationship graph, and a statistical overlay that flags gaps and risks.</p>
+
+      <h3 class="mini">Add an object</h3>
+      <ol class="steps">
+        <li>Press <kbd>N</kbd> (or <strong>New Entry</strong>).</li>
+        <li>Enter <strong>Name</strong> and pick an <strong>Object Kind</strong> — e.g. <code>software_tool</code>, <code>service_platform</code>, <code>infrastructure</code>, <code>hardware_device</code>, <code>reference_artifact</code>, <code>capability_skill</code>.</li>
+        <li>Fill <strong>Category</strong>, <strong>Domain</strong>, <strong>Status</strong>, <strong>Summary</strong>, and vendor/cost as relevant. Save.</li>
+      </ol>
+
+      <h3 class="mini">Explore</h3>
+      <ol class="steps">
+        <li>Open <strong>Browse</strong> to pivot by kind, domain, status, hosting, and more; click any facet to drill in.</li>
+        <li>Open the <strong>Relationship Graph</strong> to see how objects connect.</li>
+        <li>Open <strong>Statistical Overlay</strong> for findings: single points of failure, redundancy, stale entries, vendor concentration, capability gaps, and cost exposure.</li>
+      </ol>
+
+      <h3 class="mini">Maintain</h3>
+      <p class="body" style="margin:6px 0">Open any entry to <strong>Edit</strong>, <strong>Pin</strong>, <strong>Retire</strong>, or <strong>Delete</strong> it, or append to its annotation log.</p>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Command palette</td></tr>
+          <tr><td class="kbd-cell"><kbd>N</kbd></td><td>New entry</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        Ships with 23 sample entries. Relationships can't be created from the UI yet (only viewed) — they come from seed data, import, or the API.
+      </div>
+    </div>
+  </article>
+
+  <!-- PPS -->
+  <article class="tool" id="pps">
+    <div class="tool-head">
+      <span class="tool-code">PPS</span>
+      <span class="tool-name">Personal Policy System</span>
+      <a class="tool-open" href="http://localhost:8080/pps/">Open /pps/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Policy · read &amp; search</div>
+      <p class="body" style="margin:8px 0 0">Your policy corpus: a charter, principles, values, commitments, and domain policies (health, learning, conduct) — browsed and searched from one page.</p>
+
+      <h3 class="mini">Read</h3>
+      <ol class="steps">
+        <li>The <strong>Charter</strong> is pinned as the apex document — start there for identity and purpose.</li>
+        <li>All other policy cards are grouped by domain below it. Click any card to read it.</li>
+      </ol>
+
+      <h3 class="mini">Search</h3>
+      <ol class="steps">
+        <li>Click the search box (or press <kbd>/</kbd>).</li>
+        <li>Type a word; matches appear with highlighted snippets. It's a simple word search — no boolean or field syntax.</li>
+      </ol>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td></tr>
+          <tr><td class="kbd-cell"><kbd>Enter</kbd></td><td>Run search</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Clear search</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        Read-only. To add a policy, drop an <code>.html</code> file into <code>pps/policies/</code> and restart the server — the index is rebuilt at startup.
+      </div>
+    </div>
+  </article>
+
+  <!-- PWOS -->
+  <article class="tool" id="pwos">
+    <div class="tool-head">
+      <span class="tool-code">PWOS</span>
+      <span class="tool-name">Personal Work Organization System</span>
+      <a class="tool-open" href="http://localhost:8080/pwos/">Open /pwos/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Operations · plan, schedule, sync</div>
+      <p class="body" style="margin:8px 0 0">Organize your work: action constructs (objectives → projects → tasks), a calendar with conflict detection, Google Calendar sync, and a performance scorecard.</p>
+
+      <h3 class="mini">Plan your work</h3>
+      <ol class="steps">
+        <li>Press <kbd>N</kbd> (in Actions) to create an action. Pick a <strong>Kind</strong> — Objective, Initiative, Project, Task, Routine, or Commitment.</li>
+        <li>Set <strong>Effort</strong>, <strong>Confidence</strong>, and the <strong>Capacity</strong> it draws on; slot it under an Objective / Initiative / Project.</li>
+        <li>Open <strong>Action Hierarchy</strong> to see the tree, or filter Actions by Kind, scheduling state, pinned, or blocked.</li>
+      </ol>
+
+      <h3 class="mini">Schedule it</h3>
+      <ol class="steps">
+        <li>Open <strong>Calendar</strong> and choose <strong>Day</strong> / <strong>Week</strong> / <strong>Month</strong> / <strong>Year</strong>.</li>
+        <li>Click <strong>Schedule Block</strong>, pick an action (Task, Routine, or Commitment), set start/end times, and save. Overlapping blocks are flagged as conflicts.</li>
+      </ol>
+
+      <h3 class="mini">Track time (work sessions)</h3>
+      <ol class="steps">
+        <li>Use the header <strong>focus bar</strong>: type what you're working on and click <strong>Start</strong> (or press <kbd>Space</kbd>). The timer runs live; click <strong>Stop</strong> (or <kbd>Space</kbd> again) and add a closing note. An action link is optional.</li>
+        <li>Open <strong>Sessions</strong> to see every session grouped by day, with totals. Filter by action or status, edit any entry, or <strong>Add manually</strong> to backfill a session.</li>
+        <li>Only one session runs at a time — starting a new one stops the previous (with a prompt). Sessions are the actual counterpart to planned blocks; the gap between them is the feedback signal.</li>
+      </ol>
+
+      <h3 class="mini">Sync Google Calendar</h3>
+      <ol class="steps">
+        <li>Open the <strong>Google Calendar</strong> view and click <strong>Connect</strong>; complete Google's consent screen.</li>
+        <li>Click <strong>Sync</strong> to pull remote events and push your blocks. Without Google credentials it runs in mock mode (a no-op).</li>
+      </ol>
+
+      <h3 class="mini">Read your performance</h3>
+      <p class="body" style="margin:6px 0">Open <strong>Analytics</strong> for the performance scorecard and roughly twenty indicators across flow, backlog, temporal rhythm, and risk.</p>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Command palette</td></tr>
+          <tr><td class="kbd-cell"><kbd>N</kbd></td><td>New action (in Actions view)</td></tr>
+          <tr><td class="kbd-cell"><kbd>Space</kbd></td><td>Start / stop the timer (focus bar)</td></tr>
+          <tr><td class="kbd-cell"><kbd>F1</kbd> / <kbd>?</kbd></td><td>Help</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        Analytics currently runs over a synthetic dataset, not your PWOS data. Conflict detection covers time overlap only (no capacity checks). Live Google OAuth requires running PWOS standalone on port 5005, because the redirect URI is hardcoded — in unified mode it stays in mock.
+      </div>
+    </div>
+  </article>
+
+  <!-- PRAS -->
+  <article class="tool" id="pras">
+    <div class="tool-head">
+      <span class="tool-code">PRAS</span>
+      <span class="tool-name">Personal Reflection &amp; Adaptation System</span>
+      <a class="tool-open" href="http://localhost:8080/pras/">Open /pras/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Feedback · reflect &amp; adapt</div>
+      <p class="body" style="margin:8px 0 0">A corpus of <strong>deliberations</strong> — the structured reflections that observe what happened, make sense of the gap between intention and outcome, and mature into adaptations that feed policy and the rest of the loop.</p>
+
+      <h3 class="mini">Read &amp; browse</h3>
+      <ol class="steps">
+        <li>The <strong>Reflection Practice</strong> is pinned as the apex document — start there for the method that governs every deliberation.</li>
+        <li>Below it, all deliberations are grouped by domain, each shown with its <strong>type</strong>, <strong>status</strong>, and date. Click any card to read it.</li>
+        <li>Narrow the index with the <strong>Status</strong> (open / concluded / enacted / superseded) and <strong>Type</strong> (review / deviation / retrospective / hypothesis / decision-in-formation) filters.</li>
+      </ol>
+
+      <h3 class="mini">Search</h3>
+      <ol class="steps">
+        <li>Click the search box (or press <kbd>/</kbd>).</li>
+        <li>Type a word; matches appear with highlighted snippets, ranked by field. Simple word search — no boolean or field syntax.</li>
+      </ol>
+
+      <h3 class="mini">The deliberation arc &amp; lifecycle</h3>
+      <p class="body" style="margin:6px 0">Each deliberation follows one movement: <strong>observation</strong> → <strong>deliberation</strong> → <strong>adaptation</strong>. It matures along <code>open → concluded → enacted</code> (or <code>superseded</code>). The <em>concluded → enacted</em> step is exactly where a reflection <strong>feeds the Policy System</strong> and the rest of the loop — the adaptation declares its destination (PPS, PWOS, PRS, PTOCS).</p>
+
+      <h3 class="mini">Shortcuts</h3>
+      <table class="t">
+        <tbody>
+          <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td></tr>
+          <tr><td class="kbd-cell"><kbd>Enter</kbd></td><td>Run search</td></tr>
+          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Clear search</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Prototype note</strong>
+        Read / browse / search. To add a deliberation, drop an <code>.html</code> file (with <code>pra-*</code> meta tags) into <code>pras/deliberations/</code> and restart — the index rebuilds at startup. Lifecycle transitions are edits to a document's metadata; enactment into PPS / PWOS is a manual cross-link for now.
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ Shared shortcuts ═══ -->
+  <section>
+    <div class="section-label">Conventions</div>
+    <h2 class="section-title">Shared Keyboard Reference</h2>
+    <p class="section-sub">The same grammar across every tool.</p>
+    <table class="t">
+      <thead><tr><th>Shortcut</th><th>Action</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Open the command palette</td><td>Every tool</td></tr>
+        <tr><td class="kbd-cell"><kbd>N</kbd></td><td>Create the primary entity (record / entry / action)</td><td>PRS · PTOCS · PWOS</td></tr>
+        <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture / scratchpad</td><td>PRS · PKTS</td></tr>
+        <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td><td>PPS · PRAS</td></tr>
+        <tr><td class="kbd-cell"><kbd>F1</kbd> / <kbd>?</kbd></td><td>Help</td><td>PWOS</td></tr>
+        <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog or palette</td><td>Every tool</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══ Status ═══ -->
+  <section>
+    <div class="section-label">Honest Status</div>
+    <h2 class="section-title">Work in Progress</h2>
+    <p class="body">Autoregia is a set of working prototypes of a larger control loop. Each tool stands on its own, but they are not yet wired together: no tool calls another, and the loop does not yet close. Treat the per-tool notes above as the source of truth for what works today.</p>
+    <div class="callout">
+      <strong>For the technical docs</strong>
+      Conceptual foundations, data models, and schemas live in the <code>spec/</code> directory. See <a href="spec/README.md" style="color:var(--accent)">spec/README.md</a> for the index, and <a href="todo.html" style="color:var(--accent)">Closing the Loop</a> for the roadmap that connects these prototypes into one self-regulating system.
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Index</a>
+      <a href="about.html">About</a>
+      <a href="todo.html">Work Map</a>
+    </div>
+    <span class="mono">Autoregia · User Guide</span>
+  </footer>
+</div>
+</body>
+</html>
