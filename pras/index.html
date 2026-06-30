@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PRAS index metadata (consumed by the search server) -->
+  <meta name="pra-title" content="Personal Reflection & Adaptation System — Index">
+  <meta name="pra-summary" content="The main entry: the reflection practice that governs the corpus, plus search, filters, and an index of all deliberations.">
+  <meta name="pra-domain" content="Index">
+  <meta name="pra-type" content="index">
+  <meta name="pra-status" content="standing">
+  <meta name="pra-tags" content="index, practice, main, search, reflection, deliberation, pras">
+  <title>PRAS — Personal Reflection &amp; Adaptation System</title>
+  <link rel="stylesheet" href="/pras/static/css/deliberation.css">
+</head>
+<body>
+  <div class="index-shell">
+
+    <!-- ═══ Masthead ═══ -->
+    <header class="index-masthead">
+      <div class="index-eyebrow">VSM System 4 — Intelligence · Feedback</div>
+      <h1 class="index-title">Personal <em>Reflection</em> &amp; Adaptation System</h1>
+      <p class="index-lede">A corpus of deliberations — the structured reflections that observe what happened, make sense of the gap, and mature into adaptations that feed policy and the rest of the loop.</p>
+      <div class="gold-rule"></div>
+    </header>
+
+    <!-- ═══ Search ═══ -->
+    <div class="search-wrap">
+      <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="searchInput" class="search-box" placeholder="Search the deliberation corpus…  ( / )">
+    </div>
+    <div class="search-results" id="searchResults"></div>
+
+    <!-- ═══ Filters ═══ -->
+    <div class="filters" id="docFilters" style="margin-top:18px">
+      <select id="filterStatus" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="open">Open</option>
+        <option value="concluded">Concluded</option>
+        <option value="enacted">Enacted</option>
+        <option value="superseded">Superseded</option>
+      </select>
+      <select id="filterType" aria-label="Filter by type">
+        <option value="">All types</option>
+        <option value="review">Review</option>
+        <option value="deviation">Deviation</option>
+        <option value="retrospective">Retrospective</option>
+        <option value="hypothesis">Hypothesis</option>
+        <option value="decision-in-formation">Decision in formation</option>
+      </select>
+    </div>
+
+    <!-- ═══ Main Entry → Reflection Practice ═══ -->
+    <div id="docIndex">
+      <div class="section-label">Main Entry</div>
+      <a class="practice-card" id="practiceCard" href="/pras/deliberations/practice.html">
+        <span class="practice-tag">★ Apex Document</span>
+        <h2>Reflection Practice</h2>
+        <p>The apex of the system: the standing method that governs how deliberations are conducted and how they mature into adaptations that feed the policy system and the loop.</p>
+        <span class="practice-arrow">Open the Practice →</span>
+      </a>
+
+      <div class="section-label">All Deliberations</div>
+      <div id="domainGroups"></div>
+    </div>
+
+    <footer class="index-footer">
+      <span class="mono">Personal Reflection &amp; Adaptation System · Autoregia · VSM System 4</span>
+    </footer>
+  </div>
+
+  <script src="/pras/static/js/search.js"></script>
+</body>
+</html>

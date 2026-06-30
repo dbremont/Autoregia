@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="pra-title" content="Retrospective — building PRAS">
+  <meta name="pra-summary" content="Retrospective on constructing the reflection system itself: what the documents-as-data model bought, and the cost of read-only lifecycle.">
+  <meta name="pra-domain" content="Work">
+  <meta name="pra-type" content="retrospective">
+  <meta name="pra-status" content="concluded">
+  <meta name="pra-date" content="2026-06-30">
+  <meta name="pra-feeds" content="prs">
+  <meta name="pra-tags" content="retrospective, pras, prototype, documents-as-data, build">
+  <title>Retrospective — building PRAS — PRAS</title>
+  <link rel="stylesheet" href="/pras/static/css/deliberation.css">
+</head>
+<body>
+  <div class="delib-page">
+    <header class="delib-header">
+      <div class="delib-breadcrumb"><a href="/pras/">← Deliberation Index</a> · <span>Retrospective</span></div>
+      <div class="delib-eyebrow">Retrospective · concluded</div>
+      <h1 class="delib-title">Retrospective — building PRAS</h1>
+      <div class="delib-meta">Work · retrospective · <em>concluded</em> · 2026-06-30 · feeds: prs</div>
+      <div class="gold-rule"></div>
+    </header>
+
+    <article class="delib-body">
+      <p class="lede">
+        A look back at constructing this system — the first piece of the loop's feedback arc to
+        be materialized as a tool. The model worked; the lifecycle is deliberately incomplete.
+      </p>
+
+      <h2><span class="arc">Observation</span> What was built</h2>
+      <p>
+        PRAS was implemented as a corpus of HTML deliberations indexed by a small server, on the
+        same documents-as-data model as the Policy System. The deliberation — observation →
+        deliberation → adaptation — is the atomic unit; the lifecycle open → concluded → enacted
+        is expressed in document metadata.
+      </p>
+
+      <h2><span class="arc">Deliberation</span> What the model bought</h2>
+      <ul>
+        <li><strong>Traceability.</strong> Every change now has reasoning attached to it, dated and reviewable — adaptation instead of drift.</li>
+        <li><strong>Decoupling.</strong> Deliberations declare their destination (PPS, PWOS, …) without hard-coupling the systems. The "feeds the policy system" relationship is a field, not a wire.</li>
+        <li><strong>Honesty.</strong> The lifecycle forces a deliberation to close by enacting <em>or</em> explicitly declining — drift has to be named.</li>
+      </ul>
+
+      <h2><span class="arc">Adaptation</span> The cost, and what is next</h2>
+      <p>
+        The prototype is read / browse / search. Lifecycle transitions are edits to a document's
+        metadata, and enactment into PPS or PWOS is a manual cross-link, not an event. The cost
+        is that the loop does not yet <em>close itself</em>: a concluded deliberation does not
+        emit anything another system can hear.
+      </p>
+
+      <div class="adaptation">
+        <span class="adapt-label">Adaptation → concluded (filed; future work named)</span>
+        <p>
+          The next step is to make enactment an event on the Personal Event Bus
+          (<code>AdaptationEnacted</code>) so PPS, PWOS, PRS, and PTOCS can react. Until then,
+          this retrospective is filed as a record and the gap is recorded in the work map.
+        </p>
+        <div class="feeds">
+          <span class="feed-badge">PRS · record</span>
+          <span class="feed-badge" style="opacity:.55">future: ISCB</span>
+        </div>
+      </div>
+    </article>
+
+    <footer class="delib-footer">
+      <a href="/pras/deliberations/practice.html">↑ Governed by the Reflection Practice</a>
+      <span class="delib-colophon">PRAS · retrospective · concluded</span>
+    </footer>
+  </div>
+</body>
+</html>
