@@ -27,6 +27,12 @@ the **action** relevant for effective agency. These include:
 - **External Platform State** — the calendar and task systems the agent operates
   through (Google Calendar, and future platforms), kept synchronized with the
   internal model.
+- **Execution Actuals** — the real counterpart to the plan: **work sessions**
+  that record what was actually done and for how long. A session stands on its
+  own (a description + a time span); an action and a block are optional links.
+  The gap between a planned *block* (intended) and the *sessions* (actual) is the
+  deviation signal that closes the loop and feeds Audit (S3\*) and Adaptation
+  (PRAS).
 
 By preserving these across time, a PWOS functions as an externalized **operative
 substrate**, reducing action blindness, improving throughput, and enabling more
@@ -51,6 +57,12 @@ PWOS — Personal Work Organization System  (VSM System 1 – Operations)
  |     \_ Concrete temporal scheduling: deadlines -> dated blocks;
  |        conflict detection; workload vs. capacity; recurrence expansion.
  |
+ +-- [D] Execution & Actuals  — the work-session system
+ |     \_ Start/stop timer + manual entry; one running session at a time;
+ |        a session stands on its own (description + time); action/block are
+ |        optional links. Where [B] reasons over intended time, [D] records
+ |        actual time.
+ |
  +-- [C] Platforms Integration
       \_ Adapters that normalize external systems into PWOS terms.
          Primary: Google Calendar (OAuth 2.0, two-way sync).
@@ -61,7 +73,8 @@ PWOS — Personal Work Organization System  (VSM System 1 – Operations)
 | --- | --- | --- | --- |
 | **[A] Work Organization & Registration** | The action hierarchy — "what to do" | Action constructs, dependency graph, effort estimates, logical ordering | The underlying record store (PRS owns that) |
 | **[B] Work Calendarization** | Temporal coordination — "when, against the real calendar" | Scheduled blocks, recurrence expansion, conflict detection, workload | The authoritative external calendar (the platform owns that; this mirrors it) |
-| **[C] Platforms Integration** | The boundary with the outside world — "how it connects" | Adapters, credentials, sync model, field mapping | The semantics of action (A) or time (B) |
+| **[D] Execution & Actuals** | The actuals layer — "what really happened" | Work sessions (start/stop, actual effort, outcomes), the block↔session deviation | The durable execution *event stream* (that remains PRS-backed; PWOS holds the operational session object) |
+| **[C] Platforms Integration** | The boundary with the outside world — "how it connects" | Adapters, credentials, sync model, field mapping | The semantics of action (A), time (B), or actuals (D) |
 
 > [B] and [C] together realize what the original PWOS formulation called *"Work
 > Calendarization"*: [C] brings the platform's calendar in, [B] reasons over it.
@@ -160,6 +173,10 @@ Conversely, a construct should generally not be registered when it is:
 
 > The execution log is *not* a PWOS-owned store. It is the set of PRS records that
 > reference the action construct. PWOS reads them; Audit (S3*) reasons over them.
+> The operational object a user interacts with live — the **work session** (start/
+> stop, actual effort, outcome) — *is* a PWOS extension entity (Component [D]),
+> like a block; on completion a session may emit/link a PRS record, so the durable
+> trace remains PRS-backed for audit while the live object stays operable.
 
 ### Action Construct Link
 
@@ -260,6 +277,52 @@ Conversely, a construct should generally not be registered when it is:
 > [B] is *not* an authoritative calendar store. Authoritative temporal truth for
 > external commitments lives in the platform (Google Calendar). [B] mirrors and
 > reasons; [C] keeps the mirror in sync.
+
+## Execution & Actuals (Component D)
+
+> Component [D] is the **actuals layer** inside PWOS. Where [B] reasons over
+> *intended* time (blocks), [D] records *actual* time (work sessions). It is what
+> turns PWOS from an open-loop planner into a closed-loop operations system: the
+> gap between a block and the sessions that realize it is the deviation signal
+> that Audit (S3\*) reasons over and Adaptation (PRAS) reflects on.
+
+### Work Session Model
+
+> A **work session** is the atomic execution unit: a time-tracker entry — a span
+> of real work described in free text, with an optional link to an action (and
+> optionally to the block it realizes). It does not require an action; it stands
+> on its description and its time span.
+
+| Field | Description | Example |
+| --- | --- | --- |
+| **Session Id** | Unique identifier. | `SES-2026-00042`. |
+| **Description** | The session's title — what was worked on. Primary field. | "Component D backend." |
+| **Started At / Ended At** | The real span. `ended_at` is null while a timer runs. | ISO 8601 timestamps. |
+| **Status** | `active` (running), `completed`, `abandoned`. | `completed`. |
+| **Action Id** | *Optional* link to an action (FK to `ACT-`). | `ACT-2026-00009`. |
+| **Block Id** | *Optional* link to the planned block this session realizes (FK to `BLK-`). | `BLK-2026-00002`. |
+| **Capacity** | Actual `{resource, band}` consumed; defaults from the action's profile when linked. | `{resource: focus, band: deep}`. |
+| **Source** | `timer`, `manual`, or `platform`. | `timer`. |
+
+### Functionality
+
+- **Timer** — a persistent focus bar holds the single running session; start
+  from a free-text "what are you working on?" (an action link is optional), stop
+  with an optional closing note. One session at a time (starting a new one stops
+  the previous).
+- **Manual entry** — backfill a session with explicit start/end times.
+- **Actuals vs Estimates** — sum session durations per action and compare to its
+  `effort_estimate`; the accuracy ratio calibrates future planning.
+- **Totals** — aggregate actual time by day / action / project over a window
+  (the S1↔S3 measured-throughput channel).
+- **Deviation** — when `block_id` is set, compare the session's real duration to
+  the block's planned duration; the delta is the feedback signal.
+
+> [D] does not itself own the durable execution *event stream* — that remains
+> PRS-backed (the spec's "Execution Log"). It owns the operational session object
+> the agent starts and stops. On completion a session may link a PRS record so
+> the trace is durable; a future `AdaptationEnacted`/`ExecutionFinished` event on
+> the [ISCB](../iscb/spec.md) bus will carry enactment across systems.
 
 ## Platforms Integration (Component C)
 
@@ -371,6 +434,11 @@ objects, normalize to PWOS terms, push local changes, pull remote changes*.
   - Conflict detection (overlap, overload, policy violation).
   - Workload view (effort per period vs. measured throughput).
   - Block lifecycle: tentative → confirmed → completed.
+- **Execution & Actuals ([D])**
+  - Work sessions: timer start/stop (one running session) and manual entry.
+  - Actuals vs estimates per action; totals by day / action / project.
+  - Block↔session deviation (the feedback signal to S3\* / PRAS).
+  - Focus bar (live timer) in the header; session log grouped by day.
 - **Platforms Integration ([C])**
   - Google Calendar: OAuth consent, calendar listing/selection, two-way sync
     (incremental polling), create/update/delete with round-trip field mapping,

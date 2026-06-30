@@ -12,6 +12,8 @@
     "capacityResourceEnum": { "type": "string", "enum": ["time", "focus", "energy", "attention"] },
     "capacityBandEnum": { "type": "string", "enum": ["deep", "shallow", "low"] },
     "blockStatusEnum": { "type": "string", "enum": ["tentative", "confirmed", "cancelled", "completed"] },
+    "sessionStatusEnum": { "type": "string", "enum": ["active", "completed", "abandoned"] },
+    "sessionSourceEnum": { "type": "string", "enum": ["timer", "manual", "platform"] },
     "syncStateEnum": { "type": "string", "enum": ["synced", "dirty-local", "dirty-remote", "conflict"] },
     "iso8601Timestamp": { "type": "string", "format": "date-time" },
     "dependencyKindEnum": {
@@ -124,6 +126,24 @@
         "status": { "$ref": "#/$defs/blockStatusEnum" },
         "title": { "type": ["string", "null"] },
         "domain": { "type": ["string", "null"] }
+      }
+    },
+    "workSession": {
+      "$comment": "Atomic execution unit produced by Component D: the actuals counterpart of a calendar block — what was really done, for how long, against which action (and optionally the block it realized).",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "started_at", "status", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "Session id, e.g. 'SES-2026-00042'." },
+        "action_id": { "type": ["string", "null"], "description": "Optional link to an action construct (FK to ACT-). A session stands on its own (description + time); the action is an optional association." },
+        "block_id": { "type": ["string", "null"], "description": "Optional link to the planned block this session realizes (FK to BLK-). When set, the block↔session gap is a deviation signal." },
+        "description": { "type": "string", "default": "", "description": "The session's title — what was worked on. Primary field." },
+        "started_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "ended_at": { "oneOf": [{ "$ref": "#/$defs/iso8601Timestamp" }, { "type": "null" }], "description": "null while a timer is running." },
+        "status": { "$ref": "#/$defs/sessionStatusEnum" },
+        "capacity": { "oneOf": [{ "$ref": "#/$defs/capacityProfile" }, { "type": "null" }], "description": "Actual capacity consumed; defaults from the action's capacity_profile." },
+        "source": { "$ref": "#/$defs/sessionSourceEnum" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
       }
     }
   }

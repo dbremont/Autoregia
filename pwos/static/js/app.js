@@ -34,7 +34,8 @@ PW.init = async function () {
   this.setupHeaderButtons();
   this.renderKindNav();
   this.refreshGoogleStatus();
-  PW.Store.subscribe(() => { this.renderKindNav(); });
+  PW.Session.renderTimer();
+  PW.Store.subscribe(() => { this.renderKindNav(); PW.Session.renderTimer(); });
   this.navigate(this.getHashView() || 'dashboard');
 };
 
@@ -55,11 +56,13 @@ PW.navigate = function (view) {
   if (active) active.classList.add('active');
   const c = document.getElementById('appContent');
   const views = { dashboard: 'Dashboard', actions: 'Actions', hierarchy: 'Hierarchy',
-                  calendar: 'Calendar', google: 'Google', analytics: 'Analytics', export: 'Export' };
+                  calendar: 'Calendar', sessions: 'Sessions', google: 'Google',
+                  analytics: 'Analytics', export: 'Export' };
   if (view === 'dashboard') c.innerHTML = PW.DashboardView();
   else if (view === 'actions') c.innerHTML = PW.ActionsView();
   else if (view === 'hierarchy') { c.innerHTML = PW.HierarchyView(); PW.renderHierarchy(); }
   else if (view === 'calendar') { c.innerHTML = PW.CalendarView(); PW.Calendar.bind(); }
+  else if (view === 'sessions') { c.innerHTML = PW.SessionsView(); PW.bindSessions(); }
   else if (view === 'google') { c.innerHTML = PW.GoogleView(); PW.Google.bind(); }
   else if (view === 'analytics') { c.innerHTML = PW.AnalyticsView(); PW.Analytics.bind(); }
   else if (view === 'export') c.innerHTML = PW.ExportView();
@@ -81,10 +84,17 @@ PW.setupKeyboard = function () {
     if (meta && e.key.toLowerCase() === 'k') { e.preventDefault(); PW.CommandPalette.toggle(); }
     else if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); PW.Action.openEditor(); }
     else if (e.key === 'n' && !isInputFocused() && PW.currentView === 'actions') { PW.Action.openEditor(); }
+    // Space — toggle the timer (open start popover / stop running)
+    else if (e.key === ' ' && !isInputFocused()) {
+      e.preventDefault();
+      const active = PW.Store.getActiveSession();
+      if (active) PW.Session.stop();
+      else PW.Session.openStart();
+    }
     // F1 (?) — quick help
     else if (e.key === 'F1') { e.preventDefault(); PW.Help.toggle(); }
     else if (e.key === '?' && !isInputFocused()) { PW.Help.open(); }
-    if (e.key === 'Escape') { PW.CommandPalette.close(); PW.Action.closeEditor(); PW.Action.closeDetail(); PW.Help.close(); }
+    if (e.key === 'Escape') { PW.CommandPalette.close(); PW.Action.closeEditor(); PW.Action.closeDetail(); PW.Help.close(); PW.Session.closeStart(); }
   });
 };
 function isInputFocused() {

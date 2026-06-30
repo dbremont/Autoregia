@@ -33,11 +33,13 @@ app = Flask(__name__, static_folder="static")
 HERE = os.path.dirname(__file__)
 ACTIONS_PATH = os.path.join(HERE, "data", "mock_actions.json")
 BLOCKS_PATH = os.path.join(HERE, "data", "mock_blocks.json")
+SESSIONS_PATH = os.path.join(HERE, "data", "mock_sessions.json")
 TODOIST_PATH = os.path.join(HERE, "data", "mock_todoist.json")
 
-# CouchDB store backing actions (ACT-*) and blocks (BLK-*). The path constants
-# above double as seed fixtures for first-run population of an empty database.
-store = Store("pwos", seed_paths=[ACTIONS_PATH, BLOCKS_PATH])
+# CouchDB store backing actions (ACT-*), blocks (BLK-*), and sessions (SES-*).
+# The path constants above double as seed fixtures for first-run population of
+# an empty database.
+store = Store("pwos", seed_paths=[ACTIONS_PATH, BLOCKS_PATH, SESSIONS_PATH])
 
 # Google credentials (Component C). Brought in out-of-band; never committed.
 CLIENT_SECRET_PATH = os.environ.get(
@@ -60,6 +62,10 @@ def _is_block_doc(d):
     return str(d.get("id", "")).startswith("BLK-")
 
 
+def _is_session_doc(d):
+    return str(d.get("id", "")).startswith("SES-")
+
+
 def load(path):
     """Collection reader.
 
@@ -71,6 +77,8 @@ def load(path):
         return [d for d in store.all() if _is_action_doc(d)]
     if path == BLOCKS_PATH:
         return [d for d in store.all() if _is_block_doc(d)]
+    if path == SESSIONS_PATH:
+        return [d for d in store.all() if _is_session_doc(d)]
     if os.path.exists(path):
         with open(path, "r") as f:
             return json.load(f)
@@ -84,7 +92,7 @@ def save(path, data):
     documents present in ``data`` are touched; others in the database are left
     intact. Non-action/block paths fall back to a JSON file write.
     """
-    if path in (ACTIONS_PATH, BLOCKS_PATH):
+    if path in (ACTIONS_PATH, BLOCKS_PATH, SESSIONS_PATH):
         for doc in data:
             if isinstance(doc, dict) and doc.get("id"):
                 store.put(doc)
@@ -419,6 +427,213 @@ def hierarchy():
     orphan_projects = [p for p in projects if p["id"] not in assigned]
     return jsonify({"objectives": tree, "orphan_projects": orphan_projects,
                     "orphan_tasks": [t for t in leaves if not (t.get("strategic") or {}).get("project")]})
+
+
+# ============================================================================
+# Component D -- Execution & Actuals (Work Sessions)
+#
+# The actuals counterpart to Component B's intended time. A work session is the
+# atomic execution unit: start/stop timer or manual entry, linked to an action
+# (and optionally the block it realizes). The gap between a block and the
+# sessions that realize it is the deviation signal Analytics/PRAS consume.
+# Persisted in the same CouchDB store (SES-* prefix).
+# ============================================================================
+def _session_duration_ms(s):
+    """Duration in ms. For an active session, elapsed until now."""
+    if not s.get("started_at"):
+        return 0
+    end = s.get("ended_at") or now_iso()
+    try:
+        return int((parse_ts(end) - parse_ts(s["started_at"])).total_seconds() * 1000)
+    except Exception:
+        return 0
+
+
+def _active_session():
+    """The single running session, if any (status active, ended_at null)."""
+    return next((s for s in load(SESSIONS_PATH) if s.get("status") == "active"), None)
+
+
+def _stop_session(s, at=None):
+    s["ended_at"] = at or now_iso()
+    s["status"] = "completed"
+    s["updated_at"] = now_iso()
+
+
+def _action_by_id(action_id):
+    if not action_id:
+        return None
+    return next((a for a in load(ACTIONS_PATH) if a["id"] == action_id), None)
+
+
+@app.route("/api/sessions", methods=["GET"])
+def get_sessions():
+    out = load(SESSIONS_PATH)
+    action_id = request.args.get("action_id")
+    status = request.args.get("status")
+    start = request.args.get("start")
+    end = request.args.get("end")
+    if action_id:
+        out = [s for s in out if s.get("action_id") == action_id]
+    if status:
+        out = [s for s in out if s.get("status") == status]
+    if start:
+        s = parse_ts(start)
+        out = [s2 for s2 in out if s2.get("started_at") and parse_ts(s2["started_at"]) >= s]
+    if end:
+        e = parse_ts(end)
+        out = [s2 for s2 in out if s2.get("started_at") and parse_ts(s2["started_at"]) <= e]
+    out.sort(key=lambda s: s.get("started_at") or "", reverse=True)
+    return jsonify(out)
+
+
+@app.route("/api/sessions/active", methods=["GET"])
+def get_active_session():
+    s = _active_session()
+    return jsonify(s) if s else (jsonify({"active": False}), 200)
+
+
+@app.route("/api/sessions", methods=["POST"])
+def create_session():
+    """Create a session.
+
+    With ``started_at`` and no ``ended_at`` (and status active) this starts a
+    running timer; the convenience /start endpoint stops any active session
+    first. With both timestamps it is a manual (backfilled) entry.
+    """
+    data = request.get_json() or {}
+    sessions = load(SESSIONS_PATH)
+    now = now_iso()
+    started = data.get("started_at") or now
+    status = data.get("status") or ("active" if not data.get("ended_at") else "completed")
+    if status == "active":
+        # Enforce one running session at a time.
+        for s in sessions:
+            if s.get("status") == "active":
+                _stop_session(s, at=started)
+    s = {
+        "id": data.get("id", f"SES-{now[:4]}-{uuid.uuid4().hex[:5].upper()}"),
+        "action_id": data.get("action_id"),
+        "block_id": data.get("block_id"),
+        "description": data.get("description", ""),
+        "started_at": started,
+        "ended_at": data.get("ended_at"),
+        "status": status,
+        "capacity": data.get("capacity"),
+        "source": data.get("source", "manual"),
+        "created_at": now, "updated_at": now,
+    }
+    sessions.append(s)
+    save(SESSIONS_PATH, sessions)
+    return jsonify(s), 201
+
+
+@app.route("/api/sessions/start", methods=["POST"])
+def start_session():
+    """Start a timer for an action (stops any currently active session first)."""
+    data = request.get_json() or {}
+    action_id = data.get("action_id")
+    sessions = load(SESSIONS_PATH)
+    now = now_iso()
+    for s in sessions:
+        if s.get("status") == "active":
+            _stop_session(s, at=now)
+    action = _action_by_id(action_id)
+    s = {
+        "id": f"SES-{now[:4]}-{uuid.uuid4().hex[:5].upper()}",
+        "action_id": action_id,
+        "block_id": data.get("block_id"),
+        "description": data.get("description", ""),
+        "started_at": now,
+        "ended_at": None,
+        "status": "active",
+        "capacity": (action or {}).get("capacity_profile") or data.get("capacity"),
+        "source": "timer",
+        "created_at": now, "updated_at": now,
+    }
+    sessions.append(s)
+    save(SESSIONS_PATH, sessions)
+    # If the action is a leaf the agent is now executing, reflect that.
+    if action and action.get("scheduling_state") != "in-progress":
+        action["scheduling_state"] = "in-progress"
+        action["updated_at"] = now
+        save(ACTIONS_PATH, load(ACTIONS_PATH))
+    return jsonify(s), 201
+
+
+@app.route("/api/sessions/stop", methods=["POST"])
+def stop_session():
+    """Stop the running timer (if any). Body may carry a closing description."""
+    data = request.get_json() or {}
+    sessions = load(SESSIONS_PATH)
+    s = next((x for x in sessions if x.get("status") == "active"), None)
+    if not s:
+        return jsonify({"active": False}), 200
+    if data.get("description") is not None:
+        s["description"] = data["description"]
+    _stop_session(s)
+    save(SESSIONS_PATH, sessions)
+    return jsonify(s)
+
+
+@app.route("/api/sessions/<session_id>", methods=["PUT"])
+def update_session(session_id):
+    sessions = load(SESSIONS_PATH)
+    s = next((x for x in sessions if x["id"] == session_id), None)
+    if not s:
+        return jsonify({"error": "Session not found"}), 404
+    data = request.get_json() or {}
+    for k in ("action_id", "block_id", "description", "started_at", "ended_at",
+              "status", "capacity", "source"):
+        if k in data:
+            s[k] = data[k]
+    s["updated_at"] = now_iso()
+    save(SESSIONS_PATH, sessions)
+    return jsonify(s)
+
+
+@app.route("/api/sessions/<session_id>", methods=["DELETE"])
+def delete_session(session_id):
+    store.delete(session_id)
+    return jsonify({"deleted": session_id})
+
+
+@app.route("/api/sessions/totals", methods=["GET"])
+def sessions_totals():
+    """Aggregate completed+active session durations over a window.
+
+    Query: ?start=&end=&group=day|action|project (group defaults to day).
+    Returns { group, totals: [{key, minutes, count}], grand_minutes, count }.
+    """
+    sessions = load(SESSIONS_PATH)
+    start = request.args.get("start")
+    end = request.args.get("end")
+    group = request.args.get("group", "day")
+    rows = [s for s in sessions if s.get("status") != "abandoned"]
+    if start:
+        rows = [s for s in rows if s.get("started_at") and parse_ts(s["started_at"]) >= parse_ts(start)]
+    if end:
+        rows = [s for s in rows if s.get("started_at") and parse_ts(s["started_at"]) <= parse_ts(end)]
+    actions = {a["id"]: a for a in load(ACTIONS_PATH)}
+
+    def key_of(s):
+        if group == "action":
+            return s.get("action_id") or "(no action)"
+        if group == "project":
+            aid = s.get("action_id")
+            return (actions.get(aid, {}).get("strategic") or {}).get("project") or "(no project)"
+        return (s.get("started_at") or "")[:10]  # day
+
+    buckets = {}
+    for s in rows:
+        k = key_of(s)
+        b = buckets.setdefault(k, {"key": k, "minutes": 0, "count": 0})
+        b["minutes"] += round(_session_duration_ms(s) / 60000.0, 1)
+        b["count"] += 1
+    totals = sorted(buckets.values(), key=lambda b: b["key"], reverse=(group == "day"))
+    grand = round(sum(b["minutes"] for b in totals), 1)
+    return jsonify({"group": group, "totals": totals,
+                    "grand_minutes": grand, "count": sum(b["count"] for b in totals)})
 
 
 # ============================================================================

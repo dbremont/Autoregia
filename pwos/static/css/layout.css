@@ -6,7 +6,7 @@
 .app-shell {
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
-  grid-template-rows: var(--header-height) 1fr;
+  grid-template-rows: auto 1fr;
   min-height: 100vh;
 }
 
@@ -16,12 +16,16 @@
   background: var(--color-surface);
   border-bottom: var(--hairline) solid var(--color-border);
   display: flex;
-  align-items: center;
-  padding: 0 var(--space-6);
-  gap: var(--space-5);
+  flex-direction: column;
   z-index: var(--z-sticky);
   position: sticky;
   top: 0;
+}
+.header-row {
+  display: flex; align-items: center;
+  padding: 0 var(--space-6);
+  gap: var(--space-5);
+  min-height: var(--header-height);
 }
 
 /* Monogram brand mark */

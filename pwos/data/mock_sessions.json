@@ -1,0 +1,93 @@
+[
+  {
+    "id": "SES-2026-00001",
+    "action_id": "ACT-2026-00009",
+    "block_id": "BLK-2026-00001",
+    "description": "Component D backend: session store + CRUD endpoints.",
+    "started_at": "2026-06-29T09:12:00Z",
+    "ended_at": "2026-06-29T11:38:00Z",
+    "status": "completed",
+    "capacity": { "resource": "focus", "band": "deep" },
+    "source": "timer",
+    "created_at": "2026-06-29T09:12:00Z",
+    "updated_at": "2026-06-29T11:38:00Z"
+  },
+  {
+    "id": "SES-2026-00002",
+    "action_id": "ACT-2026-00009",
+    "block_id": null,
+    "description": "Interruptions: answered messages mid-block.",
+    "started_at": "2026-06-29T14:05:00Z",
+    "ended_at": "2026-06-29T15:20:00Z",
+    "status": "completed",
+    "capacity": { "resource": "focus", "band": "shallow" },
+    "source": "timer",
+    "created_at": "2026-06-29T14:05:00Z",
+    "updated_at": "2026-06-29T15:20:00Z"
+  },
+  {
+    "id": "SES-2026-00003",
+    "action_id": "ACT-2026-00007",
+    "block_id": null,
+    "description": "Relationship graph layout pass.",
+    "started_at": "2026-06-30T09:30:00Z",
+    "ended_at": "2026-06-30T10:55:00Z",
+    "status": "completed",
+    "capacity": { "resource": "focus", "band": "deep" },
+    "source": "timer",
+    "created_at": "2026-06-30T09:30:00Z",
+    "updated_at": "2026-06-30T10:55:00Z"
+  },
+  {
+    "id": "SES-2026-00004",
+    "action_id": "ACT-2026-00011",
+    "block_id": null,
+    "description": "Drafted the PRS review.",
+    "started_at": "2026-06-30T11:10:00Z",
+    "ended_at": "2026-06-30T12:00:00Z",
+    "status": "completed",
+    "capacity": { "resource": "energy", "band": "shallow" },
+    "source": "manual",
+    "created_at": "2026-06-30T12:01:00Z",
+    "updated_at": "2026-06-30T12:01:00Z"
+  },
+  {
+    "id": "SES-2026-00005",
+    "action_id": "ACT-2026-00009",
+    "block_id": "BLK-2026-00002",
+    "description": "Frontend module + focus bar wiring.",
+    "started_at": "2026-07-01T09:05:00Z",
+    "ended_at": "2026-07-01T11:30:00Z",
+    "status": "completed",
+    "capacity": { "resource": "focus", "band": "deep" },
+    "source": "timer",
+    "created_at": "2026-07-01T09:05:00Z",
+    "updated_at": "2026-07-01T11:30:00Z"
+  },
+  {
+    "id": "SES-2026-00006",
+    "action_id": "ACT-2026-00012",
+    "block_id": null,
+    "description": "Weekly review — partial, then abandoned.",
+    "started_at": "2026-07-01T16:00:00Z",
+    "ended_at": "2026-07-01T16:10:00Z",
+    "status": "abandoned",
+    "capacity": { "resource": "energy", "band": "low" },
+    "source": "timer",
+    "created_at": "2026-07-01T16:00:00Z",
+    "updated_at": "2026-07-01T16:10:00Z"
+  },
+  {
+    "id": "SES-2026-00007",
+    "action_id": "ACT-2026-00007",
+    "block_id": null,
+    "description": "Graph overlay of sessions on blocks.",
+    "started_at": "2026-07-02T10:00:00Z",
+    "ended_at": "2026-07-02T11:15:00Z",
+    "status": "completed",
+    "capacity": { "resource": "focus", "band": "deep" },
+    "source": "timer",
+    "created_at": "2026-07-02T10:00:00Z",
+    "updated_at": "2026-07-02T11:15:00Z"
+  }
+]
