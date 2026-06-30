@@ -19,14 +19,14 @@ PT.Store = (() => {
 
   async function fetchFromAPI() {
     try {
-      const res = await fetch('/api/entries');
+      const res = await fetch('/ptocs/api/entries');
       if (res.ok) { entries = await res.json(); saveLocal(); }
     } catch (e) { console.warn('API unavailable, using local storage only'); }
   }
 
   async function refreshFromAPI() {
     try {
-      const res = await fetch('/api/entries');
+      const res = await fetch('/ptocs/api/entries');
       if (res.ok) { entries = await res.json(); saveLocal(); notify(); }
     } catch (e) { /* keep local */ }
   }
@@ -37,7 +37,7 @@ PT.Store = (() => {
 
   async function add(data) {
     try {
-      const res = await fetch('/api/entries', { method: 'POST',
+      const res = await fetch('/ptocs/api/entries', { method: 'POST',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
       await res.json(); await refreshFromAPI();
     } catch (e) {
@@ -50,7 +50,7 @@ PT.Store = (() => {
 
   async function update(id, updates) {
     try {
-      const res = await fetch(`/api/entries/${id}`, { method: 'PUT',
+      const res = await fetch(`/ptocs/api/entries/${id}`, { method: 'PUT',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
       await res.json(); await refreshFromAPI();
     } catch (e) {
@@ -62,13 +62,13 @@ PT.Store = (() => {
   }
 
   async function remove(id) {
-    try { await fetch(`/api/entries/${id}`, { method: 'DELETE' }); await refreshFromAPI(); }
+    try { await fetch(`/ptocs/api/entries/${id}`, { method: 'DELETE' }); await refreshFromAPI(); }
     catch (e) { entries = entries.filter(e => e.id !== id); saveLocal(); notify(); }
   }
 
   async function addAnnotation(id, annotation) {
     try {
-      const res = await fetch(`/api/entries/${id}/annotations`, { method: 'POST',
+      const res = await fetch(`/ptocs/api/entries/${id}/annotations`, { method: 'POST',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(annotation) });
       await res.json(); await refreshFromAPI();
     } catch (e) {
@@ -83,7 +83,7 @@ PT.Store = (() => {
 
   async function togglePin(id) {
     try {
-      await fetch(`/api/entries/${id}/pin`, { method: 'POST' });
+      await fetch(`/ptocs/api/entries/${id}/pin`, { method: 'POST' });
       await refreshFromAPI();
     } catch (e) {
       const e2 = getById(id); if (!e2) return;

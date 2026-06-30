@@ -137,7 +137,7 @@ PW.importFile = async function (e) {
   const text = await file.text();
   try {
     const data = JSON.parse(text);
-    const res = await fetch('/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch('/pwos/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const r = await res.json();
     PW.toast('Imported ' + (r.imported_actions || 0) + ' actions, ' + (r.imported_blocks || 0) + ' blocks');
     await PW.Store.refreshFromAPI();
@@ -147,7 +147,7 @@ PW.importFile = async function (e) {
 
 PW.refreshGoogleStatus = async function () {
   try {
-    const res = await fetch('/api/calendar/google/status');
+    const res = await fetch('/pwos/api/calendar/google/status');
     const d = await res.json();
     const pill = document.getElementById('gcPill');
     if (pill) {
@@ -160,7 +160,7 @@ PW.refreshGoogleStatus = async function () {
 PW.doGoogleSync = async function () {
   PW.toast('Syncing Google Calendar…');
   try {
-    const res = await fetch('/api/calendar/google/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+    const res = await fetch('/pwos/api/calendar/google/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
     const d = await res.json();
     if (d.status === 'mock') PW.toast('Mock mode — local data only. Add client_secret.json to enable live sync.');
     else PW.toast('Synced: pulled ' + d.pulled + ', pushed ' + d.pushed);
@@ -172,7 +172,7 @@ PW.doGoogleSync = async function () {
 PW.ExportView = function () {
   const s = PW.Store.getStats();
   return '<div class="content-header"><div><span class="eyebrow">Derivative</span><h1>Export</h1></div>' +
-    '<div class="actions"><a class="btn btn-primary btn-sm" href="/api/export"><pw-icon name="download" size="15"></pw-icon> Download JSON</a></div></div>' +
+    '<div class="actions"><a class="btn btn-primary btn-sm" href="/pwos/api/export"><pw-icon name="download" size="15"></pw-icon> Download JSON</a></div></div>' +
     '<div class="card"><div class="card-body"><p>Export all actions and calendar blocks as JSON conforming to <code>spec/pwos/schema.json</code>. Use Import to merge back in by id.</p>' +
     '<p class="text-muted text-sm">Actions: ' + (s.total_actions || 0) + ' · Blocks: ' + (s.total_blocks || 0) + '.</p></div></div>';
 };

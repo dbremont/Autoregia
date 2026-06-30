@@ -1,5 +1,6 @@
 flask>=3.0
 flask-cors>=4.0
+CouchDB>=2.0
 # Google Calendar integration (Component C). Optional in mock mode.
 google-auth-oauthlib>=1.2
 google-auth-httplib2>=0.2

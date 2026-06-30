@@ -150,14 +150,3 @@ def serve_policy(filename):
 @app.route("/<path:path>")
 def static_files(path):
     return send_from_directory(STATIC_DIR, path)
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PPS_PORT", "5004"))
-    print("Personal Policy System — Server")
-    print(f"   Policies indexed: {len(DOCS)}")
-    for d in DOCS:
-        flag = " ★" if d["is_charter"] else ""
-        print(f"     - {d['title']}{flag}")
-    print(f"   Open: http://localhost:{port}")
-    app.run(debug=True, port=port, host="0.0.0.0")

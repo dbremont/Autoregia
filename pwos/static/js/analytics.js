@@ -83,7 +83,7 @@ PW.Analytics._wireHeader = function () {
   const r = document.getElementById('btnAnRefresh');
   if (r) r.onclick = () => PW.Analytics.render();
   const e = document.getElementById('btnAnExport');
-  if (e) e.href = '/api/analytics/export?window=' + PW.Analytics._window;
+  if (e) e.href = '/pwos/api/analytics/export?window=' + PW.Analytics._window;
 };
 
 /* ── Fetch helpers ───────────────────────────────────────────── */
@@ -114,33 +114,33 @@ PW.Analytics.render = async function () {
   try {
     const q = PW._anQuery();
     const data = await Promise.all([
-      PW._anGet('/api/analytics/performance?' + q),
-      PW._anGet('/api/analytics/indices?' + q),
-      PW._anGet('/api/analytics/summary?' + q),
-      PW._anGet('/api/analytics/throughput?' + q),
-      PW._anGet('/api/analytics/trajectory?' + q),
-      PW._anGet('/api/analytics/funnel?' + q),
-      PW._anGet('/api/analytics/rhythm?' + q),
-      PW._anGet('/api/analytics/hourly?' + q),
-      PW._anGet('/api/analytics/monthly?months=6' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
-      PW._anGet('/api/analytics/cycletime?' + q),
-      PW._anGet('/api/analytics/priority-debt?days=180' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
-      PW._anGet('/api/analytics/projects-intelligence?' + q),
-      PW._anGet('/api/analytics/labels?' + PW._anQuery({ limit: 12 })),
-      PW._anGet('/api/analytics/habits?' + PW._anQuery({ window: 60 })),
-      PW._anGet('/api/analytics/activity?limit=40'),
-      PW._anGet('/api/analytics/radar?' + q),
-      PW._anGet('/api/analytics/insights?' + q),
-      PW._anGet('/api/analytics/reliability?' + q),
-      PW._anGet('/api/analytics/aging'),
-      PW._anGet('/api/analytics/markov?' + q),
-      PW._anGet('/api/analytics/markov-evolution?months=6' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
+      PW._anGet('/pwos/api/analytics/performance?' + q),
+      PW._anGet('/pwos/api/analytics/indices?' + q),
+      PW._anGet('/pwos/api/analytics/summary?' + q),
+      PW._anGet('/pwos/api/analytics/throughput?' + q),
+      PW._anGet('/pwos/api/analytics/trajectory?' + q),
+      PW._anGet('/pwos/api/analytics/funnel?' + q),
+      PW._anGet('/pwos/api/analytics/rhythm?' + q),
+      PW._anGet('/pwos/api/analytics/hourly?' + q),
+      PW._anGet('/pwos/api/analytics/monthly?months=6' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
+      PW._anGet('/pwos/api/analytics/cycletime?' + q),
+      PW._anGet('/pwos/api/analytics/priority-debt?days=180' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
+      PW._anGet('/pwos/api/analytics/projects-intelligence?' + q),
+      PW._anGet('/pwos/api/analytics/labels?' + PW._anQuery({ limit: 12 })),
+      PW._anGet('/pwos/api/analytics/habits?' + PW._anQuery({ window: 60 })),
+      PW._anGet('/pwos/api/analytics/activity?limit=40'),
+      PW._anGet('/pwos/api/analytics/radar?' + q),
+      PW._anGet('/pwos/api/analytics/insights?' + q),
+      PW._anGet('/pwos/api/analytics/reliability?' + q),
+      PW._anGet('/pwos/api/analytics/aging'),
+      PW._anGet('/pwos/api/analytics/markov?' + q),
+      PW._anGet('/pwos/api/analytics/markov-evolution?months=6' + (PW.Analytics._project ? '&project=' + PW.Analytics._project : '')),
     ]);
     const D = {};
     [D.performance, D.indices, D.summary, D.throughput, D.trajectory, D.funnel, D.rhythm, D.hourly,
      D.monthly, D.cycletime, D.priorityDebt, D.projIntel, D.labels, D.habits,
      D.activity, D.radar, D.insights, D.reliability, D.aging, D.markov, D.markovEvo] = data;
-    D.heatmap = await PW._anGet('/api/analytics/heatmap?year=' + new Date(D.summary.today).getFullYear());
+    D.heatmap = await PW._anGet('/pwos/api/analytics/heatmap?year=' + new Date(D.summary.today).getFullYear());
 
     // populate project filter
     const sel = document.getElementById('anProject');

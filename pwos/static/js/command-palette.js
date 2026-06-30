@@ -36,7 +36,7 @@ PW.CommandPalette._commands = function () {
     { label: 'Open Help (F1)', icon: 'help-circle', run: () => PW.Help.open() },
     { label: 'Sync Google Calendar', icon: 'refresh-cw', run: () => PW.doGoogleSync() },
     { label: 'Open full documentation', icon: 'book-open', run: () => window.open('/docs', '_blank') },
-    { label: 'Export JSON', icon: 'download', run: () => window.open('/api/export', '_blank') },
+    { label: 'Export JSON', icon: 'download', run: () => window.open('/pwos/api/export', '_blank') },
   ];
 };
 

@@ -128,7 +128,7 @@ PT.importFile = async function (e) {
   const text = await file.text();
   try {
     const data = JSON.parse(text);
-    const res = await fetch('/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch('/ptocs/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const r = await res.json();
     PT.toast('Imported ' + r.imported + ' entries (total ' + r.total + ')');
     await PT.Store.refreshFromAPI();
@@ -138,7 +138,7 @@ PT.importFile = async function (e) {
 
 PT.ExportView = function () {
   return '<div class="content-header"><div><span class="eyebrow">Derivative</span><h1>Export</h1></div>' +
-    '<div class="actions"><a class="btn btn-primary btn-sm" href="/api/export"><pt-icon name="download" size="15"></pt-icon> Download JSON</a></div></div>' +
+    '<div class="actions"><a class="btn btn-primary btn-sm" href="/ptocs/api/export"><pt-icon name="download" size="15"></pt-icon> Download JSON</a></div></div>' +
     '<div class="card"><div class="card-body"><p>Export the entire catalog as a JSON array conforming to <code>spec/ptocs/schema.json</code>. Use the Import button (top-right) to merge entries back in by id.</p>' +
     '<p class="text-muted text-sm">Total entries: ' + PT.Store.getStats().total + '.</p></div></div>';
 };

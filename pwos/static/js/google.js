@@ -13,13 +13,13 @@ PW.Google.render = async function () {
   const el = document.getElementById('gcContent'); if (!el) return;
   el.innerHTML = '<p class="text-muted">Loading…</p>';
   let status = {};
-  try { const res = await fetch('/api/calendar/google/status'); status = await res.json(); }
+  try { const res = await fetch('/pwos/api/calendar/google/status'); status = await res.json(); }
   catch (e) { el.innerHTML = '<p class="text-muted">Failed to load status.</p>'; return; }
 
   let calList = '';
   if (status.status === 'connected') {
     try {
-      const cr = await fetch('/api/calendar/google/calendars');
+      const cr = await fetch('/pwos/api/calendar/google/calendars');
       const cd = await cr.json();
       calList = '<div class="card"><div class="card-body"><div class="stat-label">Calendars</div>' +
         (cd.calendars || []).map(c => '<div class="detail-row"><span class="mono">' + PW.esc(c.id) + '</span> <span>' + PW.esc(c.summary) + '</span>' +
@@ -54,7 +54,7 @@ PW.Google.render = async function () {
 PW.Google.startAuth = async function () {
   PW.toast('Requesting authorization URL…');
   try {
-    const res = await fetch('/api/calendar/google/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    const res = await fetch('/pwos/api/calendar/google/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
     const d = await res.json();
     if (d.authorization_url) { window.open(d.authorization_url, '_blank'); }
     else if (d.detail) { PW.toast(d.detail); }

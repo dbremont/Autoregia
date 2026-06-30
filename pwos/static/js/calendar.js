@@ -113,7 +113,7 @@ PW.Calendar._renderDay = async function () {
   const grid = document.getElementById('calGrid'); if (!grid) return;
   grid.innerHTML = '<p class="text-muted">Loading…</p>';
   try {
-    const res = await fetch('/api/calendar/day?start=' + PW.Calendar._cursor.toISOString());
+    const res = await fetch('/pwos/api/calendar/day?start=' + PW.Calendar._cursor.toISOString());
     const day = await res.json();
     grid.innerHTML = '<div class="time-grid time-grid-day">' +
       '<div class="time-top"><div class="time-corner"></div>' +
@@ -129,7 +129,7 @@ PW.Calendar._renderWeek = async function () {
   grid.innerHTML = '<p class="text-muted">Loading…</p>';
   try {
     const mon = PW.Calendar._mondayOf(PW.Calendar._cursor);
-    const res = await fetch('/api/calendar/week?start=' + mon.toISOString());
+    const res = await fetch('/pwos/api/calendar/week?start=' + mon.toISOString());
     const days = await res.json();
     grid.innerHTML = '<div class="time-grid">' +
       '<div class="time-top"><div class="time-corner"></div>' +
@@ -221,7 +221,7 @@ PW.Calendar._renderMonth = async function () {
   grid.innerHTML = '<p class="text-muted">Loading…</p>';
   try {
     const y = PW.Calendar._cursor.getFullYear(), m = PW.Calendar._cursor.getMonth() + 1;
-    const res = await fetch('/api/calendar/month?year=' + y + '&month=' + m);
+    const res = await fetch('/pwos/api/calendar/month?year=' + y + '&month=' + m);
     const data = await res.json();
     let h = '<div class="month-grid">';
     h += '<div class="month-weekhead">' + PW.Calendar.WEEKDAYS.map(w => '<span>' + w + '</span>').join('') + '</div>';
@@ -260,7 +260,7 @@ PW.Calendar._renderYear = async function () {
   grid.innerHTML = '<p class="text-muted">Loading…</p>';
   try {
     const y = PW.Calendar._cursor.getFullYear();
-    const res = await fetch('/api/calendar/year?year=' + y);
+    const res = await fetch('/pwos/api/calendar/year?year=' + y);
     const data = await res.json();
     let h = '<div class="year-grid">';
     data.months.forEach(mo => { h += PW.Calendar._miniMonth(y, mo); });

@@ -9,7 +9,7 @@ PT.Analysis = {
   async afterRender() { await this.refresh(); },
   async refresh() {
     let d;
-    try { const r = await fetch('/api/analysis'); d = await r.json(); }
+    try { const r = await fetch('/ptocs/api/analysis'); d = await r.json(); }
     catch (e) { d = this._local(); }
     this._dispose();
     document.getElementById('analysisBody').innerHTML = this._body(d);

@@ -6,6 +6,11 @@ Flask backend implementing the three PWOS components:
   [B] Work Calendarization               — /api/blocks, /api/calendar, conflict detection
   [C] Platforms Integration              — /api/calendar/google/* (OAuth + sync; mock-safe)
 
+Actions and blocks are persisted in CouchDB (db ``pwos``), discriminated by
+their id prefix (``ACT-`` / ``BLK-``); the read-only Todoist analytics dataset
+remains a local JSON file. Both collections seed from data/mock_*.json on first
+run against an empty database.
+
 Runs in *mock mode* when Google credentials are absent, so the prototype is fully
 usable offline. Conforms to spec/pwos/schema.json.
 
@@ -14,17 +19,25 @@ Open:  http://localhost:5005
 """
 import json
 import os
+import sys
 import uuid
 from datetime import datetime, timezone, timedelta
 from collections import Counter, defaultdict
 
 from flask import Flask, jsonify, request, send_from_directory, Response
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from storage import Store
+
 app = Flask(__name__, static_folder="static")
 HERE = os.path.dirname(__file__)
 ACTIONS_PATH = os.path.join(HERE, "data", "mock_actions.json")
 BLOCKS_PATH = os.path.join(HERE, "data", "mock_blocks.json")
 TODOIST_PATH = os.path.join(HERE, "data", "mock_todoist.json")
+
+# CouchDB store backing actions (ACT-*) and blocks (BLK-*). The path constants
+# above double as seed fixtures for first-run population of an empty database.
+store = Store("pwos", seed_paths=[ACTIONS_PATH, BLOCKS_PATH])
 
 # Google credentials (Component C). Brought in out-of-band; never committed.
 CLIENT_SECRET_PATH = os.environ.get(
@@ -39,7 +52,25 @@ def now_iso():
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+def _is_action_doc(d):
+    return str(d.get("id", "")).startswith("ACT-")
+
+
+def _is_block_doc(d):
+    return str(d.get("id", "")).startswith("BLK-")
+
+
 def load(path):
+    """Collection reader.
+
+    Actions/blocks are served from the ``pwos`` CouchDB database (filtered by
+    id prefix); other paths (the read-only Todoist analytics fixture) fall back
+    to a direct JSON file read.
+    """
+    if path == ACTIONS_PATH:
+        return [d for d in store.all() if _is_action_doc(d)]
+    if path == BLOCKS_PATH:
+        return [d for d in store.all() if _is_block_doc(d)]
     if os.path.exists(path):
         with open(path, "r") as f:
             return json.load(f)
@@ -47,6 +78,17 @@ def load(path):
 
 
 def save(path, data):
+    """Collection writer, routed to CouchDB for actions/blocks.
+
+    Each document is upserted individually (keyed by its ``id``). Only the
+    documents present in ``data`` are touched; others in the database are left
+    intact. Non-action/block paths fall back to a JSON file write.
+    """
+    if path in (ACTIONS_PATH, BLOCKS_PATH):
+        for doc in data:
+            if isinstance(doc, dict) and doc.get("id"):
+                store.put(doc)
+        return
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
         json.dump(data, f, indent=2, default=str)
@@ -139,9 +181,7 @@ def update_action(action_id):
 
 @app.route("/api/actions/<action_id>", methods=["DELETE"])
 def delete_action(action_id):
-    actions = load(ACTIONS_PATH)
-    actions = [a for a in actions if a["id"] != action_id]
-    save(ACTIONS_PATH, actions)
+    store.delete(action_id)
     return jsonify({"deleted": action_id})
 
 
@@ -223,8 +263,7 @@ def update_block(block_id):
 
 @app.route("/api/blocks/<block_id>", methods=["DELETE"])
 def delete_block(block_id):
-    blocks = [b for b in load(BLOCKS_PATH) if b["id"] != block_id]
-    save(BLOCKS_PATH, blocks)
+    store.delete(block_id)
     return jsonify({"deleted": block_id})
 
 
@@ -2180,12 +2219,3 @@ def index():
 @app.route("/<path:path>")
 def static_files(path):
     return send_from_directory(app.static_folder, path)
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PWOS_PORT", "5005"))
-    print("Personal Work Organization System — Prototype Server")
-    print(f"   Actions: {ACTIONS_PATH}  ({len(load(ACTIONS_PATH))})")
-    print(f"   Blocks:  {BLOCKS_PATH}  ({len(load(BLOCKS_PATH))})")
-    print(f"   Google Calendar: {_gc_status()}")
-    app.run(debug=True, port=port, host="0.0.0.0")

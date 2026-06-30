@@ -78,7 +78,7 @@
 
   function doSearch(q) {
     if (!q.trim()) { resultsEl.innerHTML = ''; return; }
-    fetch('/api/search?q=' + encodeURIComponent(q))
+    fetch('/pps/api/search?q=' + encodeURIComponent(q))
       .then(function (r) { return r.json(); })
       .then(renderResults)
       .catch(function () { resultsEl.innerHTML = ''; });
@@ -103,7 +103,7 @@
     });
   }
 
-  fetch('/api/policies')
+  fetch('/pps/api/policies')
     .then(function (r) { return r.json(); })
     .then(renderIndex)
     .catch(function () { renderEmpty('Could not load the policy index. Are policy documents present in ./policies/?'); });

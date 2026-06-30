@@ -23,7 +23,7 @@ PW.Store = (function () {
 
   async function fetchFromAPI() {
     try {
-      const [ra, rb] = await Promise.all([fetch('/api/actions'), fetch('/api/blocks')]);
+      const [ra, rb] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks')]);
       if (ra.ok) actions = await ra.json();
       if (rb.ok) blocks = await rb.json();
       saveLocal();
@@ -32,7 +32,7 @@ PW.Store = (function () {
 
   async function refreshFromAPI() {
     try {
-      const [ra, rb] = await Promise.all([fetch('/api/actions'), fetch('/api/blocks')]);
+      const [ra, rb] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks')]);
       if (ra.ok) actions = await ra.json();
       if (rb.ok) blocks = await rb.json();
       saveLocal(); await refreshStats(); notify();
@@ -41,7 +41,7 @@ PW.Store = (function () {
 
   async function refreshStats() {
     try {
-      const res = await fetch('/api/dashboard/stats');
+      const res = await fetch('/pwos/api/dashboard/stats');
       if (res.ok) stats = await res.json();
     } catch (e) { /* ignore */ }
   }
@@ -60,7 +60,7 @@ PW.Store = (function () {
 
   async function addAction(data) {
     try {
-      const res = await fetch('/api/actions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      const res = await fetch('/pwos/api/actions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
       await res.json(); await refreshFromAPI();
     } catch (e) {
       const now = new Date().toISOString();
@@ -73,7 +73,7 @@ PW.Store = (function () {
 
   async function updateAction(id, updates) {
     try {
-      const res = await fetch('/api/actions/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+      const res = await fetch('/pwos/api/actions/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
       await res.json(); await refreshFromAPI();
     } catch (e) {
       const idx = actions.findIndex(function (a) { return a.id === id; });
@@ -84,12 +84,12 @@ PW.Store = (function () {
   }
 
   async function removeAction(id) {
-    try { await fetch('/api/actions/' + id, { method: 'DELETE' }); await refreshFromAPI(); }
+    try { await fetch('/pwos/api/actions/' + id, { method: 'DELETE' }); await refreshFromAPI(); }
     catch (e) { actions = actions.filter(function (a) { return a.id !== id; }); saveLocal(); notify(); }
   }
 
   async function togglePin(id) {
-    try { await fetch('/api/actions/' + id + '/pin', { method: 'POST' }); await refreshFromAPI(); }
+    try { await fetch('/pwos/api/actions/' + id + '/pin', { method: 'POST' }); await refreshFromAPI(); }
     catch (e) {
       const a = getById(id); if (!a) return;
       a.pinned = !a.pinned; a.updated_at = new Date().toISOString(); saveLocal(); notify();
@@ -98,7 +98,7 @@ PW.Store = (function () {
 
   async function addBlock(data) {
     try {
-      const res = await fetch('/api/blocks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      const res = await fetch('/pwos/api/blocks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
       const b = await res.json();
       if (b.conflict_flags && b.conflict_flags.length) PW.toast(b.conflict_flags.length + ' conflict(s) detected on this block');
       await refreshFromAPI();
@@ -107,7 +107,7 @@ PW.Store = (function () {
   }
 
   async function removeBlock(id) {
-    try { await fetch('/api/blocks/' + id, { method: 'DELETE' }); await refreshFromAPI(); }
+    try { await fetch('/pwos/api/blocks/' + id, { method: 'DELETE' }); await refreshFromAPI(); }
     catch (e) { blocks = blocks.filter(function (b) { return b.id !== id; }); saveLocal(); notify(); }
   }
 

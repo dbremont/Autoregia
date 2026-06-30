@@ -71,12 +71,3 @@ def index():
 @app.route("/<path:path>")
 def static_files(path):
     return send_from_directory(app.static_folder, path)
-
-
-if __name__ == "__main__":
-    d = load_dataset()
-    port = int(os.environ.get("PKTS_PORT", "5001"))
-    print("Personal Keyword Tracking System — Prototype Server")
-    print(f"   Data: {DATA_PATH}")
-    print(f"   Events: {len(d.get('events', []))} · Sessions: {len(d.get('sessions', []))}")
-    app.run(debug=True, port=port, host="0.0.0.0")

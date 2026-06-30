@@ -11,7 +11,7 @@ PW.renderHierarchy = async function () {
   const el = document.getElementById('hierTree'); if (!el) return;
   el.innerHTML = '<p class="text-muted">Loading…</p>';
   try {
-    const res = await fetch('/api/hierarchy');
+    const res = await fetch('/pwos/api/hierarchy');
     const data = await res.json();
     let html = '';
     data.objectives.forEach(o => {

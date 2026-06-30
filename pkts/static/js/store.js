@@ -14,13 +14,13 @@ PKTS.Store = (() => {
     if (stored) { try { const d = JSON.parse(stored); events = d.events||[]; sessions = d.sessions||[]; } catch {} }
     if (!events.length) await fetchFromAPI();
     if (!events.length) {
-      try { const r = await fetch('/data/mock_keystrokes.json'); if(r.ok){ const d=await r.json(); events=d.events||[]; sessions=d.sessions||[]; saveLocal(); } } catch {}
+      try { const r = await fetch('/pkts/data/mock_keystrokes.json'); if(r.ok){ const d=await r.json(); events=d.events||[]; sessions=d.sessions||[]; saveLocal(); } } catch {}
     }
     return events;
   }
   async function fetchFromAPI() {
     try {
-      const res = await fetch('/api/keystrokes');
+      const res = await fetch('/pkts/api/keystrokes');
       if (res.ok) { const d = await res.json(); events = d.events||d; sessions = d.sessions||[]; saveLocal(); }
     } catch(e) { console.warn('API unavailable, using local/embedded data'); }
   }

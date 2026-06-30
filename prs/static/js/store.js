@@ -27,7 +27,7 @@ PRS.Store = (() => {
 
   async function fetchFromAPI() {
     try {
-      const res = await fetch('/api/records');
+      const res = await fetch('/prs/api/records');
       if (res.ok) {
         records = await res.json();
         saveLocal();

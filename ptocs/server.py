@@ -1,20 +1,27 @@
 """
-Personal Technical Object Catalog System (PTOCS) — Mock API Server.
+Personal Technical Object Catalog System (PTOCS) — API Server.
 
 Flask backend serving the PTOCS catalog (conforming to spec/ptocs/schema.json)
 for the PTOCS web client. Implements the catalog layer (CRUD), retrieval &
 navigation (search/browse), and the Statistical Overlay (analysis).
 
+Catalog is persisted in CouchDB (db ``ptocs``); seeded from
+data/mock_entries.json on first run against an empty database.
+
 Run:   python3 ptocs/server.py
 Open:  http://localhost:5003
 """
-import json, os, uuid
+import json, os, sys, uuid
 from datetime import datetime, timezone
 from collections import Counter, defaultdict
 from flask import Flask, jsonify, request, send_from_directory, Response
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from storage import Store
+
 app = Flask(__name__, static_folder="static")
-DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "mock_entries.json")
+SEED_PATH = os.path.join(os.path.dirname(__file__), "data", "mock_entries.json")
+store = Store("ptocs", seed_paths=[SEED_PATH])
 
 
 def now_iso():
@@ -22,16 +29,7 @@ def now_iso():
 
 
 def load_entries():
-    if os.path.exists(DATA_PATH):
-        with open(DATA_PATH, "r") as f:
-            return json.load(f)
-    return []
-
-
-def save_entries(entries):
-    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-    with open(DATA_PATH, "w") as f:
-        json.dump(entries, f, indent=2, default=str)
+    return store.all()
 
 
 def _parse_ts(s):
@@ -130,14 +128,13 @@ def get_entries():
 
 @app.route("/api/entries/<entry_id>", methods=["GET"])
 def get_entry(entry_id):
-    e = next((x for x in load_entries() if x["id"] == entry_id), None)
+    e = store.get(entry_id)
     return jsonify(e) if e else (jsonify({"error": "Entry not found"}), 404)
 
 
 @app.route("/api/entries", methods=["POST"])
 def create_entry():
     data = request.get_json() or {}
-    entries = load_entries()
     ts = now_iso()
     entry = {
         "id": data.get("id") or f"OBJ-{ts[:4]}-{uuid.uuid4().hex[:5].upper()}",
@@ -180,44 +177,37 @@ def create_entry():
         "updated_at": ts,
         "last_used_at": data.get("last_used_at"),
     }
-    entries.append(entry)
-    save_entries(entries)
-    return jsonify(entry), 201
+    saved = store.put(entry)
+    return jsonify(saved), 201
 
 
 @app.route("/api/entries/<entry_id>", methods=["PUT"])
 def update_entry(entry_id):
-    entries = load_entries()
-    idx = next((i for i, e in enumerate(entries) if e["id"] == entry_id), None)
-    if idx is None:
+    entry = store.get(entry_id)
+    if entry is None:
         return jsonify({"error": "Entry not found"}), 404
     data = request.get_json() or {}
     protected = {"id", "created_at"}
-    entry = entries[idx]
     for k, v in data.items():
         if k in protected:
             continue
         entry[k] = v
     entry["updated_at"] = now_iso()
-    save_entries(entries)
-    return jsonify(entry)
+    saved = store.put(entry)
+    return jsonify(saved)
 
 
 @app.route("/api/entries/<entry_id>", methods=["DELETE"])
 def delete_entry(entry_id):
-    entries = load_entries()
-    idx = next((i for i, e in enumerate(entries) if e["id"] == entry_id), None)
-    if idx is None:
+    if not store.exists(entry_id):
         return jsonify({"error": "Entry not found"}), 404
-    removed = entries.pop(idx)
-    save_entries(entries)
-    return jsonify({"deleted": removed["id"]})
+    store.delete(entry_id)
+    return jsonify({"deleted": entry_id})
 
 
 @app.route("/api/entries/<entry_id>/annotations", methods=["POST"])
 def add_annotation(entry_id):
-    entries = load_entries()
-    e = next((x for x in entries if x["id"] == entry_id), None)
+    e = store.get(entry_id)
     if e is None:
         return jsonify({"error": "Entry not found"}), 404
     data = request.get_json() or {}
@@ -231,20 +221,19 @@ def add_annotation(entry_id):
     }
     e.setdefault("annotations", []).append(ann)
     e["updated_at"] = now_iso()
-    save_entries(entries)
+    store.put(e)
     return jsonify(ann), 201
 
 
 @app.route("/api/entries/<entry_id>/pin", methods=["POST"])
 def toggle_pin(entry_id):
     """Toggle the `pinned` flag on an entry (promote to Dashboard quick-access)."""
-    entries = load_entries()
-    e = next((x for x in entries if x["id"] == entry_id), None)
+    e = store.get(entry_id)
     if e is None:
         return jsonify({"error": "Entry not found"}), 404
     e["pinned"] = not bool(e.get("pinned", False))
     e["updated_at"] = now_iso()
-    save_entries(entries)
+    store.put(e)
     return jsonify({"id": e["id"], "pinned": e["pinned"]})
 
 
@@ -527,16 +516,12 @@ def import_data():
     data = request.get_json()
     if not isinstance(data, list):
         return jsonify({"error": "Expected JSON array"}), 400
-    entries = load_entries()
-    existing = {e["id"] for e in entries}
     imported = 0
     for item in data:
-        if item.get("id") and item["id"] not in existing:
-            entries.append(item)
-            existing.add(item["id"])
+        if item.get("id") and not store.exists(item["id"]):
+            store.put(item)
             imported += 1
-    save_entries(entries)
-    return jsonify({"imported": imported, "total": len(entries)})
+    return jsonify({"imported": imported, "total": store.count()})
 
 
 # ── Static serving ─────────────────────────────────────────────────────────
@@ -548,11 +533,3 @@ def index():
 @app.route("/<path:path>")
 def static_files(path):
     return send_from_directory(app.static_folder, path)
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PTOCS_PORT", "5003"))
-    print("Personal Technical Object Catalog System — Prototype Server")
-    print(f"   Data: {DATA_PATH}")
-    print(f"   Entries: {len(load_entries())}")
-    app.run(debug=True, port=port, host="0.0.0.0")
