@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Loop — Work Map · Autoregia</title>
+  <style>
+    :root {
+      --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
+      --rule: #d8d0c4; --rule-soft: #e8e1d4; --parchment: #f7f3ea; --surface: #fffdf8; --surface-2: #f1ebde;
+      --accent: #7A1A2A; --gold: #b8893a; --gold-soft: #d4b87a;
+      --built: #3F6E50; --built-bg: #ecf3ee; --partial: #B4742A; --partial-bg: #fbf1e3;
+      --missing: #A33434; --missing-bg: #faecec;
+      --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+      --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:920px;margin:0 auto;padding:0 28px}
+    a.back{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
+    a.back:hover{color:var(--accent)} a.back::before{content:"← "}
+    header.masthead{padding:24px 0 36px;text-align:center}
+    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:22px}
+    .eyebrow::before,.eyebrow::after{content:"—";margin:0 12px;color:var(--rule)}
+    h1.title{font-size:clamp(38px,6vw,58px);font-weight:400;letter-spacing:-.02em;line-height:1.04;margin-bottom:22px}
+    h1.title em{font-style:italic;color:var(--accent)}
+    .lede{font-size:19px;color:var(--ink-soft);max-width:660px;margin:0 auto;font-style:italic;line-height:1.55}
+    .gold-rule{height:1px;background:var(--gold);width:64px;margin:36px auto;opacity:.7}
+    section{padding:8px 0 44px}
+    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:10px}
+    .section-title{font-size:26px;font-weight:400;letter-spacing:-.01em;margin-bottom:8px;text-align:center}
+    .section-sub{font-size:15px;color:var(--muted);text-align:center;margin-bottom:26px;font-style:italic}
+    p.body{font-size:16.5px;color:var(--ink-soft);margin:14px auto;max-width:680px}
+    code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1px 5px;border-radius:3px;color:var(--accent)}
+
+    /* Progress strip */
+    .progress-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 4px}
+    .prog{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 14px;text-align:center}
+    .prog .val{font-family:var(--serif);font-size:30px;font-weight:500;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+    .prog .lab{font-family:var(--sans);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:600}
+    .prog.warn .val{color:var(--partial)} .prog.bad .val{color:var(--missing)} .prog.good .val{color:var(--built)}
+
+    /* Legend */
+    .legend{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:6px 0 26px;font-family:var(--sans);font-size:12px;color:var(--ink-soft)}
+    .legend .sw{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:middle}
+
+    /* Diagram */
+    .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:26px 12px 18px;margin:8px 0}
+    .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
+    .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:14px}
+
+    /* Work streams */
+    .stream{margin:42px 0 8px}
+    .stream-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px}
+    .stream-tag{font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:600;letter-spacing:.04em}
+    .stream-title{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--ink);letter-spacing:-.01em}
+    .stream-why{font-family:var(--sans);font-size:12px;color:var(--muted);margin-left:auto;font-style:italic;max-width:340px;text-align:right;line-height:1.4}
+    .work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+    .work-card{background:var(--surface);border:1px solid var(--rule);border-radius:7px;padding:16px 16px 14px;border-left:3px solid var(--muted);transition:border-color .15s,box-shadow .15s}
+    .work-card:hover{box-shadow:0 2px 10px rgba(28,25,22,.06)}
+    .work-card.built{border-left-color:var(--built)} .work-card.partial{border-left-color:var(--partial)} .work-card.missing{border-left-color:var(--missing)}
+    .work-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+    .work-id{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.05em}
+    .pill{font-family:var(--sans);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:99px}
+    .pill.built{background:var(--built-bg);color:var(--built)} .pill.partial{background:var(--partial-bg);color:var(--partial)} .pill.missing{background:var(--missing-bg);color:var(--missing)}
+    .work-card h3{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink);line-height:1.25;margin-bottom:8px;letter-spacing:-.005em}
+    .work-exists,.work-needed{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-bottom:6px}
+    .work-exists strong,.work-needed strong{font-family:var(--sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block;margin-bottom:2px}
+    .work-meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+    .work-meta .dep{color:var(--accent)} .work-meta .ref{color:var(--muted)}
+
+    .callout{background:var(--surface-2);border-left:3px solid var(--gold);padding:16px 20px;border-radius:0 6px 6px 0;margin:24px 0;font-size:15px;color:var(--ink-soft)}
+    .callout strong{color:var(--ink)}
+
+    ul.refs{list-style:none;padding:0;margin:0}
+    ul.refs li{padding:11px 0;border-bottom:1px solid var(--rule)}
+    ul.refs a{color:var(--accent);text-decoration:none;font-size:15.5px;transition:color .18s}
+    ul.refs a:hover{color:var(--ink)}
+    ul.refs .desc{display:block;font-size:13px;color:var(--muted);margin-top:2px;font-style:italic}
+    footer{border-top:1px solid var(--rule);padding:30px 0 52px;text-align:center}
+    footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+    @media(max-width:680px){.progress-strip{grid-template-columns:repeat(2,1fr)}.stream-why{display:none}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">Index</a>
+  <header class="masthead">
+    <div class="eyebrow">Work Map · Concrete Control Loop</div>
+    <h1 class="title">Closing the <em>Loop</em></h1>
+    <p class="lede">A map of the work needed to turn five decoupled prototypes into one self-regulating control loop — the concrete Personal Viable System Model.</p>
+    <div class="gold-rule"></div>
+  </header>
+
+  <!-- ═══ Verdict ═══ -->
+  <section>
+    <div class="section-label">Where We Stand</div>
+    <p class="body">The PVSM defines a closed loop — <em>perceive → estimate → decide → select → execute → feed back</em>. Autoregia has five working prototypes for the first four stages, but they are <strong>structurally decoupled islands</strong>: no system calls another, there is no coordination substrate, no regulator, and the Execution &amp; Feedback stages have no code. The loop is, today, a diagram. This page maps what stands between the diagram and a running closed loop.</p>
+
+    <div class="progress-strip">
+      <div class="prog warn"><div class="val">4 / 6</div><div class="lab">loop stages prototyped</div></div>
+      <div class="prog bad"><div class="val">0 / 6</div><div class="lab">stages wired into the loop</div></div>
+      <div class="prog bad"><div class="val">0 / 2</div><div class="lab">coordination substrate built</div></div>
+      <div class="prog bad"><div class="val">0</div><div class="lab">cross-system calls today</div></div>
+    </div>
+
+    <div class="legend">
+      <span><span class="sw" style="background:#3F6E50"></span>Built — working prototype</span>
+      <span><span class="sw" style="background:#B4742A"></span>Partial — exists but stubbed / decoupled</span>
+      <span><span class="sw" style="background:#A33434"></span>Missing — spec only, or no code</span>
+    </div>
+  </section>
+
+  <!-- ═══ Gap Map ═══ -->
+  <section>
+    <div class="section-label">Gap Map</div>
+    <h2 class="section-title">The Loop, Coloured by Status</h2>
+    <p class="section-sub">green = built · amber = partial (decoupled) · red = no code</p>
+    <div class="diagram">
+      <svg viewBox="0 0 880 470" role="img" aria-label="Control loop gap map: six stages coloured by implementation status, over a coordination substrate of shared schema and event bus.">
+        <defs>
+          <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
+        </defs>
+        <style>
+          .nlbl{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:14px;fill:#1c1916;font-weight:500}
+          .nsub{font-family:"SF Mono",Consolas,monospace;font-size:10px;fill:#7a736a}
+          .nstat{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+          .arc{font-family:"SF Mono",Consolas,monospace;font-size:10px;fill:#b8893a;letter-spacing:.04em}
+          .sub-lbl{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;fill:#7a736a;font-weight:600}
+          .edge{stroke:#b8893a;stroke-width:1.5;fill:none}
+          .edge-fb{stroke:#7A1A2A;stroke-width:1.4;fill:none;stroke-dasharray:5 4}
+        </style>
+
+        <!-- forward edges -->
+        <path class="edge" d="M 140 170 L 178 170" marker-end="url(#ag)"/>
+        <path class="edge" d="M 322 170 L 358 170" marker-end="url(#ag)"/>
+        <path class="edge" d="M 502 170 L 538 170" marker-end="url(#ag)"/>
+        <path class="edge" d="M 682 170 L 718 170" marker-end="url(#ag)"/>
+        <text class="arc" x="160" y="160" text-anchor="middle">perceive</text>
+        <text class="arc" x="340" y="160" text-anchor="middle">estimate</text>
+        <text class="arc" x="520" y="160" text-anchor="middle">decide</text>
+        <text class="arc" x="700" y="160" text-anchor="middle">commit</text>
+
+        <!-- execution → world (bottom) -->
+        <path class="edge" d="M 790 200 L 790 360 L 90 360 L 90 200" marker-end="url(#ag)"/>
+        <text class="arc" x="440" y="352" text-anchor="middle">execute · modify world</text>
+
+        <!-- feedback path -->
+        <path class="edge-fb" d="M 440 360 L 440 290" marker-end="url(#ar)"/>
+        <text class="arc" x="452" y="332" text-anchor="start" fill="#7A1A2A">observe · regulate</text>
+
+        <!-- the 6 stage nodes: x = 90, 250, 440, 620, 790 (perception..execution), feedback at 440,300 -->
+        <!-- Perception (partial) -->
+        <g transform="translate(90,170)">
+          <rect x="-70" y="-30" width="140" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
+          <text class="nlbl" x="0" y="-6" text-anchor="middle">Perception</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">PRS · PKTS</text>
+          <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
+        </g>
+        <!-- Situation Model (partial) -->
+        <g transform="translate(250,170)">
+          <rect x="-72" y="-30" width="144" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
+          <text class="nlbl" x="0" y="-6" text-anchor="middle">Situation Model</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">PTOCS</text>
+          <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
+        </g>
+        <!-- Decision (partial) -->
+        <g transform="translate(440,170)">
+          <rect x="-82" y="-30" width="164" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
+          <text class="nlbl" x="0" y="-6" text-anchor="middle">Decision</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">PPS · regulator?</text>
+          <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
+        </g>
+        <!-- Action Selection (partial) -->
+        <g transform="translate(620,170)">
+          <rect x="-82" y="-30" width="164" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
+          <text class="nlbl" x="0" y="-6" text-anchor="middle">Action Selection</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">PWOS</text>
+          <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
+        </g>
+        <!-- Execution (missing) -->
+        <g transform="translate(790,170)">
+          <rect x="-70" y="-30" width="140" height="60" rx="8" fill="#faecec" stroke="#A33434" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text class="nlbl" x="0" y="-6" text-anchor="middle">Execution</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">production tools</text>
+          <text class="nstat" x="0" y="22" text-anchor="middle" fill="#A33434">missing</text>
+        </g>
+        <!-- Feedback (missing) -->
+        <g transform="translate(440,300)">
+          <rect x="-72" y="-22" width="144" height="44" rx="8" fill="#faecec" stroke="#A33434" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text class="nlbl" x="0" y="-2" text-anchor="middle">Feedback</text>
+          <text class="nsub" x="0" y="13" text-anchor="middle">reflection · regulate</text>
+        </g>
+
+        <!-- S3 Regulator (missing, hovering) -->
+        <g transform="translate(440,96)">
+          <rect x="-60" y="-18" width="120" height="36" rx="6" fill="#faecec" stroke="#A33434" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text class="nlbl" x="0" y="0" text-anchor="middle" font-size="12.5">S3 Regulator</text>
+          <text class="nsub" x="0" y="13" text-anchor="middle" font-size="9px">decision engine · missing</text>
+        </g>
+        <path class="edge-fb" d="M 440 118 L 440 140" marker-end="url(#ar)"/>
+
+        <!-- Substrate band -->
+        <rect x="40" y="404" width="800" height="50" rx="8" fill="#f1ebde" stroke="#b8893a" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.9"/>
+        <text class="sub-lbl" x="440" y="397" text-anchor="middle">Coordination Substrate · S2 · must exist for the loop to close</text>
+        <g transform="translate(220,429)">
+          <rect x="-120" y="-15" width="240" height="30" rx="5" fill="#faecec" stroke="#A33434" stroke-width="1.4"/>
+          <text class="nlbl" x="0" y="4" text-anchor="middle" font-size="13">records_schema.json</text>
+          <text class="nsub" x="118" y="4" text-anchor="end" font-size="9px" fill="#A33434">MISSING</text>
+        </g>
+        <g transform="translate(620,429)">
+          <rect x="-120" y="-15" width="240" height="30" rx="5" fill="#faecec" stroke="#A33434" stroke-width="1.4"/>
+          <text class="nlbl" x="0" y="4" text-anchor="middle" font-size="13">PEB / ISCB Event Bus</text>
+          <text class="nsub" x="118" y="4" text-anchor="end" font-size="9px" fill="#A33434">SPEC ONLY</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">the closed loop today: four amber islands, two red gaps, no substrate · every arrow is currently broken</div>
+    </div>
+
+    <div class="callout">
+      <strong>The read on the diagram:</strong> the prototypes are real but inert — none emits a signal another can hear. The single highest-leverage missing piece is the <strong>PEB event bus</strong> (the substrate band): without it, no arrow on this diagram can carry data. Build the substrate first; the islands can then be wired one at a time, each a small, independently testable step.
+    </div>
+  </section>
+
+  <!-- ═══ Work Streams ═══ -->
+  <section>
+    <div class="section-label">The Work</div>
+    <h2 class="section-title">Five Streams, Sequenced</h2>
+    <p class="section-sub">A → substrate (blocks all) · B → instrument the islands · C → build the missing stages · D → close the cascades · E → unify</p>
+
+    <!-- Stream A -->
+    <div class="stream">
+      <div class="stream-head">
+        <span class="stream-tag">STREAM A</span>
+        <span class="stream-title">Shared Substrate</span>
+        <span class="stream-why">The foundation. Nothing closes until the islands can talk. Do this first.</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">A1</span><span class="pill missing">missing</span></div>
+          <h3>Shared record schema</h3>
+          <div class="work-exists"><strong>exists</strong>Referenced in 3 docs; <code>records_schema.json</code> file is absent. Each subsystem has its own divergent schema.</div>
+          <div class="work-needed"><strong>needed</strong>Author the unified record schema (Record id, type, content, metadata) that PRS owns and every system references by <code>$id</code>.</div>
+          <div class="work-meta"><span class="dep">blocks: B-stream</span><span class="ref">README.md:22 · spec/prs/schema.json:3</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">A2</span><span class="pill missing">missing</span></div>
+          <h3>PEB / ISCB event bus</h3>
+          <div class="work-exists"><strong>exists</strong>Spec'd in <code>spec/iscb/spec.md</code> (draft): Dispatcher, Route Table, Producers, Reactions. No code directory exists.</div>
+          <div class="work-needed"><strong>needed</strong>Implement the in-process dispatcher as a library the systems import; append-only event log (events live as PRS records).</div>
+          <div class="work-meta"><span class="dep">blocks: B, C2, D</span><span class="ref">spec/iscb/spec.md:281</span></div>
+        </div>
+        <div class="work-card partial">
+          <div class="work-head"><span class="work-id">A3</span><span class="pill partial">partial</span></div>
+          <h3>Unified persistence</h3>
+          <div class="work-exists"><strong>exists</strong>JSON files across PRS, PKTS, PTOCS, PWOS. PRS spec already recommends SQLite.</div>
+          <div class="work-needed"><strong>needed</strong>Migrate to SQLite; one DB (or federated) the PEB event log and record store share.</div>
+          <div class="work-meta"><span class="dep">dep: A1</span><span class="ref">spec/prs/README.md:309</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stream B -->
+    <div class="stream">
+      <div class="stream-head">
+        <span class="stream-tag">STREAM B</span>
+        <span class="stream-title">Instrument the Islands</span>
+        <span class="stream-why">Make each prototype emit and consume events. Each is small and independently testable once the bus exists.</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card partial">
+          <div class="work-head"><span class="work-id">B1</span><span class="pill partial">partial</span></div>
+          <h3>PRS — emit &amp; log</h3>
+          <div class="work-exists"><strong>exists</strong>CRUD over Records; no <code>Event</code>/<code>Observation</code> type; silent on writes.</div>
+          <div class="work-needed"><strong>needed</strong>Add Event/Observation record types; emit <code>RecordCreated/Updated</code>; serve as the PEB event log.</div>
+          <div class="work-meta"><span class="dep">dep: A1, A2</span><span class="ref">prs/server.py</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">B2</span><span class="pill missing">missing</span></div>
+          <h3>PKTS — write path</h3>
+          <div class="work-exists"><strong>exists</strong>Read-only prototype; mock data only; no ingestion.</div>
+          <div class="work-needed"><strong>needed</strong>Add POST ingestion; emit <code>SessionEnded</code> / aggregated attention signals into the bus.</div>
+          <div class="work-meta"><span class="dep">dep: A2</span><span class="ref">pkts/server.py:78</span></div>
+        </div>
+        <div class="work-card partial">
+          <div class="work-head"><span class="work-id">B3</span><span class="pill partial">partial</span></div>
+          <h3>PTOCS — ingest signals</h3>
+          <div class="work-exists"><strong>exists</strong>Standalone catalog; <code>strategic.system_served</code> tag unused; ingests nothing.</div>
+          <div class="work-needed"><strong>needed</strong>Consume PRS/PKTS events to build the situation model; resolve <code>system_served</code> against the VSM map.</div>
+          <div class="work-meta"><span class="dep">dep: B1</span><span class="ref">ptocs/server.py:173</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">B4</span><span class="pill missing">missing</span></div>
+          <h3>PPS — policy gating API</h3>
+          <div class="work-exists"><strong>exists</strong>Static HTML corpus; search only; no enforcement; cannot create policies.</div>
+          <div class="work-needed"><strong>needed</strong>Add <code>/api/evaluate</code> (does action X violate policy Y?); emit <code>PolicyChanged</code> / <code>PolicyViolated</code>.</div>
+          <div class="work-meta"><span class="dep">dep: A2</span><span class="ref">pps/server.py:76</span></div>
+        </div>
+        <div class="work-card partial">
+          <div class="work-head"><span class="work-id">B5</span><span class="pill partial">partial</span></div>
+          <h3>PWOS — resolve &amp; gate</h3>
+          <div class="work-exists"><strong>exists</strong>Most-built system; but <code>record_id</code> is synthetic; no PPS check on blocks.</div>
+          <div class="work-needed"><strong>needed</strong>Resolve <code>record_id</code> against real PRS records; consult PPS before confirming blocks; emit scheduling &amp; completion events.</div>
+          <div class="work-meta"><span class="dep">dep: B1, B4</span><span class="ref">pwos/server.py:107</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stream C -->
+    <div class="stream">
+      <div class="stream-head">
+        <span class="stream-tag">STREAM C</span>
+        <span class="stream-title">Build the Missing Stages</span>
+        <span class="stream-why">The red nodes. Two loop stages and the steering component have no code at all.</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">C1</span><span class="pill missing">missing</span></div>
+          <h3>Situation Model / State Estimator</h3>
+          <div class="work-exists"><strong>exists</strong>Concept only (the "state estimate" stage). PTOCS is the closest artifact but is a static catalog.</div>
+          <div class="work-needed"><strong>needed</strong>A component that aggregates PRS + PKTS + PWOS signals into a live <em>current state estimate</em> — "where am I now, against where I intend to be".</div>
+          <div class="work-meta"><span class="dep">dep: B1–B3</span><span class="ref">about.html · PVSM</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">C2</span><span class="pill missing">missing · key</span></div>
+          <h3>S3 Regulation / Decision Engine</h3>
+          <div class="work-exists"><strong>exists</strong>Nothing. PWOS analytics is S3* audit (read-only); it computes deviations but actuates nothing.</div>
+          <div class="work-needed"><strong>needed</strong>The steering component: compare the state estimate against targets (the performance goals) → compute corrective action → emit it to PWOS. This is the heart of the closed loop.</div>
+          <div class="work-meta"><span class="dep">dep: C1, A2</span><span class="ref">spec/iscb · PWOS analytics</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">C3</span><span class="pill missing">missing</span></div>
+          <h3>Execution boundary</h3>
+          <div class="work-exists"><strong>exists</strong>Concept only ("Production"). No instrumented production tools.</div>
+          <div class="work-needed"><strong>needed</strong>A boundary that instruments real work (IDE, editor, comms) to emit <code>ExecutionStarted/Finished</code> events back into the loop.</div>
+          <div class="work-meta"><span class="dep">dep: A2</span><span class="ref">about.html · Execution</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">C4</span><span class="pill missing">missing</span></div>
+          <h3>Feedback / Reflection layer</h3>
+          <div class="work-exists"><strong>exists</strong>Nothing as an actuator. PWOS analytics observes but does not feed the regulator.</div>
+          <div class="work-needed"><strong>needed</strong>Close the outer arc: observe execution consequences → compute deviations → drive C2. Turns the audit dashboard into a living feedback path.</div>
+          <div class="work-meta"><span class="dep">dep: C2, C3</span><span class="ref">about.html · Feedback</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stream D -->
+    <div class="stream">
+      <div class="stream-head">
+        <span class="stream-tag">STREAM D</span>
+        <span class="stream-title">Close the Cascades</span>
+        <span class="stream-why">Wire the canonical end-to-end flows from the ISCB spec — the proof the loop actually runs.</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">D1</span><span class="pill missing">missing</span></div>
+          <h3>Commitment cascade</h3>
+          <div class="work-exists"><strong>exists</strong>The ISCB worked example — but only on paper.</div>
+          <div class="work-needed"><strong>needed</strong>PRS <code>RecordCreated</code>(Commitment) → PEB → PWOS <code>registerAction</code> → PEB → <code>BlockConflictDetected</code> → Notification.</div>
+          <div class="work-meta"><span class="dep">dep: B1, B5, A2</span><span class="ref">spec/iscb/spec.md:198</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">D2</span><span class="pill missing">missing · key</span></div>
+          <h3>Regulatory feedback loop</h3>
+          <div class="work-exists"><strong>exists</strong>PWOS analytics computes deviations from the performance goals; nothing acts on them.</div>
+          <div class="work-needed"><strong>needed</strong>PWOS <code>ActionCompleted</code> → analytics deviation vs goals → C2 regulator → corrective action → PWOS reschedule. The loop that makes the system self-correcting.</div>
+          <div class="work-meta"><span class="dep">dep: C2, C4</span><span class="ref">pwos analytics/performance</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">D3</span><span class="pill missing">missing</span></div>
+          <h3>Policy gating flow</h3>
+          <div class="work-exists"><strong>exists</strong>Spec'd (<code>governed-by</code> edges) but never enforced.</div>
+          <div class="work-needed"><strong>needed</strong>PWOS block creation → PPS <code>/api/evaluate</code> → block confirmed / rejected / surfaced. Makes policy operational.</div>
+          <div class="work-meta"><span class="dep">dep: B4, B5</span><span class="ref">spec/pwos/spec.md</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stream E -->
+    <div class="stream">
+      <div class="stream-head">
+        <span class="stream-tag">STREAM E</span>
+        <span class="stream-title">Unify the Experience</span>
+        <span class="stream-why">Ergonomic, not structural. Five ports and five shells become one navigable system.</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">E1</span><span class="pill missing">missing</span></div>
+          <h3>Shared UI shell</h3>
+          <div class="work-exists"><strong>exists</strong>Five standalone Flask apps on ports 5000–5005, each its own shell.</div>
+          <div class="work-needed"><strong>needed</strong>A unified navigation surface (gateway / sidebar) crossing all subsystems under one origin.</div>
+          <div class="work-meta"><span class="dep">after: B-stream</span><span class="ref">spec/ui.spec</span></div>
+        </div>
+        <div class="work-card missing">
+          <div class="work-head"><span class="work-id">E2</span><span class="pill missing">missing</span></div>
+          <h3>Cross-system record linking</h3>
+          <div class="work-exists"><strong>exists</strong>Link vocabularies exist per-system (<code>part-of</code>, <code>governed-by</code>) but never cross a system boundary.</div>
+          <div class="work-needed"><strong>needed</strong>Trace one object across the loop: PWOS action → PRS record → PTOCS capability → PPS policy.</div>
+          <div class="work-meta"><span class="dep">dep: A1, B5</span><span class="ref">spec/pwos/spec.md</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Suggested path ═══ -->
+  <section>
+    <div class="section-label">Suggested Path</div>
+    <h2 class="section-title">A Pragmatic Sequence</h2>
+    <p class="body">The dependencies point one way. A minimal viable loop — the smallest thing that genuinely self-regulates — needs only: <strong>A1</strong> (schema) → <strong>A2</strong> (bus) → <strong>B1+B5</strong> (PRS emits, PWOS listens) → <strong>C2</strong> (regulator reading the existing analytics) → <strong>D2</strong> (feed deviations back into PWOS). That five-step spine closes the loop; everything else enriches it.</p>
+    <div class="callout">
+      <strong>Definition of done — the loop is closed when:</strong> a commitment recorded in PRS appears as an action in PWOS without manual transfer; a deadline missed in PWOS moves the performance scorecard; and the scorecard's deviation produces a rescheduled corrective block — all through the bus, with no human copy-paste between systems.
+    </div>
+  </section>
+
+  <!-- ═══ References ═══ -->
+  <section>
+    <div class="section-label">References</div>
+    <h2 class="section-title">Source Documents</h2>
+    <ul class="refs">
+      <li><a href="about.html">About — the PVSM &amp; the control loop →</a><span class="desc">the canonical model this map serves</span></li>
+      <li><a href="spec/iscb/spec.md">ISCB — the Personal Event Bus spec →</a><span class="desc">the missing coordination substrate (Stream A2)</span></li>
+      <li><a href="spec/pwos/analytics.md">PWOS Analytics — the audit surface →</a><span class="desc">the S3* observations the regulator (C2) will read</span></li>
+      <li><a href="logos.log.md">logos.log.md — decision log →</a><span class="desc">design rationale</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <span class="mono">Autoregia · Control Loop Work Map</span>
+  </footer>
+</div>
+</body>
+</html>
