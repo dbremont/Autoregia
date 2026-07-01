@@ -13,6 +13,11 @@
 
 ## Components
 
+- **[S] Scratchpad** — **a single persistent Markdown + LaTeX working document**.
+  The agent's short-term surface for whatever is in front of mind right now:
+  written freely, read as rendered Markdown with typeset math (KaTeX), and shared
+  by link with **view** or **edit** permission. One living page, not a record
+  store. This is *"what's on my mind, right now."*
 - **[A] Work Organization & Registration** — the action hierarchy. Manages *action
   constructs* (tasks, projects, routines, commitments, initiatives, objectives)
   and their dependency graph. Operates **over** PRS records (the single source of

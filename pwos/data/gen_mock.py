@@ -1,9 +1,10 @@
 """
 PWOS deterministic mock-data generator.
 
-Produces two seed datasets conforming to spec/pwos/schema.json:
+Produces seed datasets conforming to spec/pwos/schema.json:
   - data/mock_actions.json  -> Action Constructs (Component A)
   - data/mock_blocks.json   -> Calendar Blocks  (Component B)
+  - data/mock_scratch.json  -> Scratchpad document (Component S — a single markdown working doc)
 
 Run:   python3 pwos/data/gen_mock.py
 """
@@ -14,6 +15,7 @@ from datetime import datetime, timezone, timedelta
 HERE = os.path.dirname(__file__)
 ACTIONS_PATH = os.path.join(HERE, "mock_actions.json")
 BLOCKS_PATH = os.path.join(HERE, "mock_blocks.json")
+SCRATCH_PATH = os.path.join(HERE, "mock_scratch.json")
 
 # Deterministic reference "now" (midnight) so day*24+h lands at the intended hour.
 BASE = datetime(2026, 6, 29, 0, 0, 0, tzinfo=timezone.utc)
@@ -70,6 +72,17 @@ def block(idx, action_id, start_h, dur_h, calendar_id="work",
         "status": status,
         "title": title,
         "domain": domain,
+    }
+
+
+def scratch(body, created_h, updated_h):
+    """The singleton Scratchpad document (one persistent markdown working doc)."""
+    return {
+        "id": "SCR-SCRATCHPAD",
+        "body": body,
+        "shares": [],
+        "created_at": hours(created_h),
+        "updated_at": hours(updated_h),
     }
 
 
@@ -153,15 +166,36 @@ def generate_blocks():
     return bs
 
 
+def generate_scratch():
+    return scratch(
+        "# Scratchpad\n\n"
+        "A single markdown working document \u2014 your short-term surface for whatever is in front of mind right now.\n\n"
+        "## Today\n\n"
+        "- [ ] sketch the dependency-graph query\n"
+        "- [x] confirm the launch date\n"
+        "- remember: the S1\u2013S3 channel maps onto block<->session deviation\n\n"
+        "## Notes\n\n"
+        "Drop anything here \u2014 headings, lists, `code`, links. Toggle **Preview** to read it rendered. "
+        "Use **Share** to copy the markdown or download it.\n\n"
+        "Math works too: the area of a circle is $A = \\pi r^2$, and\n\n"
+        "$$\\int_0^1 x^2\\,dx = \\tfrac{1}{3}.$$\n\n"
+        "> Short-term memory: edit freely, keep only what you need.",
+        created_h=-72, updated_h=-8)
+
+
 def main():
     actions = generate_actions()
     blocks = generate_blocks()
+    scratch_doc = generate_scratch()
     with open(ACTIONS_PATH, "w") as f:
         json.dump(actions, f, indent=2)
     with open(BLOCKS_PATH, "w") as f:
         json.dump(blocks, f, indent=2)
+    with open(SCRATCH_PATH, "w") as f:
+        json.dump(scratch_doc, f, indent=2)
     print(f"Wrote {len(actions)} actions -> {ACTIONS_PATH}")
     print(f"Wrote {len(blocks)} blocks  -> {BLOCKS_PATH}")
+    print(f"Wrote scratchpad document   -> {SCRATCH_PATH}")
 
     # Optional schema validation if jsonschema is available
     try:
@@ -173,6 +207,8 @@ def main():
         for b in blocks:
             wrap = {"$defs": schema["$defs"], "$ref": "#/$defs/calendarBlock"}
             Draft202012Validator(wrap).validate(b)
+        wrap = {"$defs": schema["$defs"], "$ref": "#/$defs/scratchpad"}
+        Draft202012Validator(wrap).validate(scratch_doc)
         print("Schema validation: all entries conform to spec/pwos/schema.json")
     except ImportError:
         print("jsonschema not installed; skipped validation")

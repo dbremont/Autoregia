@@ -18,6 +18,10 @@
 Fundamentally, a PWOS exists to maintain persistent, executable representations of
 the **action** relevant for effective agency. These include:
 
+- **Working Document** — the Scratchpad: a single persistent Markdown page for
+  the transient, in-front-of-mind material — written freely, read as rendered
+  Markdown, and shared. The short-term surface alongside the durable structure
+  below.
 - **Action Constructs** — tasks, projects, routines, commitments, initiatives, and
   objectives: the structured units of work the agent is (or may be) performing.
 - **Operational Dependencies** — the graph of blocking, ordering, and enabling
@@ -47,6 +51,12 @@ reliable, capacity-aware, policy-compliant execution.
 ```
 PWOS — Personal Work Organization System  (VSM System 1 – Operations)
  |
+ +-- [S] Scratchpad  — the working document
+ |     \_ A single persistent Markdown + LaTeX document — the agent's short-term
+ |        working surface for whatever is in front of mind right now. Authored
+ |        with an edit/preview toggle and shared by link (view or edit). Not a
+ |        collection, not a record store: one living page.
+ |
  +-- [A] Work Organization & Registration
  |     \_ Action Constructs (tasks, projects, routines, commitments,
  |        initiatives, objectives) + dependency graph + effort/capacity
@@ -71,6 +81,7 @@ PWOS — Personal Work Organization System  (VSM System 1 – Operations)
 
 | Component | Role | Owns | Does NOT own |
 | --- | --- | --- | --- |
+| **[S] Scratchpad** | The working document — "what's on my mind, right now" | A single persistent Markdown document (edit + preview, share) | Anything that needs durable registration (that is Component [A]'s job) |
 | **[A] Work Organization & Registration** | The action hierarchy — "what to do" | Action constructs, dependency graph, effort estimates, logical ordering | The underlying record store (PRS owns that) |
 | **[B] Work Calendarization** | Temporal coordination — "when, against the real calendar" | Scheduled blocks, recurrence expansion, conflict detection, workload | The authoritative external calendar (the platform owns that; this mirrors it) |
 | **[D] Execution & Actuals** | The actuals layer — "what really happened" | Work sessions (start/stop, actual effort, outcomes), the block↔session deviation | The durable execution *event stream* (that remains PRS-backed; PWOS holds the operational session object) |
@@ -115,6 +126,13 @@ Conversely, a construct should generally not be registered when it is:
   that needs no independent tracking).
 - Operationally irrelevant to current or foreseeable objectives.
 - More costly to maintain than the value it provides.
+
+> Such transient, working-memory-grade thoughts are not lost — they land on the
+> **Scratchpad** (Component [S]): a single persistent Markdown document that
+> serves as the agent's short-term working surface. It is one living page, not a
+> record store — written freely, read as rendered Markdown, and shared (copied
+> or downloaded). Anything that earns a durable place is lifted, by hand, into a
+> registered action construct (Component [A]).
 
 #### Action Construct Kind Taxonomy
 
@@ -237,6 +255,42 @@ Conversely, a construct should generally not be registered when it is:
 | | Capacity Profile | `{resource: time|focus|energy|attention, band: deep|shallow|low}` |
 | **Domain** | Domain *(from PRS)* | Software Engineering, Health, Finance, Research, ... |
 | | Tags *(from PRS)* | Free-form tags |
+
+## Scratchpad (Component S — The Working Document)
+
+> Component [S] is a **single persistent Markdown document** — the agent's
+> short-term working surface. It externalizes what is *in front of mind right
+> now*: the transient scratchings, half-formed lists, and reminders that are not
+> yet — and may never become — registered action constructs. It is deliberately
+> *one* page, not a collection: a living document you write to and read from.
+
+### Model
+
+> The Scratchpad is a **singleton document** (fixed id `SCR-SCRATCHPAD`). Its
+> entire content is one Markdown `body`; there are no notes, tags, or statuses.
+
+| Field | Description | Example |
+| --- | --- | --- |
+| **Id** | Fixed singleton identifier. | `SCR-SCRATCHPAD`. |
+| **Body** | The document — GitHub-flavored Markdown (headings, lists, checkboxes, `code`, links, quotes) with LaTeX math (`$...$`, `$$...$$`, `\(...\)`, `\[...\]`, rendered by KaTeX). The primary and only content field. | `"# Today\n- [ ] draft PR\nThe area is $A=\\pi r^2$."`. |
+| **Shares** | Active share grants — permissioned links onto the document (`view` read-only, or `edit`). Empty by default. | `[{"token", "permission": "edit", "created_at"}]`. |
+| **Created / Updated At** | Provenance timestamps. | ISO 8601. |
+
+### Functionality
+
+- **Edit** — author the document as Markdown + LaTeX in a plain editor (autosaved).
+- **Preview** — toggle to the rendered Markdown with typeset math (KaTeX).
+- **Share by link** — mint a permissioned URL: a **view** link renders the document
+  read-only; an **edit** link lets the holder update it. Links are token-scoped
+  (unguessable), can be listed and revoked, and serve a standalone public page at
+  `/pwos/share/<token>`.
+- **Persist** — one document, server-backed (`GET` / `PUT` on the singleton); it
+  survives reloads and is carried in JSON export/import.
+
+> [S] is deliberately *not* a record store and *not* PRS-backed. It is one
+> operational page the agent keeps open — like a notebook on the desk. Anything
+> that needs to be tracked, scheduled, or audited is registered as an action
+> construct (Component [A]) by hand; the Scratchpad holds no such burden.
 
 ## Work Calendarization (Component B)
 
@@ -423,6 +477,11 @@ objects, normalize to PWOS terms, push local changes, pull remote changes*.
 
 ### Functionality Set
 
+- **Scratchpad ([S])**
+  - One persistent Markdown + LaTeX working document (a singleton).
+  - Edit ↔ Preview (rendered Markdown with KaTeX math).
+  - Share by link with `view` / `edit` permission (token-scoped; listable, revocable).
+  - Server-backed singleton (`GET` / `PUT`); carried in export/import.
 - **Work Organization & Registration ([A])**
   - Action Construct: register, edit, annotate, search, pin/unpin.
   - Action Hierarchy: render and navigate Objective → Initiative → Project → Task / Routine.

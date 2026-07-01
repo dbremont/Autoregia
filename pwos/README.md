@@ -13,6 +13,9 @@ A Flask mock-API server plus a vanilla HTML/CSS/JS client that conforms to the
 Autoregia UI specification ([`../spec/ui.spec`](../spec/ui.spec)). It implements
 all three PWOS components:
 
+- **[S] Scratchpad** — a single persistent Markdown + LaTeX working document.
+  Edit ↔ Preview toggle (rendered Markdown with KaTeX math), autosave, and share
+  by link with **view** or **edit** permission.
 - **[A] Work Organization & Registration** — action constructs (CRUD, filters,
   hierarchy tree), dependency graph edges.
 - **[B] Work Calendarization** — calendar blocks, multi-view calendar
@@ -74,6 +77,14 @@ Scope: `https://www.googleapis.com/auth/calendar` (read/write) for two-way sync.
 | `GET/PUT/DELETE /api/actions/<id>` | A | Retrieve / update / delete an action |
 | `POST /api/actions/<id>/pin` | A | Toggle pin |
 | `GET /api/hierarchy` | A | Objective → Initiative → Project → Task tree |
+| `GET /api/scratch` | S | Retrieve the singleton scratchpad document (markdown + LaTeX) |
+| `PUT /api/scratch` | S | Update the scratchpad document body |
+| `POST /api/scratch/share` | S | Create a share link (`{permission: view\|edit}`) |
+| `GET /api/scratch/shares` | S | List active share grants |
+| `DELETE /api/scratch/share/<token>` | S | Revoke a share link |
+| `GET /api/scratch/shared/<token>` | S | Public read via share token (returns body + permission) |
+| `PUT /api/scratch/shared/<token>` | S | Public edit via share token (edit grants only; 403 for view) |
+| `GET /share/<token>` | S | Public share page (standalone HTML) |
 | `GET/POST /api/blocks` | B | List (filterable) / create calendar blocks (with conflict detection) |
 | `GET/PUT/DELETE /api/blocks/<id>` | B | Retrieve / update / delete a block |
 | `GET /api/calendar/day?start=` | B | Blocks for a single day (day view) |
@@ -131,6 +142,7 @@ pwos/
 ├── data/
 │   ├── mock_actions.json  # seed action constructs (conforms to schema.json)
 │   ├── mock_blocks.json   # seed calendar blocks
+│   ├── mock_scratch.json  # seed scratchpad document (Component S — markdown working doc)
 │   ├── mock_todoist.json  # synthetic app.todoist dataset (analytics dashboard)
 │   ├── gen_mock.py        # deterministic generator (+ optional schema validation)
 │   └── gen_todoist_mock.py # deterministic Todoist-style dataset generator
@@ -139,9 +151,12 @@ pwos/
     ├── index.html         # app-shell: header, sidebar, views, modals, command palette
     ├── css/               # design tokens & components (mirrors PRS/PTOCS)
     ├── fonts/             # self-hosted Spectral / Inter / IBM Plex Mono
+    ├── katex/             # self-hosted KaTeX (js + css + woff2 fonts) — LaTeX math
+    ├── share.html         # standalone public share page (/pwos/share/<token>)
     └── js/
         ├── store.js       # data layer (localStorage + API)
         ├── icons.js       # self-hosted Lucide icon set (<pw-icon>)
+        ├── md.js          # markdown + LaTeX renderer (shared by app + share page)
         ├── vendor/
         │   └── echarts.min.js  # Apache ECharts (self-hosted, offline-first)
         ├── app.js         # router, view switching, keyboard, shared helpers
@@ -151,6 +166,8 @@ pwos/
         ├── google.js      # Google Calendar status/auth/sync (Component C)
         ├── dashboard.js   # at-a-glance statistics
         ├── analytics.js   # S3* analytics dashboard (KPIs, ECharts, heatmap)
+        ├── sessions.js    # work sessions / focus timer (Component D)
+        ├── scratch.js     # scratchpad: single markdown + LaTeX doc, share by link (Component S)
         └── command-palette.js  # Ctrl/Cmd+K universal command interface
 ```
 

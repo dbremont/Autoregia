@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/pwos/css/components.css">
   <link rel="stylesheet" href="/pwos/css/views.css">
   <link rel="stylesheet" href="/pwos/css/command-palette.css">
+  <link rel="stylesheet" href="/pwos/katex/katex.min.css">
 </head>
 <body>
 
@@ -46,6 +47,7 @@
         <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><pw-icon name="gauge" size="17"></pw-icon></span> Dashboard</a></li>
         <li><a href="#analytics" data-view="analytics"><span class="nav-icon"><pw-icon name="bar-chart-3" size="17"></pw-icon></span> Analytics</a></li>
         <li><a href="#actions" data-view="actions" class="active"><span class="nav-icon"><pw-icon name="list-checks" size="17"></pw-icon></span> Actions</a></li>
+        <li><a href="#scratch" data-view="scratch"><span class="nav-icon"><pw-icon name="file-text" size="17"></pw-icon></span> Scratchpad</a></li>
         <li><a href="#hierarchy" data-view="hierarchy"><span class="nav-icon"><pw-icon name="git-fork" size="17"></pw-icon></span> Action Hierarchy</a></li>
         <li><a href="#calendar" data-view="calendar"><span class="nav-icon"><pw-icon name="calendar" size="17"></pw-icon></span> Calendar</a></li>
         <li><a href="#sessions" data-view="sessions"><span class="nav-icon"><pw-icon name="timer" size="17"></pw-icon></span> Sessions</a></li>
@@ -170,6 +172,7 @@
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="gauge" size="15"></pw-icon></span> Dashboard</span><span>at-a-glance stats &amp; summaries</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="bar-chart-3" size="15"></pw-icon></span> Analytics</span><span>throughput, backlog, deadline adherence (app.todoist)</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="list-checks" size="15"></pw-icon></span> Actions</span><span>filter, search, create, edit</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="file-text" size="15"></pw-icon></span> Scratchpad</span><span>one markdown working doc · edit &amp; preview · share</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="git-fork" size="15"></pw-icon></span> Hierarchy</span><span>Objective → Initiative → Project → Task</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="calendar" size="15"></pw-icon></span> Calendar</span><span>day / week / month / year blocks</span></div>
           <div class="shortcut-row"><span><span class="help-ico"><pw-icon name="timer" size="15"></pw-icon></span> Sessions</span><span>time tracking · start/stop timer · actuals</span></div>
@@ -180,6 +183,7 @@
       <div class="help-section">
         <h3>Core ideas</h3>
         <div class="help-component"><span class="help-comp-tag">A</span><div><strong>Work Organization</strong> — the action hierarchy &amp; dependency graph. “What to do.”</div></div>
+        <div class="help-component"><span class="help-comp-tag">S</span><div><strong>Scratchpad</strong> — one markdown working document. Edit &amp; preview, share. “What’s on my mind, right now.”</div></div>
         <div class="help-component"><span class="help-comp-tag">B</span><div><strong>Calendarization</strong> — blocks, conflict detection, workload. “When, on the real calendar.”</div></div>
         <div class="help-component"><span class="help-comp-tag">C</span><div><strong>Platforms</strong> — Google Calendar two-way sync. “How it connects.”</div></div>
         <div class="help-component"><span class="help-comp-tag">D</span><div><strong>Execution &amp; Actuals</strong> — work sessions / time tracking. “What actually happened” vs the plan.</div></div>
@@ -197,6 +201,8 @@
 
 <script src="/pwos/js/store.js"></script>
 <script src="/pwos/js/icons.js"></script>
+<script src="/pwos/katex/katex.min.js"></script>
+<script src="/pwos/js/md.js"></script>
 <script src="/pwos/js/vendor/echarts.min.js"></script>
 <script src="/pwos/js/app.js"></script>
 <script src="/pwos/js/actions.js"></script>
@@ -206,6 +212,7 @@
 <script src="/pwos/js/dashboard.js"></script>
 <script src="/pwos/js/analytics.js"></script>
 <script src="/pwos/js/sessions.js"></script>
+<script src="/pwos/js/scratch.js"></script>
 <script src="/pwos/js/command-palette.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => { PW.init(); });

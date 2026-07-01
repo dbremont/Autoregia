@@ -56,13 +56,14 @@ PW.navigate = function (view) {
   if (active) active.classList.add('active');
   const c = document.getElementById('appContent');
   const views = { dashboard: 'Dashboard', actions: 'Actions', hierarchy: 'Hierarchy',
-                  calendar: 'Calendar', sessions: 'Sessions', google: 'Google',
-                  analytics: 'Analytics', export: 'Export' };
+                  calendar: 'Calendar', sessions: 'Sessions', scratch: 'Scratchpad',
+                  google: 'Google', analytics: 'Analytics', export: 'Export' };
   if (view === 'dashboard') c.innerHTML = PW.DashboardView();
   else if (view === 'actions') c.innerHTML = PW.ActionsView();
   else if (view === 'hierarchy') { c.innerHTML = PW.HierarchyView(); PW.renderHierarchy(); }
   else if (view === 'calendar') { c.innerHTML = PW.CalendarView(); PW.Calendar.bind(); }
   else if (view === 'sessions') { c.innerHTML = PW.SessionsView(); PW.bindSessions(); }
+  else if (view === 'scratch') { c.innerHTML = PW.ScratchView(); PW.bindScratch(); }
   else if (view === 'google') { c.innerHTML = PW.GoogleView(); PW.Google.bind(); }
   else if (view === 'analytics') { c.innerHTML = PW.AnalyticsView(); PW.Analytics.bind(); }
   else if (view === 'export') c.innerHTML = PW.ExportView();

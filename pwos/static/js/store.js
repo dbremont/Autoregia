@@ -6,6 +6,7 @@ PW.Store = (function () {
   let actions = [];
   let blocks = [];
   let sessions = [];
+  let scratch = {};
   let stats = {};
   let listeners = [];
 
@@ -15,31 +16,35 @@ PW.Store = (function () {
     const sa = localStorage.getItem('pwos_actions');
     const sb = localStorage.getItem('pwos_blocks');
     const ss = localStorage.getItem('pwos_sessions');
+    const sc = localStorage.getItem('pwos_scratch');
     if (sa) { try { actions = JSON.parse(sa); } catch { actions = []; } }
     if (sb) { try { blocks = JSON.parse(sb); } catch { blocks = []; } }
     if (ss) { try { sessions = JSON.parse(ss); } catch { sessions = []; } }
-    if (!actions.length && !blocks.length && !sessions.length) { await fetchFromAPI(); }
+    if (sc) { try { scratch = JSON.parse(sc); } catch { scratch = {}; } }
+    if (!actions.length && !blocks.length && !sessions.length && !scratch.id) { await fetchFromAPI(); }
     await refreshStats();
     notify();
-    return { actions: actions, blocks: blocks, sessions: sessions };
+    return { actions: actions, blocks: blocks, sessions: sessions, scratch: scratch };
   }
 
   async function fetchFromAPI() {
     try {
-      const [ra, rb, rs] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks'), fetch('/pwos/api/sessions')]);
+      const [ra, rb, rs, rc] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks'), fetch('/pwos/api/sessions'), fetch('/pwos/api/scratch')]);
       if (ra.ok) actions = await ra.json();
       if (rb.ok) blocks = await rb.json();
       if (rs.ok) sessions = await rs.json();
+      if (rc.ok) scratch = await rc.json();
       saveLocal();
     } catch (e) { console.warn('API unavailable, using local storage only'); }
   }
 
   async function refreshFromAPI() {
     try {
-      const [ra, rb, rs] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks'), fetch('/pwos/api/sessions')]);
+      const [ra, rb, rs, rc] = await Promise.all([fetch('/pwos/api/actions'), fetch('/pwos/api/blocks'), fetch('/pwos/api/sessions'), fetch('/pwos/api/scratch')]);
       if (ra.ok) actions = await ra.json();
       if (rb.ok) blocks = await rb.json();
       if (rs.ok) sessions = await rs.json();
+      if (rc.ok) scratch = await rc.json();
       saveLocal(); await refreshStats(); notify();
     } catch (e) { /* keep local */ }
   }
@@ -55,11 +60,13 @@ PW.Store = (function () {
     localStorage.setItem('pwos_actions', JSON.stringify(actions));
     localStorage.setItem('pwos_blocks', JSON.stringify(blocks));
     localStorage.setItem('pwos_sessions', JSON.stringify(sessions));
+    localStorage.setItem('pwos_scratch', JSON.stringify(scratch));
   }
 
   function getActions() { return [...actions]; }
   function getBlocks() { return [...blocks]; }
   function getSessions() { return [...sessions]; }
+  function getScratch() { return scratch; }
   function getStats() { return stats; }
   function getById(id) { return actions.find(function (a) { return a.id === id; }); }
   function getSessionById(id) { return sessions.find(function (s) { return s.id === id; }); }
@@ -176,6 +183,44 @@ PW.Store = (function () {
     catch (e) { sessions = sessions.filter(function (s) { return s.id !== id; }); saveLocal(); notify(); }
   }
 
+  /* ── Scratchpad (Component S — a single markdown working document) ─ */
+  async function updateScratch(body) {
+    try {
+      const res = await fetch('/pwos/api/scratch', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body: body }) });
+      scratch = await res.json(); saveLocal(); await refreshStats(); notify();
+      return scratch;
+    } catch (e) {
+      scratch = Object.assign({}, scratch, { body: body, updated_at: new Date().toISOString() });
+      saveLocal(); notify(); return scratch;
+    }
+  }
+
+  async function createScratchShare(permission) {
+    try {
+      const res = await fetch('/pwos/api/scratch/share', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ permission: permission }) });
+      if (!res.ok) return null;
+      const g = await res.json();
+      scratch.shares = scratch.shares || []; scratch.shares.push(g); saveLocal(); notify();
+      return g;
+    } catch (e) { return null; }
+  }
+
+  async function listScratchShares() {
+    try {
+      const res = await fetch('/pwos/api/scratch/shares');
+      if (res.ok) { scratch.shares = await res.json(); saveLocal(); notify(); }
+    } catch (e) { /* keep */ }
+    return (scratch.shares) || [];
+  }
+
+  async function revokeScratchShare(token) {
+    try {
+      await fetch('/pwos/api/scratch/share/' + token, { method: 'DELETE' });
+      scratch.shares = (scratch.shares || []).filter(function (s) { return s.token !== token; });
+      saveLocal(); notify();
+    } catch (e) { /* keep */ }
+  }
+
   function genId(prefix) {
     return prefix + '-2026-' + Math.random().toString(36).substr(2, 5).toUpperCase();
   }
@@ -190,9 +235,10 @@ PW.Store = (function () {
     });
   }
 
-  return { load, refreshFromAPI, refreshStats, getActions, getBlocks, getSessions, getStats,
+  return { load, refreshFromAPI, refreshStats, getActions, getBlocks, getSessions, getScratch, getStats,
            getById, getSessionById, getActiveSession, getPinned,
            addAction, updateAction, removeAction, togglePin, addBlock, removeBlock,
            startSession, stopSession, addSession, updateSession, removeSession,
+           updateScratch, createScratchShare, listScratchShares, revokeScratchShare,
            subscribe, searchActions, genId };
 })();

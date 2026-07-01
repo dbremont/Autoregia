@@ -1,15 +1,18 @@
 """
 Personal Work Organization System (PWOS) — Prototype Server.
 
-Flask backend implementing the three PWOS components:
+Flask backend implementing the PWOS components:
+  [S] Scratchpad (a single markdown working document)   — /api/scratch (GET/PUT)
   [A] Work Organization & Registration  — /api/actions (CRUD, search, dependencies)
   [B] Work Calendarization               — /api/blocks, /api/calendar, conflict detection
   [C] Platforms Integration              — /api/calendar/google/* (OAuth + sync; mock-safe)
+  [D] Execution & Actuals                — /api/sessions (timer + manual; deviation signal)
 
-Actions and blocks are persisted in CouchDB (db ``pwos``), discriminated by
-their id prefix (``ACT-`` / ``BLK-``); the read-only Todoist analytics dataset
-remains a local JSON file. Both collections seed from data/mock_*.json on first
-run against an empty database.
+Actions, blocks, and sessions are persisted in CouchDB (db ``pwos``),
+discriminated by their id prefix (``ACT-`` / ``BLK-`` / ``SES-``); the
+Scratchpad is a single document (``SCR-SCRATCHPAD``) in the same store. The
+read-only Todoist analytics dataset remains a local JSON file. All collections
+seed from data/mock_*.json on first run against an empty database.
 
 Runs in *mock mode* when Google credentials are absent, so the prototype is fully
 usable offline. Conforms to spec/pwos/schema.json.
@@ -21,6 +24,7 @@ import json
 import os
 import sys
 import uuid
+import secrets
 from datetime import datetime, timezone, timedelta
 from collections import Counter, defaultdict
 
@@ -34,12 +38,13 @@ HERE = os.path.dirname(__file__)
 ACTIONS_PATH = os.path.join(HERE, "data", "mock_actions.json")
 BLOCKS_PATH = os.path.join(HERE, "data", "mock_blocks.json")
 SESSIONS_PATH = os.path.join(HERE, "data", "mock_sessions.json")
+SCRATCH_PATH = os.path.join(HERE, "data", "mock_scratch.json")
 TODOIST_PATH = os.path.join(HERE, "data", "mock_todoist.json")
 
-# CouchDB store backing actions (ACT-*), blocks (BLK-*), and sessions (SES-*).
-# The path constants above double as seed fixtures for first-run population of
-# an empty database.
-store = Store("pwos", seed_paths=[ACTIONS_PATH, BLOCKS_PATH, SESSIONS_PATH])
+# CouchDB store backing actions (ACT-*), blocks (BLK-*), sessions (SES-*),
+# and scratchpad notes (SCR-*). The path constants above double as seed
+# fixtures for first-run population of an empty database.
+store = Store("pwos", seed_paths=[ACTIONS_PATH, BLOCKS_PATH, SESSIONS_PATH, SCRATCH_PATH])
 
 # Google credentials (Component C). Brought in out-of-band; never committed.
 CLIENT_SECRET_PATH = os.environ.get(
@@ -634,6 +639,125 @@ def sessions_totals():
     grand = round(sum(b["minutes"] for b in totals), 1)
     return jsonify({"group": group, "totals": totals,
                     "grand_minutes": grand, "count": sum(b["count"] for b in totals)})
+
+
+# ============================================================================
+# Component S -- Scratchpad (a single markdown working document)
+#
+# One persistent Markdown document — the agent's short-term working surface.
+# It is a singleton (fixed id), not a collection: GET returns it (creating an
+# empty doc on first touch), PUT updates its body. Markdown rendering and any
+# sharing happen client-side. Persisted in the same CouchDB store.
+# ============================================================================
+SCRATCH_DOC_ID = "SCR-SCRATCHPAD"
+
+
+def _get_scratch_doc():
+    doc = store.get(SCRATCH_DOC_ID)
+    if not doc:
+        now = now_iso()
+        doc = {"id": SCRATCH_DOC_ID, "body": "", "shares": [],
+               "created_at": now, "updated_at": now}
+        store.put(doc)
+    doc.setdefault("shares", [])
+    return doc
+
+
+@app.route("/api/scratch", methods=["GET"])
+def get_scratch():
+    return jsonify(_get_scratch_doc())
+
+
+@app.route("/api/scratch", methods=["PUT"])
+def put_scratch():
+    data = request.get_json() or {}
+    doc = _get_scratch_doc()
+    if "body" in data:
+        doc["body"] = data["body"]
+    doc["updated_at"] = now_iso()
+    store.put(doc)
+    return jsonify(doc)
+
+
+# ── Share links (view / edit) ──────────────────────────────────────────────
+# A share is a token-scoped, permissioned view onto the singleton document.
+# `view` links render the document read-only; `edit` links may update its body.
+# Tokens are unguessable URL-safe secrets; the public read/write surface is the
+# /api/scratch/shared/<token> set, served to humans at GET /share/<token>.
+def _find_share(doc, token):
+    return next((s for s in (doc.get("shares") or []) if s.get("token") == token), None)
+
+
+@app.route("/api/scratch/share", methods=["POST"])
+def scratch_share_create():
+    """Create a share link with a permission ('view' or 'edit')."""
+    data = request.get_json() or {}
+    permission = data.get("permission", "view")
+    if permission not in ("view", "edit"):
+        return jsonify({"error": "permission must be 'view' or 'edit'"}), 400
+    doc = _get_scratch_doc()
+    doc.setdefault("shares", [])
+    token = secrets.token_urlsafe(12)
+    grant = {"token": token, "permission": permission, "created_at": now_iso()}
+    doc["shares"].append(grant)
+    store.put(doc)
+    url = request.url_root.rstrip('/') + '/share/' + token
+    return jsonify({"token": token, "permission": permission,
+                    "created_at": grant["created_at"], "url": url}), 201
+
+
+@app.route("/api/scratch/shares", methods=["GET"])
+def scratch_share_list():
+    """List the document's active share grants (owner view)."""
+    doc = _get_scratch_doc()
+    return jsonify(doc.get("shares") or [])
+
+
+@app.route("/api/scratch/share/<token>", methods=["DELETE"])
+def scratch_share_revoke(token):
+    doc = _get_scratch_doc()
+    before = len(doc.get("shares") or [])
+    doc["shares"] = [s for s in (doc.get("shares") or []) if s.get("token") != token]
+    if len(doc["shares"]) != before:
+        store.put(doc)
+        return jsonify({"revoked": token})
+    return jsonify({"revoked": None}), 404
+
+
+@app.route("/api/scratch/shared/<token>", methods=["GET"])
+def scratch_shared_read(token):
+    """Public read of the document via a share token (no auth)."""
+    doc = _get_scratch_doc()
+    grant = _find_share(doc, token)
+    if not grant:
+        return jsonify({"error": "invalid or revoked share token"}), 404
+    return jsonify({"body": doc.get("body", ""), "permission": grant.get("permission"),
+                    "updated_at": doc.get("updated_at")})
+
+
+@app.route("/api/scratch/shared/<token>", methods=["PUT"])
+def scratch_shared_write(token):
+    """Public edit of the document via a share token (only for 'edit' grants)."""
+    doc = _get_scratch_doc()
+    grant = _find_share(doc, token)
+    if not grant:
+        return jsonify({"error": "invalid or revoked share token"}), 404
+    if grant.get("permission") != "edit":
+        return jsonify({"error": "this share link is view-only"}), 403
+    data = request.get_json() or {}
+    if "body" in data:
+        doc["body"] = data["body"]
+    doc["updated_at"] = now_iso()
+    store.put(doc)
+    return jsonify({"body": doc.get("body", ""), "permission": "edit",
+                    "updated_at": doc.get("updated_at")})
+
+
+@app.route("/share/<token>")
+def scratch_share_page(token):
+    """Public share page (served to humans at /pwos/share/<token>)."""
+    return send_from_directory(app.static_folder, "share.html")
+
 
 
 # ============================================================================
@@ -2371,6 +2495,7 @@ def dashboard_stats():
         for b in blocks if b.get("status") not in ("cancelled", "completed"))
     blocked = sum(1 for a in actions
                   if any(d["kind"] == "blocked-by" for d in a.get("dependencies", [])))
+    scratch = _get_scratch_doc()
     return jsonify({
         "total_actions": len(actions),
         "by_kind": dict(by_kind),
@@ -2381,13 +2506,16 @@ def dashboard_stats():
         "conflicts": sum(len(b.get("conflict_flags", [])) for b in blocks),
         "scheduled_minutes": total_minutes,
         "blocked_actions": blocked,
+        "scratch_words": len((scratch.get("body") or "").split()),
+        "scratch_updated_at": scratch.get("updated_at"),
         "google_status": _gc_status(),
     })
 
 
 @app.route("/api/export", methods=["GET"])
 def export_data():
-    payload = {"actions": load(ACTIONS_PATH), "blocks": load(BLOCKS_PATH)}
+    payload = {"actions": load(ACTIONS_PATH), "blocks": load(BLOCKS_PATH),
+               "sessions": load(SESSIONS_PATH), "scratch": _get_scratch_doc()}
     return Response(json.dumps(payload, indent=2, default=str),
                     mimetype="application/json",
                     headers={"Content-Disposition": "attachment;filename=pwos_export.json"})
@@ -2397,22 +2525,33 @@ def export_data():
 def import_data():
     data = request.get_json()
     if not isinstance(data, dict):
-        return jsonify({"error": "Expected {actions:[...], blocks:[...]}"}), 400
+        return jsonify({"error": "Expected {actions:[...], blocks:[...], sessions:[...], scratch:{}}"}), 400
     actions = load(ACTIONS_PATH)
     blocks = load(BLOCKS_PATH)
+    sessions = load(SESSIONS_PATH)
     a_existing = {a["id"] for a in actions}
     b_existing = {b["id"] for b in blocks}
-    ai = bi = 0
+    s_existing = {s["id"] for s in sessions}
+    ai = bi = si = 0
     for item in data.get("actions", []):
         if item.get("id") and item["id"] not in a_existing:
             actions.append(item); a_existing.add(item["id"]); ai += 1
     for item in data.get("blocks", []):
         if item.get("id") and item["id"] not in b_existing:
             blocks.append(item); b_existing.add(item["id"]); bi += 1
+    for item in data.get("sessions", []):
+        if item.get("id") and item["id"] not in s_existing:
+            sessions.append(item); s_existing.add(item["id"]); si += 1
+    sci = 0
+    if isinstance(data.get("scratch"), dict) and data["scratch"].get("id") == SCRATCH_DOC_ID:
+        store.put(data["scratch"]); sci = 1
     save(ACTIONS_PATH, actions)
     save(BLOCKS_PATH, blocks)
+    save(SESSIONS_PATH, sessions)
     return jsonify({"imported_actions": ai, "imported_blocks": bi,
-                    "total_actions": len(actions), "total_blocks": len(blocks)})
+                    "imported_sessions": si, "imported_scratch": sci,
+                    "total_actions": len(actions), "total_blocks": len(blocks),
+                    "total_sessions": len(sessions)})
 
 
 # ============================================================================

@@ -19,6 +19,7 @@ PW.renderDashboard = async function () {
     PW._statCard('Scheduled Hours', hrs, 'clock', '#B4742A') +
     PW._statCard('Blocked Actions', s.blocked_actions || 0, 'alert-triangle', '#A33434') +
     PW._statCard('Pinned', s.pinned || 0, 'bookmark', '#6B5B95') +
+    PW._statCard('Scratchpad', (s.scratch_words || 0) + 'w', 'file-text', '#A8854A') +
     PW._statCard('Conflicts', s.conflicts || 0, 'alert-triangle', '#A33434') +
     '<div class="card stat-card stat-card-wide"><div class="card-body"><div class="stat-label">By Kind</div>' +
     PW._barList(s.by_kind) + '</div></div>' +

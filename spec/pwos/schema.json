@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://autoregia.local/pwos_schema.json",
   "title": "PWOS Data Models",
-  "description": "JSON Schemas for the Personal Work Organization System (PWOS). PWOS extends PRS action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), and Dependency edges. snake_case naming. Enums match spec/pwos/spec.md.",
+  "description": "JSON Schemas for the Personal Work Organization System (PWOS). PWOS extends PRS action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), Dependency edges, Work Sessions (execution actuals), and the Scratchpad (a single markdown working document). snake_case naming. Enums match spec/pwos/spec.md.",
 
   "$defs": {
     "actionKindEnum": { "type": "string", "enum": ["Routine", "Task", "Project", "Commitment", "Initiative", "Objective"] },
@@ -14,6 +14,7 @@
     "blockStatusEnum": { "type": "string", "enum": ["tentative", "confirmed", "cancelled", "completed"] },
     "sessionStatusEnum": { "type": "string", "enum": ["active", "completed", "abandoned"] },
     "sessionSourceEnum": { "type": "string", "enum": ["timer", "manual", "platform"] },
+    "sharePermissionEnum": { "type": "string", "enum": ["view", "edit"] },
     "syncStateEnum": { "type": "string", "enum": ["synced", "dirty-local", "dirty-remote", "conflict"] },
     "iso8601Timestamp": { "type": "string", "format": "date-time" },
     "dependencyKindEnum": {
@@ -144,6 +145,26 @@
         "source": { "$ref": "#/$defs/sessionSourceEnum" },
         "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
         "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "scratchpad": {
+      "$comment": "Component S: a single persistent markdown working document — the agent's short-term surface. A singleton (fixed id 'SCR-SCRATCHPAD'), not a collection.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "body", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "const": "SCR-SCRATCHPAD", "description": "Singleton document id." },
+        "body": { "type": "string", "default": "", "description": "The document body — GitHub-flavored Markdown with LaTeX math ($...$, $$...$$, \\(...\\), \\[...\\])." },
+        "shares": { "type": "array", "default": [], "items": { "$ref": "#/$defs/shareGrant" }, "description": "Active share grants (permissioned links onto the document)." },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "shareGrant": {
+      "type": "object", "additionalProperties": false, "required": ["token", "permission", "created_at"],
+      "properties": {
+        "token": { "type": "string", "description": "Unguessable URL-safe share token." },
+        "permission": { "$ref": "#/$defs/sharePermissionEnum" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" }
       }
     }
   }
