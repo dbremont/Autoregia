@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  awes:
+    build: .
+    ports:
+      - "5010:5010"
+    environment:
+      - AWES_PORT=5010
+    # Mount the docker socket only if you want container-in-container execution
+    # volumes:
+    #   - /var/run/docker.sock:/var/run/docker.sock

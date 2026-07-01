@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWES — Automated Work Execution System</title>
+<style>
+  :root {
+    --bg: #1a1a1e;
+    --surface: #25252b;
+    --border: #3a3a42;
+    --text: #e4e4e7;
+    --text-dim: #a1a1aa;
+    --green: #4ade80;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --blue: #60a5fa;
+    --font-mono: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+    --font-sans: -apple-system, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.875rem; margin-bottom: 2rem; }
+  h2 { font-size: 1.1rem; font-weight: 500; margin: 1.5rem 0 0.75rem; }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .env-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem;
+  }
+  .env-card .name { font-weight: 500; }
+  .env-card .meta { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem; }
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+  }
+  .status-ready { background: var(--green); }
+  .status-busy { background: var(--yellow); }
+  .status-error { background: var(--red); }
+  label { display: block; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.3rem; }
+  select, textarea, input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  button {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.85; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .session { border-bottom: 1px solid var(--border); padding: 0.75rem 0; }
+  .session:last-child { border-bottom: none; }
+  .session .head {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .session .exe-id { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); }
+  .session .payload { font-family: var(--font-mono); font-size: 0.85rem; margin: 0.4rem 0; color: var(--text-dim); }
+  .session .output {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    margin-top: 0.4rem;
+    max-height: 200px;
+    overflow: auto;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .badge-completed { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+  .badge-failed { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+  .badge-timed_out { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+  .actions { display: flex; gap: 0.5rem; align-items: center; }
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+  <h1>AWES</h1>
+  <div class="subtitle">Automated Work Execution System — Prototype</div>
+
+  <h2>Environments</h2>
+  <div class="panel" id="env-panel"><div class="env-grid" id="env-grid"></div></div>
+
+  <h2>Execute</h2>
+  <div class="panel">
+    <label for="env-select">Environment</label>
+    <select id="env-select"></select>
+    <label for="work-type">Work Type</label>
+    <select id="work-type">
+      <option value="command">Shell Command</option>
+      <option value="python">Python Script</option>
+    </select>
+    <label for="payload">Payload</label>
+    <textarea id="payload" placeholder="echo hello"></textarea>
+    <div class="actions">
+      <button id="run-btn" onclick="run()">▶ Run</button>
+      <span id="run-status" style="font-size:0.85rem;color:var(--text-dim)"></span>
+      <span class="spacer"></span>
+      <button onclick="clearSessions()" style="background:var(--red)">Clear History</button>
+    </div>
+  </div>
+
+  <h2>Execution History</h2>
+  <div class="panel" id="history-panel"><div id="session-list"></div></div>
+
+<script src="/js/exec.js"></script>
+</body>
+</html>
