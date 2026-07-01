@@ -74,3 +74,4 @@ The sub-systems developed within this workspace:
 
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)
 - [Self-Management](https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link)
+- [Autoregia * Project](https://app.notion.com/p/Autoregia-390e2010b23f80b392b5d1621c10de0c?v=2a6e2010b23f81c0a027000c38d7f8d2&source=copy_link)
