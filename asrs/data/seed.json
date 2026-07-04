@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "system": "Agent Self Representation System (ASRS)",
+    "note": "Reference seed data. ASRS is the integration layer: it composes the World boundary, the Model (PWMS), the Self Model (PSMS), and the Policy System (PPS) into one coherent self-representation.",
+    "version": "0.1"
+  },
+
+  "world": {
+    "boundary": "(External, Internal)",
+    "external": {
+      "label": "Environment",
+      "description": "The region of state the agent perceives and acts upon — entities, events, other agents, and resources, observed through a time-ordered stream of discrete events.",
+      "model": "PWMS"
+    },
+    "internal": {
+      "label": "Internal Environment",
+      "description": "The agent's own stateful substrate — memory, finite resources, beliefs, current commitments, and capabilities. Bounded, depletable, renewable; the reservoir the loop manages.",
+      "model": "PSMS"
+    }
+  },
+
+  "model": {
+    "ref": "PWMS",
+    "label": "Model",
+    "description": "Typed ontology of the external world — what *can be* the case out there. The schema the Situation Model instantiates as a current state estimate.",
+    "entity_types": [
+      { "name": "Person", "description": "An individual agent the self interacts with." },
+      { "name": "Organization", "description": "A collective actor with coordinated behaviour." },
+      { "name": "Project", "description": "A bounded initiative producing an output." },
+      { "name": "Tool", "description": "An instrument that extends capability." },
+      { "name": "Resource", "description": "A finite, depletable asset (time, money, energy)." },
+      { "name": "Obligation", "description": "A standing external requirement or commitment." },
+      { "name": "Document", "description": "A persistent information artifact." },
+      { "name": "Place", "description": "A physical or virtual location." }
+    ],
+    "relation_types": [
+      { "name": "depends-on", "description": "A requires B to proceed." },
+      { "name": "part-of", "description": "A is a component of B." },
+      { "name": "located-at", "description": "A is situated in B." },
+      { "name": "owns", "description": "A holds or controls B." },
+      { "name": "triggers", "description": "A causes B to occur." },
+      { "name": "integrates-with", "description": "A and B are technically coupled." }
+    ],
+    "event_types": [
+      { "name": "occurrence", "description": "An independent happening (a message arrives, a deadline passes)." },
+      { "name": "outcome", "description": "A consequence of the agent's own action — the feedback signal." },
+      { "name": "trigger", "description": "A time- or condition-based prompt (alarms, scheduled commitments)." },
+      { "name": "observational", "description": "A reading the agent actively takes." }
+    ],
+    "domains": [
+      { "name": "work", "description": "Professional and craft activity." },
+      { "name": "health", "description": "Physical and mental maintenance." },
+      { "name": "finance", "description": "Money and material resources." },
+      { "name": "relationships", "description": "Social and familial bonds." },
+      { "name": "learning", "description": "Skill and knowledge acquisition." }
+    ]
+  },
+
+  "self": {
+    "ref": "PSMS",
+    "label": "Self Model",
+    "description": "Typed model of the agent — what the agent *is, has, and holds*. The structural facets against which internal state is recorded and regulated.",
+    "identity": {
+      "name": "The Autoregia operator",
+      "narrative": "An engineer building a personal viable system model — converting implicit routines into explicit, steerable structures.",
+      "charter_ref": "PPS · charter"
+    },
+    "capabilities": [
+      { "name": "Systems engineering", "proficiency": "high", "tool_fluencies": ["Python", "Flask", "Postgres"] },
+      { "name": "Technical writing", "proficiency": "high", "tool_fluencies": ["Markdown", "LaTeX"] },
+      { "name": "Cybernetic modelling", "proficiency": "medium", "tool_fluencies": ["VSM", "control theory"] }
+    ],
+    "resources": [
+      { "id": "time", "name": "Time", "unit": "hours/week", "capacity": 112, "replenishes": "daily", "description": "Waking hours available per week." },
+      { "id": "energy", "name": "Energy", "unit": "relative", "capacity": 100, "replenishes": "nightly sleep", "description": "Daily physical/cognitive reservoir." },
+      { "id": "attention", "name": "Attention", "unit": "focus-blocks/day", "capacity": 4, "replenishes": "rest", "description": "Deep-work blocks per day." },
+      { "id": "money", "name": "Money", "unit": "EUR/month", "capacity": 2400, "replenishes": "monthly income", "description": "Discretionary monthly budget." }
+    ],
+    "beliefs": [
+      { "id": "b1", "subject": "productivity", "claim": "Deep work blocks beat fragmented hours for engineering output.", "confidence": "high", "conflicts_with": null },
+      { "id": "b2", "subject": "rest", "claim": "Sleep below 7h measurably degrades next-day decisions.", "confidence": "high", "conflicts_with": null }
+    ],
+    "commitments": [
+      { "id": "c1", "name": "Autoregia build-out", "domain": "work", "draws_on": "time", "cost": 40, "violates": null },
+      { "id": "c2", "name": "Family dinner nightly", "domain": "relationships", "draws_on": "time", "cost": 14, "violates": null },
+      { "id": "c3", "name": "Deep-work nights (extra sessions)", "domain": "work", "draws_on": "time", "cost": 60, "violates": "k-sleep" },
+      { "id": "c4", "name": "Weekly review", "domain": "work", "draws_on": "time", "cost": 3, "violates": null }
+    ],
+    "constraints": [
+      { "id": "k-sleep", "name": "Sleep floor", "rule": "Sleep no less than 7h/night — non-negotiable.", "source": "PPS · health policy" },
+      { "id": "k-scope", "name": "One system at a time", "rule": "Ship one sub-system before starting the next.", "source": "PPS · principles" }
+    ]
+  },
+
+  "policy": {
+    "ref": "PPS",
+    "label": "Policy System",
+    "description": "Normative layer — what the agent *ought to do and be*. Writes its decisions into the Self Model as identity / constraint / commitment facets.",
+    "charter": {
+      "purpose": "Preserve and extend agency by engineering the self as an explicit, viable control system.",
+      "apex_ref": "/pps/policies/charter.html"
+    },
+    "values": [
+      { "rank": 1, "name": "Health", "note": "Health > productivity." },
+      { "rank": 2, "name": "Continuity", "note": "Preserve state; avoid loss." },
+      { "rank": 3, "name": "Craft", "note": "Do the work well." }
+    ],
+    "principles": [
+      { "name": "Favour reproducibility over convenience." },
+      { "name": "Prefer asynchronous communication." },
+      { "name": "One system at a time." }
+    ],
+    "commitments": [
+      { "name": "Family dinner nightly", "domain": "relationships" },
+      { "name": "Weekly review every Sunday", "domain": "work" }
+    ],
+    "domain_policies": [
+      { "name": "Health", "ref": "/pps/policies/health.html" },
+      { "name": "Learning", "ref": "/pps/policies/learning.html" },
+      { "name": "Conduct", "ref": "/pps/policies/conduct.html" }
+    ]
+  }
+}

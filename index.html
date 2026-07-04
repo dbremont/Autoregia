@@ -7,39 +7,135 @@
   <style>
     :root {
       --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
-      --rule: #d8d0c4; --parchment: #f7f3ea; --surface: #fffdf8;
-      --accent: #7A1A2A; --gold: #b8893a;
+      --rule: #d8d0c4; --rule-soft: #e8e2d6; --parchment: #f7f3ea; --surface: #fffdf8;
+      --accent: #7A1A2A; --gold: #b8893a; --gold-tint: #f4ecda;
       --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
       --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
       --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
-    .wrap{max-width:880px;margin:0 auto;padding:0 28px}
-    header.masthead{padding:84px 0 40px;text-align:center}
-    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:22px}
+    .wrap{max-width:920px;margin:0 auto;padding:0 28px}
+    a{color:var(--accent)}
+
+    /* ── Masthead ── */
+    header.masthead{padding:64px 0 24px;text-align:center}
+    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px}
     .eyebrow::before,.eyebrow::after{content:"—";margin:0 12px;color:var(--rule)}
-    h1.title{font-size:clamp(48px,8vw,76px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:24px}
+    h1.title{font-size:clamp(44px,7vw,68px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:18px}
     h1.title em{font-style:italic;color:var(--accent)}
-    .lede{font-size:20px;color:var(--ink-soft);max-width:620px;margin:0 auto;font-style:italic;line-height:1.55}
-    .gold-rule{height:1px;background:var(--gold);width:64px;margin:40px auto;opacity:.7}
-    section.define{padding:16px 0 56px}
-    .define blockquote{border-left:2px solid var(--gold);padding:4px 0 4px 24px;margin:18px 0;color:var(--ink-soft);font-size:17px}
-    section.index{padding:8px 0 72px}
-    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:36px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-    a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:26px 24px 24px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    .lede{font-size:18px;color:var(--ink-soft);max-width:600px;margin:0 auto;font-style:italic;line-height:1.55}
+    .more{font-family:var(--sans);font-size:13px;color:var(--muted);margin-top:14px}
+    .more a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule)}
+    .more a:hover{border-color:var(--accent)}
+    .gold-rule{height:1px;background:var(--gold);width:64px;margin:28px auto;opacity:.7}
+
+    /* ── Quick actions ── */
+    section.actions{padding:4px 0 8px}
+    .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    a.action{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;transition:transform .16s,box-shadow .16s,border-color .16s}
+    a.action:hover{transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(28,25,22,.4);border-color:var(--gold)}
+    a.action svg{flex:0 0 auto;color:var(--gold)}
+    .action .a-label{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink)}
+    .action .a-sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.03em}
+
+    /* ── Situation Model (mock briefing) ── */
+    section.situation{padding:16px 0 8px}
+    .sit-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:22px 24px;box-shadow:0 1px 2px rgba(30,28,25,.03)}
+    .sit-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .sit-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+    .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:1px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
+    .sit-posture.warn{color:var(--accent);border-color:var(--accent);background:#faf3f4}
+    .sit-posture.ok{color:#4a6b43;border-color:#4a6b43;background:#f4f7f1}
+    .syn{font-size:17px;line-height:1.6;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--gold);padding:2px 0 2px 18px;margin:0 0 20px}
+    .syn strong{color:var(--ink);font-style:normal;font-weight:600}
+    .sit-cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px}
+    .sit-sub{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
+    .sit-sub.spaced{margin-top:18px}
+    .att{list-style:none;padding:0;margin:0}
+    .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:14px}
+    .att-item:last-child{border-bottom:0}
+    .att-dot{width:8px;height:8px;border-radius:999px;background:var(--gold);display:inline-block;transform:translateY(1px)}
+    .att-dot.high{background:var(--accent)}
+    .att-dot.medium{background:#b07a2a}
+    .att-sev{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+    .att-text{color:var(--ink-soft)}
+    .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
+    .att-tool:hover{text-decoration:none;background:var(--accent);color:var(--surface);border-color:var(--accent)}
+    .res-item{margin-bottom:11px}
+    .res-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:4px}
+    .res-name{color:var(--ink);font-weight:500}
+    .res-val{font-family:var(--mono);font-size:11px;color:var(--muted)}
+    .res-val.over{color:var(--accent);font-weight:600}
+    .res-bar{height:6px;background:var(--rule-soft);border-radius:999px;overflow:hidden}
+    .res-bar>span{display:block;height:100%;background:#c7a972;border-radius:999px}
+    .res-bar.over>span{background:var(--accent)}
+    .res-bar.ok>span{background:#7ea072}
+    .loop-strip{list-style:none;padding:0;margin:0}
+    .ls-item{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px}
+    .ls-item:last-child{border-bottom:0}
+    .ls-item.now{background:var(--gold-tint);margin:0 -8px;padding:6px 8px;border-bottom:1px solid var(--gold-tint)}
+    .ls-stage{font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:600}
+    .ls-state{color:var(--ink-soft)}
+    .ls-tool{font-family:var(--mono);font-size:10px;color:var(--muted)}
+    .sit-note{font-family:var(--sans);font-size:11px;color:var(--muted);text-align:center;margin-top:12px;font-style:italic}
+
+    /* ── Search ── */
+    section.search{padding:8px 0 4px}
+    .search-wrap{position:relative;max-width:560px;margin:0 auto}
+    .search-box{width:100%;font-family:var(--sans);font-size:15px;padding:12px 16px 12px 42px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(30,28,25,.03);transition:border-color .16s,box-shadow .16s}
+    .search-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,26,42,.12)}
+    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .search-hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--parchment);pointer-events:none}
+    .search-results{max-width:560px;margin:12px auto 0}
+    .sr-empty{font-family:var(--sans);font-size:12px;letter-spacing:.04em;color:var(--muted);text-align:center;padding:8px 0}
+    .sr-item{display:block;text-decoration:none;color:inherit;padding:11px 14px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);margin-bottom:8px;transition:border-color .16s,transform .16s,box-shadow .16s}
+    .sr-item:hover{text-decoration:none;border-color:var(--gold);transform:translateY(-1px);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
+    .sr-head{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+    .sr-sys{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em;border:1px solid var(--rule);border-radius:999px;padding:1px 8px;background:var(--gold-tint)}
+    .sr-title{font-size:15px;color:var(--ink);font-weight:500}
+    .sr-snippet{font-size:13px;color:var(--muted);line-height:1.45}
+    .sr-snippet mark{background:var(--gold-tint);color:var(--ink);padding:0 2px;border-radius:2px}
+
+    /* ── Lenses (on-demand panels: situation + map) ── */
+    .lenses{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:20px 0 4px}
+    .lens{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .16s,box-shadow .16s,background .16s,color .16s}
+    .lens:hover{border-color:var(--gold);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
+    .lens .chev{color:var(--accent);transition:transform .2s;display:inline-block}
+    .lens.open{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+    .lens.open .chev{transform:rotate(90deg);color:var(--surface)}
+    .lens-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .36s ease,opacity .22s ease;margin-top:0}
+    .lens-panel.open{grid-template-rows:1fr;opacity:1;margin-top:18px}
+    .lens-inner{overflow:hidden;min-height:0}
+    .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px 10px 12px}
+    .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
+    .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+
+    /* ── Systems ── */
+    section.systems{padding:24px 0 64px}
+    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:24px}
+    .phase{margin:22px 0 8px;display:flex;align-items:baseline;gap:12px}
+    .phase-label{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
+    .phase-rule{height:1px;background:var(--rule);flex:1}
+    .phase-stage{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:22px 22px 20px;transition:transform .18s,box-shadow .18s,border-color .18s}
     a.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(28,25,22,.35);border-color:var(--gold)}
-    .card .tag{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.04em;margin-bottom:12px;display:block}
-    .card h2{font-size:21px;font-weight:500;margin-bottom:8px;letter-spacing:-.01em}
-    .card p{font-size:15px;color:var(--muted);line-height:1.5}
-    .card .arrow{font-family:var(--sans);font-size:13px;color:var(--accent);margin-top:14px;display:block;font-weight:600}
+    .card .tag{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.04em;margin-bottom:10px;display:block}
+    .card .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .card h2{font-size:19px;font-weight:500;letter-spacing:-.01em}
+    .card .abbr{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.05em}
+    .card p{font-size:14px;color:var(--muted);line-height:1.5}
+    .card .arrow{font-family:var(--sans);font-size:13px;color:var(--accent);margin-top:12px;display:block;font-weight:600}
+
+    /* ── Footer ── */
     footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
-    footer .footer-links{margin-bottom:16px}
+    footer .footer-links{margin-bottom:14px}
     footer .footer-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin:0 12px;transition:color .18s}
     footer .footer-links a:hover{color:var(--accent)}
     footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
-    @media (max-width:560px){header.masthead{padding:56px 0 32px}.lede{font-size:18px}}
+
+    @media (max-width:560px){header.masthead{padding:44px 0 20px}.lede{font-size:16px}.search-hint{display:none}}
   </style>
 </head>
 <body>
@@ -47,34 +143,336 @@
   <header class="masthead">
     <div class="eyebrow">Personal Viable System Model</div>
     <h1 class="title">Autoregia</h1>
-    <p class="lede">A self-management system — a recursive regulatory architecture through which an individual monitors, organizes, and steers perception, ideation, goal-formation, action, and reflection.</p>
+    <p class="lede">A self-management system — the agent control loop and the Viable System Model, materialized as a set of cooperating tools.</p>
+    <p class="more">An open reference architecture for engineering personal agency. <a href="about.html">Read the model →</a></p>
     <div class="gold-rule"></div>
   </header>
-  <section class="define">
-    <blockquote>Every person can be understood as an adaptive control system operating within a changing environment. Autoregia starts from that premise: rather than designing productivity tools from intuition or convention, it identifies the fundamental functional architecture that every viable agent must implement.</blockquote>
-    <blockquote>The method has three stages — model the agent control loop independently of any implementation; formalize the functional components that make an agent viable (perception, decision, execution, regulation, learning, identity); then map concrete personal systems onto those functions in order to analyze, engineer, and continuously improve personal agency.</blockquote>
-    <blockquote>The output is a reference architecture, not a prescription. Note-taking systems, task managers, calendars, and reflection practices are not independent solutions — they are concrete implementations of specific functions within a larger cybernetic architecture of agency.</blockquote>
-    <blockquote>Self-management is the praxis of constructing and sustaining that architecture, so that operative processes evolve from implicit, unexamined routines into explicit, intelligible, and systematically steerable structures.</blockquote>
-    <blockquote>Autoregia decomposes self-management into a set of cooperating systems, each mapped to a level of the Viable System Model. Some are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents.</blockquote>
-  </section>
-  <section class="index">
-    <div class="section-label">Agent Loop · Implementation</div>
-    <div class="grid">
-      <a class="card" href="/prs/"><span class="tag">loop stage · Perception</span><h2>Personal Recording System</h2><p>PRS — supplies the <em>Perception</em> stage: externalizes relevant internal &amp; environmental state for persistent recording, discovery, and retrieval. The sense organs of the loop. Includes a working prototype.</p><span class="arrow">Enter prs/ →</span></a>
-      <a class="card" href="/pkts/"><span class="tag">loop stage · Perception</span><h2>Personal Keyword Tracking System</h2><p>PKTS — a <em>Perception</em> / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
-      <a class="card" href="/ptocs/"><span class="tag">loop stage · Situation Model</span><h2>Personal Technical Object Catalog System</h2><p>PTOCS — builds the <em>Situation Model</em>: a catalog of the technical objects (software, services, hardware, references, capabilities, infrastructure) the agent relies on, integrated into a queryable state estimate, with retrieval, navigation, and a statistical overlay. Includes a working prototype.</p><span class="arrow">Enter ptocs/ →</span></a>
-      <a class="card" href="/pps/"><span class="tag">loop stage · Decision</span><h2>Personal Policy System</h2><p>PPS — feeds the <em>Decision</em> stage with objectives and constraints (and preserves identity): policy documents (charter, principles, values, commitments, domain policies) defining direction and limits, with a main entry and full-text search.</p><span class="arrow">Enter pps/ →</span></a>
-      <a class="card" href="/pwos/"><span class="tag">loop stage · Action Selection</span><h2>Personal Work Organization System</h2><p>PWOS — drives <em>Action Selection</em>: organizes action constructs (tasks, projects, routines) over PRS records into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time via Google Calendar two-way sync. Includes a working prototype.</p><span class="arrow">Enter pwos/ →</span></a>
-      <a class="card" href="/pras/"><span class="tag">loop stage · Feedback</span><h2>Personal Reflection &amp; Adaptation System</h2><p>PRAS — closes the <em>Feedback</em> arc: a corpus of deliberations that observe the consequences of what was executed, make sense of the gap between intention and outcome, and mature into adaptations that feed the Policy System and the rest of the loop.</p><span class="arrow">Enter pras/ →</span></a>
+
+  <!-- ═══ Quick actions ═══ -->
+  <section class="actions">
+    <div class="action-grid">
+      <a class="action" href="/prs/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span class="a-label">Capture</span><br><span class="a-sub">PRS · record</span></span></a>
+      <a class="action" href="/pwos/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span><span class="a-label">Today's plan</span><br><span class="a-sub">PWOS · action</span></span></a>
+      <a class="action" href="/pras/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span><span class="a-label">Review</span><br><span class="a-sub">PRAS · reflect</span></span></a>
+      <a class="action" href="/pps/policies/charter.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg><span><span class="a-label">Charter</span><br><span class="a-sub">PPS · policy</span></span></a>
     </div>
   </section>
+
+  <!-- ═══ Unified search ═══ -->
+  <section class="search">
+    <div class="search-wrap">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="searchInput" class="search-box" placeholder="Search across records, policies, deliberations, catalog…" autocomplete="off">
+      <span class="search-hint">/</span>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </section>
+
+  <!-- ═══ Lenses: on-demand ways to make sense of the system ═══ -->
+  <div class="lenses">
+    <button class="lens" data-lens="sit" aria-expanded="false"><span class="chev">▸</span> Situation</button>
+    <button class="lens" data-lens="map" aria-expanded="false"><span class="chev">▸</span> How the tools fit</button>
+  </div>
+
+  <!-- Situation Model (mock briefing) — on demand -->
+  <section class="lens-panel" id="lens-sit">
+    <div class="lens-inner">
+    <div class="sit-card">
+      <div class="sit-head">
+        <span class="sit-eyebrow">Situation Model · Thu 4 Jul · evening</span>
+        <span class="sit-posture warn">⚠ attention needed</span>
+      </div>
+      <p class="syn">On track for this week's objective — <strong>ship the Situation Model</strong> — but you're over-committed by ~5h and the <strong>sleep floor</strong> is at risk. Pull back one evening session before Friday; the rest is regulating well.</p>
+
+      <div class="sit-cols">
+        <div class="sit-col">
+          <div class="sit-sub">Attention · what needs you now</div>
+          <ul class="att">
+            <li class="att-item"><span class="att-dot high"></span><span class="att-sev">over-alloc</span><span class="att-text">Time 117/112 h this week — 5 h over capacity.</span><a class="att-tool" href="/asrs/">ASRS</a></li>
+            <li class="att-item"><span class="att-dot high"></span><span class="att-sev">constraint</span><span class="att-text">“Deep-work nights” violates the Sleep floor (7 h/night).</span><a class="att-tool" href="/asrs/">ASRS</a></li>
+            <li class="att-item"><span class="att-dot high"></span><span class="att-sev">blocked</span><span class="att-text">“Wire ISCB into PRAS” blocked-by the couchdb dependency.</span><a class="att-tool" href="/pwos/">PWOS</a></li>
+            <li class="att-item"><span class="att-dot medium"></span><span class="att-sev">due</span><span class="att-text">Weekly-review prep — due Sunday.</span><a class="att-tool" href="/pras/">PRAS</a></li>
+            <li class="att-item"><span class="att-dot"></span><span class="att-sev">anomaly</span><span class="att-text">Attention to “ctx-switch” up 3× this week — possible fragmentation.</span><a class="att-tool" href="/pkts/">PKTS</a></li>
+          </ul>
+        </div>
+
+        <div class="sit-col">
+          <div class="sit-sub">Resources · internal world</div>
+          <div class="res-item"><div class="res-head"><span class="res-name">Time</span><span class="res-val over">117 / 112 h · 5 over</span></div><div class="res-bar over"><span style="width:100%"></span></div></div>
+          <div class="res-item"><div class="res-head"><span class="res-name">Energy</span><span class="res-val">62 / 100 · declining</span></div><div class="res-bar"><span style="width:62%"></span></div></div>
+          <div class="res-item"><div class="res-head"><span class="res-name">Attention</span><span class="res-val">2 / 4 blocks left today</span></div><div class="res-bar"><span style="width:50%"></span></div></div>
+          <div class="res-item"><div class="res-head"><span class="res-name">Money</span><span class="res-val">1.4k / 2.4k EUR · month</span></div><div class="res-bar ok"><span style="width:58%"></span></div></div>
+
+          <div class="sit-sub spaced">Loop state · every stage</div>
+          <ul class="loop-strip">
+            <li class="ls-item"><span class="ls-stage">Substrate</span><span class="ls-state">2 deviations · self-model else consistent</span><span class="ls-tool">ASRS</span></li>
+            <li class="ls-item"><span class="ls-stage">Perception</span><span class="ls-state">7 records today · 3 triggers pending</span><span class="ls-tool">PRS · PKTS</span></li>
+            <li class="ls-item now"><span class="ls-stage">Situation</span><span class="ls-state">this view · 5 attention items</span><span class="ls-tool">—</span></li>
+            <li class="ls-item"><span class="ls-stage">Decision</span><span class="ls-state">6 policies · top value: Health</span><span class="ls-tool">PPS</span></li>
+            <li class="ls-item"><span class="ls-stage">Action</span><span class="ls-state">4 due today · 1 blocked · 11 h scheduled</span><span class="ls-tool">PWOS</span></li>
+            <li class="ls-item"><span class="ls-stage">Execution</span><span class="ls-state">1 session running · 2 artifacts today</span><span class="ls-tool">AWES</span></li>
+            <li class="ls-item"><span class="ls-stage">Feedback</span><span class="ls-state">3 open · 1 ready to enact</span><span class="ls-tool">PRAS</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sit-note">Mock — a vision of the integrated Situation Model (fake data). The Situation Model is the loop's missing center: an unimplemented stage.</div>
+    </div>
+  </section>
+
+  <!-- Tool → control-loop map — on demand -->
+  <section class="lens-panel" id="lens-map">
+    <div class="lens-inner">
+      <div class="diagram">
+        <svg viewBox="0 0 920 470" role="img" aria-label="Control loop with the Autoregia tools placed on their stages: ASRS + PTOCS (World/substrate, self-model), PRS + PKTS (Perception), the Situation Model stage has no dedicated system yet, PPS (Decision), PWOS (Action Selection), AWES (Execution), PRAS (Feedback). Each tool chip links to its app.">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
+            <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
+          </defs>
+          <style>
+            .lbl{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:15px;fill:#1c1916}
+            .sub{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:9.5px;fill:#7a736a}
+            .arc{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
+            .fba{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
+            .cyc-lbl{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .leg{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
+            .node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
+            .node-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
+            .cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
+            .edge{stroke:#b8893a;stroke-width:1.6;fill:none}
+            .edge-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+            .tap{fill:#7A1A2A}
+            .tool-bg{fill:#f4ecda;stroke:#b8893a;stroke-width:1;transition:fill .15s}
+            .tool-t{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:11px;fill:#7A1A2A;font-weight:600;transition:fill .15s}
+            a{cursor:pointer}
+            a:hover .tool-bg{fill:#7A1A2A}
+            a:hover .tool-t{fill:#fffdf8}
+          </style>
+
+          <!-- deliberative cycle -->
+          <rect class="cycle" x="180" y="70" width="570" height="200" rx="12"/>
+          <text class="cyc-lbl" x="465" y="92" text-anchor="middle">Deliberative Cycle</text>
+
+          <!-- forward edges -->
+          <path class="edge" d="M 80 182 L 80 120 L 192 120" marker-end="url(#arr)"/>
+          <text class="arc" x="58" y="150" text-anchor="middle" transform="rotate(-90 58 150)">perceive</text>
+          <path class="edge" d="M 348 120 L 392 120" marker-end="url(#arr)"/>
+          <path class="edge" d="M 548 120 L 600 120" marker-end="url(#arr)"/>
+          <path class="edge" d="M 670 158 L 670 182" marker-end="url(#arr)"/>
+          <path class="edge" d="M 748 220 L 770 220" marker-end="url(#arr)"/>
+          <text class="arc" x="759" y="212" text-anchor="middle">commit</text>
+          <path class="edge" d="M 840 258 L 840 400 L 80 400 L 80 258" marker-end="url(#arr)"/>
+          <text class="arc" x="460" y="392" text-anchor="middle">act · modify world</text>
+
+          <!-- feedback edges -->
+          <circle class="tap" cx="470" cy="400" r="3.4"/>
+          <path class="edge-fb" d="M 470 400 L 470 378" marker-end="url(#arrA)"/>
+          <text class="fba" x="482" y="392" text-anchor="start">observe</text>
+          <path class="edge-fb" d="M 470 302 L 470 276" marker-end="url(#arrA)"/>
+          <text class="fba" x="482" y="292" text-anchor="start">regulate</text>
+
+          <!-- World / substrate -->
+          <g transform="translate(80,220)">
+            <rect class="node-loop" x="-78" y="-38" width="156" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">World</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">substrate · self-model</text>
+            <a href="/asrs/"><g transform="translate(-30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
+            <a href="/ptocs/"><g transform="translate(30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PTOCS</text></g></a>
+          </g>
+
+          <!-- Perception -->
+          <g transform="translate(270,120)">
+            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Perception</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">acquire information</text>
+            <a href="/prs/"><g transform="translate(-30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRS</text></g></a>
+            <a href="/pkts/"><g transform="translate(30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PKTS</text></g></a>
+          </g>
+
+          <!-- Situation Model -->
+          <g transform="translate(470,120)">
+            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Situation Model</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">state estimate</text>
+            <text x="0" y="27" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#a89e8f" font-style="italic">no dedicated system yet</text>
+          </g>
+
+          <!-- Decision -->
+          <g transform="translate(670,120)">
+            <rect class="node" x="-70" y="-38" width="140" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Decision</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">choose</text>
+            <a href="/pps/"><g transform="translate(0,20)"><rect class="tool-bg" x="-24" y="-11" width="48" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PPS</text></g></a>
+          </g>
+
+          <!-- Action Selection -->
+          <g transform="translate(670,220)">
+            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Action Selection</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">commit to action</text>
+            <a href="/pwos/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PWOS</text></g></a>
+          </g>
+
+          <!-- Execution -->
+          <g transform="translate(840,220)">
+            <rect class="node" x="-70" y="-38" width="140" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Execution</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">carry out</text>
+            <a href="/awes/"><g transform="translate(0,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AWES</text></g></a>
+          </g>
+
+          <!-- Feedback -->
+          <g transform="translate(470,340)">
+            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
+            <text class="lbl" x="0" y="-14" text-anchor="middle">Feedback</text>
+            <text class="sub" x="0" y="2" text-anchor="middle">observe · regulate</text>
+            <a href="/pras/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRAS</text></g></a>
+          </g>
+
+          <!-- legend -->
+          <g transform="translate(150,450)">
+            <line class="edge" x1="0" y1="0" x2="26" y2="0"/>
+            <text class="leg" x="34" y="4">forward · sense → decide → act</text>
+            <line class="edge-fb" x1="240" y1="0" x2="266" y2="0"/>
+            <text class="leg" x="274" y="4">feedback · regulation</text>
+            <rect class="cycle" x="402" y="-7" width="26" height="14"/>
+            <text class="leg" x="436" y="4">deliberative cycle · inner sub-loop</text>
+          </g>
+        </svg>
+        <div class="diagram-caption">Each stage of the agent control loop, and the Autoregia tool that implements it · click a tool chip to enter it</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Systems by loop phase ═══ -->
+  <section class="systems">
+    <div class="section-label">The Cooperating Systems</div>
+
+    <div class="phase"><span class="phase-label">Substrate</span><span class="phase-rule"></span><span class="phase-stage">what the agent is &amp; is in</span></div>
+    <div class="grid">
+      <a class="card" href="/asrs/"><span class="tag">VSM S5 · representational substrate</span><div class="head"><h2>Agent Self-Representation System</h2><span class="abbr">ASRS</span></div><p>Binds the World boundary, the external-world Model (PWMS), the Self Model (PSMS), and the Policy System (PPS) into one coherent structure — and checks it against itself for over-allocation, constraint violation, and value drift.</p><span class="arrow">Enter asrs/ →</span></a>
+      <a class="card" href="/ptocs/"><span class="tag">substrate · Self-Model (capabilities)</span><div class="head"><h2>Personal Technical Object Catalog System</h2><span class="abbr">PTOCS</span></div><p>The agent's catalog of the technical objects it relies on (software, services, hardware, references, capabilities, infrastructure) — externalizes capability awareness: what's available, where it lives, how it fits, and where the gaps are. A Self-Model (PSMS) capability facet.</p><span class="arrow">Enter ptocs/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Perception</span><span class="phase-rule"></span><span class="phase-stage">acquire information</span></div>
+    <div class="grid">
+      <a class="card" href="/prs/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Recording System</h2><span class="abbr">PRS</span></div><p>Externalizes relevant internal &amp; environmental state for persistent recording, discovery, and retrieval. The sense organs of the loop.</p><span class="arrow">Enter prs/ →</span></a>
+      <a class="card" href="/pkts/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Keyword Tracking System</h2><span class="abbr">PKTS</span></div><p>A perception / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Decision</span><span class="phase-rule"></span><span class="phase-stage">evaluate &amp; choose</span></div>
+    <div class="grid">
+      <a class="card" href="/pps/"><span class="tag">loop stage · Decision</span><div class="head"><h2>Personal Policy System</h2><span class="abbr">PPS</span></div><p>Feeds the Decision stage with objectives and constraints (and preserves identity): charter, principles, values, commitments, and domain policies defining direction and limits.</p><span class="arrow">Enter pps/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Action Selection</span><span class="phase-rule"></span><span class="phase-stage">commit to action</span></div>
+    <div class="grid">
+      <a class="card" href="/pwos/"><span class="tag">loop stage · Action Selection</span><div class="head"><h2>Personal Work Organization System</h2><span class="abbr">PWOS</span></div><p>Organizes action constructs (tasks, projects, routines) into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time.</p><span class="arrow">Enter pwos/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Execution</span><span class="phase-rule"></span><span class="phase-stage">carry out the action</span></div>
+    <div class="grid">
+      <a class="card" href="/awes/"><span class="tag">loop stage · Execution</span><div class="head"><h2>Automated Work Execution System</h2><span class="abbr">AWES</span></div><p>Supplies the Execution stage: provisions computational environments, dispatches work units (commands, scripts, notebooks), captures artifacts, and feeds results back into the loop.</p><span class="arrow">Enter awes/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Feedback</span><span class="phase-rule"></span><span class="phase-stage">observe &amp; adapt</span></div>
+    <div class="grid">
+      <a class="card" href="/pras/"><span class="tag">loop stage · Feedback</span><div class="head"><h2>Personal Reflection &amp; Adaptation System</h2><span class="abbr">PRAS</span></div><p>Closes the Feedback arc: a corpus of deliberations that observe the consequences of what was executed, make sense of the gap between intention and outcome, and mature into adaptations that feed policy and the rest of the loop.</p><span class="arrow">Enter pras/ →</span></a>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-links">
-      <a href="docs.html">Docs</a>
       <a href="about.html">About</a>
+      <a href="docs.html">Docs</a>
     </div>
     <span class="mono">Autoregia · Personal Viable System Model</span>
   </footer>
 </div>
+
+<script>
+/* Unified search — fans out to each subsystem's /api/search and merges.
+   Per-system failure is silent (a subsystem simply contributes nothing),
+   so the index degrades gracefully when a tool isn't running. */
+(function () {
+  var input = document.getElementById('searchInput');
+  var resultsEl = document.getElementById('searchResults');
+  var timer = null;
+
+  // Each source: how to turn a raw result into {title, snippet, href}.
+  // PPS/PRAS return {results:[...]}; PTOCS/PRS return a bare array.
+  var SOURCES = [
+    { prefix: 'pps',  label: 'PPS',   wrap: true,
+      map: function (r) { return { title: r.title, snippet: r.snippet, href: '/pps' + r.path }; } },
+    { prefix: 'pras', label: 'PRAS',  wrap: true,
+      map: function (r) { return { title: r.title, snippet: r.snippet, href: '/pras' + r.path }; } },
+    { prefix: 'ptocs', label: 'PTOCS', wrap: false,
+      map: function (e) { return { title: e.name || e.title || e.id, snippet: e.summary || e.description || '', href: '/ptocs/' }; } },
+    { prefix: 'prs',  label: 'PRS',   wrap: false,
+      map: function (r) { return { title: (r.content || r.id || '').slice(0, 90), snippet: r.detail || '', href: '/prs/' }; } }
+  ];
+
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+  function hl(text, q) {
+    if (!q) return esc(text);
+    var i = String(text).toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return esc(text);
+    return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
+  }
+
+  function rows(json, wrap) { return wrap ? (json && json.results) || [] : (Array.isArray(json) ? json : []); }
+
+  function searchSource(src, q) {
+    return fetch('/' + src.prefix + '/api/search?q=' + encodeURIComponent(q))
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (json) { return rows(json, src.wrap).slice(0, 5).map(function (r) { var m = src.map(r); m.sys = src.label; return m; }); })
+      .catch(function () { return []; });
+  }
+
+  function run(q) {
+    if (!q.trim()) { resultsEl.innerHTML = ''; return; }
+    Promise.all(SOURCES.map(function (s) { return searchSource(s, q); })).then(function (groups) {
+      var items = [];
+      groups.forEach(function (g) { g.forEach(function (m) { items.push(m); }); });
+      if (!items.length) {
+        resultsEl.innerHTML = '<div class="sr-empty">No matches across the running systems.</div>';
+        return;
+      }
+      resultsEl.innerHTML = items.map(function (m) {
+        return '<a class="sr-item" href="' + esc(m.href) + '">' +
+          '<div class="sr-head"><span class="sr-sys">' + esc(m.sys) + '</span>' +
+          '<span class="sr-title">' + hl(m.title || '(untitled)', q) + '</span></div>' +
+          (m.snippet ? '<div class="sr-snippet">' + hl(m.snippet, q) + '</div>' : '') +
+          '</a>';
+      }).join('');
+    });
+  }
+
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { run(input.value); }, 160); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { clearTimeout(timer); run(input.value); }
+    if (e.key === 'Escape') { input.value = ''; resultsEl.innerHTML = ''; input.blur(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); }
+  });
+})();
+</script>
+<script>
+  /* Lenses — at most one panel open at a time; click the active one to close. */
+  (function () {
+    var lenses = document.querySelectorAll('.lens');
+    var panels = document.querySelectorAll('.lens-panel');
+    lenses.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = document.getElementById('lens-' + btn.getAttribute('data-lens'));
+        var willOpen = !btn.classList.contains('open');
+        lenses.forEach(function (b) { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); });
+        panels.forEach(function (p) { p.classList.remove('open'); });
+        if (willOpen) { btn.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); target.classList.add('open'); }
+      });
+    });
+  })();
+</script>
 </body>
 </html>

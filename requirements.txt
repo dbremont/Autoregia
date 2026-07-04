@@ -2,4 +2,4 @@
 # Each sub-project (prs/, ptocs/, pwos/, pkts/, pps/) also has its own
 # requirements.txt listing its server-specific deps.
 flask>=3.0
-CouchDB>=2.0
+CouchDB>=1.2

@@ -38,6 +38,13 @@
 | Regulation           | compensate disturbances           |
 | Learning             | improve future behavior           |
 
+### Foundational Model Substrates
+
+The agent maintains two foundational model substrates — typed, declarative ontologies — that structure its perception, situation-assessment, and self-regulation. Both are sub-systems of the **Agent State** system and are **generative**: from their types they can derive recording templates and emit records into the PRS automatically.
+
+- **World Model** — the typed ontology of the external environment: entity types, relation types, event types, and domains. Makes explicit the structure that Perception reads and the Situation Model instantiates. Materialized as the [Personal World Model System (PWMS)](asrs/pwms/README.md), a sub-system of Agent State.
+- **Self Model** — the typed model of the self: identity, capabilities, resources, beliefs, commitments, constraints. Makes explicit the structure of the internal world against which internal state is recorded and regulated. Materialized as the [Personal Self Model System (PSMS)](asrs/psms/README.md), a sub-system of Agent State along with the [Personal Policy System (PPS)](../pps/) that writes to it.
+
 ### Agent Control Loop Model
 
 The agent control loop is an **outer loop** that closes the world on itself through the agent. It contains an inner **Deliberative Cycle** — the sense→decide arc that turns raw information into a committed action — followed by an **Execution** arc that carries the action out and a **Feedback** path that re-enters the cycle.
@@ -98,10 +105,9 @@ Autoregia decomposes self-management into a set of cooperating systems. Some are
 
 | **System** | **Role** | **VSM Level** |
 | --- | --- | --- |
-| Policy | Long-term direction, identity, principles, life-policy | **S5 – Policy** |
+| **Agent State** | Integrated self-regulation system: priority-setting, scheduling, day-to-day steering. Contains the agent's models and policy as sub-systems — [PPS](../pps/) (policy), [PWMS](asrs/pwms/) (world model), [PSMS](asrs/psms/) (self model) — and applies them to steer day-to-day. | **S5 – Policy** |
 | Intelligence | Scan environment, synthesize, learn, anticipate | **S4 – Intelligence** |
 | Documentation | External memory: explicit knowledge & decision records | **S4 – Intelligence** |
-| Control | Priority-setting, scheduling, day-to-day steering | **S3 – Control** |
 | Accounting | Track resource usage (time, money, energy, attention) | **S3 – Audit / Accounting** |
 | Audit | Diagnostics, deviation detection, performance evaluation | **S3 – Audit** |
 | Task Management | Organize action constructs (projects, tasks, routines) | **S1 – Operations** |
@@ -127,6 +133,16 @@ The PVSM instantiates the agent control loop with concrete personal systems. The
 | Execution       | Outer         | Production                                           |
 | Feedback        | Outer         | Reflection (Intelligence Layer)                      |
 
+#### Foundational Substrates
+
+Two foundational model substrates underpin the control loop, making Perception and Situation Model possible. They are sub-systems of the **Agent State** system — the structural/ontological layer that Perception reads and the Situation Model instantiates as a current state estimate:
+
+- **Personal World Model System (PWMS)** — the typed ontology of the external world (entity types, event types, relations, domains). A sub-system of Agent State. The PRS records *instances* of its types; the Situation Model is a *current-state instance* of its structure. Generative: PWMS can derive recording templates and emit expected/triggered records into the PRS.
+- **Personal Self Model System (PSMS)** — the typed model of the self (identity, capability, resource, belief, commitment, constraint). A sub-system of Agent State. Provides the structural facets against which internal state is recorded and regulated. Generative: PSMS can derive introspection prompts and emit self-records into the PRS.
+- **Personal Policy System (PPS)** — the regulatory apparatus at S5: direction, identity, principles, life-policy. A sub-system of Agent State that writes its decisions into PSMS as identity/constraint/commitment facets of the self model.
+
+All three are specified as specification skeletons in [`spec/pwms/`](asrs/pwms/), [`spec/psms/`](asrs/psms/), and [`spec/pps/`](../pps/).
+
 #### Diagram
 
 The PVSM diagram shares the *same* closed-loop topology as the agent control loop. In `about.html` the node labels are **abstract** (identical to the control-loop diagram); clicking a stage reveals which **concrete** personal system instantiates it (see the mapping table above).
@@ -146,6 +162,26 @@ The PVSM diagram shares the *same* closed-loop topology as the agent control loo
                           ▼
                       Feedback ── regulate ──▶ (into the Deliberative Cycle)
 ```
+
+## Q&A
+
+**Q. How should the external environment (the world) be conceptualized? As a sequence of events? What types of events constitute such a sequence?**
+
+A. Model the world as a bounded region of state — entities, resources, and other agents — perceived through a time-ordered stream of discrete events. Events are the deltas; the *Situation Model* integrates them into a snapshot of current state. Four types constitute the stream: *occurrence* events (independent happenings — a message arrives, a deadline passes), *outcome* events (consequences of your own actions, i.e. the feedback signal), *trigger* events (time- or condition-based, e.g. alarms and scheduled commitments), and *observational* events (readings you actively take). So not the world as a bare sequence, but a state-bearing region perceived as a sequence of events.
+
+**Q. How should the agent's internal environment be conceptualized?**
+
+A. As the agent's own stateful substrate — the part of the world it regulates directly and observes with low latency. It holds memory (declarative, episodic, procedural), finite resources (time, energy, attention, money), beliefs and models, current commitments, and capabilities. In cybernetic terms these are the system's essential variables: the deliberative cycle reads them into the Situation Model, and the regulation layer corrects deviations (fatigue, overload, drift). It is bounded, depletable, and renewable — the reservoir the whole loop manages.
+
+**Q. How should tasks be conceptualized?**
+
+A. A task is a bounded specification of work that represents an intended intervention by an agent to achieve, maintain, restore, investigate, create, or prevent a particular state of affairs. It is the fundamental operational unit of execution, defining what work is to be performed, under what conditions, and according to what constraints. Within the agent control loop, a task is materialized through Decision and Action Selection as the operational commitment to execution.
+
+Every task originates from an underlying source—such as a goal, obligation, recurrent obligation, problem, opportunity, policy, plan, external request, or environmental event—that justifies its existence.
+
+**Q. How should recurrent tasks be conceptualized?**
+
+A. A recurrent task is not a single task but a task generator: a template paired with a recurrence rule (interval, schedule, or trigger condition) that emits a discrete task instance each time the rule fires. Each emitted instance has its own lifecycle and completion, while the rule persists until terminated. Recurrence encodes routine and pre-commits repeated decisions, lowering deliberative load — it belongs jointly to System 1 (the instances) and System 2 coordination (the rhythm).
 
 ## References
 

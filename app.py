@@ -14,7 +14,9 @@ index at the root.
     /ptocs/...   Personal Technical Object Catalog (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /pwos/...    Personal Work Organization System (System 1 — Operations)
+    /awes/...    Automated Work Execution System    (System 1 — Execution)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
+    /asrs/...    Agent Self Representation System  (System 5 — representational substrate)
 
 Sub-systems are not independent apps: they are functional organs of one
 system, surfaced here through one router.
@@ -59,7 +61,9 @@ SUBSYSTEMS = [
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
     ("pwos", "Personal Work Organization System", "pwos/server.py"),
+    ("awes", "Automated Work Execution System", "awes/server.py"),
     ("pras", "Personal Reflection & Adaptation System", "pras/server.py"),
+    ("asrs", "Agent Self Representation System", "asrs/server.py"),
 ]
 
 MOUNTS = {prefix: _load_app(f"{prefix}_server", rel)
@@ -88,6 +92,10 @@ def index():
 @app.route("/about.html")
 def about():
     return send_from_directory(ROOT, "about.html")
+
+@app.route("/img/<path:filename>")
+def control_loop(filename):
+    return send_from_directory(ROOT, f"img/{filename}")
 
 
 @app.route("/docs.html")

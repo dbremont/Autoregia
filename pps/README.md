@@ -6,6 +6,10 @@
 > constraints, with a **main entry** that points to them and **search** over the
 > corpus.
 
+> This document is the **implementation guide**. For the conceptual
+> specification (formulation, atomic units, canonical distinction from PSMS,
+> relation to Autoregia), see [`spec/pps/README.md`](../spec/asrs/pps/README.md).
+
 > The policy documents *are* the data. There is no database, no schema, and no
 > separate record store: each policy is an HTML page under [`policies/`](policies).
 > The server indexes those pages at startup to provide search and a listing.

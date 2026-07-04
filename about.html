@@ -26,7 +26,8 @@
     h1.title em{font-style:italic;color:var(--accent)}
     .lede{font-size:20px;color:var(--ink-soft);max-width:640px;margin:0 auto;font-style:italic;line-height:1.55}
     .gold-rule{height:1px;background:var(--gold);width:64px;margin:40px auto;opacity:.7}
-    section{padding:8px 0 48px}
+    html{scroll-behavior:smooth}
+    section{padding:8px 0 48px;scroll-margin-top:24px}
     .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:28px}
     .section-title{font-size:28px;font-weight:400;letter-spacing:-.01em;margin-bottom:20px;text-align:center}
     blockquote{border-left:2px solid var(--gold);padding:4px 0 4px 24px;margin:18px 0;color:var(--ink-soft);font-size:17px}
@@ -43,10 +44,35 @@
     .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:28px 16px;margin:10px 0 6px}
     .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
     .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:14px}
+    .pvsm-map{position:relative;display:block;margin:0 auto;max-width:100%;line-height:0}
+    .pvsm-map .pvsm-img{display:block;width:100%;height:auto;border-radius:4px}
+    .pvsm-map .hotspot{position:absolute;border:0;background:transparent;cursor:pointer;border-radius:8px;padding:0;line-height:normal;transition:background .15s,box-shadow .15s}
+    .pvsm-map .hotspot:hover{background:rgba(184,137,58,.18);box-shadow:inset 0 0 0 2px rgba(122,26,42,.75)}
+    .pvsm-map .hotspot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .pvsm-map .hotspot .tag{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-family:var(--sans);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:3px 8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+    .pvsm-map .hotspot:hover .tag,.pvsm-map .hotspot:focus-visible .tag{opacity:1}
     ul.refs{list-style:none;padding:0;margin:0}
     ul.refs li{padding:12px 0;border-bottom:1px solid var(--rule)}
     ul.refs a{color:var(--accent);text-decoration:none;font-size:16px;transition:color .18s}
     ul.refs a:hover{color:var(--ink)}
+    .qa{margin:10px 0 0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:0 10px 30px -22px rgba(28,25,22,.4)}
+    .qa-item{border-bottom:1px solid var(--rule)}
+    .qa-item:last-child{border-bottom:0}
+    .qa-q{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:none;border:0;cursor:pointer;padding:18px 20px;font-family:var(--serif);font-size:16.5px;color:var(--ink);text-align:left;transition:background .18s,color .18s}
+    .qa-q:hover{background:#f4ecdd}
+    .qa-q:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+    .qa-item.open .qa-q{color:var(--accent)}
+    .qa-item .qmark{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--gold);font-weight:600;border:1px solid var(--gold);border-radius:4px;padding:2px 7px;line-height:1.5;transition:background .18s,color .18s}
+    .qa-item.open .qmark{background:var(--gold);color:#fff}
+    .qa-chev{width:8px;height:8px;border-right:1.8px solid var(--muted);border-bottom:1.8px solid var(--muted);transform:rotate(45deg);transition:transform .28s ease,border-color .18s;justify-self:end}
+    .qa-item.open .qa-chev{transform:rotate(225deg);border-color:var(--accent)}
+    .qa-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+    .qa-item.open .qa-a{grid-template-rows:1fr}
+    .qa-a-wrap{overflow:hidden;min-height:0}
+    .qa-a-inner{display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:start;padding:4px 20px 20px}
+    .qa-item .amark{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--accent);font-weight:600;border:1px solid var(--accent);border-radius:4px;padding:2px 7px;line-height:1.5;height:fit-content}
+    .qa-atext{font-size:15.5px;color:var(--ink-soft);line-height:1.65}
+    .qa-atext em{font-style:italic}
     footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
     footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
     .diagram svg g.hot,.diagram svg text.hot{cursor:pointer}
@@ -66,12 +92,23 @@
     .modal-body{font-size:15.5px;color:var(--ink-soft);line-height:1.6}
     .modal-link{display:inline-block;margin-top:16px;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);text-decoration:none;font-weight:600}
     .modal-link:hover{color:var(--ink)}
+    .toc{position:fixed;top:50%;transform:translateY(-50%);left:calc(50% + 452px);width:176px;max-height:84vh;overflow:auto;z-index:25}
+    .toc-cap{font-family:var(--sans);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 12px 14px;margin-bottom:6px;border-bottom:1px solid var(--rule)}
+    .toc-link{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;padding:9px 0 9px 14px;border-left:2px solid transparent;text-decoration:none;color:var(--ink-soft);transition:color .18s,border-color .18s}
+    .toc-link:hover{color:var(--ink)}
+    .toc-link.active{color:var(--accent);border-left-color:var(--accent)}
+    .toc-num{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.04em;padding-top:2px}
+    .toc-link.active .toc-num{color:var(--accent)}
+    .toc-txt{display:grid;gap:1px}
+    .toc-t{font-family:var(--serif);font-size:14.5px;line-height:1.3;color:inherit}
+    .toc-s{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.35}
+    @media (max-width:1279px){.toc{display:none}}
     @media (max-width:560px){header.masthead{padding:16px 0 32px}.lede{font-size:18px}.diagram{padding:18px 6px}}
   </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">Index</a>
+  <a class="back" href="/">Index</a>
   <header class="masthead">
     <div class="eyebrow">About · Personal Viable System Model</div>
     <h1 class="title">Autoregia</h1>
@@ -79,8 +116,26 @@
     <div class="gold-rule"></div>
   </header>
 
+  <section class="premise">
+    <blockquote>Every person can be understood as an adaptive control system operating within a changing environment. Autoregia starts from that premise: rather than designing productivity tools from intuition or convention, it identifies the fundamental functional architecture that every viable agent must implement.</blockquote>
+    <blockquote>The method has three stages — model the agent control loop independently of any implementation; formalize the functional components that make an agent viable (perception, decision, execution, regulation, learning, identity); then map concrete personal systems onto those functions in order to analyze, engineer, and continuously improve personal agency.</blockquote>
+    <blockquote>The output is a reference architecture, not a prescription. Note-taking systems, task managers, calendars, and reflection practices are not independent solutions — they are concrete implementations of specific functions within a larger cybernetic architecture of agency.</blockquote>
+    <blockquote>Self-management is the praxis of constructing and sustaining that architecture, so that operative processes evolve from implicit, unexamined routines into explicit, intelligible, and systematically steerable structures.</blockquote>
+    <blockquote>Autoregia decomposes self-management into a set of cooperating systems, each mapped to a level of the Viable System Model. Some are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents.</blockquote>
+  </section>
+
+  <aside class="toc" aria-label="Contents">
+    <div class="toc-cap">Contents</div>
+    <a class="toc-link" href="#agent" data-toc="agent"><span class="toc-num">01</span><span class="toc-txt"><span class="toc-t">The Agent</span><span class="toc-s">functional problems</span></span></a>
+    <a class="toc-link" href="#control-loop" data-toc="control-loop"><span class="toc-num">02</span><span class="toc-txt"><span class="toc-t">Control Loop</span><span class="toc-s">sense → decide → act</span></span></a>
+    <a class="toc-link" href="#vsm" data-toc="vsm"><span class="toc-num">03</span><span class="toc-txt"><span class="toc-t">VSM</span><span class="toc-s">five-system architecture</span></span></a>
+    <a class="toc-link" href="#pvsm" data-toc="pvsm"><span class="toc-num">04</span><span class="toc-txt"><span class="toc-t">PVSM</span><span class="toc-s">personal instantiation</span></span></a>
+    <a class="toc-link" href="#qa" data-toc="qa"><span class="toc-num">05</span><span class="toc-txt"><span class="toc-t">Q&amp;A</span><span class="toc-s">questions &amp; answers</span></span></a>
+    <a class="toc-link" href="#references" data-toc="references"><span class="toc-num">06</span><span class="toc-txt"><span class="toc-t">References</span><span class="toc-s">further reading</span></span></a>
+  </aside>
+
   <!-- The Agent -->
-  <section>
+  <section id="agent">
     <div class="section-label">The Agent</div>
     <blockquote>An agent is a system that maintains its continued existence and pursues objectives through regulated interaction with an environment.</blockquote>
     <blockquote>An agent is a system that deliberately transforms states of itself and its environment by selecting and executing actions according to internal objectives while regulating those actions using feedback.</blockquote>
@@ -115,9 +170,20 @@
         <tr><td class="code">Learning</td><td>improve future behavior</td></tr>
       </tbody>
     </table>
+    <div class="section-label" style="margin-top:40px">Foundational Model Substrates</div>
+    <p class="body">The agent maintains two foundational model substrates — typed, declarative ontologies — that structure its perception, situation-assessment, and self-regulation. Both are sub-systems of the <strong>Agent State</strong> system and are <strong>generative</strong>: from their types they can derive recording templates and emit records into the PRS automatically.</p>
+    <table class="t">
+      <thead><tr><th>Foundation</th><th>Role</th><th class="code">Sub-system of Agent State</th></tr></thead>
+      <tbody>
+        <tr><td class="code">World Model</td><td>Typed ontology of the external environment — entity types, relation types, event types, domains — that Perception reads and the Situation Model instantiates.</td><td class="code">PWMS</td></tr>
+        <tr><td class="code">Self Model</td><td>Typed model of the self — identity, capabilities, resources, beliefs, commitments — against which internal state is recorded and regulated.</td><td class="code">PSMS</td></tr>
+        <tr><td class="code">Policy</td><td>Normative direction, identity, principles, life-policy — the regulatory apparatus that writes its decisions into the Self Model.</td><td class="code">PPS</td></tr>
+      </tbody>
+    </table>
   </section>
+
   <!-- Agent Control Loop -->
-  <section>
+  <section id="control-loop">
     <div class="section-label">Agent Control Loop</div>
     <h2 class="section-title">The Control Loop</h2>
     <p class="body">The agent control loop is an <strong>outer loop</strong> that closes the world on itself through the agent. It contains an inner <strong>Deliberative Cycle</strong> — the sense→decide arc that turns raw information into a committed action — followed by an <strong>Execution</strong> arc that carries the action out and a <strong>Feedback</strong> path that re-enters the cycle.</p>
@@ -228,7 +294,7 @@
   </section>
 
   <!-- Viable System Model (VSM) -->
-  <section>
+  <section id="vsm">
     <div class="section-label">Viable System Model</div>
     <h2 class="section-title">The Reference Architecture</h2>
     <blockquote>A Viable System Model (VSM) is a formal cybernetic model of the organizational structure required for an autonomous system to remain viable in a changing environment. It specifies the minimum set of interacting subsystems necessary to regulate operations, coordinate activities, adapt to environmental change, and preserve the identity and continuity of the system over time.</blockquote>
@@ -250,10 +316,9 @@
     <table class="t">
       <thead><tr><th>System</th><th>Role</th><th class="code">VSM Level</th></tr></thead>
       <tbody>
-        <tr><td>Policy</td><td>Long-term direction, identity, principles, life-policy</td><td class="code">S5 – Policy</td></tr>
+        <tr><td><strong>Agent State</strong></td><td>Integrated self-regulation system: priority-setting, scheduling, day-to-day steering. Contains the agent's models and policy as sub-systems — PPS (policy), PWMS (world model), PSMS (self model) — and applies them to steer day-to-day.</td><td class="code">S5 – Policy</td></tr>
         <tr><td>Intelligence</td><td>Scan environment, synthesize, learn, anticipate</td><td class="code">S4 – Intelligence</td></tr>
         <tr><td>Documentation</td><td>External memory: explicit knowledge & decision records</td><td class="code">S4 – Intelligence</td></tr>
-        <tr><td>Control</td><td>Priority-setting, scheduling, day-to-day steering</td><td class="code">S3 – Control</td></tr>
         <tr><td>Accounting</td><td>Track resource usage (time, money, energy, attention)</td><td class="code">S3 – Audit / Accounting</td></tr>
         <tr><td>Audit</td><td>Diagnostics, deviation detection, performance evaluation</td><td class="code">S3 – Audit</td></tr>
         <tr><td>Task Management</td><td>Organize action constructs (projects, tasks, routines)</td><td class="code">S1 – Operations</td></tr>
@@ -266,7 +331,7 @@
   </section>
 
   <!-- Personal Viable System Model (PVSM) -->
-  <section>
+  <section id="pvsm">
     <div class="section-label">Personal Viable System Model</div>
     <h2 class="section-title">The Personalized Control Loop</h2>
     <p class="body">The PVSM instantiates the agent control loop with concrete personal systems. The <strong>Deliberative Cycle</strong> is supplied by the recording, reflection, and planning instruments; the <strong>Execution</strong> arc is supplied by production tools; and <strong>Feedback</strong> closes the loop through reflection.</p>
@@ -282,101 +347,87 @@
         <tr><td class="code">Feedback</td><td>Outer</td><td>Reflection (Intelligence Layer) - Audit </td></tr>
       </tbody>
     </table>
+    <div class="section-label" style="margin-top:40px">Foundational Substrates</div>
+    <p class="body">Two foundational model substrates underpin the control loop, making Perception and Situation Model possible. Together with the Policy system they form the <strong>Agent State</strong> — the structural/ontological layer that Perception reads, the Situation Model instantiates as a current state estimate, and policy governs. All three are generative: they can derive recording templates and emit automatic records into the PRS.</p>
+    <table class="t">
+      <thead><tr><th>Substrate</th><th>Role</th><th class="code">Spec</th></tr></thead>
+      <tbody>
+        <tr><td class="code">World Model</td><td>Typed ontology of the external world — entity types, event types, relations, domains. PRS records instances of its types; the Situation Model is a current-state instance of its structure. Generative: can derive recording templates and emit records.</td><td class="code"><a href="spec/pwms/README.md" style="color:inherit;text-decoration:none">PWMS</a></td></tr>
+        <tr><td class="code">Self Model</td><td>Typed model of the self — identity, capability, resource, belief, commitment, constraint. Provides the structural facets against which internal state is recorded and regulated. Generative: can derive introspection prompts and emit self-records.</td><td class="code"><a href="spec/psms/README.md" style="color:inherit;text-decoration:none">PSMS</a></td></tr>
+        <tr><td class="code">Policy</td><td>Normative apparatus — direction, identity, principles, life-policy. The regulatory sub-system that writes its decisions into the Self Model as identity/constraint/commitment facets.</td><td class="code"><a href="spec/pps/README.md" style="color:inherit;text-decoration:none">PPS</a></td></tr>
+      </tbody>
+    </table>
     <div class="diagram">
-      <svg data-scope="pvsm" viewBox="0 0 880 450" role="img" aria-label="Personal viable system model: a closed control loop. World feeds the Deliberative Cycle (Perception, Situation Model, Decision, Action Selection), which commits to Execution; execution modifies the World, while Feedback observes and regulates the cycle. Node labels are abstract; each stage is clickable to reveal the concrete personal system that instantiates it.">
-        <defs>
-          <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/>
-          </marker>
-          <marker id="arrow2-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/>
-          </marker>
-        </defs>
-        <style>
-          .p-lbl{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:15px;fill:#1c1916}
-          .p-sub{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#7a736a}
-          .p-arc{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
-          .p-fba{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
-          .p-cyc{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
-          .p-leg{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
-          .p-node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
-          .p-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
-          .p-cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
-          .p-edge{stroke:#b8893a;stroke-width:1.6;fill:none}
-          .p-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
-          .p-tap{fill:#7A1A2A}
-        </style>
-
-        <rect class="p-cycle" x="140" y="95" width="565" height="170" rx="12"/>
-        <text class="p-cyc hot" data-stage="cycle" x="422" y="118" text-anchor="middle">Deliberative Cycle</text>
-
-        <path class="p-edge" d="M 80 212 L 80 158 L 153 158" marker-end="url(#arrow2)"/>
-        <text class="p-arc" x="58" y="185" text-anchor="middle" transform="rotate(-90 58 185)">perceive</text>
-        <path class="p-edge" d="M 287 158 L 343 158" marker-end="url(#arrow2)"/>
-        <path class="p-edge" d="M 517 158 L 558 158" marker-end="url(#arrow2)"/>
-        <path class="p-edge" d="M 620 181 L 620 203" marker-end="url(#arrow2)"/>
-        <path class="p-edge" d="M 697 228 L 738 228" marker-end="url(#arrow2)"/>
-        <text class="p-arc" x="717" y="220" text-anchor="middle">commit</text>
-        <path class="p-edge" d="M 800 251 L 800 370 L 80 370 L 80 260" marker-end="url(#arrow2)"/>
-        <text class="p-arc" x="300" y="362" text-anchor="middle">act · modify world</text>
-
-        <circle class="p-tap" cx="540" cy="370" r="3.4"/>
-        <path class="p-fb" d="M 540 370 L 540 343" marker-end="url(#arrow2-accent)"/>
-        <text class="p-fba" x="552" y="361" text-anchor="start">observe</text>
-        <path class="p-fb" d="M 540 293 L 540 267" marker-end="url(#arrow2-accent)"/>
-        <text class="p-fba" x="552" y="288" text-anchor="start">regulate</text>
-
-        <g class="hot" data-stage="world" transform="translate(80,235)">
-          <rect class="p-loop" x="-60" y="-23" width="120" height="46" rx="23"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">World</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">Environment · Internal</text>
-        </g>
-        <g class="hot" data-stage="perception" transform="translate(220,158)">
-          <rect class="p-node" x="-65" y="-23" width="130" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Perception</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">acquire information</text>
-        </g>
-        <g class="hot" data-stage="situation" transform="translate(430,158)">
-          <rect class="p-node" x="-85" y="-23" width="170" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Situation Model</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">state estimate</text>
-        </g>
-        <g class="hot" data-stage="decision" transform="translate(620,158)">
-          <rect class="p-node" x="-60" y="-23" width="120" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Decision</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">choose alternatives</text>
-        </g>
-        <g class="hot" data-stage="action" transform="translate(620,228)">
-          <rect class="p-node" x="-75" y="-23" width="150" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Action Selection</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">commit to action</text>
-        </g>
-        <g class="hot" data-stage="execution" transform="translate(800,228)">
-          <rect class="p-node" x="-60" y="-23" width="120" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Execution</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">carry out action</text>
-        </g>
-        <g class="hot" data-stage="feedback" transform="translate(540,318)">
-          <rect class="p-node" x="-70" y="-23" width="140" height="46" rx="8"/>
-          <text class="p-lbl" x="0" y="-3" text-anchor="middle">Feedback</text>
-          <text class="p-sub" x="0" y="12" text-anchor="middle">observe · regulate</text>
-        </g>
-
-        <g transform="translate(120,425)">
-          <line class="p-edge" x1="0" y1="0" x2="24" y2="0"/>
-          <text class="p-leg" x="32" y="4">forward · sense → decide → act</text>
-          <line class="p-fb" x1="220" y1="0" x2="244" y2="0"/>
-          <text class="p-leg" x="252" y="4">feedback · regulation</text>
-          <rect class="p-cycle" x="370" y="-7" width="24" height="14"/>
-          <text class="p-leg" x="402" y="4">deliberative cycle · inner sub-loop</text>
-        </g>
-      </svg>
+      <div class="pvsm-map" data-scope="pvsm" role="img" aria-label="Personal viable system model: a closed control loop. World feeds the Deliberative Cycle (Perception, Situation Model, Decision, Action Selection), which commits to Execution; execution modifies the World, while Feedback observes and regulates the cycle. Each stage is clickable to reveal the concrete personal system that instantiates it.">
+        <img class="pvsm-img" src="img/control-loop.png" alt="Personal Viable System Model control loop diagram">
+        <button class="hotspot" data-stage="cycle" style="left:15.9%;top:21.1%;width:64.2%;height:8%" aria-label="Deliberative Cycle"><span class="tag">Deliberative Cycle</span></button>
+        <button class="hotspot" data-stage="world" style="left:2.3%;top:47.1%;width:13.6%;height:10.2%" aria-label="World"><span class="tag">World</span></button>
+        <button class="hotspot" data-stage="perception" style="left:17.6%;top:30.0%;width:14.8%;height:10.2%" aria-label="Perception"><span class="tag">Perception · PRS</span></button>
+        <button class="hotspot" data-stage="situation" style="left:39.2%;top:30.0%;width:19.3%;height:10.2%" aria-label="Situation Model"><span class="tag">Situation · Reflection</span></button>
+        <button class="hotspot" data-stage="decision" style="left:63.6%;top:30.0%;width:13.6%;height:10.2%" aria-label="Decision"><span class="tag">Decision · Task Registry</span></button>
+        <button class="hotspot" data-stage="action" style="left:61.9%;top:45.6%;width:17.0%;height:10.2%" aria-label="Action Selection"><span class="tag">Action · Calendar</span></button>
+        <button class="hotspot" data-stage="execution" style="left:84.1%;top:45.6%;width:13.6%;height:10.2%" aria-label="Execution"><span class="tag">Execution · Production</span></button>
+        <button class="hotspot" data-stage="feedback" style="left:53.4%;top:65.6%;width:15.9%;height:10.2%" aria-label="Feedback"><span class="tag">Feedback · Reflection</span></button>
+      </div>
       <div class="diagram-caption">Personal Viable System Model — the control loop instantiated by concrete personal systems · click any stage for detail</div>
     </div>
   </section>
 
+  <!-- QA -->
+  <section id="qa">
+    <div class="section-label">QA</div>
+    <h2 class="section-title">Questions &amp; Answers</h2>
+    <p class="body">Conceptual questions about the model, with working answers. Tap a question to expand.</p>
+    <div class="qa" data-accordion>
+      <div class="qa-item open">
+        <button class="qa-q" aria-expanded="true" aria-controls="qa-a1" id="qa-q1">
+          <span class="qmark">Q</span>
+          <span class="qa-qtext">How should the external environment (the world) be conceptualized? As a sequence of events? What types of events constitute such a sequence?</span>
+          <span class="qa-chev" aria-hidden="true"></span>
+        </button>
+        <div class="qa-a" id="qa-a1" role="region" aria-labelledby="qa-q1"><div class="qa-a-wrap"><div class="qa-a-inner">
+          <span class="amark">A</span>
+          <span class="qa-atext">Model the world as a bounded region of state — entities, resources, and other agents — perceived through a time-ordered stream of discrete events. Events are the deltas; the <em>Situation Model</em> integrates them into a snapshot of current state. Four types constitute the stream: <em>occurrence</em> events (independent happenings — a message arrives, a deadline passes), <em>outcome</em> events (consequences of your own actions, i.e. the feedback signal), <em>trigger</em> events (time- or condition-based, e.g. alarms and scheduled commitments), and <em>observational</em> events (readings you actively take). So not the world as a bare sequence, but a state-bearing region perceived as a sequence of events.</span>
+        </div></div></div>
+      </div>
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false" aria-controls="qa-a2" id="qa-q2">
+          <span class="qmark">Q</span>
+          <span class="qa-qtext">How should the agent's internal environment be conceptualized?</span>
+          <span class="qa-chev" aria-hidden="true"></span>
+        </button>
+        <div class="qa-a" id="qa-a2" role="region" aria-labelledby="qa-q2"><div class="qa-a-wrap"><div class="qa-a-inner">
+          <span class="amark">A</span>
+          <span class="qa-atext">As the agent's own stateful substrate — the part of the world it regulates directly and observes with low latency. It holds memory (declarative, episodic, procedural), finite resources (time, energy, attention, money), beliefs and models, current commitments, and capabilities. In cybernetic terms these are the system's essential variables: the deliberative cycle reads them into the Situation Model, and the regulation layer corrects deviations (fatigue, overload, drift). It is bounded, depletable, and renewable — the reservoir the whole loop manages.</span>
+        </div></div></div>
+      </div>
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false" aria-controls="qa-a3" id="qa-q3">
+          <span class="qmark">Q</span>
+          <span class="qa-qtext">How should tasks be conceptualized?</span>
+          <span class="qa-chev" aria-hidden="true"></span>
+        </button>
+        <div class="qa-a" id="qa-a3" role="region" aria-labelledby="qa-q3"><div class="qa-a-wrap"><div class="qa-a-inner">
+          <span class="amark">A</span>
+          <span class="qa-atext">A <b>task is a bounded specification </b> of work that represents an intended intervention (a commitment to transform the current state into a target state) by the agent to achieve, maintain, restore, investigate, create, or prevent a particular state of affairs. It is the fundamental operational unit of execution, defining what work is to be performed, under what conditions, and according to what constraints. Within the agent control loop, a task is materialized through Decision and Action Selection as the operational commitment to execution.<br><br> <b> Every task originates </b> from an underlying source — such as a goal, obligation, recurrent obligation, problem, opportunity, policy, plan, external request, or environmental event — that justifies its existence.</span>
+        </div></div></div>
+      </div>
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false" aria-controls="qa-a4" id="qa-q4">
+          <span class="qmark">Q</span>
+          <span class="qa-qtext">How should recurrent tasks be conceptualized?</span>
+          <span class="qa-chev" aria-hidden="true"></span>
+        </button>
+        <div class="qa-a" id="qa-a4" role="region" aria-labelledby="qa-q4"><div class="qa-a-wrap"><div class="qa-a-inner">
+          <span class="amark">A</span>
+          <span class="qa-atext">A recurrent task is not a single task but a task generator: a template paired with a recurrence rule (interval, schedule, or trigger condition) that emits a discrete task instance each time the rule fires. Each emitted instance has its own lifecycle and completion, while the rule persists until terminated. Recurrence encodes routine and pre-commits repeated decisions, lowering deliberative load — it belongs jointly to System 1 (the instances) and System 2 coordination (the rhythm).</span>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
   <!-- References -->
-  <section>
+  <section id="references">
     <div class="section-label">References</div>
     <h2 class="section-title">Further Reading</h2>
     <ul class="refs">
@@ -418,7 +469,7 @@
       cycle: { eyebrow: "Inner sub-loop", title: "Deliberative Cycle", body: "Supplied by the recording, reflection, and planning instruments — PRS, Reflection, Task Registry, Calendar, Time Tracker. Together they turn raw experience into a committed plan." },
       perception: { eyebrow: "Deliberative · Perception", title: "Personal Recording System (PRS)", body: "Externalize and capture relevant internal and environmental state for persistent recording, discovery, and retrieval — the sense organs of your loop.", link: { href: "spec/prs/README.md", label: "Enter PRS →" } },
       situation: { eyebrow: "Deliberative · Situation Model", title: "Reflection · Documentation", body: "Integrate records into a current state estimate — what is actually going on, made explicit and retrievable.", link: { href: "ptocs/README.md", label: "Enter PTOCS →" } },
-      decision: { eyebrow: "Deliberative · Decision", title: "Task Registry · Reflection", body: "Evaluate alternatives and choose what to do, held against the objectives and constraints made explicit by policy.", link: { href: "pps/README.md", label: "Enter PPS →" } },
+      decision: { eyebrow: "Deliberative · Decision", title: "Task Registry · Reflection", body: "Evaluate alternatives and choose what to do, held against the objectives and constraints made explicit by policy.", link: { href: "spec/pps/README.md", label: "Enter PPS →" } },
       action: { eyebrow: "Deliberative · Action Selection", title: "Calendar · Time Tracker", body: "Commit a chosen action to specific time and capacity — turning an intention into a scheduled, resourced commitment.", link: { href: "pwos/README.md", label: "Enter PWOS →" } },
       execution: { eyebrow: "Outer loop", title: "Production", body: "The physical and cognitive tools you actually use to perform the work — where committed plans become done work." },
       feedback: { eyebrow: "Outer loop · Intelligence Layer", title: "Reflection", body: "Observe the consequences of what you executed and regulate the deliberative cycle — the layer where you learn, correct deviations, and steer the next iteration." }
@@ -447,16 +498,50 @@
     document.body.style.overflow = '';
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('svg[data-scope]'), function (svg) {
-    var scope = svg.getAttribute('data-scope');
-    Array.prototype.forEach.call(svg.querySelectorAll('[data-stage]'), function (el) {
-      el.style.cursor = 'pointer';
-      el.addEventListener('click', function () {
-        var c = CONTENT[scope] && CONTENT[scope][el.getAttribute('data-stage')];
-        if (c) open(c);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-stage]'), function (el) {
+    var scopeEl = el.closest('[data-scope]');
+    var scope = scopeEl ? scopeEl.getAttribute('data-scope') : null;
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', function () {
+      var c = scope && CONTENT[scope] && CONTENT[scope][el.getAttribute('data-stage')];
+      if (c) open(c);
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-accordion]'), function (acc) {
+    var items = acc.querySelectorAll('.qa-item');
+    Array.prototype.forEach.call(items, function (item) {
+      var btn = item.querySelector('.qa-q');
+      btn.addEventListener('click', function () {
+        var isOpen = item.classList.contains('open');
+        Array.prototype.forEach.call(items, function (it) {
+          it.classList.remove('open');
+          it.querySelector('.qa-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
       });
     });
   });
+
+  (function () {
+    var links = document.querySelectorAll('.toc-link');
+    if (!links.length) return;
+    var setActive = function (id) {
+      Array.prototype.forEach.call(links, function (l) {
+        l.classList.toggle('active', l.getAttribute('data-toc') === id);
+      });
+    };
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id); });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      Array.prototype.forEach.call(links, function (l) {
+        var el = document.getElementById(l.getAttribute('data-toc'));
+        if (el) io.observe(el);
+      });
+    }
+    if (!document.querySelector('.toc-link.active')) links[0].classList.add('active');
+  })();
 
   overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
   overlay.querySelector('.modal-close').addEventListener('click', close);

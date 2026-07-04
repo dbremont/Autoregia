@@ -35,7 +35,7 @@
 - **Parent:** [Autoregia](../../README.md)
 - **Role:** VSM System 1 – Operations (Execution)
 - **Sibling sub-projects:** [PRS](../../spec/prs/), [PKTS](../../spec/pkts/),
-  [PTOCS](../../spec/ptocs/), [PPS](../../spec/pps/), [PWOS](../../spec/pwos/),
+  [PTOCS](../../spec/ptocs/), [PPS](../../spec/asrs/pps/), [PWOS](../../spec/pwos/),
   [PRAS](../../spec/pras/)
 - **Shared UI standard:** [`../ui.spec`](../ui.spec)
 - **Decision log:** [`../../logos.log.md`](../../logos.log.md)
