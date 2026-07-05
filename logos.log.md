@@ -29,6 +29,62 @@ TODO:
 
 ## Index
 
+### 2025 — Application-interaction capture (PAIS) + PKTS app-context enrichment
+
+**Question.** PKTS captured keystrokes globally but (a) did not attribute them
+to the focused application, and (b) there was no mouse/focus telemetry at all.
+Should mouse capture be a new sub-system, folded into PKTS, or attached to an
+existing one? How do we get a complete picture of "where the user spends time"?
+
+**Decision.**
+
+1. **Keep PKTS focused on keystrokes** — its spec, schema, and seven analytics
+   tabs are keyboard-defined; folding mouse in would break its contract.
+2. **Enrich PKTS keystrokes with application context** — but *not* by adding
+   window-tracking logic inside PKTS. Factor out a shared
+   `shared/focus_watcher.py` (X11 + Wayland backend chain) as the single source
+   of truth for "what was focused at time T". PKTS stamps each keystroke; the
+   watcher's full timeline lives elsewhere.
+3. **Build a new sibling sub-system, PAIS** (Personal Application Interaction
+   System) — mirrors the PRS/PKTS/PTOCS one-technical-object-per-sub-system
+   convention. PAIS owns mouse capture (clicks + scroll + ~5 Hz sampled
+   movement), the focus timeline, and the **join** of its own data with the
+   PKTS keystream (read-only) to produce application-interaction analytics
+   (time-per-app, click-rate, keys/click, app-switch frequency,
+   focus-fragmentation index, idle gaps).
+
+**Rationale.** One object per sub-system keeps each schema clean and lets the
+join happen at query time rather than forcing one giant event schema. A shared
+focus watcher avoids two collectors disagreeing about the active window. Mouse
+movement is coalesced (never raw kernel-rate) to keep CouchDB volume sane.
+
+**Trade-offs accepted.**
+
+- Focus attribution is compositor-level, not kernel-level — there is no
+  evdev-equivalent for "which window has focus". The watcher therefore uses
+  the lowest-level source each desktop exposes: Xlib EWMH (X11), the
+  compositor's own CLI where one exists (Hyprland/Sway/KDE), and AT-SPI as a
+  bonus on GTK3 desktops.
+- On modern GNOME (Wayland or X11) every low-level path is blocked:
+  `org.gnome.Shell.Introspect` is denied, `Shell.Eval` needs session-only
+  unsafe-mode, and on GTK4 AT-SPI no longer publishes app windows (verified on
+  GNOME 46 — only `gjs`/Desktop appears on the a11y bus; `gnome-calculator`
+  loads zero atk-bridge). The only reliable source is a small Shell extension
+  (`pais@autoregia`) that owns `org.autoregia.Focus`. It is **not a daemon** —
+  it loads into the already-running gnome-shell like any other extension.
+- evdev yields only relative pointer deltas; absolute coordinates are
+  integrated from a screen-center origin and clamped to screen bounds
+  (drifting approximation; sufficient for heatmaps). True absolute coords are
+  available on the X11/pynput backend.
+- Window titles may carry sensitive content; a `PAIS_TITLE_REDACT_REGEX`
+  redaction knob masks matching substrings before they leave the watcher.
+
+**Implements.** [`shared/focus_watcher.py`](../shared/focus_watcher.py),
+[`pais/`](../pais/), [`spec/pais/`](../spec/pais/); PKTS enrichment in
+[`pkts/collector.py`](../pkts/collector.py) + [`pkts/jobs.py`](../pkts/jobs.py)
++ [`spec/pkts/schema.json`](../spec/pkts/schema.json) (additive: `window_title`,
+`focused_window_id` in `Context`).
+
 ## Terminology
 
 | **Word** | **Definition** |

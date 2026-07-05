@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAIS — Personal Application Interaction System</title>
+  <link rel="stylesheet" href="/pkts/css/variables.css">
+  <link rel="stylesheet" href="/pkts/css/fonts.css">
+  <link rel="stylesheet" href="/pkts/css/base.css">
+  <link rel="stylesheet" href="/pkts/css/layout.css">
+  <link rel="stylesheet" href="/pkts/css/components.css">
+  <link rel="stylesheet" href="/pkts/css/views.css">
+  <link rel="stylesheet" href="/pais/css/pais.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l2 2"/><path d="M19 3l-2 2"/><path d="M5 21l2-2"/><path d="M19 21l-2-2"/><path d="M9 3h6"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg></span>
+      <span class="brand-wordmark">Personal <em>Application Interaction</em> System</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input type="search" id="appFilter" placeholder="Filter by application name…" autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btnRefresh" title="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Refresh</button>
+      <button class="btn btn-primary btn-sm" id="btnExport" title="Export Dataset"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> Export</button>
+    </div>
+  </header>
+
+  <!-- ═══ Body: main only (analytics dashboard) ═══ -->
+  <div class="app-body">
+    <main class="app-main" id="viewRoot">
+
+      <section class="pais-empty hidden" id="emptyState">
+        <h2>No interaction data yet</h2>
+        <p>Start the collector to capture mouse events and focus segments.</p>
+        <pre class="pais-cmd">python3 pais/collector.py</pre>
+        <p class="text-muted text-xs">Analytics fill in as events stream. The dashboard also joins keystrokes from PKTS.</p>
+      </section>
+
+      <!-- Totals row -->
+      <section class="pais-totals" id="totalsRow"></section>
+
+      <!-- Time-per-app chart -->
+      <section class="pais-card" id="timeCard">
+        <header class="pais-card-head">
+          <h3>Time per application</h3>
+          <span class="pais-card-sub text-muted" id="windowLabel"></span>
+        </header>
+        <div class="pais-chart" id="timeChart"></div>
+      </section>
+
+      <!-- Per-app breakdown -->
+      <section class="pais-card" id="appsCard">
+        <header class="pais-card-head"><h3>Application breakdown</h3></header>
+        <div class="pais-table-wrap" id="appsTable"></div>
+      </section>
+
+      <!-- Activity timeline -->
+      <section class="pais-card">
+        <header class="pais-card-head"><h3>Activity timeline</h3><span class="pais-card-sub text-muted">5-minute buckets</span></header>
+        <div class="pais-chart" id="timelineChart"></div>
+      </section>
+
+      <!-- Idle gaps -->
+      <section class="pais-card">
+        <header class="pais-card-head"><h3>Idle gaps</h3><span class="pais-card-sub text-muted">≥ 60 s of no input</span></header>
+        <div class="pais-table-wrap" id="idleTable"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    <span class="text-muted text-xs">PAIS · Personal Application Interaction System · mouse + focus + app interaction analytics</span>
+    <span class="text-muted text-xs" id="jobsStatus"></span>
+  </footer>
+</div>
+
+<script src="/pkts/js/vendor/echarts.min.js"></script>
+<script src="/pais/js/store.js"></script>
+<script src="/pais/js/views.js"></script>
+<script src="/pais/js/app.js"></script>
+</body>
+</html>

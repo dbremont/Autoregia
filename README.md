@@ -27,7 +27,9 @@ Autoregia/
 │   ├── requirements.txt
 │   ├── data/
 │   └── static/
-└── pkts/                # Personal Keyword Tracking System (sub-project)
+├── pkts/                # Personal Keyword Tracking System (sub-project)
+│   └── README.md
+└── pais/                # Personal Application Interaction System (sub-project)
     └── README.md
 ```
 
@@ -46,7 +48,7 @@ Autoregia/
 | **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Personal Technical Object Catalog System (PTOCS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
 | **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
 | **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
-| **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PRS**, **PKTS** |
+| **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PRS**, **PKTS**, **PAIS** |
 | **Audit System** | Performs diagnostic checks, detects deviations, evaluates performance, and ensures compliance with standards. | **System 3 – Audit** | Monthly Review Template, Error Logs, KPIs |
 | **Task Management Assistance System** (Agential Operating Management System) | Organizes Action Constructs (projects, tasks, routines), maintains the work inventory, and supports execution. | **System 1 – Operations** | Trello, Todoist, Asana |
 | **Notification System** | Ensures timely external triggers for commitments, reminders, and events. | **System 2 – Coordination** | Google Calendar, Alarms |
@@ -62,6 +64,7 @@ The sub-systems developed within this workspace:
 
 - **[Personal Recording System (PRS)](prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](prs/spec.md), [record schema](records_schema.json), and [implementation](prs/README.md#prototype).
 - **[Personal Keyword Tracking System (PKTS)](pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
+- **[Personal Application Interaction System (PAIS)](pais/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`shared/focus_watcher.py`](shared/) as the single source of truth for the focused window with PKTS.
 - **[Personal Technical Object Catalog System (PTOCS)](ptocs/README.md)** — the Intelligence System component; a structured catalog of the technical objects the agent relies on, with retrieval, navigation, and a statistical overlay.
 - **[Personal Policy System (PPS)](pps/README.md)** — the Policy System component (VSM System 5); a set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search over the corpus.
 - **[Agent Operation Organization System (AOOS)](aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PRS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.

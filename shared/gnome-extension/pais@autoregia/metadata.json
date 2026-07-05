@@ -1,0 +1,8 @@
+{
+  "uuid": "pais@autoregia",
+  "name": "Autoregia PAIS Focus Bridge",
+  "description": "Exposes the focused window (application + title) over the session D-Bus for the PAIS interaction collector. Owned by PAIS itself, so it is not subject to the org.gnome.Shell.Introspect access restrictions. On modern GNOME (GTK4) AT-SPI does not publish app windows, so this extension is the only reliable focus source.",
+  "shell-version": ["45", "46", "47"],
+  "session-modes": ["unlock-dialog", "user"],
+  "version": 1
+}

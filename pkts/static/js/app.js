@@ -85,7 +85,7 @@ PKTS.docsHTML = function() {
     <h4>Artifact Model</h4>
     <p>Each tab presents <em>concrete epistemic artifacts</em> — scalar metrics, distributions, matrices, trajectories, and graphs — that encode a distinct facet of the dataset. Every artifact is computed live from the raw telemetry.</p>
     <h4>Data</h4>
-    <p>This prototype runs on deterministically generated mock data (<code>data/mock_keystrokes.json</code>) spanning multiple sessions. Regenerate with <code>python3 pkts/data/gen_mock.py</code>.</p>
+    <p>Telemetry is captured by the <code>pkts/collector.py</code> daemon, ingested via <code>/api/ingest</code>, processed into <code>KeystrokeEvent[]</code> by an RQ worker, and served from CouchDB. Every artifact is computed live from that stream.</p>
     <h4>Shortcuts</h4>
     <div class="kbd-grid">
       <div class="kbd-row"><span>Command palette</span><span><span class="kbd">Ctrl</span> <span class="kbd">K</span></span></div>

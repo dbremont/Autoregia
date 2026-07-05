@@ -102,6 +102,7 @@
     <div class="grid">
       <a class="jump" href="#prs"><span class="k">PRS · /prs/</span><span class="n">Recording</span><span class="d">Capture &amp; find records</span></a>
       <a class="jump" href="#pkts"><span class="k">PKTS · /pkts/</span><span class="n">Tracking</span><span class="d">Keystroke telemetry</span></a>
+      <a class="jump" href="#pais"><span class="k">PAIS · /pais/</span><span class="n">Interaction</span><span class="d">Mouse + app-interaction analytics</span></a>
       <a class="jump" href="#ptocs"><span class="k">PTOCS · /ptocs/</span><span class="n">Catalog</span><span class="d">Your tools &amp; capabilities</span></a>
       <a class="jump" href="#pps"><span class="k">PPS · /pps/</span><span class="n">Policy</span><span class="d">Read &amp; search policies</span></a>
       <a class="jump" href="#aoos"><span class="k">AOOS · /aoos/</span><span class="n">Work</span><span class="d">Organize &amp; schedule</span></a>
@@ -185,6 +186,31 @@
       <div class="callout warn">
         <strong>Prototype note</strong>
         Despite the name, the current client analyzes keyboard telemetry (not keywords or attention). It runs entirely on bundled sample data (11 sessions, 1,143 events) and is read-only — there is no live capture yet.
+      </div>
+    </div>
+  </article>
+
+  <!-- PAIS -->
+  <article class="tool" id="pais">
+    <div class="tool-head">
+      <span class="tool-code">PAIS</span>
+      <span class="tool-name">Personal Application Interaction System</span>
+      <a class="tool-open" href="http://localhost:8080/pais/">Open /pais/ →</a>
+    </div>
+    <div class="tool-body">
+      <div class="tool-tag">Audit · interaction telemetry</div>
+      <p class="body" style="margin:8px 0 0">A sibling of PKTS. It records mouse events (clicks, scroll, sampled movement) and the focused-window timeline, then joins them with the PKTS keystroke stream to surface where your time and input actually go — per application.</p>
+
+      <h3 class="mini">Read the dashboard</h3>
+      <ol class="steps">
+        <li>Start at the <strong>Totals</strong> row: active time, keystrokes (from PKTS), clicks, scrolls, app switches, and keys-per-click.</li>
+        <li>The <strong>Time-per-application</strong> chart and <strong>Application breakdown</strong> table show how time, input, and attention-fragmentation distribute across apps.</li>
+        <li>The <strong>Activity timeline</strong> plots keystrokes / clicks / scrolls in 5-minute buckets; <strong>Idle gaps</strong> lists periods of no input.</li>
+      </ol>
+
+      <div class="callout tip">
+        <strong>Shared focus watcher</strong>
+        PAIS and PKTS share <code>shared/focus_watcher.py</code> as the single source of truth for the focused window, so every keystroke and mouse event carries identical application attribution. On stock GNOME Wayland attribution degrades to <code>unknown</code> (Introspect is restricted); capture continues regardless.
       </div>
     </div>
   </article>

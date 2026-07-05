@@ -1,5 +1,5 @@
 # Shared dependencies for Autoregia's unified server and sub-systems.
-# Each sub-project (prs/, ptocs/, aoos/, pkts/, pps/) also has its own
+# Each sub-project (prs/, ptocs/, aoos/, pkts/, pais/, pps/) also has its own
 # requirements.txt listing its server-specific deps.
 flask>=3.0
 CouchDB>=1.2

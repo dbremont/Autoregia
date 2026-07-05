@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    PKTS Store — Data Layer + Analytical computations
-   Loads mock KeystrokeEvent[] (conforming to schema.json) and
-   derives every epistemic artifact from the raw telemetry.
+   Loads KeystrokeEvent[] (conforming to schema.json) from the API
+   and derives every epistemic artifact from the raw telemetry.
    ════════════════════════════════════════════════════════════ */
 window.PKTS = window.PKTS || {};
 PKTS.Store = (() => {
@@ -13,9 +13,6 @@ PKTS.Store = (() => {
     const stored = localStorage.getItem(KEY);
     if (stored) { try { const d = JSON.parse(stored); events = d.events||[]; sessions = d.sessions||[]; } catch {} }
     if (!events.length) await fetchFromAPI();
-    if (!events.length) {
-      try { const r = await fetch('/pkts/data/mock_keystrokes.json'); if(r.ok){ const d=await r.json(); events=d.events||[]; sessions=d.sessions||[]; saveLocal(); } } catch {}
-    }
     return events;
   }
   async function fetchFromAPI() {

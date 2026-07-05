@@ -11,6 +11,7 @@ index at the root.
     /api/        unified index of sub-systems
     /prs/...     Personal Recording System         (VSM System 1 — Perception)
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
+    /pais/...   Personal Application Interaction System  (Accounting / audit)
     /ptocs/...   Personal Technical Object Catalog (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
@@ -58,6 +59,7 @@ def _load_app(module_name, server_rel_path):
 SUBSYSTEMS = [
     ("prs", "Personal Recording System", "prs/server.py"),
     ("pkts", "Personal Keyword Tracking System", "pkts/server.py"),
+    ("pais", "Personal Application Interaction System", "pais/server.py"),
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
     ("aoos", "Agent Operation Organization System", "aoos/server.py"),

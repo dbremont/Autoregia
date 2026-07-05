@@ -1,8 +1,8 @@
 /* ════════════════════════════════════════════════════════════
    PKTS Scratchpad — Quick Capture (Ctrl+Shift+N)
-   In this mock prototype, capture is acknowledged via a toast;
-   no telemetry is injected (capture is the data-source layer's
-   concern, not the analysis client).
+   Capture is acknowledged via a toast; continuous keystroke
+   telemetry is the collector's concern (pkts/collector.py),
+   not this analysis client.
    ════════════════════════════════════════════════════════════ */
 window.PKTS = window.PKTS || {};
 PKTS.scratchpad = {

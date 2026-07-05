@@ -357,6 +357,16 @@
           "description": "Available reliably only for application-local collection."
         },
 
+        "window_title": {
+          "type": "string",
+          "description": "Title of the focused window at the time of the event. May be redacted by the focus watcher (PAIS_TITLE_REDACT_REGEX)."
+        },
+
+        "focused_window_id": {
+          "type": "string",
+          "description": "Backend-native id of the focused window at the time of the event; stable within one focus segment."
+        },
+
         "input_field_type": {
           "type": "string",
 

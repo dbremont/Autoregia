@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/pais-interaction-dataset.schema.json",
+  "title": "PAIS Interaction Dataset",
+  "description": "Mouse and focus telemetry captured by the Personal Application Interaction System. Mouse events are the atomic pointer/click/scroll records; focus events are continuous-focus segments. Both carry the focused-window attribution sourced from shared/focus_watcher.py.",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/InteractionEvent"
+  },
+
+  "$defs": {
+    "InteractionEvent": {
+      "type": "object",
+      "description": "Either a MouseEvent or a FocusEvent, discriminated by doc_kind.",
+      "required": ["id", "doc_type", "doc_kind", "timestamp_utc", "session_id"],
+      "properties": {
+        "id": { "type": "string" },
+        "doc_type": { "const": "event" },
+        "doc_kind": { "enum": ["mouse", "focus"] },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "local_timestamp": { "type": "string", "format": "date-time" },
+        "timezone": { "type": "string" },
+        "session_id": { "type": "string" },
+        "mouse": { "$ref": "#/$defs/MouseEvent" },
+        "focus": { "$ref": "#/$defs/FocusEvent" },
+        "source": { "$ref": "#/$defs/Source" },
+        "device": { "$ref": "#/$defs/Device" },
+        "environment": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": false
+    },
+
+    "MouseEvent": {
+      "type": "object",
+      "description": "One atomic mouse interaction: a click press/release, a scroll tick, or a coalesced movement sample.",
+      "required": ["event_type", "hw_time_ms"],
+      "properties": {
+        "event_type": {
+          "enum": ["click_down", "click_up", "scroll", "move_sample"]
+        },
+        "button": {
+          "type": ["string", "null"],
+          "enum": ["left", "right", "middle", "x1", "x2", null],
+          "description": "null for move_sample and scroll."
+        },
+        "click_dwell_ms": {
+          "type": ["number", "null"],
+          "description": "Press→release duration; present only on click_up (paired)."
+        },
+        "x": { "type": ["integer", "null"], "description": "Absolute pointer X (current screen resolution)." },
+        "y": { "type": ["integer", "null"], "description": "Absolute pointer Y." },
+        "dx": { "type": ["integer", "null"], "description": "Accumulated delta since last sample (move_sample, scroll)." },
+        "dy": { "type": ["integer", "null"] },
+        "scroll_axis": { "enum": ["vertical", "horizontal", null] },
+        "modifiers": {
+          "type": "array",
+          "items": { "enum": ["shift", "ctrl", "alt", "meta"] }
+        },
+        "hw_time_ms": { "type": "integer", "description": "Unix-epoch millisecond timestamp." }
+      },
+      "additionalProperties": false
+    },
+
+    "FocusEvent": {
+      "type": "object",
+      "description": "A continuous segment of focus on one window. Emitted when focus changes or on session boundary.",
+      "required": ["started_ms", "ended_ms", "window_id"],
+      "properties": {
+        "started_ms": { "type": "integer" },
+        "ended_ms": { "type": "integer" },
+        "duration_ms": { "type": "number" },
+        "app": { "type": "string", "description": "Application id (WM_CLASS / app-id)." },
+        "title": { "type": "string", "description": "Window title at segment start; may be redacted." },
+        "window_id": { "type": "string", "description": "Backend-native id; segment identity = (window_id, started_ms)." },
+        "backend": { "type": "string", "description": "Focus-watcher backend that produced this (x11-ewmh, gnome-introspect, none, …)." }
+      },
+      "additionalProperties": false
+    },
+
+    "Source": {
+      "type": "object",
+      "required": ["platform", "capture_scope"],
+      "properties": {
+        "platform": { "enum": ["x11", "wayland", "unknown"] },
+        "capture_scope": { "enum": ["global", "focused_window", "application_local"] },
+        "collector": { "type": "string" },
+        "collector_version": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "Device": {
+      "type": "object",
+      "required": ["device_id", "hostname", "os"],
+      "properties": {
+        "device_id": { "type": "string" },
+        "hostname": { "type": "string" },
+        "machine_type": { "enum": ["desktop", "laptop", "tablet", "virtual_machine", "other"] },
+        "os": {
+          "type": "object",
+          "required": ["family", "version"],
+          "properties": {
+            "family": { "type": "string" },
+            "distribution": { "type": "string" },
+            "version": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "pointer_id": { "type": "string" },
+        "pointer_type": { "enum": ["mouse", "touchpad", "trackpoint", "touchscreen", "other"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}

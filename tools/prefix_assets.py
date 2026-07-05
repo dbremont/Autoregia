@@ -22,6 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS = {
     "prs": ["prs/static"],
     "pkts": ["pkts/static"],
+    "pais": ["pais/static"],
     "ptocs": ["ptocs/static"],
     "pps": ["pps/static", "pps/index.html", "pps/policies"],
     "aoos": ["aoos/static"],
