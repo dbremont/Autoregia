@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoregia.local/aoos_schema.json",
+  "title": "AOOS Data Models",
+  "description": "JSON Schemas for the Agent Operation Organization System (AOOS). AOOS extends PRS action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), Dependency edges, Work Sessions (execution actuals), and the Scratchpad (a single markdown working document). snake_case naming. Enums match spec/aoos/spec.md.",
+
+  "$defs": {
+    "actionKindEnum": { "type": "string", "enum": ["Routine", "Task", "Project", "Commitment", "Initiative", "Objective"] },
+    "schedulingStateEnum": { "type": "string", "enum": ["unscheduled", "scheduled", "deferred", "in-progress", "done"] },
+    "confidenceEnum": { "type": "string", "enum": ["Low", "Medium", "High"] },
+    "effortUnitEnum": { "type": "string", "enum": ["hours", "points", "sessions"] },
+    "capacityResourceEnum": { "type": "string", "enum": ["time", "focus", "energy", "attention"] },
+    "capacityBandEnum": { "type": "string", "enum": ["deep", "shallow", "low"] },
+    "blockStatusEnum": { "type": "string", "enum": ["tentative", "confirmed", "cancelled", "completed"] },
+    "sessionStatusEnum": { "type": "string", "enum": ["active", "completed", "abandoned"] },
+    "sessionSourceEnum": { "type": "string", "enum": ["timer", "manual", "platform"] },
+    "sharePermissionEnum": { "type": "string", "enum": ["view", "edit"] },
+    "syncStateEnum": { "type": "string", "enum": ["synced", "dirty-local", "dirty-remote", "conflict"] },
+    "goalStatusEnum": { "type": "string", "enum": ["on-track", "at-risk", "off-track", "achieved", "dormant"] },
+    "horizonEnum": { "type": "string", "enum": ["quarterly", "annual", "long-term"] },
+    "directionEnum": { "type": "string", "enum": ["gte", "lte"] },
+    "iso8601Timestamp": { "type": "string", "format": "date-time" },
+    "dependencyKindEnum": {
+      "type": "string",
+      "enum": ["part-of", "contains", "implements-objective", "depends-on", "blocked-by", "required-by", "enables", "uses-capability", "fulfills-commitment", "governed-by", "scheduled-in", "recurs-from", "spawned-from", "mirrors-external"]
+    },
+
+    "effortEstimate": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "unit": { "$ref": "#/$defs/effortUnitEnum" },
+        "confidence": { "$ref": "#/$defs/confidenceEnum" }
+      }
+    },
+    "capacityProfile": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "resource": { "$ref": "#/$defs/capacityResourceEnum" },
+        "band": { "$ref": "#/$defs/capacityBandEnum" }
+      }
+    },
+    "externalMapping": {
+      "type": "object", "required": ["platform", "external_id"], "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "string" },
+        "external_id": { "type": "string" },
+        "sync_state": { "$ref": "#/$defs/syncStateEnum" },
+        "synced_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "url": { "type": ["string", "null"] }
+      }
+    },
+    "dependency": {
+      "type": "object", "required": ["target", "kind"], "additionalProperties": false,
+      "properties": {
+        "target": { "type": "string" },
+        "kind": { "$ref": "#/$defs/dependencyKindEnum" },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "annotation": {
+      "type": "object", "required": ["id", "created_at", "author", "kind", "text", "state"], "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "author": { "type": "string" },
+        "kind": { "type": "string", "enum": ["comment", "progress", "blocker", "review", "reflection"] },
+        "text": { "type": "string" },
+        "state": { "type": "string", "enum": ["open", "resolved", "superseded"] }
+      }
+    },
+    "conflictFlag": {
+      "type": "object", "required": ["kind"], "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "enum": ["overlap", "overload", "policy-violation"] },
+        "with": { "type": ["string", "null"] },
+        "detail": { "type": ["string", "null"] }
+      }
+    },
+    "recurrenceSource": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "action_id": { "type": "string" },
+        "rule": { "type": "string", "description": "RRULE-like recurrence rule, e.g. 'FREQ=WEEKLY'." }
+      }
+    },
+    "keyResult": {
+      "$comment": "Component G — a measurable line item that rolls up into a goal's progress.",
+      "type": "object", "required": ["id", "description", "target", "current", "direction"], "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "metric": { "type": ["string", "null"], "description": "Name of the measured quantity." },
+        "target": { "type": "number" },
+        "current": { "type": "number" },
+        "unit": { "type": ["string", "null"] },
+        "direction": { "$ref": "#/$defs/directionEnum", "description": "gte = higher is better; lte = lower is better." }
+      }
+    },
+    "goalExtension": {
+      "$comment": "Component G — Goal Tracking. An optional extension on an Objective action that binds a declared end (target) to a measured present (current), decomposed into Key Results. The objective's own action_id is the goal identity.",
+      "type": "object", "additionalProperties": false,
+      "required": ["target", "current", "progress_pct", "status"],
+      "properties": {
+        "objective_id": { "type": ["string", "null"], "description": "The strategic objective identifier this goal realizes (mirrors strategic.objective)." },
+        "target": {
+          "type": "object", "required": ["value", "direction"], "additionalProperties": false,
+          "properties": {
+            "metric": { "type": ["string", "null"] },
+            "value": { "type": "number" },
+            "unit": { "type": ["string", "null"] },
+            "direction": { "$ref": "#/$defs/directionEnum" }
+          }
+        },
+        "baseline": { "type": ["number", "null"], "description": "Starting value of the measured quantity." },
+        "current": { "type": "number", "description": "Latest measured value." },
+        "progress_pct": { "type": "number", "minimum": 0, "maximum": 100, "description": "0–100. Computed from Key Results or set manually." },
+        "status": { "$ref": "#/$defs/goalStatusEnum" },
+        "horizon": { "$ref": "#/$defs/horizonEnum" },
+        "deadline": { "oneOf": [{ "$ref": "#/$defs/iso8601Timestamp" }, { "type": "null" }] },
+        "owner": { "type": ["string", "null"] },
+        "key_results": { "type": "array", "default": [], "items": { "$ref": "#/$defs/keyResult" } },
+        "progress_history": { "type": "array", "default": [], "items": {
+          "type": "object", "additionalProperties": false,
+          "properties": { "date": { "type": "string", "format": "date" }, "pct": { "type": "number" } },
+          "required": ["date", "pct"]
+        }, "description": "Time series of progress_pct; its slope yields momentum (advancing/stalled/regressing)." }
+      }
+    },
+
+    "actionConstruct": {
+      "$comment": "Atomic unit of Component A. Operates over a PRS record (record_id) plus the AOOS operational extension.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "record_id", "kind", "scheduling_state", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "AOOS action id, e.g. 'ACT-2026-00042'." },
+        "record_id": { "type": "string", "description": "The underlying PRS record id this action manages." },
+        "kind": { "$ref": "#/$defs/actionKindEnum" },
+        "scheduling_state": { "$ref": "#/$defs/schedulingStateEnum" },
+        "effort_estimate": { "oneOf": [{ "$ref": "#/$defs/effortEstimate" }, { "type": "null" }] },
+        "capacity_profile": { "oneOf": [{ "$ref": "#/$defs/capacityProfile" }, { "type": "null" }] },
+        "dependencies": { "type": "array", "default": [], "items": { "$ref": "#/$defs/dependency" } },
+        "external_mappings": { "type": "array", "default": [], "items": { "$ref": "#/$defs/externalMapping" } },
+        "pinned": { "type": "boolean", "default": false },
+        "strategic": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "objective": { "type": ["string", "null"] },
+            "initiative": { "type": ["string", "null"] },
+            "project": { "type": ["string", "null"] },
+            "capability": { "type": ["string", "null"] }
+          }
+        },
+        "annotations": { "type": "array", "default": [], "items": { "$ref": "#/$defs/annotation" } },
+        "goal": { "oneOf": [{ "$ref": "#/$defs/goalExtension" }, { "type": "null" }], "description": "Component G — Goal Tracking extension. Present only on Objective (and optionally Initiative) actions." },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "calendarBlock": {
+      "$comment": "Atomic temporal unit produced by Component B: a concrete placement of work on the timeline.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "action_id", "starts_at", "ends_at", "calendar_id", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "Block id, e.g. 'BLK-2026-06-28-001'." },
+        "action_id": { "type": "string" },
+        "starts_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "ends_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "all_day": { "type": "boolean", "default": false },
+        "calendar_id": { "type": "string" },
+        "recurrence_source": { "oneOf": [{ "$ref": "#/$defs/recurrenceSource" }, { "type": "null" }] },
+        "external_mapping": { "oneOf": [{ "$ref": "#/$defs/externalMapping" }, { "type": "null" }] },
+        "conflict_flags": { "type": "array", "default": [], "items": { "$ref": "#/$defs/conflictFlag" } },
+        "status": { "$ref": "#/$defs/blockStatusEnum" },
+        "title": { "type": ["string", "null"] },
+        "domain": { "type": ["string", "null"] }
+      }
+    },
+    "workSession": {
+      "$comment": "Atomic execution unit produced by Component D: the actuals counterpart of a calendar block — what was really done, for how long, against which action (and optionally the block it realized).",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "started_at", "status", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "Session id, e.g. 'SES-2026-00042'." },
+        "action_id": { "type": ["string", "null"], "description": "Optional link to an action construct (FK to ACT-). A session stands on its own (description + time); the action is an optional association." },
+        "block_id": { "type": ["string", "null"], "description": "Optional link to the planned block this session realizes (FK to BLK-). When set, the block↔session gap is a deviation signal." },
+        "description": { "type": "string", "default": "", "description": "The session's title — what was worked on. Primary field." },
+        "started_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "ended_at": { "oneOf": [{ "$ref": "#/$defs/iso8601Timestamp" }, { "type": "null" }], "description": "null while a timer is running." },
+        "status": { "$ref": "#/$defs/sessionStatusEnum" },
+        "capacity": { "oneOf": [{ "$ref": "#/$defs/capacityProfile" }, { "type": "null" }], "description": "Actual capacity consumed; defaults from the action's capacity_profile." },
+        "source": { "$ref": "#/$defs/sessionSourceEnum" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "scratchpad": {
+      "$comment": "Component S: a single persistent markdown working document — the agent's short-term surface. A singleton (fixed id 'SCR-SCRATCHPAD'), not a collection.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "body", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "const": "SCR-SCRATCHPAD", "description": "Singleton document id." },
+        "body": { "type": "string", "default": "", "description": "The document body — GitHub-flavored Markdown with LaTeX math ($...$, $$...$$, \\(...\\), \\[...\\])." },
+        "shares": { "type": "array", "default": [], "items": { "$ref": "#/$defs/shareGrant" }, "description": "Active share grants (permissioned links onto the document)." },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" },
+        "updated_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    },
+    "shareGrant": {
+      "type": "object", "additionalProperties": false, "required": ["token", "permission", "created_at"],
+      "properties": {
+        "token": { "type": "string", "description": "Unguessable URL-safe share token." },
+        "permission": { "$ref": "#/$defs/sharePermissionEnum" },
+        "created_at": { "$ref": "#/$defs/iso8601Timestamp" }
+      }
+    }
+  }
+}

@@ -83,7 +83,7 @@ Because the whole representation is typed and declarative, ASRS can **generate**
 - **Loop stage:** underpins **Perception** (defines what is perceivable), the **Situation Model** (instantiates it as current state), **Decision** (checks plans against it), and the **Regulation / Learning** arc (the representation is what gets corrected and refined).
 - **VSM level:** **System 5 – Policy** (identity, values, cohesion — "preserve the agent"), with the World Model facets feeding **S4 Intelligence** (environment scanning/anticipation) and the Self Model facets feeding **S3 Control** (resources/capabilities).
 - **Composed of:** the **World** boundary, the **Model** ([PWMS](pwms/)), the **Self Model** ([PSMS](psms/)), and the **Policy System** ([PPS](pps/)).
-- **Read by:** [PRS](../prs/) (records are typed instances of ASRS types), [PTOCS](../ptocs/) (catalog entries instantiate entity types), [PWOS](../pwos/) (operations are planned against the modelled self and world), Control (priority-setting and scheduling), Decision (consistency checks).
+- **Read by:** [PRS](../prs/) (records are typed instances of ASRS types), [PTOCS](../ptocs/) (catalog entries instantiate entity types), [AOOS](../aoos/) (operations are planned against the modelled self and world), Control (priority-setting and scheduling), Decision (consistency checks).
 - **Adapted by (what revises ASRS):** [PRAS](../pras/) — the feedback arc that revises the world model, self model, and policy when intention and outcome diverge.
 
 ### Canonical distinction from its parts

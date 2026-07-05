@@ -1,0 +1,110 @@
+/* ════════════════════════════════════════════════════════════
+   Command Palette — Ctrl+K Universal Command Interface
+   Refined detailing · expo-out entrance · hairline structure
+   ════════════════════════════════════════════════════════════ */
+
+.cmd-palette-overlay {
+  position: fixed; inset: 0; z-index: var(--z-palette);
+  background: rgba(28,26,23,0.38);
+  display: flex; justify-content: center; padding-top: 14vh;
+  animation: fadeIn 120ms var(--ease-out-soft);
+  backdrop-filter: blur(4px) saturate(1.05);
+}
+.cmd-palette-overlay.hidden { display: none; }
+
+.cmd-palette {
+  width: 580px; max-width: 92vw;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl), 0 0 0 var(--hairline) rgba(0,0,0,0.05);
+  overflow: hidden;
+  animation: paletteIn 220ms var(--ease-out-expo);
+  border: var(--hairline) solid var(--color-border);
+}
+
+.cmd-palette-search {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--hairline) solid var(--color-border);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+.cmd-palette-search > span:first-child { color: var(--color-text-muted); display: inline-flex; }
+.cmd-palette-search input {
+  border: none; background: transparent; font-size: var(--text-md);
+  outline: none; width: 100%; color: var(--ink-0);
+  font-family: var(--font-body); padding: 0;
+}
+.cmd-palette-search input::placeholder { color: var(--color-text-faint); }
+
+.cmd-results { max-height: 360px; overflow-y: auto; }
+.cmd-result-item {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer; transition: background var(--transition-fast);
+  border-left: 2px solid transparent;
+}
+.cmd-result-item:hover,
+.cmd-result-item.active {
+  background: var(--oxford-bg);
+  border-left-color: var(--rule-gold);
+}
+.cmd-result-icon {
+  width: 22px; text-align: center; color: var(--color-text-muted);
+  flex-shrink: 0; display: inline-flex; justify-content: center;
+}
+.cmd-result-item:hover .cmd-result-icon,
+.cmd-result-item.active .cmd-result-icon { color: var(--oxford); }
+.cmd-result-text { flex: 1; min-width: 0; }
+.cmd-result-title { font-size: var(--text-sm); font-weight: 500; color: var(--ink-1); }
+.cmd-result-subtitle { font-size: var(--text-xs); color: var(--color-text-muted); }
+.cmd-result-shortcut {
+  font-size: var(--text-2xs); color: var(--color-text-muted);
+  font-family: var(--font-mono); background: var(--color-surface-2);
+  padding: 2px 7px; border-radius: var(--radius-sm);
+  border: var(--hairline) solid var(--color-border-light);
+}
+
+.cmd-group-label {
+  font-size: var(--text-2xs); font-weight: 600;
+  text-transform: uppercase; letter-spacing: var(--tracking-widest);
+  font-variant: small-caps;
+  color: var(--color-text-faint); padding: var(--space-3) var(--space-5) var(--space-1);
+  background: var(--color-surface-warm);
+  border-top: var(--hairline) solid var(--color-border-light);
+}
+.cmd-group-label:first-child { border-top: none; }
+
+/* ── Scratchpad (Quick Capture) ───────────────────────── */
+.scratchpad-overlay {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: rgba(28,26,23,0.34);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 10vh; animation: fadeIn 150ms var(--ease-out-soft);
+  backdrop-filter: blur(3px);
+}
+.scratchpad-overlay.hidden { display: none; }
+
+.scratchpad {
+  width: 640px; max-width: 94vw;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: var(--hairline) solid var(--color-border);
+  animation: paletteIn 200ms var(--ease-out-expo);
+}
+.scratchpad-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--hairline) solid var(--color-border);
+}
+.scratchpad-body { padding: var(--space-5); }
+.scratchpad-body textarea {
+  border: none; min-height: 200px; font-size: var(--text-md);
+  resize: none; box-shadow: none; padding: 0;
+  font-family: var(--font-display); line-height: var(--leading-relaxed);
+}
+.scratchpad-body textarea:focus { box-shadow: none; border-color: transparent; }
+
+@keyframes paletteIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}

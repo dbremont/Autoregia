@@ -41,14 +41,14 @@
       <h2><span class="arc">Deliberation</span> What the model bought</h2>
       <ul>
         <li><strong>Traceability.</strong> Every change now has reasoning attached to it, dated and reviewable — adaptation instead of drift.</li>
-        <li><strong>Decoupling.</strong> Deliberations declare their destination (PPS, PWOS, …) without hard-coupling the systems. The "feeds the policy system" relationship is a field, not a wire.</li>
+        <li><strong>Decoupling.</strong> Deliberations declare their destination (PPS, AOOS, …) without hard-coupling the systems. The "feeds the policy system" relationship is a field, not a wire.</li>
         <li><strong>Honesty.</strong> The lifecycle forces a deliberation to close by enacting <em>or</em> explicitly declining — drift has to be named.</li>
       </ul>
 
       <h2><span class="arc">Adaptation</span> The cost, and what is next</h2>
       <p>
         The prototype is read / browse / search. Lifecycle transitions are edits to a document's
-        metadata, and enactment into PPS or PWOS is a manual cross-link, not an event. The cost
+        metadata, and enactment into PPS or AOOS is a manual cross-link, not an event. The cost
         is that the loop does not yet <em>close itself</em>: a concluded deliberation does not
         emit anything another system can hear.
       </p>
@@ -57,7 +57,7 @@
         <span class="adapt-label">Adaptation → concluded (filed; future work named)</span>
         <p>
           The next step is to make enactment an event on the Personal Event Bus
-          (<code>AdaptationEnacted</code>) so PPS, PWOS, PRS, and PTOCS can react. Until then,
+          (<code>AdaptationEnacted</code>) so PPS, AOOS, PRS, and PTOCS can react. Until then,
           this retrospective is filed as a record and the gap is recorded in the work map.
         </p>
         <div class="feeds">

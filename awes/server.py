@@ -36,7 +36,7 @@ app = Flask(__name__, static_folder="static")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 # Result Feed — target URLs for sibling sub-systems (empty = disabled)
-PWOS_URL = os.environ.get("AWES_PWOS_URL", "http://localhost:5005").rstrip("/")
+AOOS_URL = os.environ.get("AWES_AOOS_URL", "http://localhost:5005").rstrip("/")
 PRS_URL = os.environ.get("AWES_PRS_URL", "http://localhost:5000").rstrip("/")
 
 def _load_json(filename):
@@ -62,7 +62,7 @@ def _seed_environments():
 _seed_environments()
 
 
-# ── [R] Result Feed — push execution results into PWOS + PRS ──────────────
+# ── [R] Result Feed — push execution results into AOOS + PRS ──────────────
 
 def _post_json(url, body):
     """Fire-and-forget POST of a JSON body to *url*."""
@@ -78,7 +78,7 @@ def _post_json(url, body):
 
 
 def _feed_result(session):
-    """Feed an execution result to PWOS (work session) and PRS (durable trace).
+    """Feed an execution result to AOOS (work session) and PRS (durable trace).
 
     Runs in a background thread so the execute endpoint is not delayed.
     """
@@ -87,9 +87,9 @@ def _feed_result(session):
     desc = f"AWES: {session['payload'][:80]}"
     domain = "Execution"
 
-    # 1. PWOS — create a work session (manual entry)
-    if PWOS_URL:
-        pwos_body = {
+    # 1. AOOS — create a work session (manual entry)
+    if AOOS_URL:
+        aoos_body = {
             "action_id": aid or "",
             "description": desc,
             "started_at": session["started_at"],
@@ -97,7 +97,7 @@ def _feed_result(session):
             "status": session["status"],
             "source": "awes",
         }
-        _post_json(f"{PWOS_URL}/api/sessions", pwos_body)
+        _post_json(f"{AOOS_URL}/api/sessions", aoos_body)
 
     # 2. PRS — create a durable record
     if PRS_URL:

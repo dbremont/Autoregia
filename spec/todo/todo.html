@@ -177,7 +177,7 @@
         <g transform="translate(620,170)">
           <rect x="-82" y="-30" width="164" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
           <text class="nlbl" x="0" y="-6" text-anchor="middle">Action Selection</text>
-          <text class="nsub" x="0" y="9" text-anchor="middle">PWOS</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">AOOS</text>
           <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
         </g>
         <!-- Execution (missing) -->
@@ -255,7 +255,7 @@
         <div class="work-card partial">
           <div class="work-head"><span class="work-id">A3</span><span class="pill partial">partial</span></div>
           <h3>Unified persistence</h3>
-          <div class="work-exists"><strong>exists</strong>JSON files across PRS, PKTS, PTOCS, PWOS. PRS spec already recommends SQLite.</div>
+          <div class="work-exists"><strong>exists</strong>JSON files across PRS, PKTS, PTOCS, AOOS. PRS spec already recommends SQLite.</div>
           <div class="work-needed"><strong>needed</strong>Migrate to SQLite; one DB (or federated) the PEB event log and record store share.</div>
           <div class="work-meta"><span class="dep">dep: A1</span><span class="ref">spec/prs/README.md:309</span></div>
         </div>
@@ -300,10 +300,10 @@
         </div>
         <div class="work-card partial">
           <div class="work-head"><span class="work-id">B5</span><span class="pill partial">partial</span></div>
-          <h3>PWOS — resolve &amp; gate</h3>
+          <h3>AOOS — resolve &amp; gate</h3>
           <div class="work-exists"><strong>exists</strong>Most-built system; but <code>record_id</code> is synthetic; no PPS check on blocks.</div>
           <div class="work-needed"><strong>needed</strong>Resolve <code>record_id</code> against real PRS records; consult PPS before confirming blocks; emit scheduling &amp; completion events.</div>
-          <div class="work-meta"><span class="dep">dep: B1, B4</span><span class="ref">pwos/server.py:107</span></div>
+          <div class="work-meta"><span class="dep">dep: B1, B4</span><span class="ref">aoos/server.py:107</span></div>
         </div>
       </div>
     </div>
@@ -320,15 +320,15 @@
           <div class="work-head"><span class="work-id">C1</span><span class="pill missing">missing</span></div>
           <h3>Situation Model / State Estimator</h3>
           <div class="work-exists"><strong>exists</strong>Concept only (the "state estimate" stage). PTOCS is the closest artifact but is a static catalog.</div>
-          <div class="work-needed"><strong>needed</strong>A component that aggregates PRS + PKTS + PWOS signals into a live <em>current state estimate</em> — "where am I now, against where I intend to be".</div>
+          <div class="work-needed"><strong>needed</strong>A component that aggregates PRS + PKTS + AOOS signals into a live <em>current state estimate</em> — "where am I now, against where I intend to be".</div>
           <div class="work-meta"><span class="dep">dep: B1–B3</span><span class="ref">about.html · PVSM</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">C2</span><span class="pill missing">missing · key</span></div>
           <h3>S3 Regulation / Decision Engine</h3>
-          <div class="work-exists"><strong>exists</strong>Nothing. PWOS analytics is S3* audit (read-only); it computes deviations but actuates nothing.</div>
-          <div class="work-needed"><strong>needed</strong>The steering component: compare the state estimate against targets (the performance goals) → compute corrective action → emit it to PWOS. This is the heart of the closed loop.</div>
-          <div class="work-meta"><span class="dep">dep: C1, A2</span><span class="ref">spec/iscb · PWOS analytics</span></div>
+          <div class="work-exists"><strong>exists</strong>Nothing. AOOS analytics is S3* audit (read-only); it computes deviations but actuates nothing.</div>
+          <div class="work-needed"><strong>needed</strong>The steering component: compare the state estimate against targets (the performance goals) → compute corrective action → emit it to AOOS. This is the heart of the closed loop.</div>
+          <div class="work-meta"><span class="dep">dep: C1, A2</span><span class="ref">spec/iscb · AOOS analytics</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">C3</span><span class="pill missing">missing</span></div>
@@ -340,7 +340,7 @@
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">C4</span><span class="pill missing">missing</span></div>
           <h3>Feedback / Reflection layer</h3>
-          <div class="work-exists"><strong>exists</strong>Nothing as an actuator. PWOS analytics observes but does not feed the regulator.</div>
+          <div class="work-exists"><strong>exists</strong>Nothing as an actuator. AOOS analytics observes but does not feed the regulator.</div>
           <div class="work-needed"><strong>needed</strong>Close the outer arc: observe execution consequences → compute deviations → drive C2. Turns the audit dashboard into a living feedback path.</div>
           <div class="work-meta"><span class="dep">dep: C2, C3</span><span class="ref">about.html · Feedback</span></div>
         </div>
@@ -359,22 +359,22 @@
           <div class="work-head"><span class="work-id">D1</span><span class="pill missing">missing</span></div>
           <h3>Commitment cascade</h3>
           <div class="work-exists"><strong>exists</strong>The ISCB worked example — but only on paper.</div>
-          <div class="work-needed"><strong>needed</strong>PRS <code>RecordCreated</code>(Commitment) → PEB → PWOS <code>registerAction</code> → PEB → <code>BlockConflictDetected</code> → Notification.</div>
+          <div class="work-needed"><strong>needed</strong>PRS <code>RecordCreated</code>(Commitment) → PEB → AOOS <code>registerAction</code> → PEB → <code>BlockConflictDetected</code> → Notification.</div>
           <div class="work-meta"><span class="dep">dep: B1, B5, A2</span><span class="ref">spec/iscb/spec.md:198</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">D2</span><span class="pill missing">missing · key</span></div>
           <h3>Regulatory feedback loop</h3>
-          <div class="work-exists"><strong>exists</strong>PWOS analytics computes deviations from the performance goals; nothing acts on them.</div>
-          <div class="work-needed"><strong>needed</strong>PWOS <code>ActionCompleted</code> → analytics deviation vs goals → C2 regulator → corrective action → PWOS reschedule. The loop that makes the system self-correcting.</div>
-          <div class="work-meta"><span class="dep">dep: C2, C4</span><span class="ref">pwos analytics/performance</span></div>
+          <div class="work-exists"><strong>exists</strong>AOOS analytics computes deviations from the performance goals; nothing acts on them.</div>
+          <div class="work-needed"><strong>needed</strong>AOOS <code>ActionCompleted</code> → analytics deviation vs goals → C2 regulator → corrective action → AOOS reschedule. The loop that makes the system self-correcting.</div>
+          <div class="work-meta"><span class="dep">dep: C2, C4</span><span class="ref">aoos analytics/performance</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">D3</span><span class="pill missing">missing</span></div>
           <h3>Policy gating flow</h3>
           <div class="work-exists"><strong>exists</strong>Spec'd (<code>governed-by</code> edges) but never enforced.</div>
-          <div class="work-needed"><strong>needed</strong>PWOS block creation → PPS <code>/api/evaluate</code> → block confirmed / rejected / surfaced. Makes policy operational.</div>
-          <div class="work-meta"><span class="dep">dep: B4, B5</span><span class="ref">spec/pwos/spec.md</span></div>
+          <div class="work-needed"><strong>needed</strong>AOOS block creation → PPS <code>/api/evaluate</code> → block confirmed / rejected / surfaced. Makes policy operational.</div>
+          <div class="work-meta"><span class="dep">dep: B4, B5</span><span class="ref">spec/aoos/spec.md</span></div>
         </div>
       </div>
     </div>
@@ -398,8 +398,8 @@
           <div class="work-head"><span class="work-id">E2</span><span class="pill missing">missing</span></div>
           <h3>Cross-system record linking</h3>
           <div class="work-exists"><strong>exists</strong>Link vocabularies exist per-system (<code>part-of</code>, <code>governed-by</code>) but never cross a system boundary.</div>
-          <div class="work-needed"><strong>needed</strong>Trace one object across the loop: PWOS action → PRS record → PTOCS capability → PPS policy.</div>
-          <div class="work-meta"><span class="dep">dep: A1, B5</span><span class="ref">spec/pwos/spec.md</span></div>
+          <div class="work-needed"><strong>needed</strong>Trace one object across the loop: AOOS action → PRS record → PTOCS capability → PPS policy.</div>
+          <div class="work-meta"><span class="dep">dep: A1, B5</span><span class="ref">spec/aoos/spec.md</span></div>
         </div>
       </div>
     </div>
@@ -409,9 +409,9 @@
   <section>
     <div class="section-label">Suggested Path</div>
     <h2 class="section-title">A Pragmatic Sequence</h2>
-    <p class="body">The dependencies point one way. A minimal viable loop — the smallest thing that genuinely self-regulates — needs only: <strong>A1</strong> (schema) → <strong>A2</strong> (bus) → <strong>B1+B5</strong> (PRS emits, PWOS listens) → <strong>C2</strong> (regulator reading the existing analytics) → <strong>D2</strong> (feed deviations back into PWOS). That five-step spine closes the loop; everything else enriches it.</p>
+    <p class="body">The dependencies point one way. A minimal viable loop — the smallest thing that genuinely self-regulates — needs only: <strong>A1</strong> (schema) → <strong>A2</strong> (bus) → <strong>B1+B5</strong> (PRS emits, AOOS listens) → <strong>C2</strong> (regulator reading the existing analytics) → <strong>D2</strong> (feed deviations back into AOOS). That five-step spine closes the loop; everything else enriches it.</p>
     <div class="callout">
-      <strong>Definition of done — the loop is closed when:</strong> a commitment recorded in PRS appears as an action in PWOS without manual transfer; a deadline missed in PWOS moves the performance scorecard; and the scorecard's deviation produces a rescheduled corrective block — all through the bus, with no human copy-paste between systems.
+      <strong>Definition of done — the loop is closed when:</strong> a commitment recorded in PRS appears as an action in AOOS without manual transfer; a deadline missed in AOOS moves the performance scorecard; and the scorecard's deviation produces a rescheduled corrective block — all through the bus, with no human copy-paste between systems.
     </div>
   </section>
 
@@ -422,7 +422,7 @@
     <ul class="refs">
       <li><a href="about.html">About — the PVSM &amp; the control loop →</a><span class="desc">the canonical model this map serves</span></li>
       <li><a href="spec/iscb/spec.md">ISCB — the Personal Event Bus spec →</a><span class="desc">the missing coordination substrate (Stream A2)</span></li>
-      <li><a href="spec/pwos/analytics.md">PWOS Analytics — the audit surface →</a><span class="desc">the S3* observations the regulator (C2) will read</span></li>
+      <li><a href="spec/aoos/analytics.md">AOOS Analytics — the audit surface →</a><span class="desc">the S3* observations the regulator (C2) will read</span></li>
       <li><a href="logos.log.md">logos.log.md — decision log →</a><span class="desc">design rationale</span></li>
     </ul>
   </section>

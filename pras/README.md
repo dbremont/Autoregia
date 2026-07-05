@@ -10,7 +10,7 @@ A Flask server plus a vanilla HTML/CSS/JS client that conforms to the Autoregia 
 
 - **Atomic unit:** a *deliberation* — observation → deliberation → adaptation.
 - **Lifecycle:** `open → concluded → enacted` (or `superseded`), expressed in each document's `pra-status` meta tag.
-- **Adaptation routing:** each deliberation declares the system(s) its adaptation *feeds* — `pps`, `pwos`, `prs`, `ptocs` — via the `pra-feeds` meta tag. Enactment into PPS/PWOS is a manual cross-link in this prototype (a future `AdaptationEnacted` event on the [ISCB](../spec/iscb/spec.md) bus will automate it).
+- **Adaptation routing:** each deliberation declares the system(s) its adaptation *feeds* — `pps`, `aoos`, `prs`, `ptocs` — via the `pra-feeds` meta tag. Enactment into PPS/AOOS is a manual cross-link in this prototype (a future `AdaptationEnacted` event on the [ISCB](../spec/iscb/spec.md) bus will automate it).
 
 ## Parts
 
@@ -49,6 +49,6 @@ Drop an `.html` file into `pras/deliberations/` with the `pra-*` meta tags (`tit
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Loop stage:** Feedback (outer arc).
 - **VSM level:** System 4 – Intelligence (deviation detection overlaps S3\* Audit).
-- **Reads from:** [PRS](../prs), [PWOS](../pwos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
-- **Feeds:** [PPS](../pps) (policy amendments), [PWOS](../pwos) (corrective actions), [PRS](../prs) (records), [PTOCS](../ptocs) (capability revisions).
+- **Reads from:** [PRS](../prs), [AOOS](../aoos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
+- **Feeds:** [PPS](../pps) (policy amendments), [AOOS](../aoos) (corrective actions), [PRS](../prs) (records), [PTOCS](../ptocs) (capability revisions).
 - **Specification:** [`../spec/pras/`](../spec/pras).

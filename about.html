@@ -128,10 +128,10 @@
     <div class="toc-cap">Contents</div>
     <a class="toc-link" href="#agent" data-toc="agent"><span class="toc-num">01</span><span class="toc-txt"><span class="toc-t">The Agent</span><span class="toc-s">functional problems</span></span></a>
     <a class="toc-link" href="#control-loop" data-toc="control-loop"><span class="toc-num">02</span><span class="toc-txt"><span class="toc-t">Control Loop</span><span class="toc-s">sense → decide → act</span></span></a>
-    <a class="toc-link" href="#vsm" data-toc="vsm"><span class="toc-num">03</span><span class="toc-txt"><span class="toc-t">VSM</span><span class="toc-s">five-system architecture</span></span></a>
-    <a class="toc-link" href="#pvsm" data-toc="pvsm"><span class="toc-num">04</span><span class="toc-txt"><span class="toc-t">PVSM</span><span class="toc-s">personal instantiation</span></span></a>
-    <a class="toc-link" href="#qa" data-toc="qa"><span class="toc-num">05</span><span class="toc-txt"><span class="toc-t">Q&amp;A</span><span class="toc-s">questions &amp; answers</span></span></a>
-    <a class="toc-link" href="#references" data-toc="references"><span class="toc-num">06</span><span class="toc-txt"><span class="toc-t">References</span><span class="toc-s">further reading</span></span></a>
+    <a class="toc-link" href="#pvsm" data-toc="pvsm"><span class="toc-num">03</span><span class="toc-txt"><span class="toc-t">PVSM</span><span class="toc-s">personal instantiation</span></span></a>
+    <a class="toc-link" href="#qa" data-toc="qa"><span class="toc-num">04</span><span class="toc-txt"><span class="toc-t">Q&amp;A</span><span class="toc-s">questions &amp; answers</span></span></a>
+    <a class="toc-link" href="#references" data-toc="references"><span class="toc-num">05</span><span class="toc-txt"><span class="toc-t">References</span><span class="toc-s">further reading</span></span></a>
+    <a class="toc-link" href="#vsm" data-toc="vsm"><span class="toc-num">A</span><span class="toc-txt"><span class="toc-t">VSM</span><span class="toc-s">appendix · five-system architecture</span></span></a>
   </aside>
 
   <!-- The Agent -->
@@ -293,43 +293,6 @@
     </div>
   </section>
 
-  <!-- Viable System Model (VSM) -->
-  <section id="vsm">
-    <div class="section-label">Viable System Model</div>
-    <h2 class="section-title">The Reference Architecture</h2>
-    <blockquote>A Viable System Model (VSM) is a formal cybernetic model of the organizational structure required for an autonomous system to remain viable in a changing environment. It specifies the minimum set of interacting subsystems necessary to regulate operations, coordinate activities, adapt to environmental change, and preserve the identity and continuity of the system over time.</blockquote>
-    <p class="body">Where the <strong>agent control loop</strong> describes the <em>temporal</em> arc of agency — sense, decide, act, regulate — the Viable System Model describes its <em>structural</em> complement: the minimum set of interacting subsystems any viable system must implement to keep that loop running. Autoregia uses the VSM as its reference architecture, mapping every personal system to one of these functions.</p>
-    <div class="section-label" style="margin-top:40px">The Five Systems</div>
-    <table class="t">
-      <thead><tr><th>System</th><th>Name</th><th>Function</th></tr></thead>
-      <tbody>
-        <tr><td class="code">System 1</td><td>Operational Units</td><td>The primary units that perform the agent's basic operations. Each unit is semi-autonomous and responsible for delivering specific outputs or services.</td></tr>
-        <tr><td class="code">System 2</td><td>Coordination</td><td>Ensures the harmonious operation of System 1 units by providing coordination and conflict resolution, managing the interactions and synergies between operational units.</td></tr>
-        <tr><td class="code">System 3</td><td>Control</td><td>Provides resource allocation, monitoring, and control over the operational units; ensures the system is functioning efficiently and effectively.</td></tr>
-        <tr><td class="code">System 3*</td><td>Audit</td><td>A subset of System 3 focused on monitoring and auditing the operational units to ensure compliance and performance standards.</td></tr>
-        <tr><td class="code">System 4</td><td>Intelligence</td><td>Focuses on the external environment and future planning; adapts the system to environmental change, drives innovation and strategic development.</td></tr>
-        <tr><td class="code">System 5</td><td>Policy</td><td>Sets the system's overall goals, values, and direction; balances internal and external focus and maintains identity and cohesion.</td></tr>
-      </tbody>
-    </table>
-    <div class="section-label" style="margin-top:40px">System Map · Autoregia Systems</div>
-    <p class="body">Autoregia decomposes self-management into a set of cooperating systems. Some are materialized as dedicated tools developed in this workspace; others are satisfied by existing tools or documents. Each maps to a level of the Viable System Model.</p>
-    <table class="t">
-      <thead><tr><th>System</th><th>Role</th><th class="code">VSM Level</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Agent State</strong></td><td>Integrated self-regulation system: priority-setting, scheduling, day-to-day steering. Contains the agent's models and policy as sub-systems — PPS (policy), PWMS (world model), PSMS (self model) — and applies them to steer day-to-day.</td><td class="code">S5 – Policy</td></tr>
-        <tr><td>Intelligence</td><td>Scan environment, synthesize, learn, anticipate</td><td class="code">S4 – Intelligence</td></tr>
-        <tr><td>Documentation</td><td>External memory: explicit knowledge & decision records</td><td class="code">S4 – Intelligence</td></tr>
-        <tr><td>Accounting</td><td>Track resource usage (time, money, energy, attention)</td><td class="code">S3 – Audit / Accounting</td></tr>
-        <tr><td>Audit</td><td>Diagnostics, deviation detection, performance evaluation</td><td class="code">S3 – Audit</td></tr>
-        <tr><td>Task Management</td><td>Organize action constructs (projects, tasks, routines)</td><td class="code">S1 – Operations</td></tr>
-        <tr><td>Notification</td><td>Timely external triggers for commitments & events</td><td class="code">S2 – Coordination</td></tr>
-        <tr><td>Coordination</td><td>Resolve conflicts, harmonize schedules, avoid overload</td><td class="code">S2 – Coordination</td></tr>
-        <tr><td>Execution</td><td>Physical & cognitive tools used to perform work</td><td class="code">S1 – Operations</td></tr>
-        <tr><td>Inventory</td><td>Registry of assets, capabilities, reference objects</td><td class="code">S3 – Control</td></tr>
-      </tbody>
-    </table>
-  </section>
-
   <!-- Personal Viable System Model (PVSM) -->
   <section id="pvsm">
     <div class="section-label">Personal Viable System Model</div>
@@ -436,6 +399,26 @@
     </ul>
   </section>
 
+  <!-- Appendix A · Viable System Model (VSM) -->
+  <section id="vsm" class="appendix">
+    <div class="section-label">Appendix A · Viable System Model</div>
+    <h2 class="section-title">The Reference Architecture</h2>
+    <blockquote>A Viable System Model (VSM) is a formal cybernetic model of the organizational structure required for an autonomous system to remain viable in a changing environment. It specifies the minimum set of interacting subsystems necessary to regulate operations, coordinate activities, adapt to environmental change, and preserve the identity and continuity of the system over time.</blockquote>
+    <p class="body">Where the <strong>agent control loop</strong> describes the <em>temporal</em> arc of agency — sense, decide, act, regulate — the Viable System Model describes its <em>structural</em> complement: the minimum set of interacting subsystems any viable system must implement to keep that loop running. Autoregia uses the VSM as its reference architecture, mapping every personal system to one of these functions.</p>
+    <div class="section-label" style="margin-top:40px">The Five Systems</div>
+    <table class="t">
+      <thead><tr><th>System</th><th>Name</th><th>Function</th></tr></thead>
+      <tbody>
+        <tr><td class="code">System 1</td><td>Operational Units</td><td>The primary units that perform the agent's basic operations. Each unit is semi-autonomous and responsible for delivering specific outputs or services.</td></tr>
+        <tr><td class="code">System 2</td><td>Coordination</td><td>Ensures the harmonious operation of System 1 units by providing coordination and conflict resolution, managing the interactions and synergies between operational units.</td></tr>
+        <tr><td class="code">System 3</td><td>Control</td><td>Provides resource allocation, monitoring, and control over the operational units; ensures the system is functioning efficiently and effectively.</td></tr>
+        <tr><td class="code">System 3*</td><td>Audit</td><td>A subset of System 3 focused on monitoring and auditing the operational units to ensure compliance and performance standards.</td></tr>
+        <tr><td class="code">System 4</td><td>Intelligence</td><td>Focuses on the external environment and future planning; adapts the system to environmental change, drives innovation and strategic development.</td></tr>
+        <tr><td class="code">System 5</td><td>Policy</td><td>Sets the system's overall goals, values, and direction; balances internal and external focus and maintains identity and cohesion.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
   <footer>
     <span class="mono">Autoregia · Personal Viable System Model</span>
   </footer>
@@ -470,7 +453,7 @@
       perception: { eyebrow: "Deliberative · Perception", title: "Personal Recording System (PRS)", body: "Externalize and capture relevant internal and environmental state for persistent recording, discovery, and retrieval — the sense organs of your loop.", link: { href: "spec/prs/README.md", label: "Enter PRS →" } },
       situation: { eyebrow: "Deliberative · Situation Model", title: "Reflection · Documentation", body: "Integrate records into a current state estimate — what is actually going on, made explicit and retrievable.", link: { href: "ptocs/README.md", label: "Enter PTOCS →" } },
       decision: { eyebrow: "Deliberative · Decision", title: "Task Registry · Reflection", body: "Evaluate alternatives and choose what to do, held against the objectives and constraints made explicit by policy.", link: { href: "spec/pps/README.md", label: "Enter PPS →" } },
-      action: { eyebrow: "Deliberative · Action Selection", title: "Calendar · Time Tracker", body: "Commit a chosen action to specific time and capacity — turning an intention into a scheduled, resourced commitment.", link: { href: "pwos/README.md", label: "Enter PWOS →" } },
+      action: { eyebrow: "Deliberative · Action Selection", title: "Calendar · Time Tracker", body: "Commit a chosen action to specific time and capacity — turning an intention into a scheduled, resourced commitment.", link: { href: "aoos/README.md", label: "Enter AOOS →" } },
       execution: { eyebrow: "Outer loop", title: "Production", body: "The physical and cognitive tools you actually use to perform the work — where committed plans become done work." },
       feedback: { eyebrow: "Outer loop · Intelligence Layer", title: "Reflection", body: "Observe the consequences of what you executed and regulate the deliberative cycle — the layer where you learn, correct deviations, and steer the next iteration." }
     }

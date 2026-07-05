@@ -90,7 +90,7 @@
   <header class="masthead">
     <div class="eyebrow">User Guide</div>
     <h1 class="title">Docs</h1>
-    <p class="lede">How to use Autoregia's six tools — the Personal Recording System, Keyword Tracking System, Technical Object Catalog, Policy System, Work Organization System, and Reflection &amp; Adaptation System.</p>
+    <p class="lede">How to use Autoregia's six tools — the Personal Recording System, Keyword Tracking System, Technical Object Catalog, Policy System, Agent Operation Organization System, and Reflection &amp; Adaptation System.</p>
     <div class="gold-rule"></div>
   </header>
 
@@ -104,7 +104,7 @@
       <a class="jump" href="#pkts"><span class="k">PKTS · /pkts/</span><span class="n">Tracking</span><span class="d">Keystroke telemetry</span></a>
       <a class="jump" href="#ptocs"><span class="k">PTOCS · /ptocs/</span><span class="n">Catalog</span><span class="d">Your tools &amp; capabilities</span></a>
       <a class="jump" href="#pps"><span class="k">PPS · /pps/</span><span class="n">Policy</span><span class="d">Read &amp; search policies</span></a>
-      <a class="jump" href="#pwos"><span class="k">PWOS · /pwos/</span><span class="n">Work</span><span class="d">Organize &amp; schedule</span></a>
+      <a class="jump" href="#aoos"><span class="k">AOOS · /aoos/</span><span class="n">Work</span><span class="d">Organize &amp; schedule</span></a>
       <a class="jump" href="#pras"><span class="k">PRAS · /pras/</span><span class="n">Reflection</span><span class="d">Deliberations &amp; adaptation</span></a>
     </div>
   </section>
@@ -272,12 +272,12 @@
     </div>
   </article>
 
-  <!-- PWOS -->
-  <article class="tool" id="pwos">
+  <!-- AOOS -->
+  <article class="tool" id="aoos">
     <div class="tool-head">
-      <span class="tool-code">PWOS</span>
-      <span class="tool-name">Personal Work Organization System</span>
-      <a class="tool-open" href="http://localhost:8080/pwos/">Open /pwos/ →</a>
+      <span class="tool-code">AOOS</span>
+      <span class="tool-name">Agent Operation Organization System</span>
+      <a class="tool-open" href="http://localhost:8080/aoos/">Open /aoos/ →</a>
     </div>
     <div class="tool-body">
       <div class="tool-tag">Operations · plan, schedule, sync</div>
@@ -325,7 +325,7 @@
 
       <div class="callout warn">
         <strong>Prototype note</strong>
-        Analytics currently runs over a synthetic dataset, not your PWOS data. Conflict detection covers time overlap only (no capacity checks). Live Google OAuth requires running PWOS standalone on port 5005, because the redirect URI is hardcoded — in unified mode it stays in mock.
+        Analytics currently runs over a synthetic dataset, not your AOOS data. Conflict detection covers time overlap only (no capacity checks). Live Google OAuth requires running AOOS standalone on port 5005, because the redirect URI is hardcoded — in unified mode it stays in mock.
       </div>
     </div>
   </article>
@@ -355,7 +355,7 @@
       </ol>
 
       <h3 class="mini">The deliberation arc &amp; lifecycle</h3>
-      <p class="body" style="margin:6px 0">Each deliberation follows one movement: <strong>observation</strong> → <strong>deliberation</strong> → <strong>adaptation</strong>. It matures along <code>open → concluded → enacted</code> (or <code>superseded</code>). The <em>concluded → enacted</em> step is exactly where a reflection <strong>feeds the Policy System</strong> and the rest of the loop — the adaptation declares its destination (PPS, PWOS, PRS, PTOCS).</p>
+      <p class="body" style="margin:6px 0">Each deliberation follows one movement: <strong>observation</strong> → <strong>deliberation</strong> → <strong>adaptation</strong>. It matures along <code>open → concluded → enacted</code> (or <code>superseded</code>). The <em>concluded → enacted</em> step is exactly where a reflection <strong>feeds the Policy System</strong> and the rest of the loop — the adaptation declares its destination (PPS, AOOS, PRS, PTOCS).</p>
 
       <h3 class="mini">Shortcuts</h3>
       <table class="t">
@@ -368,7 +368,7 @@
 
       <div class="callout warn">
         <strong>Prototype note</strong>
-        Read / browse / search. To add a deliberation, drop an <code>.html</code> file (with <code>pra-*</code> meta tags) into <code>pras/deliberations/</code> and restart — the index rebuilds at startup. Lifecycle transitions are edits to a document's metadata; enactment into PPS / PWOS is a manual cross-link for now.
+        Read / browse / search. To add a deliberation, drop an <code>.html</code> file (with <code>pra-*</code> meta tags) into <code>pras/deliberations/</code> and restart — the index rebuilds at startup. Lifecycle transitions are edits to a document's metadata; enactment into PPS / AOOS is a manual cross-link for now.
       </div>
     </div>
   </article>
@@ -382,10 +382,10 @@
       <thead><tr><th>Shortcut</th><th>Action</th><th>Where</th></tr></thead>
       <tbody>
         <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Open the command palette</td><td>Every tool</td></tr>
-        <tr><td class="kbd-cell"><kbd>N</kbd></td><td>Create the primary entity (record / entry / action)</td><td>PRS · PTOCS · PWOS</td></tr>
+        <tr><td class="kbd-cell"><kbd>N</kbd></td><td>Create the primary entity (record / entry / action)</td><td>PRS · PTOCS · AOOS</td></tr>
         <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture / scratchpad</td><td>PRS · PKTS</td></tr>
         <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td><td>PPS · PRAS</td></tr>
-        <tr><td class="kbd-cell"><kbd>F1</kbd> / <kbd>?</kbd></td><td>Help</td><td>PWOS</td></tr>
+        <tr><td class="kbd-cell"><kbd>F1</kbd> / <kbd>?</kbd></td><td>Help</td><td>AOOS</td></tr>
         <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog or palette</td><td>Every tool</td></tr>
       </tbody>
     </table>

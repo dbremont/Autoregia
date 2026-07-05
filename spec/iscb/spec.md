@@ -9,18 +9,18 @@
 > hard-coupling those systems to each other.
 
 > Where the sibling systems each externalize a **substance** — the PRS
-> externalizes records, the PWOS externalizes action, the PPS externalizes
+> externalizes records, the AOOS externalizes action, the PPS externalizes
 > policy, the PTOCS externalizes capabilities, the PKTS externalizes attention —
 > the PEB externalizes the **control flow** *between* them. A recording in the
 > PRS is not, by itself, a task; but it may *signal* that a task should be
-> registered in the PWOS. The PEB is what turns that "may" into a declared,
+> registered in the AOOS. The PEB is what turns that "may" into a declared,
 > inspectable, reversible reaction: an event crosses the bus, a rule fires, a
 > task appears.
 
 > Within the PVSM, the PEB is the substrate of the **Coordination function**
 > (**VSM System 2 – Coordination**): the medium that harmonizes the operational
 > units (System 1,
-> the PWOS) with each other and with the regulatory systems (S3 Control /
+> the AOOS) with each other and with the regulatory systems (S3 Control /
 > Accounting, S3\* Audit, S4 Intelligence, S5 Policy), by propagating the signals
 > that keep them coherent. The **Notification System** (also S2) is a *consumer*
 > on this bus, not an alternative to it.
@@ -62,7 +62,7 @@ externalizing **the cross-system control flow** to scaffold extended agency:
 Conversely, a reaction should generally *not* live on the bus when it is:
 
 - **Internal to a single system** — pure record-to-record derivation inside the
-  PRS, or pure dependency-graph computation inside the PWOS, belongs to that
+  PRS, or pure dependency-graph computation inside the AOOS, belongs to that
   system, not to the coordination layer.
 - **Trivial and local** — a UI re-render or a cache invalidation is plumbing,
   not coordination.
@@ -75,7 +75,7 @@ Conversely, a reaction should generally *not* live on the bus when it is:
 
 | Case | Description | Example |
 | --- | --- | --- |
-| **Consequence-Bearing** | The change creates an obligation or a new unit of work elsewhere. | A `Commitment` record is created → a PWOS action should be registered. |
+| **Consequence-Bearing** | The change creates an obligation or a new unit of work elsewhere. | A `Commitment` record is created → a AOOS action should be registered. |
 | **Constraint-Triggering** | The change may violate, or newly satisfy, a policy. | A deep-work block scheduled at 02:00 → a PPS Sleep-Policy check. |
 | **Status-Propagating** | A lifecycle transition in one system must be reflected in another. | A task is marked `Completed` → its deadline-linked calendar block is freed. |
 | **Conflict-Signaling** | The change may collide with another commitment. | Two blocks overlap → a conflict is raised and the agent is notified. |
@@ -152,7 +152,7 @@ becomes a producer by instrumenting its write paths to append an event to the lo
 | Producer | Emits (seed) |
 | --- | --- |
 | **PRS** | `RecordCreated`, `RecordAnnotated`, `RecordStatusChanged`, `RecordDeadlineSet`, `RecordLinked` |
-| **PWOS** | `ActionRegistered`, `ActionScheduled`, `ActionCompleted`, `BlockConflictDetected`, `SyncDriftDetected` |
+| **AOOS** | `ActionRegistered`, `ActionScheduled`, `ActionCompleted`, `BlockConflictDetected`, `SyncDriftDetected` |
 | **PPS** | `PolicyChanged`, `PolicyViolated` |
 | **PTOCS** | `CapabilityAdded`, `CapabilityDeprecated` |
 | **PKTS** | `KeywordThresholdCrossed` |
@@ -169,11 +169,11 @@ system, which itself emits new events and so continues the cascade.
 | --- | --- | --- |
 | **Reaction Id** | Stable identifier. | `rxn.commitment-to-action` |
 | **Trigger** | Predicate over events (type + conditions on payload). | `type == RecordCreated AND record_type in {Commitment, Task}` |
-| **Effect** | The operation performed in the target system. | `PWOS.registerAction(derived)` |
-| **Target** | The system whose API is called. | `PWOS` |
+| **Effect** | The operation performed in the target system. | `AOOS.registerAction(derived)` |
+| **Target** | The system whose API is called. | `AOOS` |
 | **Gating** | Auto-fire / require-confirmation / suppress-on-policy. | `require-confirmation if irreversible` |
 | **Idempotency Key** | Derived from event+reaction so a redelivery does not double-fire. | `hash(event_id, reaction_id)` |
-| **Inverse** | Where possible, the operation that undoes the effect. | `PWOS.cancelAction` |
+| **Inverse** | Where possible, the operation that undoes the effect. | `AOOS.cancelAction` |
 
 ### Route
 
@@ -209,21 +209,21 @@ PRS appends  RecordCreated { record_id: REC-124, type: Commitment, deadline: Fri
 PEB Dispatcher matches route.commitment-to-action
    │
    ▼
-Reaction rxn.commitment-to-action  ->  PWOS.registerAction(
+Reaction rxn.commitment-to-action  ->  AOOS.registerAction(
         kind      = Commitment,
         source    = REC-124,
         deadline  = Fri,
         effort    = { estimate: nil } )
    │
    ▼
-PWOS appends  ActionRegistered { action_id: ACT-124, source: REC-124 }
+AOOS appends  ActionRegistered { action_id: ACT-124, source: REC-124 }
    │  (caused-by REC-124, correlation thr-...-007)
    │
    ▼
 PEB matches route.action-to-schedule-projection
    │
    ▼
-Reaction  ->  PWOS.projectDeadline(...)  ─▶  BlockConflictDetected
+Reaction  ->  AOOS.projectDeadline(...)  ─▶  BlockConflictDetected
    │
    ▼
 PEB matches route.conflict-to-notification
@@ -339,7 +339,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
 - [PVSM — Specification](../README.md) — agent control loop & VSM framing.
 - [PRS — spec](../prs/spec.md) — recording system; canonical home of the event log; source of the causal-link vocabulary.
-- [PWOS — spec](../pwos/spec.md) — operations system; the primary reaction *target* (task registry) and a producer (`ActionRegistered`, …).
+- [AOOS — spec](../aoos/spec.md) — operations system; the primary reaction *target* (task registry) and a producer (`ActionRegistered`, …).
 - [PPS — README](../../pps/README.md) — policy corpus; source of gating rules.
 - [PTOCS — spec](../ptocs/spec.md) — capability catalog; referenced by capability-bearing reactions.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

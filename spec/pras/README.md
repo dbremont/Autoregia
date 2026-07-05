@@ -26,7 +26,7 @@ A deliberation carries:
 - an **observation** — what was noticed (a deviation, a pattern, a result, a surprise),
 - a **deliberation** — the reasoning about *why* it happened and what it means,
 - an **adaptation** — the proposed change to a model, a goal, a practice, or a policy, and
-- a **destination** — the system the adaptation should feed (PPS for policy, PWOS for corrective action, PRS for the record, PTOCS for capability).
+- a **destination** — the system the adaptation should feed (PPS for policy, AOOS for corrective action, PRS for the record, PTOCS for capability).
 
 ### The Deliberation Lifecycle
 
@@ -36,7 +36,7 @@ A deliberation is a *living* object. It matures along a lifecycle that mirrors t
 | --- | --- |
 | **open** | Under active reflection — the observation is recorded; sense-making is in progress. |
 | **concluded** | Reflection complete — an adaptation has been proposed and the reasoning is settled. |
-| **enacted** | The adaptation has been applied — fed into its destination system (e.g. a policy amended in PPS, a corrective action registered in PWOS). |
+| **enacted** | The adaptation has been applied — fed into its destination system (e.g. a policy amended in PPS, a corrective action registered in AOOS). |
 | **superseded** | Replaced by a later deliberation that refines or reverses it. |
 
 The transition **concluded → enacted** is the precise point at which PRAS *feeds the policy system* (and the others). Until enactment, an adaptation is a hypothesis about how to improve; enactment makes it operational and leaves a trace.
@@ -46,7 +46,7 @@ The transition **concluded → enacted** is the precise point at which PRAS *fee
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Loop stage:** Feedback (outer arc) — *observe consequences → regulate the deliberative cycle*.
 - **VSM level:** System 4 – Intelligence (with deviation detection overlapping S3\* Audit).
-- **Upstream (what PRAS reads):** the [PRS](../prs/) (records of what happened), [PWOS](../pwos/) analytics (deviations against goals), [PTOCS](../ptocs/) (the capability set), [PKTS](../pkts/) (attention/telemetry signals).
-- **Downstream (what PRAS feeds):** the [PPS](../../pps/README.md) (policy amendments), [PWOS](../pwos/) (corrective actions), [PRS](../prs/) (the deliberation itself becomes a record), [PTOCS](../ptocs/) (capability revisions).
+- **Upstream (what PRAS reads):** the [PRS](../prs/) (records of what happened), [AOOS](../aoos/) analytics (deviations against goals), [PTOCS](../ptocs/) (the capability set), [PKTS](../pkts/) (attention/telemetry signals).
+- **Downstream (what PRAS feeds):** the [PPS](../../pps/README.md) (policy amendments), [AOOS](../aoos/) (corrective actions), [PRS](../prs/) (the deliberation itself becomes a record), [PTOCS](../ptocs/) (capability revisions).
 
 > The functional specification, data model, and deliberation schema live in [`spec.md`](spec.md). The prototype implementation lives at [`../../pras/`](../../prs/) (`pras/server.py`).

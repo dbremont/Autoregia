@@ -69,5 +69,5 @@ awes/
 - **Role:** VSM System 1 – Operations (Execution)
 - **Spec:** [`../spec/awes/spec.md`](../spec/awes/spec.md)
 - **Sibling sub-projects:** [PRS](../prs/), [PKTS](../pkts/),
-  [PTOCS](../ptocs/), [PPS](../pps/), [PWOS](../pwos/), [PRAS](../pras/)
+  [PTOCS](../ptocs/), [PPS](../pps/), [AOOS](../aoos/), [PRAS](../pras/)
 - **Decision log:** [`../logos.log.md`](../logos.log.md)

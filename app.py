@@ -2,7 +2,7 @@
 Autoregia — unified application server.
 
 A single entry point that composes every sub-system (PRS, PKTS, PTOCS, PPS,
-PWOS) under path prefixes on one port. Each sub-system keeps its own Flask
+AOOS) under path prefixes on one port. Each sub-system keeps its own Flask
 app and static assets; this module loads them and mounts them via a small
 WSGI dispatcher, and serves the Autoregia landing page plus a unified API
 index at the root.
@@ -13,7 +13,7 @@ index at the root.
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
     /ptocs/...   Personal Technical Object Catalog (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
-    /pwos/...    Personal Work Organization System (System 1 — Operations)
+    /aoos/...    Agent Operation Organization System (System 1 — Operations)
     /awes/...    Automated Work Execution System    (System 1 — Execution)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /asrs/...    Agent Self Representation System  (System 5 — representational substrate)
@@ -60,10 +60,11 @@ SUBSYSTEMS = [
     ("pkts", "Personal Keyword Tracking System", "pkts/server.py"),
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
-    ("pwos", "Personal Work Organization System", "pwos/server.py"),
+    ("aoos", "Agent Operation Organization System", "aoos/server.py"),
     ("awes", "Automated Work Execution System", "awes/server.py"),
     ("pras", "Personal Reflection & Adaptation System", "pras/server.py"),
     ("asrs", "Agent Self Representation System", "asrs/server.py"),
+    ("loop", "The Loop — Control-Loop Dashboard", "loop/server.py"),
 ]
 
 MOUNTS = {prefix: _load_app(f"{prefix}_server", rel)

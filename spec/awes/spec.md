@@ -10,7 +10,7 @@
 > Within the Autoregia Personal Viable System Model (PVSM), AWES instantiates the
 > **Execution** stage of the agent control loop and maps to **VSM System 1 –
 > Operations (Execution)**: it *carries out* the actions that the deliberative
-> cycle selects. Where PWOS organizes action constructs and records actuals,
+> cycle selects. Where AOOS organizes action constructs and records actuals,
 > AWES performs the computational work itself — turning "action selected" into
 > "action completed."
 
@@ -20,7 +20,7 @@ Fundamentally, an AWES exists to maintain persistent representations of the
 - **Execution Environments** — sandboxed runtimes (shell, Python, Jupyter,
   container) with declared capabilities and resource limits.
 - **Work Units** — the executable payload: a command string, script body, or
-  notebook cell sequence, with an optional reference to a PWOS action.
+  notebook cell sequence, with an optional reference to a AOOS action.
 - **Execution Sessions** — the record of a single dispatch: which environment,
   what was run, the output streams, exit code, timing, and produced artifacts.
 - **Execution Artifacts** — files, data, or logs produced during execution,
@@ -54,7 +54,7 @@ AWES — Automated Work Execution System  (VSM System 1 – Execution)
  |        Artifacts are addressable by session ID and carry MIME type metadata.
  |
  +-- [R] Result Feed
- |     \_ Pushes execution results into the feedback loop: writes a PWOS session
+ |     \_ Pushes execution results into the feedback loop: writes a AOOS session
  |        (actuals), creates a PRS record (durable trace), signals PRAS (outcome
  |        for adaptation).
 ```
@@ -64,7 +64,7 @@ AWES — Automated Work Execution System  (VSM System 1 – Execution)
 | **[E] Environment Manager** | Environment lifecycle — "where to run" | Environment registry, provisioning, lifecycle, capability declarations | The work itself (that is [T]'s job) |
 | **[T] Task Runner** | Work dispatch — "run this" | Work unit queue, dispatch, monitoring, timeout enforcement, result collection | The environment runtime (that is [E]'s job) |
 | **[A] Artifact Capture** | Result preservation — "what came out" | Execution logs (stdout/stderr), exit codes, file artifacts, metadata | The durable event stream (PRS owns that) |
-| **[R] Result Feed** | Feedback integration — "tell the agent" | PWOS session creation, PRS record linking, PRAS signal emission | The execution itself (that is [T]'s job) |
+| **[R] Result Feed** | Feedback integration — "tell the agent" | AOOS session creation, PRS record linking, PRAS signal emission | The execution itself (that is [T]'s job) |
 
 ## Formulation
 
@@ -92,7 +92,7 @@ agency:
 > script" or "execute this shell command" — it does not say "on my laptop" or
 > "in that container." The environment binding happens at dispatch time.
 
-Conversely, a work unit is *not* a PWOS action construct. An action construct
+Conversely, a work unit is *not* a AOOS action construct. An action construct
 says *why* and *when*; a work unit says *what exactly* and *how*. The same
 action may produce different work units on different execution attempts.
 
@@ -101,7 +101,7 @@ action may produce different work units on different execution attempts.
 | Case | Description | Example |
 | --- | --- | --- |
 | Headless execution | Run a script without opening a terminal | `POST /api/execute` with a Python script body |
-| Scheduled computation | A PWOS routine triggers a daily report | AWES pulls data, runs analysis, posts to PRS |
+| Scheduled computation | A AOOS routine triggers a daily report | AWES pulls data, runs analysis, posts to PRS |
 | Interactive exploration | A Jupyter notebook kernel managed by AWES | AWES provisions a kernel, the agent works through the UI, AWES captures the session |
 | CI-style pipeline | A series of dependent work units | AWES runs lint -> test -> build, each step consuming the previous artifact |
 | Reproducible audit | Re-run a past computation to verify a result | AWES replays a session in the same environment |
@@ -133,7 +133,7 @@ An **execution session** records a single dispatch of a work unit.
 | Field | Type | Description | Example |
 | --- | --- | --- | --- |
 | `session_id` | `string` | Unique identifier (prefix `EXE-`). | `EXE-2026-00042` |
-| `action_id` | `string?` | Optional link to a PWOS action construct. | `ACT-2026-00009` |
+| `action_id` | `string?` | Optional link to a AOOS action construct. | `ACT-2026-00009` |
 | `env_id` | `string` | The environment used. | `ENV-PYTHON-001` |
 | `work_type` | `enum` | `command`, `script`, `notebook`. | `script` |
 | `payload` | `string` | The command or script body. | `print("hello")` |
@@ -169,7 +169,7 @@ An **artifact** is a file or data object produced during execution.
 | **Determinism** | Same work unit + same environment → same result (modulo time) | Repeatable exit code and output on re-run |
 | **Observability** | Every execution produces a complete, inspectable record | stdout, stderr, exit code, timing, artifacts all captured |
 | **Safety** | Work units cannot escape their resource or capability limits | Timeout enforcement; read-only filesystem where possible |
-| **Feedback** | Results reach the agent's operational and reflective systems | PWOS session created; PRAS signal emitted |
+| **Feedback** | Results reach the agent's operational and reflective systems | AOOS session created; PRAS signal emitted |
 | **Simplicity** | The system is easy to understand, run, and extend | Single Flask process; in-memory store for prototyping |
 
 ## Implementation
@@ -212,7 +212,7 @@ production deployment.
 
 ## References
 
-- [PWOS — spec](../pwos/spec.md) — the operations system AWES feeds into
+- [AOOS — spec](../aoos/spec.md) — the operations system AWES feeds into
 - [PRS — spec](../prs/spec.md) — durable event stream for execution traces
 - [PRAS — spec](../pras/spec.md) — reflection and adaptation on execution outcomes
 - [Autoregia UI Specification](../ui.spec) — shared UI standard

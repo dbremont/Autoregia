@@ -1,4 +1,0 @@
-# PWOS Documentation Specification
-
-> ...
-

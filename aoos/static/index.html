@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AOOS — Agent Operation Organization System</title>
+  <link rel="stylesheet" href="/aoos/css/variables.css">
+  <link rel="stylesheet" href="/aoos/css/fonts.css">
+  <link rel="stylesheet" href="/aoos/css/base.css">
+  <link rel="stylesheet" href="/aoos/css/layout.css">
+  <link rel="stylesheet" href="/aoos/css/components.css">
+  <link rel="stylesheet" href="/aoos/css/views.css">
+  <link rel="stylesheet" href="/aoos/css/command-palette.css">
+  <link rel="stylesheet" href="/aoos/katex/katex.min.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-row">
+      <div class="header-brand">
+        <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <span class="brand-wordmark">Agent <em>Operation</em> Organization System</span>
+      </div>
+      <div class="header-search">
+        <span class="search-icon"><ao-icon name="search" size="16"></ao-icon></span>
+        <input type="search" id="globalSearch" placeholder="Search actions…" autocomplete="off">
+      </div>
+      <div class="header-actions">
+        <div class="timer" id="timer" title="Time tracking"></div>
+        <span class="gc-pill" id="gcPill" title="Google Calendar status">GC: …</span>
+        <button class="btn btn-ghost btn-sm" id="btnHelp" title="Help &amp; Shortcuts (F1)"><ao-icon name="help-circle" size="15"></ao-icon> Help</button>
+        <button class="btn btn-ghost btn-sm" id="btnSync" title="Sync Google Calendar"><ao-icon name="refresh-cw" size="15"></ao-icon> Sync</button>
+        <button class="btn btn-ghost btn-sm" id="btnImport" title="Import (JSON)"><ao-icon name="upload" size="15"></ao-icon> Import</button>
+        <button class="btn btn-primary btn-sm" id="btnNewAction" title="New Action (N)"><ao-icon name="plus" size="15"></ao-icon> New Action</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <ul class="sidebar-nav">
+        <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><ao-icon name="gauge" size="17"></ao-icon></span> Dashboard</a></li>
+        <li><a href="#analytics" data-view="analytics"><span class="nav-icon"><ao-icon name="bar-chart-3" size="17"></ao-icon></span> Analytics</a></li>
+        <li><a href="#actions" data-view="actions" class="active"><span class="nav-icon"><ao-icon name="list-checks" size="17"></ao-icon></span> Actions</a></li>
+        <li><a href="#scratch" data-view="scratch"><span class="nav-icon"><ao-icon name="file-text" size="17"></ao-icon></span> Scratchpad</a></li>
+        <li><a href="#hierarchy" data-view="hierarchy"><span class="nav-icon"><ao-icon name="git-fork" size="17"></ao-icon></span> Action Hierarchy</a></li>
+        <li><a href="#goals" data-view="goals"><span class="nav-icon"><ao-icon name="target" size="17"></ao-icon></span> Goals</a></li>
+        <li><a href="#calendar" data-view="calendar"><span class="nav-icon"><ao-icon name="calendar" size="17"></ao-icon></span> Calendar</a></li>
+        <li><a href="#sessions" data-view="sessions"><span class="nav-icon"><ao-icon name="timer" size="17"></ao-icon></span> Sessions</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Platforms</div>
+      <ul class="sidebar-nav">
+        <li><a href="#google" data-view="google"><span class="nav-icon"><ao-icon name="cloud" size="17"></ao-icon></span> Google Calendar</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">By Kind</div>
+      <ul class="sidebar-nav" id="kindNav"></ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Complementary</div>
+      <ul class="sidebar-nav">
+        <li><a href="#export" data-view="export"><span class="nav-icon"><ao-icon name="download" size="17"></ao-icon></span> Export</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">AOOS · Operations System</div>
+      <div class="colophon-meta">VSM SYSTEM 1 — v0.1</div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="app-main" id="appContent"></main>
+
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette">
+    <div class="cmd-palette-search">
+      <span><ao-icon name="search" size="18"></ao-icon></span>
+      <input type="text" id="cmdInput" placeholder="Type a command or search actions…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+  </div>
+</div>
+
+<!-- ═══ Action Editor Modal ═══ -->
+<div class="modal-overlay hidden" id="actionModal">
+  <div class="modal" style="max-width:860px;">
+    <div class="modal-header">
+      <h2 id="actionModalTitle">New Action</h2>
+      <button class="btn-icon" onclick="AO.Action.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
+    </div>
+    <div class="modal-body" id="actionModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="AO.Action.closeEditor()">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btnSaveAction">Save Action</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Action Detail Modal ═══ -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="modal" style="max-width:880px;">
+    <div class="modal-header">
+      <h2 id="detailTitle">Action Detail</h2>
+      <button class="btn-icon" onclick="AO.Action.closeDetail()"><ao-icon name="x" size="17"></ao-icon></button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- ═══ Start-timer Popover ═══ -->
+<div class="popover-root" id="popoverRoot" aria-hidden="true">
+  <div class="popover-backdrop" onclick="AO.Session.closeStart()"></div>
+  <div class="start-popover" id="startPopover"></div>
+</div>
+
+<!-- ═══ Session Editor Modal ═══ -->
+<div class="modal-overlay hidden" id="sessionModal">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-header">
+      <h2 id="sessionModalTitle">New Session</h2>
+      <button class="btn-icon" onclick="AO.Session.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
+    </div>
+    <div class="modal-body" id="sessionModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="AO.Session.closeEditor()">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btnSaveSession" onclick="AO.Session.saveEditor()">Save Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Help Modal (F1) ═══ -->
+<div class="modal-overlay hidden" id="helpModal" onclick="if(event.target===this) AO.Help.close()">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <h2><span class="help-title-icon"><ao-icon name="help-circle" size="20"></ao-icon></span> Help &amp; Keyboard Shortcuts</h2>
+      <button class="btn-icon" onclick="AO.Help.close()"><ao-icon name="x" size="17"></ao-icon></button>
+    </div>
+    <div class="modal-body help-body">
+      <p class="help-lede">AOOS — the <strong>Agent Operation Organization System</strong> — organizes your action constructs (tasks, projects, routines, commitments, initiatives, objectives), resolves them against the real calendar, and syncs with Google Calendar.</p>
+
+      <div class="help-section">
+        <h3>Keyboard shortcuts</h3>
+        <div class="shortcut-grid">
+          <div class="shortcut-row"><span>Open this help</span><span><kbd class="kbd">F1</kbd> or <kbd class="kbd">?</kbd></span></div>
+          <div class="shortcut-row"><span>Command palette</span><span><kbd class="kbd">Ctrl</kbd>/<kbd class="kbd">⌘</kbd> + <kbd class="kbd">K</kbd></span></div>
+          <div class="shortcut-row"><span>New action</span><span><kbd class="kbd">Ctrl</kbd>/<kbd class="kbd">⌘</kbd> + <kbd class="kbd">N</kbd> &nbsp;·&nbsp; <kbd class="kbd">N</kbd></span></div>
+          <div class="shortcut-row"><span>Start / stop timer</span><span><kbd class="kbd">Space</kbd></span></div>
+          <div class="shortcut-row"><span>Global search</span><span>header search box</span></div>
+          <div class="shortcut-row"><span>Close any dialog</span><span><kbd class="kbd">Esc</kbd></span></div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>Views</h3>
+        <div class="shortcut-grid">
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="gauge" size="15"></ao-icon></span> Dashboard</span><span>at-a-glance stats &amp; summaries</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="bar-chart-3" size="15"></ao-icon></span> Analytics</span><span>throughput, backlog, deadline adherence (app.todoist)</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="list-checks" size="15"></ao-icon></span> Actions</span><span>filter, search, create, edit</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="file-text" size="15"></ao-icon></span> Scratchpad</span><span>one markdown working doc · edit &amp; preview · share</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="git-fork" size="15"></ao-icon></span> Hierarchy</span><span>Objective → Initiative → Project → Task</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="target" size="15"></ao-icon></span> Goals</span><span>tracked objectives · target vs progress · key results</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="calendar" size="15"></ao-icon></span> Calendar</span><span>day / week / month / year blocks</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="timer" size="15"></ao-icon></span> Sessions</span><span>time tracking · start/stop timer · actuals</span></div>
+          <div class="shortcut-row"><span><span class="help-ico"><ao-icon name="cloud" size="15"></ao-icon></span> Google Calendar</span><span>OAuth connect &amp; two-way sync</span></div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>Core ideas</h3>
+        <div class="help-component"><span class="help-comp-tag">A</span><div><strong>Work Organization</strong> — the action hierarchy &amp; dependency graph. “What to do.”</div></div>
+        <div class="help-component"><span class="help-comp-tag">S</span><div><strong>Scratchpad</strong> — one markdown working document. Edit &amp; preview, share. “What’s on my mind, right now.”</div></div>
+        <div class="help-component"><span class="help-comp-tag">B</span><div><strong>Calendarization</strong> — blocks, conflict detection, workload. “When, on the real calendar.”</div></div>
+        <div class="help-component"><span class="help-comp-tag">C</span><div><strong>Platforms</strong> — Google Calendar two-way sync. “How it connects.”</div></div>
+        <div class="help-component"><span class="help-comp-tag">D</span><div><strong>Execution &amp; Actuals</strong> — work sessions / time tracking. “What actually happened” vs the plan.</div></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary btn-sm" href="/docs" target="_blank" rel="noopener"><ao-icon name="book-open" size="15"></ao-icon> Open full documentation</a>
+      <button class="btn btn-primary btn-sm" onclick="AO.Help.close()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept="application/json" style="display:none">
+<div class="toast" id="toast"></div>
+
+<script src="/aoos/js/store.js"></script>
+<script src="/aoos/js/icons.js"></script>
+<script src="/aoos/katex/katex.min.js"></script>
+<script src="/aoos/js/md.js"></script>
+<script src="/aoos/js/vendor/echarts.min.js"></script>
+<script src="/aoos/js/app.js"></script>
+<script src="/aoos/js/actions.js"></script>
+<script src="/aoos/js/hierarchy.js"></script>
+<script src="/aoos/js/calendar.js"></script>
+<script src="/aoos/js/google.js"></script>
+<script src="/aoos/js/dashboard.js"></script>
+<script src="/aoos/js/goals.js"></script>
+<script src="/aoos/js/analytics.js"></script>
+<script src="/aoos/js/sessions.js"></script>
+<script src="/aoos/js/scratch.js"></script>
+<script src="/aoos/js/command-palette.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { AO.init(); });
+</script>
+
+</body>
+</html>

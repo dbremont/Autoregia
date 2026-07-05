@@ -24,7 +24,7 @@ TOOLS = {
     "pkts": ["pkts/static"],
     "ptocs": ["ptocs/static"],
     "pps": ["pps/static", "pps/index.html", "pps/policies"],
-    "pwos": ["pwos/static"],
+    "aoos": ["aoos/static"],
 }
 
 # Path segments served under each tool's mount that must be prefixed.

@@ -5,18 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Autoregia — Self-Management System</title>
   <style>
+    /* Self-hosted typefaces (offline-first) — Spectral · Inter · IBM Plex Mono.
+       Served by PRS at /prs/fonts/ under the unified server. */
+    @font-face{font-family:'Spectral';font-style:normal;font-weight:300;font-display:swap;src:url('/prs/fonts/spectral-300.woff2') format('woff2')}
+    @font-face{font-family:'Spectral';font-style:normal;font-weight:400;font-display:swap;src:url('/prs/fonts/spectral-400.woff2') format('woff2')}
+    @font-face{font-family:'Spectral';font-style:normal;font-weight:500;font-display:swap;src:url('/prs/fonts/spectral-500.woff2') format('woff2')}
+    @font-face{font-family:'Spectral';font-style:normal;font-weight:600;font-display:swap;src:url('/prs/fonts/spectral-600.woff2') format('woff2')}
+    @font-face{font-family:'Spectral';font-style:italic;font-weight:400;font-display:swap;src:url('/prs/fonts/spectral-400i.woff2') format('woff2')}
+    @font-face{font-family:'Spectral';font-style:italic;font-weight:500;font-display:swap;src:url('/prs/fonts/spectral-500i.woff2') format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/prs/fonts/inter-400.woff2') format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/prs/fonts/inter-500.woff2') format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/prs/fonts/inter-600.woff2') format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('/prs/fonts/inter-700.woff2') format('woff2')}
+    @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/prs/fonts/plexmono-400.woff2') format('woff2')}
+    @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/prs/fonts/plexmono-500.woff2') format('woff2')}
+
     :root {
-      --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
-      --rule: #d8d0c4; --rule-soft: #e8e2d6; --parchment: #f7f3ea; --surface: #fffdf8;
-      --accent: #7A1A2A; --gold: #b8893a; --gold-tint: #f4ecda;
-      --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
-      --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
+      /* Warm-neutral ink ramp (0 near-black → 10 surface tint) */
+      --ink-0:#1E1C19; --ink-1:#2C2A26; --ink-2:#44413B; --ink-3:#5B574E;
+      --ink-4:#6B665B; --ink-5:#8C877B; --ink-6:#A7A296; --ink-7:#C9C4B8;
+      --ink-8:#E2DED4; --ink-9:#EEEAE0; --ink-10:#F4F1EA;
+      --paper:#FAFAF6;
+      /* legacy aliases → graduated ramp (existing rules now draw from it) */
+      --ink:var(--ink-1); --ink-soft:var(--ink-3); --muted:var(--ink-5);
+      --rule:var(--ink-8); --rule-soft:var(--ink-9);
+      --parchment:var(--paper); --surface:#FFFFFF; --surface-warm:var(--ink-10);
+      --accent:#7A1A2A; --accent-deep:#641020;
+      --gold:#A8854A; --gold-soft:#C7A972; --gold-tint:#F6EFE1;
+      /* typefaces */
+      --serif:"Spectral",Georgia,"Times New Roman",serif;
+      --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --mono:"IBM Plex Mono",Consolas,monospace;
+      /* craft tokens */
+      --hl:0.5px; --measure:64ch;
+      --shadow-sm:0 1px 2px rgba(30,28,25,.04);
+      --ring:0 0 0 3px rgba(122,26,42,.16);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"kern","liga"}
     .wrap{max-width:920px;margin:0 auto;padding:0 28px}
     a{color:var(--accent)}
+    ::selection{background:var(--gold-tint);color:var(--ink-0)}
 
     /* ── Masthead ── */
     header.masthead{padding:64px 0 24px;text-align:center}
@@ -26,14 +55,22 @@
     h1.title em{font-style:italic;color:var(--accent)}
     .lede{font-size:18px;color:var(--ink-soft);max-width:600px;margin:0 auto;font-style:italic;line-height:1.55}
     .more{font-family:var(--sans);font-size:13px;color:var(--muted);margin-top:14px}
-    .more a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule)}
+    .more a{color:var(--accent);text-decoration:none;border-bottom:0.5px solid var(--rule)}
     .more a:hover{border-color:var(--accent)}
     .gold-rule{height:1px;background:var(--gold);width:64px;margin:28px auto;opacity:.7}
+
+    /* ── Current work session (discreet line) ── */
+    .session-line{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:16px 0 -4px;letter-spacing:.01em}
+    .session-line .sl-dot{width:6px;height:6px;border-radius:999px;background:#4a6b43;display:inline-block;flex:0 0 auto}
+    .session-line .sl-text{color:var(--ink-soft);max-width:46ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .session-line .sl-time{color:var(--muted);font-variant-numeric:tabular-nums}
+    .session-line .sl-link{color:var(--accent);text-decoration:none}
+    .session-line .sl-link:hover{text-decoration:underline}
 
     /* ── Quick actions ── */
     section.actions{padding:4px 0 8px}
     .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    a.action{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;transition:transform .16s,box-shadow .16s,border-color .16s}
+    a.action{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--surface);border:0.5px solid var(--rule);border-radius:8px;padding:14px 16px;transition:transform .16s,box-shadow .16s,border-color .16s}
     a.action:hover{transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(28,25,22,.4);border-color:var(--gold)}
     a.action svg{flex:0 0 auto;color:var(--gold)}
     .action .a-label{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink)}
@@ -41,10 +78,10 @@
 
     /* ── Situation Model (mock briefing) ── */
     section.situation{padding:16px 0 8px}
-    .sit-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:22px 24px;box-shadow:0 1px 2px rgba(30,28,25,.03)}
+    .sit-card{background:var(--surface);border:0.5px solid var(--rule);border-radius:10px;padding:22px 24px;box-shadow:0 1px 2px rgba(30,28,25,.03)}
     .sit-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
     .sit-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
-    .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:1px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
+    .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:0.5px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
     .sit-posture.warn{color:var(--accent);border-color:var(--accent);background:#faf3f4}
     .sit-posture.ok{color:#4a6b43;border-color:#4a6b43;background:#f4f7f1}
     .syn{font-size:17px;line-height:1.6;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--gold);padding:2px 0 2px 18px;margin:0 0 20px}
@@ -53,14 +90,14 @@
     .sit-sub{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
     .sit-sub.spaced{margin-top:18px}
     .att{list-style:none;padding:0;margin:0}
-    .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:14px}
+    .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:0.5px solid var(--rule-soft);font-size:14px}
     .att-item:last-child{border-bottom:0}
     .att-dot{width:8px;height:8px;border-radius:999px;background:var(--gold);display:inline-block;transform:translateY(1px)}
     .att-dot.high{background:var(--accent)}
     .att-dot.medium{background:#b07a2a}
     .att-sev{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
     .att-text{color:var(--ink-soft)}
-    .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
+    .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:0.5px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
     .att-tool:hover{text-decoration:none;background:var(--accent);color:var(--surface);border-color:var(--accent)}
     .res-item{margin-bottom:11px}
     .res-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:4px}
@@ -72,7 +109,7 @@
     .res-bar.over>span{background:var(--accent)}
     .res-bar.ok>span{background:#7ea072}
     .loop-strip{list-style:none;padding:0;margin:0}
-    .ls-item{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px}
+    .ls-item{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:baseline;padding:6px 0;border-bottom:0.5px solid var(--rule-soft);font-size:13px}
     .ls-item:last-child{border-bottom:0}
     .ls-item.now{background:var(--gold-tint);margin:0 -8px;padding:6px 8px;border-bottom:1px solid var(--gold-tint)}
     .ls-stage{font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:600}
@@ -83,23 +120,23 @@
     /* ── Search ── */
     section.search{padding:8px 0 4px}
     .search-wrap{position:relative;max-width:560px;margin:0 auto}
-    .search-box{width:100%;font-family:var(--sans);font-size:15px;padding:12px 16px 12px 42px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(30,28,25,.03);transition:border-color .16s,box-shadow .16s}
+    .search-box{width:100%;font-family:var(--sans);font-size:15px;padding:12px 16px 12px 42px;border:0.5px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(30,28,25,.03);transition:border-color .16s,box-shadow .16s}
     .search-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,26,42,.12)}
     .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .search-hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--parchment);pointer-events:none}
+    .search-hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:0.5px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--parchment);pointer-events:none}
     .search-results{max-width:560px;margin:12px auto 0}
     .sr-empty{font-family:var(--sans);font-size:12px;letter-spacing:.04em;color:var(--muted);text-align:center;padding:8px 0}
-    .sr-item{display:block;text-decoration:none;color:inherit;padding:11px 14px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);margin-bottom:8px;transition:border-color .16s,transform .16s,box-shadow .16s}
+    .sr-item{display:block;text-decoration:none;color:inherit;padding:11px 14px;border:0.5px solid var(--rule);border-radius:6px;background:var(--surface);margin-bottom:8px;transition:border-color .16s,transform .16s,box-shadow .16s}
     .sr-item:hover{text-decoration:none;border-color:var(--gold);transform:translateY(-1px);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
     .sr-head{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
-    .sr-sys{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em;border:1px solid var(--rule);border-radius:999px;padding:1px 8px;background:var(--gold-tint)}
+    .sr-sys{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em;border:0.5px solid var(--rule);border-radius:999px;padding:1px 8px;background:var(--gold-tint)}
     .sr-title{font-size:15px;color:var(--ink);font-weight:500}
     .sr-snippet{font-size:13px;color:var(--muted);line-height:1.45}
     .sr-snippet mark{background:var(--gold-tint);color:var(--ink);padding:0 2px;border-radius:2px}
 
     /* ── Lenses (on-demand panels: situation + map) ── */
     .lenses{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:20px 0 4px}
-    .lens{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .16s,box-shadow .16s,background .16s,color .16s}
+    .lens{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:0.5px solid var(--rule);border-radius:999px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .16s,box-shadow .16s,background .16s,color .16s}
     .lens:hover{border-color:var(--gold);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
     .lens .chev{color:var(--accent);transition:transform .2s;display:inline-block}
     .lens.open{background:var(--accent);color:var(--surface);border-color:var(--accent)}
@@ -107,7 +144,7 @@
     .lens-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .36s ease,opacity .22s ease;margin-top:0}
     .lens-panel.open{grid-template-rows:1fr;opacity:1;margin-top:18px}
     .lens-inner{overflow:hidden;min-height:0}
-    .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px 10px 12px}
+    .diagram{background:var(--surface);border:0.5px solid var(--rule);border-radius:8px;padding:18px 10px 12px}
     .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
     .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
 
@@ -119,7 +156,7 @@
     .phase-rule{height:1px;background:var(--rule);flex:1}
     .phase-stage{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:22px 22px 20px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:0.5px solid var(--rule);border-radius:6px;padding:22px 22px 20px;transition:transform .18s,box-shadow .18s,border-color .18s}
     a.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(28,25,22,.35);border-color:var(--gold)}
     .card .tag{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.04em;margin-bottom:10px;display:block}
     .card .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -129,7 +166,7 @@
     .card .arrow{font-family:var(--sans);font-size:13px;color:var(--accent);margin-top:12px;display:block;font-weight:600}
 
     /* ── Footer ── */
-    footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
+    footer{border-top:0.5px solid var(--rule);padding:32px 0 56px;text-align:center}
     footer .footer-links{margin-bottom:14px}
     footer .footer-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin:0 12px;transition:color .18s}
     footer .footer-links a:hover{color:var(--accent)}
@@ -152,7 +189,7 @@
   <section class="actions">
     <div class="action-grid">
       <a class="action" href="/prs/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span class="a-label">Capture</span><br><span class="a-sub">PRS · record</span></span></a>
-      <a class="action" href="/pwos/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span><span class="a-label">Today's plan</span><br><span class="a-sub">PWOS · action</span></span></a>
+      <a class="action" href="/aoos/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span><span class="a-label">Today's plan</span><br><span class="a-sub">AOOS · action</span></span></a>
       <a class="action" href="/pras/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span><span class="a-label">Review</span><br><span class="a-sub">PRAS · reflect</span></span></a>
       <a class="action" href="/pps/policies/charter.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg><span><span class="a-label">Charter</span><br><span class="a-sub">PPS · policy</span></span></a>
     </div>
@@ -168,10 +205,20 @@
     <div class="search-results" id="searchResults"></div>
   </section>
 
+
+
   <!-- ═══ Lenses: on-demand ways to make sense of the system ═══ -->
   <div class="lenses">
     <button class="lens" data-lens="sit" aria-expanded="false"><span class="chev">▸</span> Situation</button>
     <button class="lens" data-lens="map" aria-expanded="false"><span class="chev">▸</span> How the tools fit</button>
+  </div>
+
+    <!-- Current work session — discreet, above the lenses -->
+  <div class="session-line" id="sessionLine" hidden>
+    <span class="sl-dot"></span>
+    <span class="sl-text" id="sessionText">…</span>
+    <span class="sl-time" id="sessionTime"></span>
+    <a class="sl-link" href="/aoos/">AOOS →</a>
   </div>
 
   <!-- Situation Model (mock briefing) — on demand -->
@@ -190,7 +237,7 @@
           <ul class="att">
             <li class="att-item"><span class="att-dot high"></span><span class="att-sev">over-alloc</span><span class="att-text">Time 117/112 h this week — 5 h over capacity.</span><a class="att-tool" href="/asrs/">ASRS</a></li>
             <li class="att-item"><span class="att-dot high"></span><span class="att-sev">constraint</span><span class="att-text">“Deep-work nights” violates the Sleep floor (7 h/night).</span><a class="att-tool" href="/asrs/">ASRS</a></li>
-            <li class="att-item"><span class="att-dot high"></span><span class="att-sev">blocked</span><span class="att-text">“Wire ISCB into PRAS” blocked-by the couchdb dependency.</span><a class="att-tool" href="/pwos/">PWOS</a></li>
+            <li class="att-item"><span class="att-dot high"></span><span class="att-sev">blocked</span><span class="att-text">“Wire ISCB into PRAS” blocked-by the couchdb dependency.</span><a class="att-tool" href="/aoos/">AOOS</a></li>
             <li class="att-item"><span class="att-dot medium"></span><span class="att-sev">due</span><span class="att-text">Weekly-review prep — due Sunday.</span><a class="att-tool" href="/pras/">PRAS</a></li>
             <li class="att-item"><span class="att-dot"></span><span class="att-sev">anomaly</span><span class="att-text">Attention to “ctx-switch” up 3× this week — possible fragmentation.</span><a class="att-tool" href="/pkts/">PKTS</a></li>
           </ul>
@@ -209,8 +256,8 @@
             <li class="ls-item"><span class="ls-stage">Perception</span><span class="ls-state">7 records today · 3 triggers pending</span><span class="ls-tool">PRS · PKTS</span></li>
             <li class="ls-item now"><span class="ls-stage">Situation</span><span class="ls-state">this view · 5 attention items</span><span class="ls-tool">—</span></li>
             <li class="ls-item"><span class="ls-stage">Decision</span><span class="ls-state">6 policies · top value: Health</span><span class="ls-tool">PPS</span></li>
-            <li class="ls-item"><span class="ls-stage">Action</span><span class="ls-state">4 due today · 1 blocked · 11 h scheduled</span><span class="ls-tool">PWOS</span></li>
-            <li class="ls-item"><span class="ls-stage">Execution</span><span class="ls-state">1 session running · 2 artifacts today</span><span class="ls-tool">AWES</span></li>
+            <li class="ls-item"><span class="ls-stage">Action</span><span class="ls-state">4 due today · 1 blocked · 11 h scheduled</span><span class="ls-tool">AOOS</span></li>
+            <li class="ls-item"><span class="ls-stage">Execution</span><span class="ls-state" id="execState">1 session running · 2 artifacts today</span><span class="ls-tool">AWES</span></li>
             <li class="ls-item"><span class="ls-stage">Feedback</span><span class="ls-state">3 open · 1 ready to enact</span><span class="ls-tool">PRAS</span></li>
           </ul>
         </div>
@@ -224,18 +271,18 @@
   <section class="lens-panel" id="lens-map">
     <div class="lens-inner">
       <div class="diagram">
-        <svg viewBox="0 0 920 470" role="img" aria-label="Control loop with the Autoregia tools placed on their stages: ASRS + PTOCS (World/substrate, self-model), PRS + PKTS (Perception), the Situation Model stage has no dedicated system yet, PPS (Decision), PWOS (Action Selection), AWES (Execution), PRAS (Feedback). Each tool chip links to its app.">
+        <svg viewBox="0 0 920 470" role="img" aria-label="Control loop with the Autoregia tools placed on their stages: ASRS + PTOCS (World/substrate, self-model), PRS + PKTS (Perception), the Situation Model stage has no dedicated system yet, PPS (Decision), AOOS (Action Selection), AWES (Execution), PRAS (Feedback). Each tool chip links to its app.">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
           </defs>
           <style>
-            .lbl{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:15px;fill:#1c1916}
-            .sub{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:9.5px;fill:#7a736a}
-            .arc{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
-            .fba{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
-            .cyc-lbl{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
-            .leg{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
+            .lbl{font-family:"Spectral",Georgia,serif;font-size:15px;fill:#1c1916}
+            .sub{font-family:"IBM Plex Mono",Consolas,monospace;font-size:9.5px;fill:#7a736a}
+            .arc{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
+            .fba{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
+            .cyc-lbl{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .leg{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
             .node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
             .node-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
             .cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
@@ -243,7 +290,7 @@
             .edge-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
             .tap{fill:#7A1A2A}
             .tool-bg{fill:#f4ecda;stroke:#b8893a;stroke-width:1;transition:fill .15s}
-            .tool-t{font-family:"SF Mono","JetBrains Mono",Consolas,monospace;font-size:11px;fill:#7A1A2A;font-weight:600;transition:fill .15s}
+            .tool-t{font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;fill:#7A1A2A;font-weight:600;transition:fill .15s}
             a{cursor:pointer}
             a:hover .tool-bg{fill:#7A1A2A}
             a:hover .tool-t{fill:#fffdf8}
@@ -310,7 +357,7 @@
             <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
             <text class="lbl" x="0" y="-14" text-anchor="middle">Action Selection</text>
             <text class="sub" x="0" y="2" text-anchor="middle">commit to action</text>
-            <a href="/pwos/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PWOS</text></g></a>
+            <a href="/aoos/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AOOS</text></g></a>
           </g>
 
           <!-- Execution -->
@@ -367,7 +414,7 @@
 
     <div class="phase"><span class="phase-label">Action Selection</span><span class="phase-rule"></span><span class="phase-stage">commit to action</span></div>
     <div class="grid">
-      <a class="card" href="/pwos/"><span class="tag">loop stage · Action Selection</span><div class="head"><h2>Personal Work Organization System</h2><span class="abbr">PWOS</span></div><p>Organizes action constructs (tasks, projects, routines) into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time.</p><span class="arrow">Enter pwos/ →</span></a>
+      <a class="card" href="/aoos/"><span class="tag">loop stage · Action Selection</span><div class="head"><h2>Agent Operation Organization System</h2><span class="abbr">AOOS</span></div><p>Organizes action constructs (tasks, projects, routines) into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time.</p><span class="arrow">Enter aoos/ →</span></a>
     </div>
 
     <div class="phase"><span class="phase-label">Execution</span><span class="phase-rule"></span><span class="phase-stage">carry out the action</span></div>
@@ -472,6 +519,51 @@
         if (willOpen) { btn.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); target.classList.add('open'); }
       });
     });
+  })();
+</script>
+<script>
+  /* Current work session — polls AOOS /api/sessions/active; ticks the timer.
+     Drives the discreet line above the lenses and the Execution row inside the
+     Situation briefing. Idle = line hidden. Degrades silently when AOOS is down. */
+  (function () {
+    var line = document.getElementById('sessionLine');
+    if (!line) return;
+    var textEl = document.getElementById('sessionText');
+    var timeEl = document.getElementById('sessionTime');
+    var execEl = document.getElementById('execState');
+    var startMs = null, desc = '';
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
+    function fmt(ms){ var s = Math.max(0, Math.floor(ms/1000)), h = Math.floor(s/3600), m = Math.floor(s%3600/60); return (h>0?h+':':'') + pad(m) + ':' + pad(s%60); }
+    function esc(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+    function tick(){
+      if (startMs == null) return;
+      var t = fmt(Date.now() - startMs);
+      timeEl.textContent = t;
+      if (execEl) execEl.innerHTML = '● ' + esc(desc) + ' · ' + esc(t);
+    }
+    function render(s){
+      if (s && s.status === 'active' && s.started_at) {
+        var d = new Date(s.started_at); startMs = isNaN(d) ? null : d.getTime();
+        desc = s.description || ('Action ' + (s.action_id || ''));
+        var band = s.capacity && s.capacity.band;
+        line.hidden = false;
+        textEl.textContent = desc + (band ? ' · ' + band : '');
+        tick();
+      } else {
+        startMs = null; desc = '';
+        line.hidden = true;
+        if (execEl) execEl.textContent = 'no active session';
+      }
+    }
+    function load(){
+      fetch('/aoos/api/sessions/active')
+        .then(function (r) { return r.ok ? r.json() : { active:false }; })
+        .then(render)
+        .catch(function () { render({ active:false }); });
+    }
+    load();
+    setInterval(load, 20000);
+    setInterval(tick, 1000);
   })();
 </script>
 </body>

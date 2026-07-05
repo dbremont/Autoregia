@@ -1,6 +1,6 @@
-"""CouchDB-backed document store shared by PRS, PTOCS, and PWOS.
+"""CouchDB-backed document store shared by PRS, PTOCS, and AOOS.
 
-Each sub-system owns one CouchDB database (``prs``, ``ptocs``, ``pwos``) and
+Each sub-system owns one CouchDB database (``prs``, ``ptocs``, ``aoos``) and
 maps its existing record ``id`` field onto the CouchDB ``_id``. CouchDB's own
 ``_id``/``_rev`` bookkeeping is kept internal so the public API surface (and
 therefore the web clients) is unchanged.
