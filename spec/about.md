@@ -86,7 +86,7 @@ The Abstract Agency Framework is instantiated by a set of cooperating systems, e
 
 Autoregia's scope is to provide an **abstract agency framework** — a functional architecture that enables an agent to act coherently through time. It is an enabling infrastructure, not a goal in itself: it does not prescribe what the agent should value or pursue, only how the functions required to pursue anything can be organized into a sustained, self-correcting loop.
 
-> Two layers, two scopes. The **abstract agency framework** is not bound to any implementation — it applies to any agent that meets the definition. The **concrete toolset** built in the Autoregia project, by contrast, is fitted to a particular kind of agent: one that operates in a **virtual environment** — knowledge work mediated by software, where perception, decision, and execution all happen on a computer.
+>  The **abstract agency framework** is not bound to any implementation — it applies to any agent that meets the definition. The **concrete toolset** built in the Autoregia project, by contrast, is fitted to a particular kind of agent: one that operates in a **virtual environment** — knowledge work mediated by software, where perception, decision, and execution all happen on a computer.
 
 **In Scope:**
 
