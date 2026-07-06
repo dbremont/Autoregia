@@ -1,7 +1,15 @@
 # Autoregia Model Explanation
 
+> Autoregia is a self-management system that augments an agent's capacity to deliberately regulate its behavior, resources, and objectives in pursuit of its long-term viability and goals.
+
+> Autoregia is not a manager of the agent; it is an enabling infrastructure for agency.
+
+> Autoregia is analogous to an exoskeleton for an agent. It does not replace the agent's core capabilities, but augments them with structures and mechanisms for self-regulation, resource management, intention management, monitoring, and adaptation, enabling more capable and sustained autonomous behavior.
+
+> This is analogous to the cross-cutting capabilities that AI provides to traditional software systems, extending their computational abilities with functions that were previously impractical or intractable, such as speech recognition, natural language understanding, and computer vision.
+
 > What underlies the Autoregia model? This document is the conceptual basis for [`about.html`](../about.html) — the canonical home of the Autoregia model: the agent, the agent control loop, the Viable System Model (VSM) and the Autoregia system map, and the Personal Viable System Model (PVSM).
->
+
 > The diagrams in `about.html` are **interactive**: every stage is clickable and opens a detail panel. Node labels use **abstract** cybernetic terms only; the **concrete** personal-system mapping is revealed on click. The ASCII diagrams below mirror that same closed-loop topology; the mapping tables are the authoritative reference for the specifics.
 
 ## Agent
@@ -10,33 +18,26 @@
 
 > An agent is a system that deliberately transforms states of itself and its environment by selecting and executing actions according to internal objectives while regulating those actions using feedback.
 
-| Component      | Role                                     |
-| -------------- | ---------------------------------------- |
-| Identity       | what persists through time               |
-| Objectives     | desired future states                    |
-| World          |(Internal, External)                      |
-| Internal State | beliefs, memory, resources, capabilities |
-| Perception     | acquisition of information               |
-| Decision       | selection among alternatives             |
-| Action         | modification of world or self            |
-| Feedback       | observation of consequences              |
-| Regulation     | correction of deviations                 |
-| Learning       | modification of internal models          |
+> Every person can be understood as an adaptive control system operating within a changing environment. Autoregia starts from that premise: rather than designing productivity tools from intuition or convention, it creates/uses a model of agency - with it's core oragnizing principle -  identifies the fundamental functional architecture that every viable agent must implement.
 
-### What functional problems must every agent solve?
+> An agent is a stateful autonomous system that maintains an internal representation of itself and its environment, continuously updating this representation through perception and using it to generate intentions, make decisions, coordinate actions, regulate execution, and learn from outcomes. The agent operates as a recursive feedback system that seeks to achieve objectives while maintaining its long-term viability.
 
-| Functional Problem   | Description                       |
-| -------------------- | --------------------------------- |
-| Identity Maintenance | preserve the agent                |
-| Situation Assessment | understand environment            |
-| Goal Formation       | determine desired future          |
-| Planning             | generate possible actions         |
-| Resource Allocation  | distribute limited resources      |
-| Coordination         | synchronize concurrent activities |
-| Execution            | perform actions                   |
-| Monitoring           | observe progress                  |
-| Regulation           | compensate disturbances           |
-| Learning             | improve future behavior           |
+> See `img/self-model.png`
+
+| **Agency Aspect**        | **Agency Problem Addressed**                                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **Identity**             | **Identity Maintenance** — What makes the agent the same entity over time?                                    |
+| **Intent Management**    | **Intent Management** — Which intentions should be generated, evaluated, committed to, revised, or abandoned? |
+| **External World Model** | **Situation Understanding** — What is the current state of the external world?                                |
+| **Agent State**          | **Self-State Maintenance** — What is the current condition, capabilities, and resources of the agent?         |
+| **Perception**           | **Situation Assessment** — What is happening right now?                                                       |
+| **Decision**             | **Choice** — Which course of action should be selected?                                                       |
+| **Planning**             | **Action Organization** — How should chosen intentions be transformed into executable actions?                |
+| **Operation Control**    | **Coordination** — How should ongoing activities, resources, and concurrent work be coordinated?              |
+| **Execution**            | **Intervention** — How should actions be carried out to change the world?                                     |
+| **Feedback**             | **Outcome Assessment** — What actually happened, and how did it compare with expectations?                    |
+| **Regulation**           | **Behavioral Control** — How should deviations be corrected to remain aligned with intentions?                |
+| **Learning**             | **Adaptation** — How should future behavior improve based on experience?                                      |
 
 ### Foundational Model Substrates
 
@@ -45,89 +46,15 @@ The agent maintains two foundational model substrates — typed, declarative ont
 - **World Model** — the typed ontology of the external environment: entity types, relation types, event types, and domains. Makes explicit the structure that Perception reads and the Situation Model instantiates. Materialized as the [Personal World Model System (PWMS)](asrs/pwms/README.md), a sub-system of Agent State.
 - **Self Model** — the typed model of the self: identity, capabilities, resources, beliefs, commitments, constraints. Makes explicit the structure of the internal world against which internal state is recorded and regulated. Materialized as the [Personal Self Model System (PSMS)](asrs/psms/README.md), a sub-system of Agent State along with the [Personal Policy System (PPS)](../pps/) that writes to it.
 
-### Agent Control Loop Model
+## Management Model Formulation
 
-The agent control loop is an **outer loop** that closes the world on itself through the agent. It contains an inner **Deliberative Cycle** — the sense→decide arc that turns raw information into a committed action — followed by an **Execution** arc that carries the action out and a **Feedback** path that re-enters the cycle.
+The Management Model (also called the **Personal Viable System Model (PVSM)**) concretizes the abstract agency framework by providing the tools, mechanisms, and organizational structure through which each agency function is realized in practice.
 
-> The **Deliberative Cycle** is the sub-loop spanning Perception → Situation Model → Decision → Action Selection: it observes the world, builds a state estimate, evaluates alternatives, and commits to an action. It does *not* act; it produces a *selected* action that the outer loop then executes.
-
-#### Stages
-
-| Stage           | Loop          | Role                                                       |
-| --------------- | ------------- | ---------------------------------------------------------- |
-| Perception      | Deliberative  | acquire information from the internal and external world  |
-| Situation Model | Deliberative  | integrate perception into a current state estimate        |
-| Decision        | Deliberative  | evaluate and choose among alternative courses of action   |
-| Action Selection| Deliberative  | commit to a specific action or plan to carry out          |
-| Execution       | Outer         | carry out the selected action in the world or self        |
-| Feedback        | Outer         | observe consequences and regulate the Deliberative Cycle  |
-
-#### Diagram
-
-The control loop is a closed loop with a single **World** node. The **Deliberative Cycle** (the dashed inner sub-loop) observes the world, commits to an action, and the **Feedback** path observes the consequences and regulates the cycle.
-
-```txt
-  World ──perceive──▶ ┌──── Deliberative Cycle ──────────────────────┐
-(Environment ·        │  Perception ─▶ Situation ─▶ Decision ─▶ Action │
- Internal)            │                 Model              Selection   │
-     ▲                └─────────────────────────────────────┬──────────┘
-     │                                              commit │
-     │                                                    ▼
-     │                                               Execution
-     │                                                    │
-     └────────────────── act · modify world ──────────────┘
-                          │
-                          │ observe
-                          ▼
-                      Feedback ── regulate ──▶ (into the Deliberative Cycle)
-```
-
-## Personal Viable System Model (PVSM)
-
-### Agent Control Loop
+The Control Loop serves as the organizing principle of the Management Model, structuring how its systems and tools support the agent's continuous cycle of deliberation, action, feedback, regulation, and adaptation.
 
 The PVSM instantiates the agent control loop with concrete personal systems. The **Deliberative Cycle** is supplied by the recording, reflection, and planning instruments; the **Execution** arc is supplied by production tools; and **Feedback** closes the loop through reflection.
 
-#### Stages (PVSM mapping)
-
-| Stage           | Loop          | PVSM Component                                       |
-| --------------- | ------------- | ---------------------------------------------------- |
-| Perception      | Deliberative  | Personal Recording System (PRS), Audit Process       |
-| Situation Model | Deliberative  | Reflection, Documentation                            |
-| Decision        | Deliberative  | Task Registry Mechanism, Reflection                  |
-| Action Selection| Deliberative  | Calendar, Time Tracker                               |
-| Execution       | Outer         | Production                                           |
-| Feedback        | Outer         | Reflection (Intelligence Layer)                      |
-
-#### Foundational Substrates
-
-Two foundational model substrates underpin the control loop, making Perception and Situation Model possible. They are sub-systems of the **Agent State** system — the structural/ontological layer that Perception reads and the Situation Model instantiates as a current state estimate:
-
-- **Personal World Model System (PWMS)** — the typed ontology of the external world (entity types, event types, relations, domains). A sub-system of Agent State. The PRS records *instances* of its types; the Situation Model is a *current-state instance* of its structure. Generative: PWMS can derive recording templates and emit expected/triggered records into the PRS.
-- **Personal Self Model System (PSMS)** — the typed model of the self (identity, capability, resource, belief, commitment, constraint). A sub-system of Agent State. Provides the structural facets against which internal state is recorded and regulated. Generative: PSMS can derive introspection prompts and emit self-records into the PRS.
-- **Personal Policy System (PPS)** — the regulatory apparatus at S5: direction, identity, principles, life-policy. A sub-system of Agent State that writes its decisions into PSMS as identity/constraint/commitment facets of the self model.
-
-All three are specified as specification skeletons in [`spec/pwms/`](asrs/pwms/), [`spec/psms/`](asrs/psms/), and [`spec/pps/`](../pps/).
-
-#### Diagram
-
-The PVSM diagram shares the *same* closed-loop topology as the agent control loop. In `about.html` the node labels are **abstract** (identical to the control-loop diagram); clicking a stage reveals which **concrete** personal system instantiates it (see the mapping table above).
-
-```txt
-  World ──perceive──▶ ┌──── Deliberative Cycle ──────────────────────┐
-(Environment ·        │  Perception ─▶ Situation ─▶ Decision ─▶ Action │
- Internal)            │                 Model              Selection   │
-     ▲                └─────────────────────────────────────┬──────────┘
-     │                                              commit │
-     │                                                    ▼
-     │                                               Execution
-     │                                                    │
-     └────────────────── act · modify world ──────────────┘
-                          │
-                          │ observe
-                          ▼
-                      Feedback ── regulate ──▶ (into the Deliberative Cycle)
-```
+> See `control-loop-expanded.png`.
 
 ## Q&A
 
@@ -148,6 +75,22 @@ Every task originates from an underlying source—such as a goal, obligation, re
 **Q. How should recurrent tasks be conceptualized?**
 
 A. A recurrent task is not a single task but a task generator: a template paired with a recurrence rule (interval, schedule, or trigger condition) that emits a discrete task instance each time the rule fires. Each emitted instance has its own lifecycle and completion, while the rule persists until terminated. Recurrence encodes routine and pre-commits repeated decisions, lowering deliberative load — it belongs jointly to System 1 (the instances) and System 2 coordination (the rhythm).
+
+## **Q. How should intent formation (or intent management) be conceptualized? Which are the triggers?**
+
+**A.** Intent management is the process by which an agent continuously generates, evaluates, selects, commits to, and revises intentions that determine what it should pursue. It bridges perception and deliberation by transforming changes in the environment, internal state, and enduring commitments into an active set of intentions that guide planning and execution.
+
+Intent generation is triggered whenever information suggests that attention or action may be warranted. The principal trigger classes are:
+
+- **Problematization:** detection of deviations, unmet needs, failures, threats, or risks requiring intervention.
+-  **Opportunity Discovery:** recognition of favorable conditions that could produce value or advantage.
+-  **Commitments & Obligations:** goals, plans, policies, promises, deadlines, and recurring responsibilities requiring progress or maintenance.
+-  **External Requests:** commands, messages, delegated work, or other requests originating from external agents.
+-  **Identity & Values:** strategic objectives, principles, roles, and long-term aspirations that proactively generate intentions.
+-  **Habits & Routines:** recurring behaviors generated from persistent policies or recurrence rules rather than fresh deliberation.
+-  **Curiosity & Exploration:** uncertainty, knowledge gaps, prediction errors, or intrinsic motivation to acquire information or experiment.
+
+These sources produce **intent candidates**, which are subsequently evaluated according to importance, urgency, expected value, feasibility, resource requirements, constraints, and strategic alignment. Conflicting candidates are prioritized and resolved, producing an **Active Intent Set** that directs planning and execution. Intentions remain active until completed, abandoned, superseded, or revised in response to new information or changing circumstances.
 
 ## References
 
