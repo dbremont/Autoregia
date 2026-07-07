@@ -271,22 +271,31 @@
   <section class="lens-panel" id="lens-map">
     <div class="lens-inner">
       <div class="diagram">
-        <svg viewBox="0 0 920 470" role="img" aria-label="Control loop with the Autoregia tools placed on their stages: ASRS + PTOCS (World/substrate, self-model), PRS + PKTS (Perception), the Situation Model stage has no dedicated system yet, PPS (Decision), AOOS (Action Selection), AWES (Execution), PRAS (Feedback). Each tool chip links to its app.">
+        <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon) and the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), the Situation Model and Intent Management stages have no dedicated system yet, PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
           <defs>
-            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
-            <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
+            <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
+            <filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3a342b" flood-opacity="0.07"/></filter>
           </defs>
           <style>
-            .lbl{font-family:"Spectral",Georgia,serif;font-size:15px;fill:#1c1916}
-            .sub{font-family:"IBM Plex Mono",Consolas,monospace;font-size:9.5px;fill:#7a736a}
-            .arc{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10.5px;fill:#b8893a;letter-spacing:.06em}
-            .fba{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#7A1A2A;letter-spacing:.04em}
-            .cyc-lbl{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .eyebrow{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .dtitle{font-family:"Spectral",Georgia,serif;font-size:24px;fill:#1c1916;font-weight:400;letter-spacing:-.012em}
+            .dgloss{font-family:"Spectral",Georgia,serif;font-size:13px;fill:#908a7e;font-style:italic}
+            .cyc-lbl{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .reglab{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .num{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#b8893a;letter-spacing:.08em;font-weight:500}
+            .num-sub{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#1c1916;letter-spacing:.08em;font-weight:600}
+            .lbl{font-family:"Spectral",Georgia,serif;font-size:16px;fill:#1c1916}
+            .cap{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#938c7d;letter-spacing:.02em}
+            .note{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#b0a89a;font-style:italic}
+            .arc{font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;fill:#b8893a;letter-spacing:.06em}
+            .fba{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10.5px;fill:#7A1A2A;letter-spacing:.04em}
             .leg{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
-            .node{fill:#fffdf8;stroke:#b8893a;stroke-width:1.4}
-            .node-loop{fill:#fffdf8;stroke:#1c1916;stroke-width:1.6}
-            .cycle{fill:none;stroke:#b8893a;stroke-width:1.2;stroke-dasharray:6 5;opacity:.75}
+            .card{fill:#fffefb;stroke:#e6dcc8;stroke-width:0.7}
+            .card-top{stroke:#b8893a;stroke-width:1.4;stroke-linecap:round}
+            .card-top-sub{stroke:#1c1916;stroke-width:1.5;stroke-linecap:round}
             .edge{stroke:#b8893a;stroke-width:1.6;fill:none}
+            .edge-sub{stroke:#b8893a;stroke-width:1.4;fill:none;stroke-dasharray:2 3}
             .edge-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
             .tap{fill:#7A1A2A}
             .tool-bg{fill:#f4ecda;stroke:#b8893a;stroke-width:1;transition:fill .15s}
@@ -296,97 +305,151 @@
             a:hover .tool-t{fill:#fffdf8}
           </style>
 
-          <!-- deliberative cycle -->
-          <rect class="cycle" x="180" y="70" width="570" height="200" rx="12"/>
-          <text class="cyc-lbl" x="465" y="92" text-anchor="middle">Deliberative Cycle</text>
+          <!-- header plate -->
+          <text class="eyebrow" x="56" y="42">Fig. 1 · Agency Architecture</text>
+          <text class="dtitle" x="56" y="72">The Agent Control Loop</text>
+          <text class="dgloss" x="56" y="94">Each stage of the loop, and the Autoregia tool that realizes it — substrate below, deliberation above, feedback returning.</text>
+          <line x1="56" y1="108" x2="1264" y2="108" stroke="#e0d2b0" stroke-width="0.5"/>
 
-          <!-- forward edges -->
-          <path class="edge" d="M 80 182 L 80 120 L 192 120" marker-end="url(#arr)"/>
-          <text class="arc" x="58" y="150" text-anchor="middle" transform="rotate(-90 58 150)">perceive</text>
-          <path class="edge" d="M 348 120 L 392 120" marker-end="url(#arr)"/>
-          <path class="edge" d="M 548 120 L 600 120" marker-end="url(#arr)"/>
-          <path class="edge" d="M 670 158 L 670 182" marker-end="url(#arr)"/>
-          <path class="edge" d="M 748 220 L 770 220" marker-end="url(#arr)"/>
-          <text class="arc" x="759" y="212" text-anchor="middle">commit</text>
-          <path class="edge" d="M 840 258 L 840 400 L 80 400 L 80 258" marker-end="url(#arr)"/>
-          <text class="arc" x="460" y="392" text-anchor="middle">act · modify world</text>
+          <!-- deliberative cycle panel -->
+          <rect x="36" y="132" width="1028" height="176" rx="14" fill="#f7f0df" fill-opacity="0.6" stroke="#b8893a" stroke-width="1.1" stroke-dasharray="6 5"/>
+          <text class="cyc-lbl" x="60" y="158">Deliberative Cycle</text>
 
-          <!-- feedback edges -->
-          <circle class="tap" cx="470" cy="400" r="3.4"/>
-          <path class="edge-fb" d="M 470 400 L 470 378" marker-end="url(#arrA)"/>
-          <text class="fba" x="482" y="392" text-anchor="start">observe</text>
-          <path class="edge-fb" d="M 470 302 L 470 276" marker-end="url(#arrA)"/>
-          <text class="fba" x="482" y="292" text-anchor="start">regulate</text>
+          <!-- forward edges (cycle row) -->
+          <path class="edge" d="M 240 222 L 264 222" marker-end="url(#arr)"/>
+          <path class="edge" d="M 440 222 L 464 222" marker-end="url(#arr)"/>
+          <path class="edge" d="M 640 222 L 664 222" marker-end="url(#arr)"/>
+          <path class="edge" d="M 840 222 L 864 222" marker-end="url(#arr)"/>
+          <path class="edge" d="M 1040 222 L 1088 222" marker-end="url(#arr)"/>
+          <text class="arc" x="1064" y="214" text-anchor="middle">commit</text>
 
-          <!-- World / substrate -->
-          <g transform="translate(80,220)">
-            <rect class="node-loop" x="-78" y="-38" width="156" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">World</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">substrate · self-model</text>
-            <a href="/asrs/"><g transform="translate(-30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
-            <a href="/ptocs/"><g transform="translate(30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PTOCS</text></g></a>
+          <!-- substrate risers: perceive + reads -->
+          <path class="edge" d="M 152 510 L 152 176" marker-end="url(#arr)"/>
+          <text class="arc" x="136" y="344" text-anchor="middle" transform="rotate(-90 136 344)">perceive</text>
+          <path class="edge-sub" d="M 352 510 L 352 176" marker-end="url(#arr)"/>
+          <text class="arc" x="336" y="344" text-anchor="middle" transform="rotate(-90 336 344)">reads</text>
+
+          <!-- return arc: act · modify world -->
+          <path class="edge" d="M 1176 268 L 1176 624 Q 1176 640 1160 640 L 168 640 Q 152 640 152 624 L 152 602" marker-end="url(#arr)"/>
+          <text class="arc" x="660" y="632" text-anchor="middle">act · modify world</text>
+
+          <!-- feedback spurs -->
+          <circle class="tap" cx="820" cy="640" r="3.4"/>
+          <path class="edge-fb" d="M 820 640 L 820 602" marker-end="url(#arrA)"/>
+          <text class="fba" x="832" y="624" text-anchor="start">observe</text>
+          <path class="edge-fb" d="M 820 510 L 820 348" marker-end="url(#arrA)"/>
+          <text class="fba" x="832" y="432" text-anchor="start">regulate</text>
+
+          <!-- substrate foundation panel -->
+          <rect x="60" y="502" width="572" height="108" rx="10" fill="#f3ecdb" fill-opacity="0.55" stroke="#dccdb0" stroke-width="0.6"/>
+          <text class="reglab" x="346" y="492" text-anchor="middle">Substrate · what the agent is &amp; is in</text>
+
+          <!-- World -->
+          <g transform="translate(152,556)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top-sub" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num-sub" x="-78" y="-25">WORLD</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">World</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">environment</text>
+            <text class="note" x="0" y="32" text-anchor="middle">perceived · acted</text>
+          </g>
+
+          <!-- Agent State -->
+          <g transform="translate(352,556)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top-sub" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num-sub" x="-78" y="-25">SUBSTRATE</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Agent State</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">world &amp; self-model</text>
+            <a href="/asrs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
+            <a href="/ptocs/"><g transform="translate(30,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PTOCS</text></g></a>
           </g>
 
           <!-- Perception -->
-          <g transform="translate(270,120)">
-            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Perception</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">acquire information</text>
-            <a href="/prs/"><g transform="translate(-30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRS</text></g></a>
-            <a href="/pkts/"><g transform="translate(30,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PKTS</text></g></a>
+          <g transform="translate(152,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">01</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Perception</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">acquire information</text>
+            <a href="/prs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRS</text></g></a>
+            <a href="/pkts/"><g transform="translate(30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PKTS</text></g></a>
           </g>
 
           <!-- Situation Model -->
-          <g transform="translate(470,120)">
-            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Situation Model</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">state estimate</text>
-            <text x="0" y="27" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#a89e8f" font-style="italic">no dedicated system yet</text>
+          <g transform="translate(352,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">02</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Situation Model</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">state estimate</text>
+            <text class="note" x="0" y="32" text-anchor="middle">no dedicated system yet</text>
+          </g>
+
+          <!-- Intent Management -->
+          <g transform="translate(552,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">03</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Intent Management</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">active intent set</text>
+            <text class="note" x="0" y="32" text-anchor="middle">no dedicated system yet</text>
           </g>
 
           <!-- Decision -->
-          <g transform="translate(670,120)">
-            <rect class="node" x="-70" y="-38" width="140" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Decision</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">choose</text>
-            <a href="/pps/"><g transform="translate(0,20)"><rect class="tool-bg" x="-24" y="-11" width="48" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PPS</text></g></a>
+          <g transform="translate(752,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">04</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Decision</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">choose</text>
+            <a href="/pps/"><g transform="translate(0,31)"><rect class="tool-bg" x="-24" y="-11" width="48" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PPS</text></g></a>
           </g>
 
           <!-- Action Selection -->
-          <g transform="translate(670,220)">
-            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Action Selection</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">commit to action</text>
-            <a href="/aoos/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AOOS</text></g></a>
+          <g transform="translate(952,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">05</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Action Selection</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">commit to action</text>
+            <a href="/aoos/"><g transform="translate(0,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AOOS</text></g></a>
           </g>
 
           <!-- Execution -->
-          <g transform="translate(840,220)">
-            <rect class="node" x="-70" y="-38" width="140" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Execution</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">carry out</text>
-            <a href="/awes/"><g transform="translate(0,20)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AWES</text></g></a>
+          <g transform="translate(1176,222)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">06</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Execution</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">carry out</text>
+            <a href="/awes/"><g transform="translate(0,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AWES</text></g></a>
           </g>
 
           <!-- Feedback -->
-          <g transform="translate(470,340)">
-            <rect class="node" x="-78" y="-38" width="156" height="76" rx="10"/>
-            <text class="lbl" x="0" y="-14" text-anchor="middle">Feedback</text>
-            <text class="sub" x="0" y="2" text-anchor="middle">observe · regulate</text>
-            <a href="/pras/"><g transform="translate(0,20)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRAS</text></g></a>
+          <g transform="translate(820,556)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num" x="-78" y="-25">07</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Feedback</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">observe · regulate</text>
+            <a href="/pras/"><g transform="translate(0,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRAS</text></g></a>
           </g>
 
           <!-- legend -->
-          <g transform="translate(150,450)">
-            <line class="edge" x1="0" y1="0" x2="26" y2="0"/>
-            <text class="leg" x="34" y="4">forward · sense → decide → act</text>
-            <line class="edge-fb" x1="240" y1="0" x2="266" y2="0"/>
-            <text class="leg" x="274" y="4">feedback · regulation</text>
-            <rect class="cycle" x="402" y="-7" width="26" height="14"/>
-            <text class="leg" x="436" y="4">deliberative cycle · inner sub-loop</text>
+          <line x1="334" y1="662" x2="986" y2="662" stroke="#e0d2b0" stroke-width="0.5"/>
+          <g transform="translate(334,678)">
+            <line class="edge" x1="0" y1="0" x2="24" y2="0"/>
+            <text class="leg" x="32" y="4">forward flow</text>
+            <line class="edge-sub" x1="114" y1="0" x2="138" y2="0"/>
+            <text class="leg" x="146" y="4">substrate · read by the cycle</text>
+            <line class="edge-fb" x1="334" y1="0" x2="358" y2="0"/>
+            <text class="leg" x="366" y="4">feedback · regulation</text>
+            <rect x="512" y="-6" width="24" height="12" rx="2" fill="none" stroke="#b8893a" stroke-width="1.1" stroke-dasharray="6 5"/>
+            <text class="leg" x="544" y="4">deliberative cycle</text>
           </g>
         </svg>
-        <div class="diagram-caption">Each stage of the agent control loop, and the Autoregia tool that implements it · click a tool chip to enter it</div>
+        <div class="diagram-caption">Each stage of the loop, and the Autoregia tool that realizes it · the Situation Model and Intent Management stages have no dedicated system yet · click a tool chip to enter it</div>
       </div>
     </div>
   </section>
