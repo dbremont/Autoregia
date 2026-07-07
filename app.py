@@ -64,6 +64,7 @@ SUBSYSTEMS = [
     ("peos", "Personal External Observation System", "peos/server.py"),
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
+    ("aias", "Agent Intent Aid System", "aias/server.py"),
     ("aoos", "Agent Operation Organization System", "aoos/server.py"),
     ("awes", "Automated Work Execution System", "awes/server.py"),
     ("pras", "Personal Reflection & Adaptation System", "pras/server.py"),

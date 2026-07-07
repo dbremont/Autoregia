@@ -271,7 +271,7 @@
   <section class="lens-panel" id="lens-map">
     <div class="lens-inner">
       <div class="diagram">
-        <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon) and the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), the Situation Model and Intent Management stages have no dedicated system yet, PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
+        <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon) and the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
@@ -393,7 +393,7 @@
             <text class="num" x="-78" y="-25">03</text>
             <text class="lbl" x="0" y="-6" text-anchor="middle">Intent Management</text>
             <text class="cap" x="0" y="12" text-anchor="middle">active intent set</text>
-            <text class="note" x="0" y="32" text-anchor="middle">no dedicated system yet</text>
+            <a href="/aias/"><g transform="translate(0,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">AIAS</text></g></a>
           </g>
 
           <!-- Decision -->
@@ -449,7 +449,7 @@
             <text class="leg" x="544" y="4">deliberative cycle</text>
           </g>
         </svg>
-        <div class="diagram-caption">Each stage of the loop, and the Autoregia tool that realizes it · the Situation Model and Intent Management stages have no dedicated system yet · click a tool chip to enter it</div>
+        <div class="diagram-caption">Each stage of the loop, and the Autoregia tool that realizes it · the Situation Model stage alone has no dedicated system yet · click a tool chip to enter it</div>
       </div>
     </div>
   </section>
@@ -470,6 +470,11 @@
       <a class="card" href="/pkts/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Keyword Tracking System</h2><span class="abbr">PKTS</span></div><p>A perception / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
       <a class="card" href="/pais/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Application Interaction System</h2><span class="abbr">PAIS</span></div><p>Records mouse &amp; focus interaction and joins it with PKTS keystrokes to surface application-interaction analytics — where time and input actually go, per app.</p><span class="arrow">Enter pais/ →</span></a>
       <a class="card" href="/peos/"><span class="tag">loop stage · Perception · external world</span><div class="head"><h2>Personal External Observation System</h2><span class="abbr">PEOS</span></div><p>Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an observational event — the external-world sense organ, with an analytical layer that turns the stream into orientation.</p><span class="arrow">Enter peos/ →</span></a>
+    </div>
+
+    <div class="phase"><span class="phase-label">Intent Management</span><span class="phase-rule"></span><span class="phase-stage">generate · evaluate · commit · revise intentions</span></div>
+    <div class="grid">
+      <a class="card" href="/aias/"><span class="tag">loop stage · Intent Management</span><div class="head"><h2>Agent Intent Aid System</h2><span class="abbr">AIAS</span></div><p>The central coordination layer between Perception and Deliberation — maintains the Intent Store and Intent Scheduler, and yields the Active Intent Set that directs planning and execution. Turns what the agent pursues into a maintained, revisable, resource-feasible set of commitments.</p><span class="arrow">Enter aias/ →</span></a>
     </div>
 
     <div class="phase"><span class="phase-label">Decision</span><span class="phase-rule"></span><span class="phase-stage">evaluate &amp; choose</span></div>
@@ -518,6 +523,8 @@
       map: function (r) { return { title: r.title, snippet: r.snippet, href: '/pps' + r.path }; } },
     { prefix: 'pras', label: 'PRAS',  wrap: true,
       map: function (r) { return { title: r.title, snippet: r.snippet, href: '/pras' + r.path }; } },
+    { prefix: 'aias', label: 'AIAS',  wrap: false,
+      map: function (i) { return { title: i.description || i.id, snippet: i.expected_value || ('intent · ' + (i.status || '')), href: '/aias/' }; } },
     { prefix: 'ptocs', label: 'PTOCS', wrap: false,
       map: function (e) { return { title: e.name || e.title || e.id, snippet: e.summary || e.description || '', href: '/ptocs/' }; } },
     { prefix: 'prs',  label: 'PRS',   wrap: false,

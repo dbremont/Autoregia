@@ -78,6 +78,8 @@ The Abstract Agency Framework is instantiated by a set of cooperating systems, e
 | **PRS** | Personal Recording System | Perception | Externalizes internal & environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop. |
 | **PKTS** | Personal Keyword Tracking System | Perception · Audit | Tracks resource usage and keyword attention over time; a longitudinal signal feeding back into the loop. |
 | **PAIS** | Personal Application Interaction System | Perception | Records mouse & focus interaction; joins PKTS to surface per-application interaction analytics. |
+| **PEOS** | Personal External Observation System | Perception · External World | Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and stores each item as an observational event; an analytical layer turns the stream into orientation. |
+| **AIAS** | Agent Intent Aid System | Intent Management | Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the **Active Intent Set** that directs planning and execution. |
 | **AOOS** | Agent Operation Organization System | Action Selection | Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan. |
 | **AWES** | Automated Work Execution System | Execution | Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop. |
 | **PRAS** | Personal Reflection & Adaptation System | Feedback | A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations. |

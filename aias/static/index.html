@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIAS — Agent Intent Aid System</title>
+  <link rel="stylesheet" href="/aias/css/variables.css">
+  <link rel="stylesheet" href="/aias/css/base.css">
+  <link rel="stylesheet" href="/aias/css/layout.css">
+  <link rel="stylesheet" href="/aias/css/components.css">
+  <link rel="stylesheet" href="/aias/css/views.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <span class="brand-wordmark">Agent <em>Intent</em> Aid System</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><ai-icon name="search" size="16"></ai-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search the Intent Store…" autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <span class="kbd">⌘K</span>
+      <button class="btn btn-ghost btn-sm" id="btnCapture" title="Quick capture (candidate)"><ai-icon name="inbox" size="15"></ai-icon> Capture</button>
+      <button class="btn btn-secondary btn-sm" id="btnExport" title="Export JSON"><ai-icon name="download" size="15"></ai-icon></button>
+      <button class="btn btn-primary btn-sm" id="btnNew" title="New intention (N)"><ai-icon name="plus" size="15"></ai-icon> New</button>
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Console</div>
+      <ul class="sidebar-nav" id="sidebarNav"></ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Reference</div>
+      <ul class="sidebar-nav">
+        <li><a href="/" ><span class="nav-icon"><ai-icon name="compass" size="17"></ai-icon></span> Autoregia index</a></li>
+        <li><a href="/aias/README.md" download><span class="nav-icon"><ai-icon name="bookmark" size="17"></ai-icon></span> AIAS spec</a></li>
+      </ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">Neighbors</div>
+      <ul class="sidebar-nav">
+        <li><a href="/prs/"><span class="nav-icon"><ai-icon name="inbox" size="17"></ai-icon></span> PRS · perception</a></li>
+        <li><a href="/pps/"><span class="nav-icon"><ai-icon name="bookmark" size="17"></ai-icon></span> PPS · policy</a></li>
+        <li><a href="/aoos/"><span class="nav-icon"><ai-icon name="layers" size="17"></ai-icon></span> AOOS · planning</a></li>
+        <li><a href="/pras/"><span class="nav-icon"><ai-icon name="refresh-cw" size="17"></ai-icon></span> PRAS · feedback</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">AIAS · Intent Management</div>
+      <div class="colophon-meta">CONTROL LOOP · INTENT STAGE</div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═══ -->
+  <main class="app-main" id="appContent"></main>
+
+</div>
+
+<!-- ═══ Toast ═══ -->
+<div class="toast" id="toast"></div>
+
+<script src="/aias/js/icons.js"></script>
+<script src="/aias/js/store.js"></script>
+<script src="/aias/js/app.js"></script>
+<script src="/aias/js/board.js"></script>
+<script src="/aias/js/dashboard.js"></script>
+<script src="/aias/js/editor.js"></script>
+<script src="/aias/js/command-palette.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { AI.Cmd.init(); AI.app.init(); });
+</script>
+
+</body>
+</html>
