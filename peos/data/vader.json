@@ -1,0 +1,41 @@
+{
+  "good": 2.0, "great": 3.1, "excellent": 3.4, "amazing": 3.6, "awesome": 3.5, "fantastic": 3.5, "wonderful": 3.4,
+  "best": 3.2, "better": 1.8, "love": 3.2, "loved": 3.2, "loves": 3.2, "lovely": 2.4, "like": 1.2, "liked": 1.2,
+  "nice": 1.6, "happy": 2.7, "glad": 2.4, "brilliant": 3.0, "perfect": 3.1, "perfectly": 2.6, "beautiful": 2.6,
+  "fun": 2.0, "enjoy": 2.2, "enjoyed": 2.2, "enjoying": 2.2, "enjoyable": 2.2, "impressive": 2.6, "remarkable": 2.6,
+  "positive": 2.0, "success": 2.4, "successful": 2.6, "win": 2.4, "winning": 2.4, "wins": 2.4, "won": 2.2,
+  "benefit": 1.8, "benefits": 1.8, "helpful": 2.0, "help": 1.4, "helps": 1.4, "support": 1.4, "improve": 1.6,
+  "improved": 1.6, "improvement": 1.6, "improves": 1.6, "easy": 1.6, "simple": 1.0, "clear": 1.0, "fast": 1.2,
+  "cool": 1.6, " neat": 1.6, "neat": 1.6, "solid": 1.6, "strong": 1.6, "smart": 2.0, "clever": 2.0, "elegant": 2.2,
+  "favorite": 2.6, "favourite": 2.6, "recommend": 2.4, "recommended": 2.4, "thanks": 2.0, "thank": 2.0,
+  "incredible": 3.0, "outstanding": 3.0, "superb": 3.0, "marvelous": 2.8, "delightful": 2.6, "pleasant": 1.8,
+  " breakthrough": 2.6, "breakthrough": 2.6, "innovative": 2.2, "innovation": 2.0, "exciting": 2.6, "excited": 2.4,
+
+  "bad": -2.0, "terrible": -3.1, "awful": -3.0, "horrible": -3.2, "worst": -3.2, "worse": -1.8, "poor": -2.0,
+  "hate": -3.0, "hated": -3.0, "hates": -3.0, "dislike": -2.0, "ugly": -2.2, "stupid": -2.2, "dumb": -2.0,
+  "annoying": -2.2, "annoyed": -2.0, "frustrating": -2.4, "frustrated": -2.2, "frustration": -2.2, "disappointed": -2.4,
+  "disappointing": -2.4, "disappointment": -2.4, "sad": -2.0, "unhappy": -2.2, "angry": -2.6, "anger": -2.4,
+  "furious": -3.0, "ridiculous": -2.4, "absurd": -2.0, "useless": -2.6, "worthless": -2.6, "broken": -2.2,
+  "bug": -1.6, "bugs": -1.6, "buggy": -2.0, "crash": -2.0, "crashes": -2.0, "crashed": -2.0, "fail": -2.2,
+  "fails": -2.2, "failed": -2.4, "failure": -2.6, "problem": -1.8, "problems": -1.8, "issue": -1.4, "issues": -1.4,
+  "wrong": -1.8, "wrongly": -1.6, "slow": -1.4, "boring": -1.8, "bored": -1.6, "confusing": -1.8, "confused": -1.6,
+  "mess": -1.6, "messy": -1.8, "dangerous": -2.2, "threat": -2.2, "threatening": -2.6, "fear": -2.0, "afraid": -2.0,
+  "scared": -2.2, "worried": -1.8, "worry": -1.6, "concerning": -1.8, "concerned": -1.6, "alarm": -2.0,
+  "alarming": -2.4, "disaster": -3.0, "catastrophe": -3.2, "crisis": -2.6, "collapse": -2.6, "corrupt": -2.6,
+  "corruption": -2.6, "scandal": -2.6, "fraud": -2.6, "lie": -2.0, "lies": -2.0, "lying": -2.0, "fake": -1.8,
+  "attack": -2.0, "attacks": -2.0, "attacked": -2.2, "kill": -2.4, "kills": -2.4, "killed": -2.6, "death": -2.6,
+  "dead": -2.2, "war": -2.0, "violence": -2.6, "violent": -2.6, "harm": -2.0, "harmful": -2.4, "damage": -2.0,
+  "damaged": -2.2, "suffer": -2.0, "suffers": -2.0, "suffering": -2.2, "pain": -2.0, "painful": -2.2, "hurt": -1.8,
+  "negative": -1.8, "weak": -1.6, "vulnerable": -1.6, "exploit": -1.8, "breach": -2.0, "leak": -1.8, "vulnerable": -1.6,
+  "overpriced": -1.8, "expensive": -1.0, "costly": -1.4, "loss": -1.8, "lost": -1.6, "losing": -1.8,
+
+  "not": -1.0, "no": -1.0, "never": -1.2, "none": -0.8, "nothing": -0.6, "neither": -0.6, "nor": -0.6,
+  "isn't": -1.0, "wasn't": -1.0, "aren't": -1.0, "weren't": -1.0, "couldn't": -1.2, "wouldn't": -1.2,
+  "shouldn't": -1.2, "doesn't": -1.0, "didn't": -1.2, "don't": -1.0, "cannot": -1.4, "can't": -1.2, "won't": -1.2,
+
+  "very": 0.8, "really": 0.9, "extremely": 1.2, "incredibly": 1.2, "totally": 1.0, "absolutely": 1.2,
+  "completely": 0.9, "highly": 1.0, "so": 0.6, "too": 0.5, "quite": 0.5, "rather": 0.4,
+  "barely": -0.7, "hardly": -0.7, "scarcely": -0.7, "slightly": 0.3, "somewhat": 0.3,
+
+  "but": 0.0, "however": -0.4, "although": -0.3, "though": -0.2, "despite": -0.2, "yet": -0.2, "still": 0.2
+}

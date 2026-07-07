@@ -1,0 +1,57 @@
+[
+  {
+    "id": "TOPIC-hackernews-ai",
+    "doc_type": "topic",
+    "topic_id": "hackernews-ai",
+    "source": "hackernews",
+    "query": "AI",
+    "interval_s": 0,
+    "enabled": true,
+    "created_at": "2025-07-06T00:00:00Z",
+    "note": "Seed: Hacker News comments mentioning AI"
+  },
+  {
+    "id": "TOPIC-lobsters-programming",
+    "doc_type": "topic",
+    "topic_id": "lobsters-programming",
+    "source": "lobsters",
+    "query": "t:programming",
+    "interval_s": 0,
+    "enabled": true,
+    "created_at": "2025-07-06T00:00:00Z",
+    "note": "Seed: Lobsters stories tagged 'programming'"
+  },
+  {
+    "id": "TOPIC-reddit-worldnews",
+    "doc_type": "topic",
+    "topic_id": "reddit-worldnews",
+    "source": "reddit",
+    "query": "worldnews",
+    "interval_s": 0,
+    "enabled": true,
+    "created_at": "2025-07-06T00:00:00Z",
+    "note": "Seed: newest posts on r/worldnews"
+  },
+  {
+    "id": "TOPIC-mastodon-ai",
+    "doc_type": "topic",
+    "topic_id": "mastodon-ai",
+    "source": "mastodon",
+    "query": "AI",
+    "interval_s": 0,
+    "enabled": true,
+    "created_at": "2025-07-06T00:00:00Z",
+    "note": "Seed: #AI hashtag across configured Mastodon instances"
+  },
+  {
+    "id": "TOPIC-gdelt-ai",
+    "doc_type": "topic",
+    "topic_id": "gdelt-ai",
+    "source": "gdelt",
+    "query": "artificial intelligence",
+    "interval_s": 0,
+    "enabled": true,
+    "created_at": "2025-07-06T00:00:00Z",
+    "note": "Seed: GDELT news articles about AI"
+  }
+]

@@ -12,6 +12,7 @@ index at the root.
     /prs/...     Personal Recording System         (VSM System 1 — Perception)
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
     /pais/...   Personal Application Interaction System  (Accounting / audit)
+    /peos/...   Personal External Observation System  (Perception — external world)
     /ptocs/...   Personal Technical Object Catalog (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
@@ -60,6 +61,7 @@ SUBSYSTEMS = [
     ("prs", "Personal Recording System", "prs/server.py"),
     ("pkts", "Personal Keyword Tracking System", "pkts/server.py"),
     ("pais", "Personal Application Interaction System", "pais/server.py"),
+    ("peos", "Personal External Observation System", "peos/server.py"),
     ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
     ("pps", "Personal Policy System", "pps/server.py"),
     ("aoos", "Agent Operation Organization System", "aoos/server.py"),

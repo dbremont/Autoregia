@@ -1,0 +1,148 @@
+/* ════════════════════════════════════════════════════════════
+   LOOP Base Styles — Reset, Typography, Global
+   Editorial refinement: OpenType features, measure, paper grain
+   (mirrors PRS base.css; prs-icon -> peos-icon)
+   ════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: var(--text-md);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variant-ligatures: common-ligatures;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: var(--leading-normal);
+  min-height: 100vh;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Faint paper grain — premium substrate, respects reduced-transparency */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.app-shell { position: relative; z-index: 1; }
+
+@media (prefers-reduced-transparency: reduce) { body::before { display: none; } }
+
+/* ── Typography ──────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--ink-0);
+  letter-spacing: var(--tracking-tight);
+}
+h1 { font-size: var(--text-2xl); }
+h2 { font-size: var(--text-xl); letter-spacing: var(--tracking-snug); }
+h3 { font-size: var(--text-lg); }
+h4 { font-size: var(--text-md); font-weight: 600; letter-spacing: var(--tracking-snug); }
+
+p { margin-bottom: var(--space-3); }
+p:last-child { margin-bottom: 0; }
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--color-accent-hover); }
+
+strong { font-weight: 600; color: var(--ink-0); }
+em { font-style: italic; }
+small { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--color-surface-2);
+  color: var(--ink-2);
+  padding: 0.12em 0.38em;
+  border-radius: var(--radius-xs);
+  border: var(--hairline) solid var(--color-border-light);
+}
+
+/* Tabular figures everywhere data appears */
+.stat-value, .stat-card, .data-table, .matrix-cell,
+.text-mono, code, .detail-id, .folio, .data-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reading measure for prose blocks */
+.measure { max-width: var(--measure); }
+
+/* ── Editorial eyebrow (small-caps section label) ─────── */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--gold);
+  font-variant: small-caps;
+}
+
+/* ── Selection ───────────────────────────────────────── */
+::selection { background: var(--oxford-tint); color: var(--oxford-deep); }
+
+/* ── Focus (refined double-ring) ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--oxford);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* ── Scrollbar (webkit) ───────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--ink-8); border-radius: var(--radius-pill);
+  border: 2px solid transparent; background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-6); background-clip: padding-box; }
+
+/* ── Icon element ─────────────────────────────────────── */
+.peos-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+peos-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+
+/* ── Keycap styling ───────────────────────────────────── */
+.kbd, .kbd-hint {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 19px; padding: 0 6px;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--ink-3);
+  background: linear-gradient(180deg, #fff 0%, var(--color-surface-2) 100%);
+  border: var(--hairline) solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 0 rgba(30,28,25,0.04);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Utility ──────────────────────────────────────────── */
+.text-muted    { color: var(--color-text-muted); }
+.text-faint    { color: var(--color-text-faint); }
+.text-secondary{ color: var(--color-text-secondary); }
+.text-accent   { color: var(--color-accent); }
+.text-sm       { font-size: var(--text-sm); }
+.text-xs       { font-size: var(--text-xs); }
+.text-mono     { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.font-display  { font-family: var(--font-display); }
+.truncate      { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
