@@ -38,11 +38,12 @@ from peos.sources.base import Topic, now_ms, obs_id, slugify
 app = Flask(__name__, static_folder="static")
 _DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 SEED_PATH = os.path.join(_DATA_DIR, "mock_topics.json")
+NITTER_SEED_PATH = os.path.join(_DATA_DIR, "nitter_handles.json")
 with open(os.path.join(_DATA_DIR, "vader.json"), "r", encoding="utf-8") as _fh:
     VADER = json.load(_fh)
 with open(os.path.join(_DATA_DIR, "stopwords-en.json"), "r", encoding="utf-8") as _fh:
     STOPWORDS = json.load(_fh)
-store = Store("peos", seed_paths=[SEED_PATH])
+store = Store("peos", seed_paths=[SEED_PATH, NITTER_SEED_PATH])
 CLUSTERS_DOC_ID = "CLUSTERS-current"
 
 

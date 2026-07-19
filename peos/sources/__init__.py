@@ -11,6 +11,7 @@ from .gdelt import GDELTSource
 from .hackernews import HackerNewsSource
 from .lobsters import LobstersSource
 from .mastodon import MastodonSource
+from .nitter import NitterSource
 from .reddit_rss import RedditSource
 
 _INSTANCES = {
@@ -19,6 +20,7 @@ _INSTANCES = {
     RedditSource.name: RedditSource(),
     MastodonSource.name: MastodonSource(),
     GDELTSource.name: GDELTSource(),
+    NitterSource.name: NitterSource(),
 }
 
 SOURCE_REGISTRY: dict[str, Source] = _INSTANCES

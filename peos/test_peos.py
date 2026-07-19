@@ -31,7 +31,7 @@ if not _couch_ok:
 
 import peos.server as srv  # noqa: E402
 import peos.sources as src_pkg  # noqa: E402
-from peos.sources import hackernews, lobsters, reddit_rss, gdelt, mastodon  # noqa: E402
+from peos.sources import hackernews, lobsters, reddit_rss, gdelt, mastodon, nitter  # noqa: E402
 from peos.sources.base import Topic, Observation, obs_id  # noqa: E402
 
 
@@ -125,6 +125,82 @@ def test_mastodon_strips_html_and_multi_instance(monkeypatch):
     o = obs[0]
     assert o.body == "hello world"              # html stripped
     assert o.score == 3 and o.native_id.endswith(":1")
+
+
+def test_nitter_parse_and_at_strip(monkeypatch):
+    class _Feed:
+        entries = [{
+            "id": "1234567890",
+            "title": "teortexasTex: first line of the tweet text",
+            "link": "https://nitter.net/teortexasTex/status/1234567890#m",
+            "author": "@teortexasTex",
+            "summary": "<p>full tweet <a>body</a> text</p>",
+            "published_parsed": (2026, 7, 19, 12, 0, 0, 0, 0, 0),  # 1784553600
+        }]
+    monkeypatch.setattr(nitter, "get_feed", lambda *a, **k: _Feed())
+    obs = nitter.NitterSource().poll(
+        Topic("n-t", "nitter", "@teortexasTex"), since_ms=None)
+    assert len(obs) == 1
+    o = obs[0]
+    assert o.source == "nitter" and o.source_type == "post"
+    assert o.native_id == "1234567890"                      # guid used; globally unique on X
+    assert o.native_url == "https://twitter.com/teortexasTex/status/1234567890"
+    assert o.author == "teortexasTex"                       # @ stripped
+    assert o.title == "first line of the tweet text"        # handle prefix stripped
+    assert o.body == "full tweet body text"                 # html stripped
+    assert o.observed_at_ms > 0
+
+
+def test_nitter_retweet_uses_original_author(monkeypatch):
+    # Nitter surfaces retweets with the original author in dc:creator and the
+    # status id is the original tweet's. The watched handle appears only in the
+    # "RT by @<handle>:" title prefix.
+    class _Feed:
+        entries = [{
+            "id": "2074973674332123157",
+            "title": "RT by @karpathy: Rewriting Bun in Rust https://bun.com/x",
+            "link": "https://nitter.net/jarredsumner/status/2074973674332123157#m",
+            "author": "@jarredsumner",
+            "summary": "<p>Rewriting Bun in Rust</p>",
+            "published_parsed": (2026, 7, 8, 21, 47, 29, 0, 0, 0),
+        }]
+    monkeypatch.setattr(nitter, "get_feed", lambda *a, **k: _Feed())
+    obs = nitter.NitterSource().poll(
+        Topic("n-rt", "nitter", "karpathy"), since_ms=None)
+    assert len(obs) == 1
+    o = obs[0]
+    assert o.native_id == "2074973674332123157"
+    assert o.author == "jarredsumner"                       # original author, not watcher
+    assert o.native_url == "https://twitter.com/jarredsumner/status/2074973674332123157"
+    assert o.title.startswith("Rewriting Bun in Rust")      # "RT by @karpathy:" stripped
+    assert o.raw["watched_handle"] == "karpathy"
+
+
+def test_nitter_multi_instance_failover(monkeypatch):
+    calls = []
+
+    def fake(url, *a, **k):
+        calls.append(url)
+        if "nitter.net/" in url:
+            raise RuntimeError("connection refused")        # primary down
+        # second instance serves one tweet
+        class _Feed:
+            entries = [{
+                "link": "https://nitter.privacydev.net/karpathy/status/999",
+                "title": "karpathy: hello world",
+                "summary": "<p>hello</p>",
+                "published_parsed": (2026, 7, 19, 12, 0, 0, 0, 0, 0),
+            }]
+        return _Feed()
+
+    monkeypatch.setattr(nitter, "get_feed", fake)
+    src = nitter.NitterSource()
+    assert len(src.instances) >= 2                            # multi-instance configured
+    obs = src.poll(Topic("n-m", "nitter", "karpathy"), since_ms=None)
+    assert len(obs) == 1 and obs[0].native_id == "999"
+    # the failing primary was tried and skipped, the second succeeded
+    assert any("nitter.net" in c for c in calls)
+    assert any("nitter.privacydev.net" in c for c in calls)
 
 
 def test_since_ms_filter(monkeypatch):

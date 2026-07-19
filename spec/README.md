@@ -100,12 +100,13 @@ Feedback
 World: Environment | Internal Environment
       │
       ▼
- Perception: Personal Recording System
-        -> Null.
-        -> Task Regitry Mechanism -> Documentation
-        -> Reflection
-        -> Audit Process
-        -> ...
+  Perception: Personal Recording System        (internal events)
+            | Personal External Observation System (external events: PEOS)
+         -> Null.
+         -> Task Regitry Mechanism -> Documentation
+         -> Reflection
+         -> Audit Process
+         -> ...
 Situation Model
       │
       ▼
