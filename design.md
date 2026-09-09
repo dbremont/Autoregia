@@ -6,7 +6,7 @@
 
 **Normative source:** [`spec/ui.spec`](spec/ui.spec) — tokens, typography,
 components, interaction, deviation policy.
-**Reference implementation:** [`module/prs/static/`](module/prs/static/) — when in doubt,
+**Reference implementation:** [`app/module/prs/static/`](app/module/prs/static/) — when in doubt,
 the PRS implementation wins over prose.
 
 ---
@@ -163,7 +163,7 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 
 - [`spec/ui.spec`](spec/ui.spec) — normative specification (§3 tokens, §4
   typography, §7 component catalog, §11 implementation conventions).
-- [`module/prs/static/css/variables.css`](module/prs/static/css/variables.css) — canonical
+- [`app/module/prs/static/css/variables.css`](app/module/prs/static/css/variables.css) — canonical
   token file (extended ramp).
-- [`module/pps/static/css/policy.css`](module/pps/static/css/policy.css) — canonical
+- [`app/module/pps/static/css/policy.css`](app/module/pps/static/css/policy.css) — canonical
   standalone token block.

@@ -34,6 +34,7 @@ import sys
 from flask import Flask, jsonify, send_from_directory
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(ROOT)  # repository root: docs, spec, img/ live here
 DEFAULT_PORT = int(os.environ.get("AUTOREGIA_PORT", "8080"))
 
 app = Flask(__name__, static_folder=None)
@@ -103,7 +104,7 @@ def about():
 
 @app.route("/img/<path:filename>")
 def control_loop(filename):
-    return send_from_directory(ROOT, f"img/{filename}")
+    return send_from_directory(REPO, f"img/{filename}")
 
 
 @app.route("/docs.html")

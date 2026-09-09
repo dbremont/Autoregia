@@ -29,4 +29,4 @@ logs/
 
 # OS files
 Thumbs.db
-pwos/config/
+app/module/pwos/config/

@@ -14,4 +14,4 @@ RUN find . -name requirements.txt | xargs cat \
 
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8080
-CMD ["python", "app.py"]
+CMD ["python", "app/app.py"]
