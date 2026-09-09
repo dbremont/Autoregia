@@ -42,25 +42,26 @@
       --ring:0 0 0 3px rgba(122,26,42,.16);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"kern","liga"}
-    .wrap{max-width:920px;margin:0 auto;padding:0 28px}
+    body{font-family:var(--serif);font-size:16px;background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"kern","liga"}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 32px}
     a{color:var(--accent)}
+    a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
     ::selection{background:var(--gold-tint);color:var(--ink-0)}
 
-    /* ── Masthead ── */
-    header.masthead{padding:64px 0 24px;text-align:center}
-    .eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px}
-    .eyebrow::before,.eyebrow::after{content:"—";margin:0 12px;color:var(--rule)}
-    h1.title{font-size:clamp(44px,7vw,68px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:18px}
-    h1.title em{font-style:italic;color:var(--accent)}
-    .lede{font-size:18px;color:var(--ink-soft);max-width:600px;margin:0 auto;font-style:italic;line-height:1.55}
-    .more{font-family:var(--sans);font-size:13px;color:var(--muted);margin-top:14px}
-    .more a{color:var(--accent);text-decoration:none;border-bottom:0.5px solid var(--rule)}
+    /* ── Masthead — editorial, left axis ── */
+    header.masthead{padding:84px 0 0;text-align:left}
+    .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:650;display:flex;align-items:center;gap:14px}
+    .eyebrow::before{content:"";display:inline-block;width:30px;height:1px;background:var(--gold)}
+    h1.title{font-size:clamp(58px,8.5vw,94px);font-weight:300;letter-spacing:-.028em;line-height:.98;margin:20px 0 0}
+    h1.title em{font-style:italic;font-weight:400;color:var(--accent)}
+    .lede{font-size:19px;color:var(--ink-3);max-width:58ch;margin:22px 0 0;font-style:italic;line-height:1.6}
+    .more{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin-top:16px}
+    .more a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule)}
     .more a:hover{border-color:var(--accent)}
-    .gold-rule{height:1px;background:var(--gold);width:64px;margin:28px auto;opacity:.7}
+    .gold-rule{height:2px;background:var(--gold);width:64px;margin:36px 0 0}
 
-    /* ── Current work session (discreet line) ── */
-    .session-line{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:16px 0 -4px;letter-spacing:.01em}
+    /* ── Current work session (discreet line, left axis) ── */
+    .session-line{display:flex;align-items:center;justify-content:flex-start;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);margin:28px 0 0;letter-spacing:.01em}
     .session-line .sl-dot{width:6px;height:6px;border-radius:999px;background:#4a6b43;display:inline-block;flex:0 0 auto}
     .session-line .sl-text{color:var(--ink-soft);max-width:46ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .session-line .sl-time{color:var(--muted);font-variant-numeric:tabular-nums}
@@ -68,20 +69,20 @@
     .session-line .sl-link:hover{text-decoration:underline}
 
     /* ── Quick actions ── */
-    section.actions{padding:4px 0 8px}
-    .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    a.action{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--surface);border:0.5px solid var(--rule);border-radius:8px;padding:14px 16px;transition:transform .16s,box-shadow .16s,border-color .16s}
+    section.actions{padding:40px 0 0}
+    .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+    a.action{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;transition:transform .16s,box-shadow .16s,border-color .16s}
     a.action:hover{transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(28,25,22,.4);border-color:var(--gold)}
     a.action svg{flex:0 0 auto;color:var(--gold)}
-    .action .a-label{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink)}
+    .action .a-label{font-family:var(--sans);font-size:15px;font-weight:650;color:var(--ink-0)}
     .action .a-sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.03em}
 
     /* ── Situation Model (mock briefing) ── */
     section.situation{padding:16px 0 8px}
-    .sit-card{background:var(--surface);border:0.5px solid var(--rule);border-radius:10px;padding:22px 24px;box-shadow:0 1px 2px rgba(30,28,25,.03)}
+    .sit-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:22px 24px;box-shadow:0 1px 2px rgba(30,28,25,.03)}
     .sit-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
     .sit-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
-    .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:0.5px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
+    .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:1px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
     .sit-posture.warn{color:var(--accent);border-color:var(--accent);background:#faf3f4}
     .sit-posture.ok{color:#4a6b43;border-color:#4a6b43;background:#f4f7f1}
     .syn{font-size:17px;line-height:1.6;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--gold);padding:2px 0 2px 18px;margin:0 0 20px}
@@ -90,14 +91,14 @@
     .sit-sub{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
     .sit-sub.spaced{margin-top:18px}
     .att{list-style:none;padding:0;margin:0}
-    .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:0.5px solid var(--rule-soft);font-size:14px}
+    .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:14px}
     .att-item:last-child{border-bottom:0}
     .att-dot{width:8px;height:8px;border-radius:999px;background:var(--gold);display:inline-block;transform:translateY(1px)}
     .att-dot.high{background:var(--accent)}
     .att-dot.medium{background:#b07a2a}
     .att-sev{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
     .att-text{color:var(--ink-soft)}
-    .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:0.5px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
+    .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
     .att-tool:hover{text-decoration:none;background:var(--accent);color:var(--surface);border-color:var(--accent)}
     .res-item{margin-bottom:11px}
     .res-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:4px}
@@ -109,7 +110,7 @@
     .res-bar.over>span{background:var(--accent)}
     .res-bar.ok>span{background:#7ea072}
     .loop-strip{list-style:none;padding:0;margin:0}
-    .ls-item{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:baseline;padding:6px 0;border-bottom:0.5px solid var(--rule-soft);font-size:13px}
+    .ls-item{display:grid;grid-template-columns:92px 1fr auto;gap:9px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px}
     .ls-item:last-child{border-bottom:0}
     .ls-item.now{background:var(--gold-tint);margin:0 -8px;padding:6px 8px;border-bottom:1px solid var(--gold-tint)}
     .ls-stage{font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:600}
@@ -117,26 +118,27 @@
     .ls-tool{font-family:var(--mono);font-size:10px;color:var(--muted)}
     .sit-note{font-family:var(--sans);font-size:11px;color:var(--muted);text-align:center;margin-top:12px;font-style:italic}
 
-    /* ── Search ── */
-    section.search{padding:8px 0 4px}
-    .search-wrap{position:relative;max-width:560px;margin:0 auto}
-    .search-box{width:100%;font-family:var(--sans);font-size:15px;padding:12px 16px 12px 42px;border:0.5px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(30,28,25,.03);transition:border-color .16s,box-shadow .16s}
+    /* ── Search — a primary interaction, treated as one ── */
+    section.search{padding:34px 0 0}
+    .search-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+    .search-wrap{position:relative;max-width:680px}
+    .search-box{width:100%;font-family:var(--sans);font-size:17px;padding:15px 88px 15px 46px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);transition:border-color .16s,box-shadow .16s}
     .search-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,26,42,.12)}
-    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .search-hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:0.5px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--parchment);pointer-events:none}
-    .search-results{max-width:560px;margin:12px auto 0}
-    .sr-empty{font-family:var(--sans);font-size:12px;letter-spacing:.04em;color:var(--muted);text-align:center;padding:8px 0}
-    .sr-item{display:block;text-decoration:none;color:inherit;padding:11px 14px;border:0.5px solid var(--rule);border-radius:6px;background:var(--surface);margin-bottom:8px;transition:border-color .16s,transform .16s,box-shadow .16s}
+    .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .search-hint{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:5px;padding:2px 8px;background:var(--parchment);pointer-events:none}
+    .search-results{max-width:680px;margin:14px 0 0}
+    .sr-empty{font-family:var(--sans);font-size:12.5px;letter-spacing:.04em;color:var(--muted);text-align:left;padding:8px 0}
+    .sr-item{display:block;text-decoration:none;color:inherit;padding:13px 16px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);margin-bottom:8px;transition:border-color .16s,transform .16s,box-shadow .16s}
     .sr-item:hover{text-decoration:none;border-color:var(--gold);transform:translateY(-1px);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
-    .sr-head{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
-    .sr-sys{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em;border:0.5px solid var(--rule);border-radius:999px;padding:1px 8px;background:var(--gold-tint)}
-    .sr-title{font-size:15px;color:var(--ink);font-weight:500}
-    .sr-snippet{font-size:13px;color:var(--muted);line-height:1.45}
+    .sr-head{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+    .sr-sys{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.05em;border:1px solid var(--rule);border-radius:999px;padding:1px 8px;background:var(--gold-tint)}
+    .sr-title{font-family:var(--sans);font-size:16px;color:var(--ink-0);font-weight:600}
+    .sr-snippet{font-family:var(--sans);font-size:13.5px;color:var(--ink-3);line-height:1.5}
     .sr-snippet mark{background:var(--gold-tint);color:var(--ink);padding:0 2px;border-radius:2px}
 
     /* ── Lenses (on-demand panels: situation + map) ── */
-    .lenses{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:20px 0 4px}
-    .lens{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:0.5px solid var(--rule);border-radius:999px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .16s,box-shadow .16s,background .16s,color .16s}
+    .lenses{display:flex;gap:10px;flex-wrap:wrap;padding:30px 0 0;justify-content:flex-start}
+    .lens{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .16s,box-shadow .16s,background .16s,color .16s}
     .lens:hover{border-color:var(--gold);box-shadow:0 8px 18px -16px rgba(28,25,22,.4)}
     .lens .chev{color:var(--accent);transition:transform .2s;display:inline-block}
     .lens.open{background:var(--accent);color:var(--surface);border-color:var(--accent)}
@@ -144,35 +146,73 @@
     .lens-panel{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .36s ease,opacity .22s ease;margin-top:0}
     .lens-panel.open{grid-template-rows:1fr;opacity:1;margin-top:18px}
     .lens-inner{overflow:hidden;min-height:0}
-    .diagram{background:var(--surface);border:0.5px solid var(--rule);border-radius:8px;padding:18px 10px 12px}
+    .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px 10px 12px}
     .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
     .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
 
-    /* ── Systems ── */
-    section.systems{padding:24px 0 64px}
-    .section-label{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;margin-bottom:24px}
-    .phase{margin:22px 0 8px;display:flex;align-items:baseline;gap:12px}
-    .phase-label{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
-    .phase-rule{height:1px;background:var(--rule);flex:1}
+    /* ── Systems — section head, phase heads, N-up grids, ledger rows ── */
+    section.systems{padding:20px 0 88px}
+    .section-head{display:flex;align-items:baseline;gap:18px;border-top:1px solid var(--ink-8);margin-top:56px;padding-top:22px}
+    .sh-index{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.08em}
+    .sh-title{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:-.015em;color:var(--ink-0)}
+    .sh-gloss{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto;text-align:right}
+    .phase-head{display:flex;align-items:baseline;gap:14px;margin:40px 0 16px}
+    .phase-label{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:650;white-space:nowrap}
+    .phase-rule{height:1px;background:var(--ink-9);flex:1}
     .phase-stage{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:0.5px solid var(--rule);border-radius:6px;padding:22px 22px 20px;transition:transform .18s,box-shadow .18s,border-color .18s}
-    a.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(28,25,22,.35);border-color:var(--gold)}
-    .card .tag{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.04em;margin-bottom:10px;display:block}
-    .card .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
-    .card h2{font-size:19px;font-weight:500;letter-spacing:-.01em}
-    .card .abbr{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.05em}
-    .card p{font-size:14px;color:var(--muted);line-height:1.5}
-    .card .arrow{font-family:var(--sans);font-size:13px;color:var(--accent);margin-top:12px;display:block;font-weight:600}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .g4{grid-column:span 4}
+    .g3{grid-column:span 3}
 
-    /* ── Footer ── */
-    footer{border-top:0.5px solid var(--rule);padding:32px 0 56px;text-align:center}
-    footer .footer-links{margin-bottom:14px}
-    footer .footer-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin:0 12px;transition:color .18s}
-    footer .footer-links a:hover{color:var(--accent)}
-    footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+    a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:24px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    a.card:hover{transform:translateY(-3px);box-shadow:0 18px 38px -24px rgba(28,25,22,.4);border-color:var(--gold)}
+    .card-rule{width:34px;height:2px;background:var(--gold);margin-bottom:18px}
+    .card-ico{color:var(--gold);margin-bottom:14px;transition:color .18s}
+    a.card:hover .card-ico{color:var(--accent)}
+    .card .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:block}
+    .card .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .card h2{font-family:var(--sans);font-size:20px;font-weight:650;letter-spacing:-.012em;line-height:1.25;color:var(--ink-0)}
+    .card .abbr{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.05em;flex:0 0 auto}
+    .card p{font-family:var(--sans);font-size:15px;color:var(--ink-2);line-height:1.55;margin-top:10px}
+    .card .arrow{margin-top:auto;padding-top:18px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+    a.card:hover .arrow{text-decoration:underline}
 
-    @media (max-width:560px){header.masthead{padding:44px 0 20px}.lede{font-size:16px}.search-hint{display:none}}
+    /* single-system stages: deliberate ledger rows */
+    a.lrow{display:grid;grid-template-columns:minmax(230px,320px) 1fr auto;gap:28px;align-items:center;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:22px 24px;margin-bottom:14px;transition:transform .18s,box-shadow .18s,border-color .18s}
+    a.lrow:hover{transform:translateY(-2px);box-shadow:0 16px 34px -24px rgba(28,25,22,.4);border-color:var(--gold)}
+    .lr-id{display:flex;align-items:center;gap:16px}
+    .lr-num{font-family:var(--mono);font-size:12px;color:var(--ink-6);letter-spacing:.06em}
+    .lr-ico{color:var(--gold);flex:0 0 auto;transition:color .18s}
+    a.lrow:hover .lr-ico{color:var(--accent)}
+    .lr-name h2{font-family:var(--sans);font-size:20px;font-weight:650;letter-spacing:-.012em;line-height:1.25;color:var(--ink-0)}
+    .lr-tag{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-5);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+    .lr-desc{font-family:var(--sans);font-size:15px;color:var(--ink-2);line-height:1.55}
+    .lr-cta{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+    a.lrow:hover .lr-cta{text-decoration:underline}
+
+    /* ── Footer — three zones on the axis ── */
+    footer{border-top:1px solid var(--rule);margin-top:8px;padding:34px 0 64px}
+    .f-row{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .f-brand{font-family:var(--serif);font-size:18px;color:var(--ink-0)}
+    .f-mono{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+    .f-links a{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);text-decoration:none;margin-left:24px;transition:color .18s}
+    .f-links a:hover{color:var(--accent)}
+
+    @media (max-width:900px){
+      .g3,.g4{grid-column:span 6}
+      .lrow{grid-template-columns:1fr;gap:14px;align-items:start}
+      .lr-cta{justify-self:start}
+      .sit-cols{grid-template-columns:1fr}
+    }
+    @media (max-width:600px){
+      .wrap{padding:0 22px}
+      header.masthead{padding-top:56px}
+      h1.title{font-size:clamp(46px,13vw,58px)}
+      .lede{font-size:17px}
+      .g3,.g4{grid-column:span 12}
+      .search-hint{display:none}
+      .sh-gloss{display:none}
+    }
   </style>
 </head>
 <body>
@@ -184,6 +224,14 @@
     <p class="more">An open reference architecture for engineering personal agency. <a href="about.html">Read the model →</a></p>
     <div class="gold-rule"></div>
   </header>
+
+  <!-- Current work session — live status, under the hero -->
+  <div class="session-line" id="sessionLine" hidden>
+    <span class="sl-dot"></span>
+    <span class="sl-text" id="sessionText">…</span>
+    <span class="sl-time" id="sessionTime"></span>
+    <a class="sl-link" href="/aoos/">AOOS →</a>
+  </div>
 
   <!-- ═══ Quick actions ═══ -->
   <section class="actions">
@@ -197,6 +245,7 @@
 
   <!-- ═══ Unified search ═══ -->
   <section class="search">
+    <div class="search-label">Find anything across the running systems</div>
     <div class="search-wrap">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="search" id="searchInput" class="search-box" placeholder="Search across records, policies, deliberations, catalog…" autocomplete="off">
@@ -211,14 +260,6 @@
   <div class="lenses">
     <button class="lens" data-lens="sit" aria-expanded="false"><span class="chev">▸</span> Situation</button>
     <button class="lens" data-lens="map" aria-expanded="false"><span class="chev">▸</span> How the tools fit</button>
-  </div>
-
-    <!-- Current work session — discreet, above the lenses -->
-  <div class="session-line" id="sessionLine" hidden>
-    <span class="sl-dot"></span>
-    <span class="sl-text" id="sessionText">…</span>
-    <span class="sl-time" id="sessionTime"></span>
-    <a class="sl-link" href="/aoos/">AOOS →</a>
   </div>
 
   <!-- Situation Model (mock briefing) — on demand -->
@@ -470,55 +511,44 @@
 
   <!-- ═══ Systems by loop phase ═══ -->
   <section class="systems">
-    <div class="section-label">The Cooperating Systems</div>
+    <div class="section-head"><span class="sh-index">§ 1</span><span class="sh-title">The Cooperating Systems</span><span class="sh-gloss">every stage of the loop, materialized</span></div>
 
-    <div class="phase"><span class="phase-label">Substrate</span><span class="phase-rule"></span><span class="phase-stage">what the agent is &amp; is in</span></div>
+    <div class="phase-head"><span class="phase-label">Substrate</span><span class="phase-rule"></span><span class="phase-stage">what the agent is &amp; is in</span></div>
     <div class="grid">
-      <a class="card" href="/asrs/"><span class="tag">VSM S5 · representational substrate</span><div class="head"><h2>Agent Self-Representation System</h2><span class="abbr">ASRS</span></div><p>Binds the World boundary, the external-world Model (PWMS), the Self Model (PSMS), and the Policy System (PPS) into one coherent structure — and checks it against itself for over-allocation, constraint violation, and value drift.</p><span class="arrow">Enter asrs/ →</span></a>
-      <a class="card" href="/ptocs/"><span class="tag">substrate · Self-Model (capabilities)</span><div class="head"><h2>Personal Technical Object Catalog System</h2><span class="abbr">PTOCS</span></div><p>The agent's catalog of the technical objects it relies on (software, services, hardware, references, capabilities, infrastructure) — externalizes capability awareness: what's available, where it lives, how it fits, and where the gaps are. A Self-Model (PSMS) capability facet.</p><span class="arrow">Enter ptocs/ →</span></a>
-      <a class="card" href="/acsms/"><span class="tag">substrate · capability self-management</span><div class="head"><h2>Agent Capability Self Management System</h2><span class="abbr">ACSMS</span></div><p>The agent's improvement engine — manages the deliberate growth of its own capabilities. Detects capability gaps in the catalog (PTOCS) and behavioral signals (PKTS), matures feedback adaptations (PRAS) into improvement programs, commits them as resource-feasible intents (AIAS), and consolidates demonstrated capability back into the self-model (PSMS) and the catalog (PTOCS).</p><span class="arrow">Enter acsms/ →</span></a>
+      <a class="card g4" href="/asrs/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="tag">VSM S5 · representational substrate</span><div class="head"><h2>Agent Self-Representation System</h2><span class="abbr">ASRS</span></div><p>Binds the World boundary, the external-world Model (PWMS), the Self Model (PSMS), and the Policy System (PPS) into one coherent structure — and checks it against itself for over-allocation, constraint violation, and value drift.</p><span class="arrow">Enter asrs/ →</span></a>
+      <a class="card g4" href="/ptocs/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg><span class="tag">substrate · Self-Model (capabilities)</span><div class="head"><h2>Personal Technical Object Catalog System</h2><span class="abbr">PTOCS</span></div><p>The agent's catalog of the technical objects it relies on (software, services, hardware, references, capabilities, infrastructure) — externalizes capability awareness: what's available, where it lives, how it fits, and where the gaps are. A Self-Model (PSMS) capability facet.</p><span class="arrow">Enter ptocs/ →</span></a>
+      <a class="card g4" href="/acsms/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span class="tag">substrate · capability self-management</span><div class="head"><h2>Agent Capability Self Management System</h2><span class="abbr">ACSMS</span></div><p>The agent's improvement engine — manages the deliberate growth of its own capabilities. Detects capability gaps in the catalog (PTOCS) and behavioral signals (PKTS), matures feedback adaptations (PRAS) into improvement programs, commits them as resource-feasible intents (AIAS), and consolidates demonstrated capability back into the self-model (PSMS) and the catalog (PTOCS).</p><span class="arrow">Enter acsms/ →</span></a>
     </div>
 
-    <div class="phase"><span class="phase-label">Perception</span><span class="phase-rule"></span><span class="phase-stage">acquire information</span></div>
+    <div class="phase-head"><span class="phase-label">Perception</span><span class="phase-rule"></span><span class="phase-stage">acquire information</span></div>
     <div class="grid">
-      <a class="card" href="/prs/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Recording System</h2><span class="abbr">PRS</span></div><p>Externalizes relevant internal &amp; environmental state for persistent recording, discovery, and retrieval. The sense organs of the loop.</p><span class="arrow">Enter prs/ →</span></a>
-      <a class="card" href="/pkts/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Keyword Tracking System</h2><span class="abbr">PKTS</span></div><p>A perception / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
-      <a class="card" href="/pais/"><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Application Interaction System</h2><span class="abbr">PAIS</span></div><p>Records mouse &amp; focus interaction and joins it with PKTS keystrokes to surface application-interaction analytics — where time and input actually go, per app.</p><span class="arrow">Enter pais/ →</span></a>
-      <a class="card" href="/peos/"><span class="tag">loop stage · Perception · external world</span><div class="head"><h2>Personal External Observation System</h2><span class="abbr">PEOS</span></div><p>Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an observational event — the external-world sense organ, with an analytical layer that turns the stream into orientation.</p><span class="arrow">Enter peos/ →</span></a>
+      <a class="card g3" href="/prs/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Recording System</h2><span class="abbr">PRS</span></div><p>Externalizes relevant internal &amp; environmental state for persistent recording, discovery, and retrieval. The sense organs of the loop.</p><span class="arrow">Enter prs/ →</span></a>
+      <a class="card g3" href="/pkts/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Keyword Tracking System</h2><span class="abbr">PKTS</span></div><p>A perception / audit instrument tracking resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</p><span class="arrow">Enter pkts/ →</span></a>
+      <a class="card g3" href="/pais/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/></svg><span class="tag">loop stage · Perception</span><div class="head"><h2>Personal Application Interaction System</h2><span class="abbr">PAIS</span></div><p>Records mouse &amp; focus interaction and joins it with PKTS keystrokes to surface application-interaction analytics — where time and input actually go, per app.</p><span class="arrow">Enter pais/ →</span></a>
+      <a class="card g3" href="/peos/"><span class="card-rule"></span><svg class="card-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span class="tag">loop stage · Perception · external world</span><div class="head"><h2>Personal External Observation System</h2><span class="abbr">PEOS</span></div><p>Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an observational event — the external-world sense organ, with an analytical layer that turns the stream into orientation.</p><span class="arrow">Enter peos/ →</span></a>
     </div>
 
-    <div class="phase"><span class="phase-label">Intent Management</span><span class="phase-rule"></span><span class="phase-stage">generate · evaluate · commit · revise intentions</span></div>
-    <div class="grid">
-      <a class="card" href="/aias/"><span class="tag">loop stage · Intent Management</span><div class="head"><h2>Agent Intent Aid System</h2><span class="abbr">AIAS</span></div><p>The central coordination layer between Perception and Deliberation — maintains the Intent Store and Intent Scheduler, and yields the Active Intent Set that directs planning and execution. Turns what the agent pursues into a maintained, revisable, resource-feasible set of commitments.</p><span class="arrow">Enter aias/ →</span></a>
-    </div>
+    <div class="phase-head"><span class="phase-label">Intent Management</span><span class="phase-rule"></span><span class="phase-stage">generate · evaluate · commit · revise intentions</span></div>
+    <a class="lrow" href="/aias/"><div class="lr-id"><span class="lr-num">03</span><svg class="lr-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><div class="lr-name"><h2>Agent Intent Aid System</h2><span class="lr-tag">loop stage · Intent Management</span></div></div><div class="lr-desc">The central coordination layer between Perception and Deliberation — maintains the Intent Store and Intent Scheduler, and yields the Active Intent Set that directs planning and execution. Turns what the agent pursues into a maintained, revisable, resource-feasible set of commitments.</div><span class="lr-cta">Enter aias/ →</span></a>
 
-    <div class="phase"><span class="phase-label">Decision</span><span class="phase-rule"></span><span class="phase-stage">evaluate &amp; choose</span></div>
-    <div class="grid">
-      <a class="card" href="/pps/"><span class="tag">loop stage · Decision</span><div class="head"><h2>Personal Policy System</h2><span class="abbr">PPS</span></div><p>Feeds the Decision stage with objectives and constraints (and preserves identity): charter, principles, values, commitments, and domain policies defining direction and limits.</p><span class="arrow">Enter pps/ →</span></a>
-    </div>
+    <div class="phase-head"><span class="phase-label">Decision</span><span class="phase-rule"></span><span class="phase-stage">evaluate &amp; choose</span></div>
+    <a class="lrow" href="/pps/"><div class="lr-id"><span class="lr-num">04</span><svg class="lr-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg><div class="lr-name"><h2>Personal Policy System</h2><span class="lr-tag">loop stage · Decision</span></div></div><div class="lr-desc">Feeds the Decision stage with objectives and constraints (and preserves identity): charter, principles, values, commitments, and domain policies defining direction and limits.</div><span class="lr-cta">Enter pps/ →</span></a>
 
-    <div class="phase"><span class="phase-label">Action Selection</span><span class="phase-rule"></span><span class="phase-stage">commit to action</span></div>
-    <div class="grid">
-      <a class="card" href="/aoos/"><span class="tag">loop stage · Action Selection</span><div class="head"><h2>Agent Operation Organization System</h2><span class="abbr">AOOS</span></div><p>Organizes action constructs (tasks, projects, routines) into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time.</p><span class="arrow">Enter aoos/ →</span></a>
-    </div>
+    <div class="phase-head"><span class="phase-label">Action Selection</span><span class="phase-rule"></span><span class="phase-stage">commit to action</span></div>
+    <a class="lrow" href="/aoos/"><div class="lr-id"><span class="lr-num">05</span><svg class="lr-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><div class="lr-name"><h2>Agent Operation Organization System</h2><span class="lr-tag">loop stage · Action Selection</span></div></div><div class="lr-desc">Organizes action constructs (tasks, projects, routines) into a dependency-aware, capacity-checked, calendar-coordinated plan, committing work to time.</div><span class="lr-cta">Enter aoos/ →</span></a>
 
-    <div class="phase"><span class="phase-label">Execution</span><span class="phase-rule"></span><span class="phase-stage">carry out the action</span></div>
-    <div class="grid">
-      <a class="card" href="/awes/"><span class="tag">loop stage · Execution</span><div class="head"><h2>Automated Work Execution System</h2><span class="abbr">AWES</span></div><p>Supplies the Execution stage: provisions computational environments, dispatches work units (commands, scripts, notebooks), captures artifacts, and feeds results back into the loop.</p><span class="arrow">Enter awes/ →</span></a>
-    </div>
+    <div class="phase-head"><span class="phase-label">Execution</span><span class="phase-rule"></span><span class="phase-stage">carry out the action</span></div>
+    <a class="lrow" href="/awes/"><div class="lr-id"><span class="lr-num">06</span><svg class="lr-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><div class="lr-name"><h2>Automated Work Execution System</h2><span class="lr-tag">loop stage · Execution</span></div></div><div class="lr-desc">Supplies the Execution stage: provisions computational environments, dispatches work units (commands, scripts, notebooks), captures artifacts, and feeds results back into the loop.</div><span class="lr-cta">Enter awes/ →</span></a>
 
-    <div class="phase"><span class="phase-label">Feedback</span><span class="phase-rule"></span><span class="phase-stage">observe &amp; adapt</span></div>
-    <div class="grid">
-      <a class="card" href="/pras/"><span class="tag">loop stage · Feedback</span><div class="head"><h2>Personal Reflection &amp; Adaptation System</h2><span class="abbr">PRAS</span></div><p>Closes the Feedback arc: a corpus of deliberations that observe the consequences of what was executed, make sense of the gap between intention and outcome, and mature into adaptations that feed policy and the rest of the loop.</p><span class="arrow">Enter pras/ →</span></a>
-    </div>
+    <div class="phase-head"><span class="phase-label">Feedback</span><span class="phase-rule"></span><span class="phase-stage">observe &amp; adapt</span></div>
+    <a class="lrow" href="/pras/"><div class="lr-id"><span class="lr-num">07</span><svg class="lr-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><div class="lr-name"><h2>Personal Reflection &amp; Adaptation System</h2><span class="lr-tag">loop stage · Feedback</span></div></div><div class="lr-desc">Closes the Feedback arc: a corpus of deliberations that observe the consequences of what was executed, make sense of the gap between intention and outcome, and mature into adaptations that feed policy and the rest of the loop.</div><span class="lr-cta">Enter pras/ →</span></a>
   </section>
 
   <footer>
-    <div class="footer-links">
-      <a href="about.html">About</a>
-      <a href="docs.html">Docs</a>
+    <div class="f-row">
+      <div><span class="f-brand">Autoregia</span> <span class="f-mono">· Personal Viable System Model</span></div>
+      <nav class="f-links"><a href="about.html">About</a><a href="docs.html">Docs</a></nav>
     </div>
-    <span class="mono">Autoregia · Personal Viable System Model</span>
   </footer>
 </div>
 
