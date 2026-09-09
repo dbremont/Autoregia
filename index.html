@@ -271,34 +271,34 @@
   <section class="lens-panel" id="lens-map">
     <div class="lens-inner">
       <div class="diagram">
-        <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon) and the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
+        <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon), the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
           <defs>
-            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8893a"/></marker>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A8854A"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
             <filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3a342b" flood-opacity="0.07"/></filter>
           </defs>
           <style>
-            .eyebrow{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;fill:#b8893a;font-weight:600}
+            .eyebrow{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;fill:#A8854A;font-weight:600}
             .dtitle{font-family:"Spectral",Georgia,serif;font-size:24px;fill:#1c1916;font-weight:400;letter-spacing:-.012em}
             .dgloss{font-family:"Spectral",Georgia,serif;font-size:13px;fill:#908a7e;font-style:italic}
-            .cyc-lbl{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;fill:#b8893a;font-weight:600}
-            .reglab{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;fill:#b8893a;font-weight:600}
-            .num{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#b8893a;letter-spacing:.08em;font-weight:500}
+            .cyc-lbl{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;fill:#A8854A;font-weight:600}
+            .reglab{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;fill:#A8854A;font-weight:600}
+            .num{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#A8854A;letter-spacing:.08em;font-weight:500}
             .num-sub{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#1c1916;letter-spacing:.08em;font-weight:600}
             .lbl{font-family:"Spectral",Georgia,serif;font-size:16px;fill:#1c1916}
             .cap{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10px;fill:#938c7d;letter-spacing:.02em}
             .note{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#b0a89a;font-style:italic}
-            .arc{font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;fill:#b8893a;letter-spacing:.06em}
+            .arc{font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;fill:#A8854A;letter-spacing:.06em}
             .fba{font-family:"IBM Plex Mono",Consolas,monospace;font-size:10.5px;fill:#7A1A2A;letter-spacing:.04em}
             .leg{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:10.5px;fill:#7a736a}
             .card{fill:#fffefb;stroke:#e6dcc8;stroke-width:0.7}
-            .card-top{stroke:#b8893a;stroke-width:1.4;stroke-linecap:round}
+            .card-top{stroke:#A8854A;stroke-width:1.4;stroke-linecap:round}
             .card-top-sub{stroke:#1c1916;stroke-width:1.5;stroke-linecap:round}
-            .edge{stroke:#b8893a;stroke-width:1.6;fill:none}
-            .edge-sub{stroke:#b8893a;stroke-width:1.4;fill:none;stroke-dasharray:2 3}
+            .edge{stroke:#A8854A;stroke-width:1.6;fill:none}
+            .edge-sub{stroke:#A8854A;stroke-width:1.4;fill:none;stroke-dasharray:2 3}
             .edge-fb{stroke:#7A1A2A;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
             .tap{fill:#7A1A2A}
-            .tool-bg{fill:#f4ecda;stroke:#b8893a;stroke-width:1;transition:fill .15s}
+            .tool-bg{fill:#f4ecda;stroke:#A8854A;stroke-width:1;transition:fill .15s}
             .tool-t{font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;fill:#7A1A2A;font-weight:600;transition:fill .15s}
             a{cursor:pointer}
             a:hover .tool-bg{fill:#7A1A2A}
@@ -312,7 +312,7 @@
           <line x1="56" y1="108" x2="1264" y2="108" stroke="#e0d2b0" stroke-width="0.5"/>
 
           <!-- deliberative cycle panel -->
-          <rect x="36" y="132" width="1028" height="176" rx="14" fill="#f7f0df" fill-opacity="0.6" stroke="#b8893a" stroke-width="1.1" stroke-dasharray="6 5"/>
+          <rect x="36" y="132" width="1028" height="176" rx="14" fill="#f7f0df" fill-opacity="0.6" stroke="#A8854A" stroke-width="1.1" stroke-dasharray="6 5"/>
           <text class="cyc-lbl" x="60" y="158">Deliberative Cycle</text>
 
           <!-- forward edges (cycle row) -->
@@ -340,9 +340,13 @@
           <path class="edge-fb" d="M 820 510 L 820 348" marker-end="url(#arrA)"/>
           <text class="fba" x="832" y="432" text-anchor="start">regulate</text>
 
+          <!-- feedback → capability self-management -->
+          <path class="edge-fb" d="M 732 556 L 646 556" marker-end="url(#arrA)"/>
+          <text class="fba" x="689" y="546" text-anchor="middle">adaptations</text>
+
           <!-- substrate foundation panel -->
-          <rect x="60" y="502" width="572" height="108" rx="10" fill="#f3ecdb" fill-opacity="0.55" stroke="#dccdb0" stroke-width="0.6"/>
-          <text class="reglab" x="346" y="492" text-anchor="middle">Substrate · what the agent is &amp; is in</text>
+          <rect x="60" y="502" width="604" height="108" rx="10" fill="#f3ecdb" fill-opacity="0.55" stroke="#dccdb0" stroke-width="0.6"/>
+          <text class="reglab" x="362" y="492" text-anchor="middle">Substrate · what the agent is &amp; is in</text>
 
           <!-- World -->
           <g transform="translate(152,556)">
@@ -363,6 +367,16 @@
             <text class="cap" x="0" y="12" text-anchor="middle">world &amp; self-model</text>
             <a href="/asrs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
             <a href="/ptocs/"><g transform="translate(30,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PTOCS</text></g></a>
+          </g>
+
+          <!-- Capability Self-Management -->
+          <g transform="translate(552,556)">
+            <rect class="card" x="-88" y="-46" width="176" height="92" rx="8" filter="url(#sh)"/>
+            <line class="card-top-sub" x1="-80" y1="-40" x2="80" y2="-40"/>
+            <text class="num-sub" x="-78" y="-25">SUBSTRATE</text>
+            <text class="lbl" x="0" y="-6" text-anchor="middle">Capability Growth</text>
+            <text class="cap" x="0" y="12" text-anchor="middle">self-improvement</text>
+            <a href="/acsms/"><g transform="translate(0,31)"><rect class="tool-bg" x="-32" y="-11" width="64" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ACSMS</text></g></a>
           </g>
 
           <!-- Perception -->
@@ -445,7 +459,7 @@
             <text class="leg" x="146" y="4">substrate · read by the cycle</text>
             <line class="edge-fb" x1="334" y1="0" x2="358" y2="0"/>
             <text class="leg" x="366" y="4">feedback · regulation</text>
-            <rect x="512" y="-6" width="24" height="12" rx="2" fill="none" stroke="#b8893a" stroke-width="1.1" stroke-dasharray="6 5"/>
+            <rect x="512" y="-6" width="24" height="12" rx="2" fill="none" stroke="#A8854A" stroke-width="1.1" stroke-dasharray="6 5"/>
             <text class="leg" x="544" y="4">deliberative cycle</text>
           </g>
         </svg>
@@ -462,6 +476,7 @@
     <div class="grid">
       <a class="card" href="/asrs/"><span class="tag">VSM S5 · representational substrate</span><div class="head"><h2>Agent Self-Representation System</h2><span class="abbr">ASRS</span></div><p>Binds the World boundary, the external-world Model (PWMS), the Self Model (PSMS), and the Policy System (PPS) into one coherent structure — and checks it against itself for over-allocation, constraint violation, and value drift.</p><span class="arrow">Enter asrs/ →</span></a>
       <a class="card" href="/ptocs/"><span class="tag">substrate · Self-Model (capabilities)</span><div class="head"><h2>Personal Technical Object Catalog System</h2><span class="abbr">PTOCS</span></div><p>The agent's catalog of the technical objects it relies on (software, services, hardware, references, capabilities, infrastructure) — externalizes capability awareness: what's available, where it lives, how it fits, and where the gaps are. A Self-Model (PSMS) capability facet.</p><span class="arrow">Enter ptocs/ →</span></a>
+      <a class="card" href="/acsms/"><span class="tag">substrate · capability self-management</span><div class="head"><h2>Agent Capability Self Management System</h2><span class="abbr">ACSMS</span></div><p>The agent's improvement engine — manages the deliberate growth of its own capabilities. Detects capability gaps in the catalog (PTOCS) and behavioral signals (PKTS), matures feedback adaptations (PRAS) into improvement programs, commits them as resource-feasible intents (AIAS), and consolidates demonstrated capability back into the self-model (PSMS) and the catalog (PTOCS).</p><span class="arrow">Enter acsms/ →</span></a>
     </div>
 
     <div class="phase"><span class="phase-label">Perception</span><span class="phase-rule"></span><span class="phase-stage">acquire information</span></div>

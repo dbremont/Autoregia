@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWES — Automated Work Execution System</title>
+<style>
+  /* Autoregia warm-parchment aesthetic — tokens per design.md / spec/ui.spec */
+  :root {
+    --ink: #2C2A26;
+    --ink-soft: #44413B;
+    --muted: #6B665B;
+    --faint: #8C877B;
+    --rule: #E2DED4;
+    --rule-soft: #EEEAE0;
+    --paper: #FAFAF6;
+    --surface: #FFFFFF;
+    --surface-warm: #FBF9F4;
+    --oxford: #7A1A2A;
+    --oxford-deep: #641020;
+    --oxford-tint: #F4E8EA;
+    --gold: #A8854A;
+    --gold-soft: #C7A972;
+    --green: #3F6E50;
+    --green-bg: #ECF3EE;
+    --amber: #B07A2A;
+    --amber-bg: #FBF1E3;
+    /* compat aliases referenced inline by exec.js */
+    --text-dim: #8C877B;
+    --red: #7A1A2A;
+    --serif: "Spectral", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem 2rem 3rem;
+    line-height: 1.55;
+  }
+  a.back {
+    display: inline-block; font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--faint); text-decoration: none; margin-top: 12px;
+  }
+  a.back:hover { color: var(--oxford); }
+  a.back::before { content: "← "; }
+  header.masthead { padding: 16px 0 8px; text-align: center; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--serif); font-size: 2rem; font-weight: 400;
+    letter-spacing: -.015em; color: var(--ink);
+  }
+  .subtitle {
+    font-family: var(--serif); font-style: italic;
+    color: var(--muted); font-size: .95rem; margin-top: 6px;
+  }
+  .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto 8px; opacity: .7; }
+  h2 {
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 500;
+    margin: 1.6rem 0 .7rem; color: var(--ink);
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: .75rem;
+  }
+  .env-card {
+    background: var(--surface-warm);
+    border: 1px solid var(--rule-soft);
+    border-radius: 6px;
+    padding: .75rem;
+  }
+  .env-card .name { font-weight: 500; color: var(--ink); }
+  .env-card .meta { font-size: .8rem; color: var(--muted); margin-top: .25rem; }
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+  }
+  .status-ready { background: var(--green); }
+  .status-busy { background: var(--amber); }
+  .status-error { background: var(--oxford); }
+  label { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+  select, textarea, input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    color: var(--ink);
+    padding: .6rem;
+    font-family: var(--mono);
+    font-size: .85rem;
+    margin-bottom: .75rem;
+  }
+  select:focus, textarea:focus, input:focus { outline: 2px solid var(--gold-soft); outline-offset: -1px; }
+  textarea { min-height: 120px; resize: vertical; }
+  button {
+    background: var(--oxford);
+    color: #fffdf8;
+    border: none;
+    border-radius: 6px;
+    padding: .6rem 1.2rem;
+    font-family: var(--sans);
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  button:hover { background: var(--oxford-deep); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .session { border-bottom: 1px solid var(--rule-soft); padding: .75rem 0; }
+  .session:last-child { border-bottom: none; }
+  .session .head {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .session .exe-id { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+  .session .payload { font-family: var(--mono); font-size: .85rem; margin: .4rem 0; color: var(--ink-soft); }
+  .session .output {
+    background: var(--surface-warm);
+    border: 1px solid var(--rule-soft);
+    border-radius: 4px;
+    padding: .5rem;
+    font-family: var(--mono);
+    font-size: .8rem;
+    white-space: pre-wrap;
+    margin-top: .4rem;
+    max-height: 200px;
+    overflow: auto;
+  }
+  .badge {
+    display: inline-block;
+    padding: .1rem .5rem;
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .04em;
+  }
+  .badge-completed { background: var(--green-bg); color: var(--green); }
+  .badge-failed { background: var(--oxford-tint); color: var(--oxford); }
+  .badge-timed_out { background: var(--amber-bg); color: var(--amber); }
+  .actions { display: flex; gap: .5rem; align-items: center; }
+  .actions .danger {
+    background: none;
+    border: 1px solid var(--oxford);
+    color: var(--oxford);
+  }
+  .actions .danger:hover { background: var(--oxford-tint); }
+  .spacer { flex: 1; }
+  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+</style>
+</head>
+<body>
+  <a class="back" href="/">Index</a>
+  <header class="masthead">
+    <div class="eyebrow">Execution</div>
+    <h1>AWES</h1>
+    <div class="subtitle">Automated Work Execution System — Prototype</div>
+    <div class="gold-rule"></div>
+  </header>
+
+  <h2>Environments</h2>
+  <div class="panel"><div class="env-grid" id="env-grid"></div></div>
+
+  <h2>Execute</h2>
+  <div class="panel">
+    <label for="env-select">Environment</label>
+    <select id="env-select"></select>
+    <label for="work-type">Work Type</label>
+    <select id="work-type">
+      <option value="command">Shell Command</option>
+      <option value="python">Python Script</option>
+    </select>
+    <label for="payload">Payload</label>
+    <textarea id="payload" placeholder="echo hello"></textarea>
+    <div class="actions">
+      <button id="run-btn" onclick="run()">▶ Run</button>
+      <span id="run-status" style="font-size:0.85rem;color:var(--muted)"></span>
+      <span class="spacer"></span>
+      <button class="danger" onclick="clearSessions()">Clear History</button>
+    </div>
+  </div>
+
+  <h2>Execution History</h2>
+  <div class="panel"><div id="session-list"></div></div>
+
+  <footer>AWES · Execution — VSM System 1</footer>
+
+<script src="/js/exec.js"></script>
+</body>
+</html>

@@ -19,6 +19,7 @@ index at the root.
     /awes/...    Automated Work Execution System    (System 1 — Execution)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /asrs/...    Agent Self Representation System  (System 5 — representational substrate)
+    /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
 
 Sub-systems are not independent apps: they are functional organs of one
 system, surfaced here through one router.
@@ -56,20 +57,21 @@ def _load_app(module_name, server_rel_path):
 
 # (url-prefix, human name, server.py path). Prefixes are also baked into each
 # tool's static assets, so renaming one here requires re-running the asset
-# prefixing pass (see tools/prefix_assets.py).
+# prefixing pass (see support/tools/prefix_assets.py).
 SUBSYSTEMS = [
-    ("prs", "Personal Recording System", "prs/server.py"),
-    ("pkts", "Personal Keyword Tracking System", "pkts/server.py"),
-    ("pais", "Personal Application Interaction System", "pais/server.py"),
-    ("peos", "Personal External Observation System", "peos/server.py"),
-    ("ptocs", "Personal Technical Object Catalog System", "ptocs/server.py"),
-    ("pps", "Personal Policy System", "pps/server.py"),
-    ("aias", "Agent Intent Aid System", "aias/server.py"),
-    ("aoos", "Agent Operation Organization System", "aoos/server.py"),
-    ("awes", "Automated Work Execution System", "awes/server.py"),
-    ("pras", "Personal Reflection & Adaptation System", "pras/server.py"),
-    ("asrs", "Agent Self Representation System", "asrs/server.py"),
-    ("loop", "The Loop — Control-Loop Dashboard", "loop/server.py"),
+    ("prs", "Personal Recording System", "module/prs/server.py"),
+    ("pkts", "Personal Keyword Tracking System", "module/pkts/server.py"),
+    ("pais", "Personal Application Interaction System", "module/pais/server.py"),
+    ("peos", "Personal External Observation System", "module/peos/server.py"),
+    ("ptocs", "Personal Technical Object Catalog System", "module/ptocs/server.py"),
+    ("pps", "Personal Policy System", "module/pps/server.py"),
+    ("aias", "Agent Intent Aid System", "module/aias/server.py"),
+    ("aoos", "Agent Operation Organization System", "module/aoos/server.py"),
+    ("awes", "Automated Work Execution System", "module/awes/server.py"),
+    ("pras", "Personal Reflection & Adaptation System", "module/pras/server.py"),
+    ("asrs", "Agent Self Representation System", "module/asrs/server.py"),
+    ("acsms", "Agent Capability Self Management System", "module/acsms/server.py"),
+    ("loop", "The Loop — Control-Loop Dashboard", "module/loop/server.py"),
 ]
 
 MOUNTS = {prefix: _load_app(f"{prefix}_server", rel)

@@ -20,29 +20,35 @@ Autoregia/
 ├── index.html           # project landing / index page
 ├── logos.log.md         # decision & design log
 ├── records_schema.json  # shared record JSON Schema (PRS / PKTS)
-├── prs/                 # Personal Recording System (sub-project)
-│   ├── README.md
-│   ├── spec.md
-│   ├── server.py
-│   ├── requirements.txt
-│   ├── data/
-│   └── static/
-├── pkts/                # Personal Keyword Tracking System (sub-project)
-│   └── README.md
-├── pais/                # Personal Application Interaction System (sub-project)
-│   └── README.md
-├── peos/                # Personal External Observation System (sub-project)
-│   ├── README.md
-│   ├── server.py        # Flask API + CouchDB persistence
-│   ├── collector.py     # poller daemon
-│   ├── analytics.py     # sense-making aggregations
-│   ├── clustering.py    # topic clustering (embeddings / lexical)
-│   ├── sources/         # Hacker News, Lobsters, Reddit, Mastodon, GDELT
-│   ├── data/
-│   ├── static/
-│   └── test_peos.py
+├── app.py               # unified server — mounts every module under /<prefix>/
+├── module/              # all materialized sub-systems
+│   ├── prs/             # Personal Recording System
+│   │   ├── README.md
+│   │   ├── spec.md
+│   │   ├── server.py
+│   │   ├── requirements.txt
+│   │   ├── data/
+│   │   └── static/
+│   ├── pkts/            # Personal Keyword Tracking System
+│   ├── pais/            # Personal Application Interaction System
+│   ├── peos/            # Personal External Observation System
+│   │   ├── README.md
+│   │   ├── server.py    # Flask API + CouchDB persistence
+│   │   ├── collector.py # poller daemon
+│   │   ├── analytics.py # sense-making aggregations
+│   │   ├── clustering.py# topic clustering (embeddings / lexical)
+│   │   ├── sources/     # Hacker News, Lobsters, Reddit, Mastodon, GDELT
+│   │   ├── data/
+│   │   ├── static/
+│   │   └── test_peos.py
+│   └── ...              # ptocs, pps, aias, aoos, awes, pras, asrs, acsms, loop, pwos
+├── support/             # everything that supports the modules
+│   ├── storage/         # shared CouchDB document store (Store)
+│   ├── shared/          # shared Python package (focus_watcher, …)
+│   ├── tools/           # repo tooling (asset prefixing)
+│   └── bin/             # standalone utility scripts
 └── spec/                # conceptual specifications of every sub-system
-    └── peos/spec.md
+    └── module/peos/spec.md
 ```
 
 ---
@@ -74,13 +80,13 @@ Autoregia/
 
 The sub-systems developed within this workspace:
 
-- **[Personal Recording System (PRS)](prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](prs/spec.md), [record schema](records_schema.json), and [implementation](prs/README.md#prototype).
-- **[Personal Keyword Tracking System (PKTS)](pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
-- **[Personal Application Interaction System (PAIS)](pais/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`shared/focus_watcher.py`](shared/) as the single source of truth for the focused window with PKTS.
-- **[Personal External Observation System (PEOS)](peos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): collects what *other agents* say about the world from free, no-auth public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an `observational` event in CouchDB, with batch topic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PRS. See the PEOS [specification](spec/peos/spec.md) and [implementation](peos/README.md#run).
-- **[Personal Technical Object Catalog System (PTOCS)](ptocs/README.md)** — the Intelligence System component; a structured catalog of the technical objects the agent relies on, with retrieval, navigation, and a statistical overlay.
-- **[Personal Policy System (PPS)](pps/README.md)** — the Policy System component (VSM System 5); a set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search over the corpus.
-- **[Agent Operation Organization System (AOOS)](aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PRS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
+- **[Personal Recording System (PRS)](module/prs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PRS [specification](module/prs/spec.md), [record schema](records_schema.json), and [implementation](module/prs/README.md#prototype).
+- **[Personal Keyword Tracking System (PKTS)](module/pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
+- **[Personal Application Interaction System (PAIS)](module/pais/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`support/shared/focus_watcher.py`](support/shared/) as the single source of truth for the focused window with PKTS.
+- **[Personal External Observation System (PEOS)](module/peos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): collects what *other agents* say about the world from free, no-auth public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an `observational` event in CouchDB, with batch topic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PRS. See the PEOS [specification](spec/peos/spec.md) and [implementation](module/peos/README.md#run).
+- **[Personal Technical Object Catalog System (PTOCS)](module/ptocs/README.md)** — the Intelligence System component; a structured catalog of the technical objects the agent relies on, with retrieval, navigation, and a statistical overlay.
+- **[Personal Policy System (PPS)](module/pps/README.md)** — the Policy System component (VSM System 5); a set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search over the corpus.
+- **[Agent Operation Organization System (AOOS)](module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PRS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
 
 > The design rationale and decision log live in [`logos.log.md`](logos.log.md).
 

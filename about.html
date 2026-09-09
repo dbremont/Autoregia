@@ -7,11 +7,11 @@
   <style>
     :root {
       --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
-      --rule: #d8d0c4; --parchment: #f7f3ea; --surface: #fffdf8;
-      --accent: #7A1A2A; --gold: #b8893a;
-      --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
-      --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      --mono: "SF Mono","JetBrains Mono","IBM Plex Mono",Consolas,monospace;
+      --rule: #d8d0c4; --paper: #FAFAF6; --parchment: var(--paper); --surface: #fffdf8;
+      --accent: #7A1A2A; --gold: #A8854A;
+      --serif: "Spectral","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+      --sans: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --mono: "IBM Plex Mono","SF Mono",Consolas,monospace;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--serif);background:var(--parchment);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -130,7 +130,7 @@
       <thead><tr><th>Agency Aspect</th><th>Agency Problem Addressed</th></tr></thead>
       <tbody>
         <tr><td class="code">Identity</td><td><b>Identity Maintenance</b> — What makes the agent the same entity over time?</td></tr>
-        <tr><td class="code">Intent Management</td><td><b>Intent Management</b> — Which intentions should be generated, evaluated, committed to, revised, or abandoned?</td></tr>
+        <tr><td class="code">Intent Management</td><td><b>Intent Management</b> — Which intentions should be generated, evaluated, <em>committed to</em>, revised, or abandoned?</td></tr>
         <tr><td class="code">External World Model</td><td><b>Situation Understanding</b> — What is the current state of the external world?</td></tr>
         <tr><td class="code">Agent State</td><td><b>Self-State Maintenance</b> — What is the current condition, capabilities, and resources of the agent?</td></tr>
         <tr><td class="code">Perception</td><td><b>Situation Assessment</b> — What is happening right now?</td></tr>
@@ -200,6 +200,7 @@
         <tr><td class="code">AOOS</td><td>Agent Operation Organization System</td><td>Action Selection</td><td>Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan.</td></tr>
         <tr><td class="code">AWES</td><td>Automated Work Execution System</td><td>Execution</td><td>Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop.</td></tr>
         <tr><td class="code">PRAS</td><td>Personal Reflection &amp; Adaptation System</td><td>Feedback</td><td>A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations.</td></tr>
+        <tr><td class="code">ACSMS</td><td>Agent Capability Self Management System</td><td>Substrate · Capability Self-Management</td><td>The agent's improvement engine — turns detected capability gaps (PTOCS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (PSMS) and the catalog (PTOCS).</td></tr>
 
 
         <tr>
@@ -314,6 +315,17 @@
         <div class="qa-a" id="qa-a6" role="region" aria-labelledby="qa-q6"><div class="qa-a-wrap"><div class="qa-a-inner">
           <span class="amark">A</span>
           <span class="qa-atext">A framework for agency is a coherent conceptual structure that identifies and organizes the essential functions an agent must perform to remain viable and effective — perception, intention formation, decision, planning, execution, regulation, and learning — together with the interfaces through which those functions interact and the organizing principle (the Control Loop) that steers them as a whole. It is neither an agent nor a specific tool; it is a reference architecture that decomposes the problem of agency into well-defined functional problems and specifies how they interrelate.<br><br>Four properties define it:<br><br>· <b>Abstract and structural</b> — it identifies what functions must exist and how they relate, independent of any particular implementation.<br>· <b>Principle-organized</b> — an organizing principle (the Control Loop) arranges the functions into a coherent whole rather than a flat list.<br>· <b>Separation of concerns</b> — it distinguishes perception from decision, decision from execution, execution from regulation, so each function can be examined and improved independently.<br>· <b>Generative</b> — it can be instantiated by concrete tools and practices, and reused to analyze, engineer, and improve any agent's capacity for self-regulated, goal-directed behavior.<br><br>Autoregia is such a framework: it provides the abstract organizational skeleton for the essential functions of agency, which the Abstract Agency Framework Formulation then instantiates with concrete personal systems.</span>
+        </div></div></div>
+      </div>
+      <div class="qa-item">
+        <button class="qa-q" aria-expanded="false" aria-controls="qa-a7" id="qa-q7">
+          <span class="qmark">Q</span>
+          <span class="qa-qtext">Why should commitment be modeled — or represented — as an explicit part of the flow of intent management?</span>
+          <span class="qa-chev" aria-hidden="true"></span>
+        </button>
+        <div class="qa-a" id="qa-a7" role="region" aria-labelledby="qa-q7"><div class="qa-a-wrap"><div class="qa-a-inner">
+          <span class="amark">A</span>
+          <span class="qa-atext">Because commitment is the hinge of the loop: it is the step at which an intention stops being a candidate and starts consuming the agent's finite resources. Representing it explicitly matters for four reasons:<br><br>· <b>Separation of generation from commitment</b> — the agent generates many candidates but can only pursue a committed few. Without an explicit committed state, 'considered' and 'bound to' are indistinguishable, and deliberation cannot close.<br>· <b>The Active Intent Set</b> — commitment is what produces the authoritative set of what the agent is currently pursuing: the input to planning and the reference against which execution and feedback are compared.<br>· <b>Feasibility &amp; over-commitment</b> — time, energy, and attention are finite. Commitment as a first-class state is what makes over-commitment, conflict, and drift inspectable and correctable rather than latent.<br>· <b>Principled revision</b> — an explicit state makes its transitions (pause, cancel, merge, reprioritize, replan) traceable, so intentions are revised deliberately instead of silently abandoned.<br><br>In the framework this is materialized as the <em>Committed</em> lifecycle state of the Intent Store and the <em>Active Intent Set</em> emitted by the Intent Scheduler — commitment is not an event but a maintained, revisable condition of the flow.</span>
         </div></div></div>
       </div>
     </div>
