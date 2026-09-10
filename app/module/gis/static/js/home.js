@@ -172,22 +172,25 @@ PT.HomeIndex = (() => {
         '<div class="home-pagination" id="homePagination"></div>' +
       '</section>' +
       '<aside class="home-rail">' +
-        '<div class="rail-card"><div class="rail-title">Quick Actions</div>' +
-          '<div class="rail-actions">' +
-            '<button class="rail-action" id="railAdd"><pt-icon name="plus" size="16"></pt-icon> Add Entry</button>' +
-            '<button class="rail-action" id="railImport"><pt-icon name="upload" size="16"></pt-icon> Import from File</button>' +
-            '<button class="rail-action" id="railGraph"><pt-icon name="share-2" size="16"></pt-icon> Open Graph View</button>' +
+        '<div class="rail-card"><div class="rail-title">' + PT.icon('command', 13) + ' Quick Actions</div>' +
+          '<div class="rail-quick">' +
+            '<button class="rail-quick-btn" id="railAdd"><pt-icon name="plus" size="15"></pt-icon><span>Add</span></button>' +
+            '<button class="rail-quick-btn" id="railImport"><pt-icon name="upload" size="15"></pt-icon><span>Import</span></button>' +
+            '<button class="rail-quick-btn" id="railGraph"><pt-icon name="share-2" size="15"></pt-icon><span>Graph</span></button>' +
           '</div></div>' +
-        '<div class="rail-card"><div class="rail-title">Filters <button class="rail-clear" id="railClear">Clear all</button></div>' +
+        '<div class="rail-card"><div class="rail-title">' + PT.icon('sliders-horizontal', 13) + ' Filters <button class="rail-clear" id="railClear">Clear all</button></div>' +
+          '<div class="rail-sub">Spaces</div>' +
+          '<div class="rail-spaces" id="railSpaces"></div>' +
+          '<div class="rail-sub">Kinds</div>' +
           '<input type="search" id="railKindSearch" class="rail-search" placeholder="Search kinds…">' +
           '<div class="rail-checks" id="railKinds"></div></div>' +
-        '<div class="rail-card"><div class="rail-title">Tags</div>' +
+        '<div class="rail-card"><div class="rail-title">' + PT.icon('tag', 13) + ' Tags</div>' +
           '<input type="search" id="railTagSearch" class="rail-search" placeholder="Search tags…">' +
           '<div class="rail-tags" id="railTags"></div></div>' +
-        '<div class="rail-card"><div class="rail-title">Knowledge Graph</div>' +
+        '<div class="rail-card"><div class="rail-title">' + PT.icon('share-2', 13) + ' Knowledge Graph</div>' +
           '<div id="railGraph" class="rail-graph"></div>' +
           '<a class="rail-link" href="#graph">Explore relationships between entries <pt-icon name="arrow-right" size="13"></pt-icon></a></div>' +
-        '<div class="rail-card"><div class="rail-title">Recent Activity</div>' +
+        '<div class="rail-card"><div class="rail-title">' + PT.icon('history', 13) + ' Recent Activity</div>' +
           '<div id="railActivity" class="rail-activity"><p class="text-muted text-sm">…</p></div></div>' +
       '</aside>' +
     '</div>';
@@ -199,7 +202,7 @@ PT.HomeIndex = (() => {
     const color = PT.kindColor(e.object_kind);
     const tags = (e.tags || []).slice(0, 3).map(t =>
       '<span class="ix-tag" data-tag="' + PT.esc(t) + '">#' + PT.esc(t) + '</span>').join('');
-    return '<div class="ix-row" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
+    return '<div class="ix-row" onclick="PT.openEntry(\'' + e.id + '\')">' +
       '<div class="ix-entity"><span class="ix-entity-icon" style="color:' + color + ';background:' + color + '14">' + PT.icon(icon, 17) + '</span>' +
         '<span class="ix-entity-name">' + PT.esc(e.name) + '</span>' +
         (e.pinned ? '<span class="ix-pin">' + PT.icon('pin', 12) + '</span>' : '') + '</div>' +
@@ -252,6 +255,15 @@ PT.HomeIndex = (() => {
   }
 
   // ── rail painting ──────────────────────────────────────────
+  function paintSpaces() {
+    const box = document.getElementById('railSpaces'); if (!box) return;
+    box.innerHTML = PT.SPACES.map(s => {
+      const active = s.id === 'favorites' ? state.pinned : state.space === s.id;
+      return '<button class="rail-space' + (active ? ' active' : '') + '" data-space="' + s.id + '">' +
+        PT.icon(s.icon, 13) + ' ' + s.label + '</button>';
+    }).join('');
+  }
+
   function paintKinds(filter) {
     const box = document.getElementById('railKinds'); if (!box || !overview) return;
     const entries = Object.entries(overview.by_kind).sort((a, b) => b[1] - a[1]);
@@ -260,6 +272,7 @@ PT.HomeIndex = (() => {
       .map(k => {
         const on = state.kinds.includes(k[0]);
         return '<label class="rail-check"><input type="checkbox" data-kind="' + PT.esc(k[0]) + '"' + (on ? ' checked' : '') + '>' +
+          '<span class="rail-check-dot" style="background:' + PT.kindColor(k[0]) + '"></span>' +
           '<span class="rail-check-name">' + PT.prettyEnum(k[0]) + '</span>' +
           '<span class="rail-check-count">' + k[1] + '</span></label>';
       }).join('');
@@ -289,7 +302,7 @@ PT.HomeIndex = (() => {
     box.innerHTML = events.slice(0, 8).map(ev => {
       const m = meta[ev.kind] || meta.viewed;
       const verb = { added: 'Added', updated: 'Updated', viewed: 'Viewed', deleted: 'Deleted' }[ev.kind] || ev.kind;
-      return '<div class="rail-event" onclick="PT.Entry.showDetail(\'' + PT.esc(ev.entry_id) + '\')">' +
+      return '<div class="rail-event" onclick="PT.openEntry(\'' + PT.esc(ev.entry_id) + '\')">' +
         '<span class="rail-event-icon ' + m.cls + '">' + PT.icon(m.icon, 13) + '</span>' +
         '<span class="rail-event-text">' + verb + ': ' + PT.esc(ev.entry_name || ev.entry_id) + '</span>' +
         '<span class="rail-event-time">' + rel(ev.ts) + '</span></div>';
@@ -327,15 +340,24 @@ PT.HomeIndex = (() => {
         label: { show: false },
       }],
     });
-    railGraphChart.on('click', p => { if (p.dataType === 'node') PT.Entry.showDetail(p.data.id); });
+    railGraphChart.on('click', p => { if (p.dataType === 'node') PT.openEntry(p.data.id); });
   }
 
   // ── data fetching ──────────────────────────────────────────
+  let loadedOnce = false;
+  function ixSkeleton() {
+    const row = '<div class="ix-sk-row"><span class="ix-sk ix-sk-badge"></span>' +
+      '<span class="ix-sk w40"></span><span class="ix-sk w60"></span>' +
+      '<span class="ix-sk w20"></span><span class="ix-sk w25"></span></div>';
+    return '<div class="ix-skeleton">' + row.repeat(6) + '</div>';
+  }
   function fetchIndex() {
+    const box = document.getElementById('homeResults');
+    if (box && !loadedOnce) box.innerHTML = ixSkeleton();
     fetch('/gis/api/index?' + queryParams())
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(paintResults)
-      .catch(() => paintResults(localIndex()));
+      .then(data => { loadedOnce = true; paintResults(data); })
+      .catch(() => { loadedOnce = true; paintResults(localIndex()); });
   }
   function fetchOverview() {
     fetch('/gis/api/overview')
@@ -354,14 +376,20 @@ PT.HomeIndex = (() => {
     if (stats) stats.innerHTML = statCards();
     const tabs = document.getElementById('homeTabs');
     if (tabs) tabs.innerHTML = tabsHTML();
+    paintSpaces();
     paintKinds(document.getElementById('railKindSearch')?.value || '');
     paintTags(document.getElementById('railTagSearch')?.value || '');
     initRailGraph();
   }
 
-  // ── public filters (sidebar, header search) ────────────────
+  // ── public filters (sidebar, header search, reference links) ──
   function resetPage() { state.page = 1; }
   function setQuery(q) { state.q = q || ''; resetPage(); paintChips(); fetchIndex(); }
+  function setGroup(group) {
+    state.group = group || ''; state.kinds = []; resetPage();
+    document.querySelectorAll('.ix-tab').forEach(t => t.classList.toggle('active', t.dataset.group === group));
+    paintChips(); fetchIndex();
+  }
   function filterKind(kind) {
     state.kinds = [kind]; state.group = ''; resetPage();
     paintChips(); refreshRail(); fetchIndex();
@@ -425,6 +453,10 @@ PT.HomeIndex = (() => {
       state.q = ''; resetPage(); refreshRail(); fetchIndex();
     });
     document.getElementById('railKindSearch').addEventListener('input', e => paintKinds(e.target.value));
+    document.getElementById('railSpaces').addEventListener('click', e => {
+      const chip = e.target.closest('.rail-space'); if (!chip) return;
+      filterSpace(chip.dataset.space);
+    });
     document.getElementById('railKinds').addEventListener('change', e => {
       const k = e.target.dataset.kind; if (!k) return;
       state.kinds = e.target.checked ? state.kinds.concat([k]) : state.kinds.filter(x => x !== k);
@@ -437,9 +469,6 @@ PT.HomeIndex = (() => {
       state.tag = state.tag === chip.dataset.tagchip ? '' : chip.dataset.tagchip;
       resetPage(); paintTags(document.getElementById('railTagSearch').value); paintChips(); fetchIndex();
     });
-
-    // keep space nav labels fresh
-    renderSpaceNav();
   }
 
   function setMode(mode) {
@@ -449,12 +478,5 @@ PT.HomeIndex = (() => {
     fetchIndex();
   }
 
-  function renderSpaceNav() {
-    const nav = document.getElementById('spaceNav'); if (!nav) return;
-    nav.innerHTML = PT.SPACES.map(s =>
-      '<li><a href="#index" data-view="index" onclick="PT.HomeIndex.filterSpace(\'' + s.id + '\')">' +
-      '<span class="nav-icon"><pt-icon name="' + s.icon + '" size="15"></pt-icon></span>' + s.label + '</a></li>').join('');
-  }
-
-  return { render, afterRender, setQuery, filterKind, filterAll, filterSpace, renderSpaceNav };
+  return { render, afterRender, setQuery, setGroup, filterKind, filterAll, filterSpace };
 })();

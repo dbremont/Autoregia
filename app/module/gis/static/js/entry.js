@@ -1,60 +1,12 @@
-/* GIS Entry — Catalog list, filters, editor modal, detail modal */
+/* GIS Entry — entry card, editor modal, detail modal.
+   (The list view itself lives in home.js — the General Index.) */
 PT.Entry = {
-  _filters: {},
-
-  filterKind(kind) { this.applyFilters(Object.assign({}, this._filters, { kind: kind })); PT.navigate('catalog'); },
-
-  applyFilters(f) {
-    this._filters = f || {};
-    const list = document.getElementById('entryListContainer');
-    if (!list) return;
-    list.innerHTML = this._renderCards(this._filtered());
-    const count = document.getElementById('listCount');
-    if (count) count.textContent = this._filtered().length + ' of ' + PT.Store.getAll().length;
-  },
-
-  _filtered() {
-    let entries = PT.Store.getAll();
-    const f = this._filters;
-    if (f.kind) entries = entries.filter(function (e) { return e.object_kind === f.kind; });
-    if (f.status) entries = entries.filter(function (e) { return e.status === f.status; });
-    if (f.domain) entries = entries.filter(function (e) { return e.domain === f.domain; });
-    if (f.priority) entries = entries.filter(function (e) { return e.priority === f.priority; });
-    if (f.system) entries = entries.filter(function (e) { return e.strategic && e.strategic.system_served === f.system; });
-    if (f.q) {
-      const q = f.q.toLowerCase();
-      entries = PT.Store.search(f.q).map(function (e) { delete e._sc; return e; });
-    }
-    return entries;
-  },
-
-  renderList() {
-    const entries = PT.Store.getAll();
-    const kindOpts = PT.ENUMS.object_kind.map(function (k) { return '<option value="' + k + '">' + PT.prettyEnum(k) + '</option>'; }).join('');
-    const statusOpts = PT.ENUMS.status.map(function (k) { return '<option value="' + k + '">' + PT.prettyEnum(k) + '</option>'; }).join('');
-    return '<div class="content-header"><div><span class="eyebrow">Catalog</span><h1>Technical Objects</h1></div>' +
-      '<div class="actions"><button class="btn btn-primary btn-sm" onclick="PT.Entry.openEditor()"><pt-icon name="plus" size="15"></pt-icon> New Entry</button></div></div>' +
-      '<div class="list-toolbar">' +
-        '<input type="search" id="catalogSearch" placeholder="Filter entries…" autocomplete="off">' +
-        '<select id="fKind"><option value="">All Kinds</option>' + kindOpts + '</select>' +
-        '<select id="fStatus"><option value="">All Status</option>' + statusOpts + '</select>' +
-        '<button class="btn btn-ghost btn-sm" onclick="PT.Entry.clearFilters()"><pt-icon name="x" size="14"></pt-icon> Clear</button>' +
-        '<span class="list-count" id="listCount">' + entries.length + ' of ' + entries.length + '</span>' +
-      '</div>' +
-      '<div class="entry-list" id="entryListContainer">' + this._renderCards(entries) + '</div>';
-  },
-
-  _renderCards(entries) {
-    if (!entries.length) return '<div class="empty-state"><div class="empty-icon">' + PT.icon('box', 40) + '</div><h3>No entries</h3><p>Adjust filters or create a new entry.</p></div>';
-    return entries.map(function (e) { return PT.Entry._card(e); }).join('');
-  },
-
   _card(e) {
     const color = PT.kindColor(e.object_kind);
     const kindIcon = PT.KIND_ICONS[e.object_kind] || 'circle';
     const pinned = e.pinned ? ' is-pinned' : '';
     const pinBtn = '<button class="entry-card-pin' + pinned + '" title="' + (e.pinned ? 'Unpin' : 'Pin to Dashboard') + '" onclick="event.stopPropagation();PT.togglePin(\'' + e.id + '\')">' + PT.icon('pin', 15) + '</button>';
-    return '<div class="entry-card' + pinned + '" style="--kind-color:' + color + '" onclick="PT.Entry.showDetail(\'' + e.id + '\')">' +
+    return '<div class="entry-card' + pinned + '" style="--kind-color:' + color + '" onclick="PT.openEntry(\'' + e.id + '\')">' +
       '<div class="entry-card-head"><div><div class="entry-card-name">' + PT.esc(e.name) + '</div>' +
       '<div class="entry-card-id">' + PT.esc(e.id) + '</div></div>' +
       '<div class="entry-card-head-actions">' + pinBtn + '<pt-icon name="' + kindIcon + '" size="20" style="color:' + color + '"></pt-icon></div></div>' +
@@ -66,22 +18,6 @@ PT.Entry = {
         (e.domain ? '<span class="mini-badge">' + PT.esc(e.domain) + '</span>' : '') +
         (e.relations && e.relations.length ? '<span class="mini-badge">' + PT.icon('git-branch',12) + ' ' + e.relations.length + '</span>' : '') +
       '</div></div>';
-  },
-
-  afterRender() {
-    const self = this;
-    const cs = document.getElementById('catalogSearch');
-    if (cs) cs.addEventListener('input', function (e) { self.applyFilters(Object.assign({}, self._filters, { q: e.target.value })); });
-    const fk = document.getElementById('fKind'); if (fk) fk.addEventListener('change', function (e) { self.applyFilters(Object.assign({}, self._filters, { kind: e.target.value })); });
-    const fs = document.getElementById('fStatus'); if (fs) fs.addEventListener('change', function (e) { self.applyFilters(Object.assign({}, self._filters, { status: e.target.value })); });
-  },
-
-  clearFilters() {
-    this._filters = {};
-    const cs = document.getElementById('catalogSearch'); if (cs) cs.value = '';
-    const fk = document.getElementById('fKind'); if (fk) fk.value = '';
-    const fs = document.getElementById('fStatus'); if (fs) fs.value = '';
-    this.applyFilters({});
   },
 
   // ── Editor modal ──
@@ -168,7 +104,6 @@ PT.Entry = {
       PT.toast('Entry created');
     }
     this.closeEditor();
-    if (PT.currentView === 'catalog') PT.navigate('catalog');
     if (PT.currentView === 'dashboard') PT.navigate('dashboard');
     if (PT.currentView === 'index') PT.navigate('index');
   },
@@ -240,7 +175,7 @@ PT.Entry = {
     if (rels.length) {
       html += '<div class="detail-section"><h4>Relationships</h4><div class="relations-list">' +
         rels.map(function (r) { return '<div class="relation-row"><span class="relation-kind">' + r.kind.replace(/_/g,' ') + '</span>' +
-          '<span class="relation-arrow">→</span><span class="relation-target" onclick="PT.Entry.showDetail(\'' + r.target + '\')">' + PT.esc(targetName(r.target)) + '</span>' +
+          '<span class="relation-arrow">→</span><span class="relation-target" onclick="PT.openEntry(\'' + r.target + '\')">' + PT.esc(targetName(r.target)) + '</span>' +
           (r.notes ? '<span class="relation-notes">' + PT.esc(r.notes) + '</span>' : '') + '</div>'; }).join('') + '</div></div>';
     }
     // Annotations
@@ -281,7 +216,7 @@ PT.retire = async function (id) {
   await PT.Store.update(id, { status: 'retired', lifecycle_state: 'retired', workflow_state: 'removed' });
   PT.toast('Entry retired');
   PT.Entry.closeDetail();
-  if (PT.currentView === 'catalog') PT.navigate('catalog');
+  if (PT.currentView === 'dashboard') PT.navigate('dashboard');
   if (PT.currentView === 'index') PT.navigate('index');
 };
 PT.togglePin = async function (id) {
@@ -289,17 +224,17 @@ PT.togglePin = async function (id) {
   const e = PT.Store.getById(id);
   PT.toast(e && e.pinned ? 'Entry pinned' : 'Entry unpinned');
   // refresh whichever modal/view is open
-  if (!document.getElementById('detailModal').classList.contains('hidden')) PT.Entry.showDetail(id);
-  if (PT.currentView === 'catalog') PT.navigate('catalog');
+  if (!document.getElementById('detailModal').classList.contains('hidden')) PT.openEntry(id);
   if (PT.currentView === 'dashboard') PT.navigate('dashboard');
   if (PT.currentView === 'index') PT.navigate('index');
+  if (PT.currentView === 'graph') PT.navigate('graph');
 };
 PT.confirmDelete = function (id) {
   const e = PT.Store.getById(id); if (!e) return;
   if (confirm('Delete entry "' + e.name + '"? This cannot be undone.')) {
     PT.Store.remove(id).then(function () {
       PT.toast('Entry deleted'); PT.Entry.closeDetail();
-      if (PT.currentView === 'catalog') PT.navigate('catalog');
+      if (PT.currentView === 'dashboard') PT.navigate('dashboard');
       if (PT.currentView === 'index') PT.navigate('index');
     });
   }

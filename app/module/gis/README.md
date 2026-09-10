@@ -6,8 +6,7 @@
 > **point → element** pair, where the point is the handle (a name/alias) and
 > the element is what it points to — a GitHub project, a document, a service,
 > a capability, or a deep-link into any other Autoregia system. The index is
-> the **entry point to everything**, aggregated with the running systems
-> through a read-only fan-out across their public APIs.
+> the **entry point to everything**.
 
 > This directory contains the **prototype implementation**. It evolved from
 > the PTOCS catalog (Personal Technical Object Catalog System); entries
@@ -43,13 +42,15 @@ gis/
         ├── app.js         # router, view switching, keyboard, shared helpers
         ├── search.js      # header search application (delegates to the Index view)
         ├── home.js        # General Index home: hero, stats, tabs, table/grid,
-        │                  #   pagination, right rail (filters, tags, graph, activity)
-        ├── federation.js  # cross-system fan-out directory (point → element)
-        ├── entry.js       # catalog list, filters, editor & detail modals
-        ├── dashboard.js   # at-a-glance statistics + charts
-        ├── browse.js      # faceted pivot cards (kind/domain/status/system/…)
+        │                  #   pagination, right rail (spaces, filters, tags,
+        │                  #   graph preview, activity)
+        ├── entry.js       # entry card, editor & detail modals
+        ├── reference.js   # user-facing plates: Data Sources, Documentation, About
+        ├── dashboard.js   # multi-tab dashboard: Overview · Coverage · Structure
+        │                  #   · Health · Cost & Trust · Activity
+        ├── analysis.js    # shared /api/analysis projection service + the four
+        │                  #   analytics tab renderers
         ├── relations.js   # relationship graph (force layout)
-        ├── analysis.js    # Statistical Overlay (coverage, gaps, redundancy, …)
         └── command-palette.js  # Ctrl+K universal command interface
 ```
 
@@ -87,20 +88,31 @@ Per [`../spec/ptocs/spec.md`](../spec/ptocs/spec.md):
   People / Projects / More), sort (relevance / updated / name / created), a
   list & grid mode, and an overview endpoint (`/api/overview`) for header
   stats (total, kinds, relationship count, freshness) and facet counts
-  (kinds, groups, spaces, top tags).
+  (kinds, groups, spaces, top tags). The right rail holds quick actions,
+  space chips, kind filters with counts, top tags, a knowledge-graph
+  preview, and recent activity.
+- **Dashboard (multi-tab):** one tabbed analytics surface derived from the
+  statistics the system holds — **Overview** (composition + pinned + recent),
+  **Coverage** (domains, hosting, capability gaps), **Structure** (dependency
+  depth, single points of failure, redundancy clusters), **Health** (findings,
+  lifecycle/freshness, ecosystem concentration), **Cost & Trust** (recurring
+  spend, evidence levels, under-validated entries), and **Activity** (the
+  added/updated/viewed/deleted feed). The analysis tabs share one cached
+  `/api/analysis` projection with a client-side fallback.
 - **Activity log:** `added / updated / viewed / deleted` events persisted in
   a separate CouchDB db (`ptocs_activity`; view/updated events throttled to
-  one per entry per hour), surfaced in the Recent Activity rail
+  one per entry per hour), surfaced in the Activity tab and the home rail
   (`POST /api/entries/<id>/view`, `GET /api/activity`).
-- **Retrieval & Navigation:** search (scored), browse by facet, capability
-  discovery via the relationship graph, and entry detail with the full
-  classification/provenance/delivery/cost/usage/epistemic/strategic metadata.
-- **Statistical Overlay (Analysis):** coverage & composition, capability-gap
-  analysis, redundancy/overlap detection, dependency-graph analytics (depth,
-  fan-in/out, single points of failure), cost exposure, lifecycle/freshness,
-  ecosystem health (orphans, vendor/license concentration), and provenance/trust.
-- **Federation:** a read-only fan-out across the running sibling systems'
-  public APIs (`#federation` view), each item deep-linked back to its origin.
+- **Retrieval & Navigation:** search (scored), faceted counts (`/api/browse`,
+  API retained), capability discovery via the relationship graph, and entry
+  detail with the full classification/provenance/delivery/cost/usage/
+  epistemic/strategic metadata.
+- **Reference:** three user-facing plates about the Index itself — **Data
+  Sources** (the live list of data-source entries, linked to their detail
+  views and out to their sources), **Documentation** (every view, control,
+  and shortcut in plain language, plus entry anatomy, kinds, and spaces),
+  and **About** (the point → element idea and the system's role). Rendered
+  in the standalone-document archetype (`design.md` §3.2).
 - **Derivative:** JSON export & import (merge-by-id).
 - **Append-only Annotation Log:** per-entry commentary without mutating content.
 

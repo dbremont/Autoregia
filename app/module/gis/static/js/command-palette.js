@@ -15,27 +15,23 @@ PT.CommandPalette = {
     const commands = [
       { icon: 'plus', title: 'New Entry', sub: 'Register a new technical object', action: function () { PT.Entry.openEditor(); } },
       { icon: 'list', title: 'Go to Index', sub: 'The General Index home', action: function () { PT.navigate('index'); } },
-      { icon: 'gauge', title: 'Go to Dashboard', sub: 'At-a-glance statistics', action: function () { PT.navigate('dashboard'); } },
-      { icon: 'book-open', title: 'Browse Catalog', sub: 'All technical objects', action: function () { PT.navigate('catalog'); } },
-      { icon: 'layout-grid', title: 'Browse Facets', sub: 'Pivot by kind/domain/status', action: function () { PT.navigate('browse'); } },
-      { icon: 'network', title: 'Federation', sub: 'Cross-system fan-out directory', action: function () { PT.navigate('federation'); } },
-      { icon: 'share-2', title: 'Relationship Graph', sub: 'Visualize entry relationships', action: function () { PT.navigate('graph'); } },
-      { icon: 'bar-chart-3', title: 'Statistical Overlay', sub: 'Coverage, gaps, redundancy, cost', action: function () { PT.navigate('analysis'); } },
+      { icon: 'gauge', title: 'Go to Dashboard', sub: 'Overview, coverage, structure, health, cost, activity', action: function () { PT.navigate('dashboard'); } },
+      { icon: 'share-2', title: 'Graph', sub: 'Visualize entry relationships', action: function () { PT.navigate('graph'); } },
       { icon: 'download', title: 'Export Catalog', sub: 'Download as JSON', action: function () { PT.navigate('export'); } },
       { icon: 'search', title: 'Search the Index…', sub: 'Focus the search box', action: function () { document.getElementById('globalSearch').focus(); } },
     ];
     let html = '<div class="cmd-group-label">Commands</div>';
-    commands.filter(function (c) { return !q || c.title.toLowerCase().indexOf(q) >= 0 || c.sub.toLowerCase().indexOf(q) >= 0; })
-      .forEach(function (c) {
-        html += '<div class="cmd-result-item" data-action="cmd"><span class="cmd-result-icon">' + PT.icon(c.icon, 17) + '</span>' +
-          '<div class="cmd-result-text"><div class="cmd-result-title">' + c.title + '</div><div class="cmd-result-subtitle">' + c.sub + '</div></div></div>';
-      });
+    const visible = commands.filter(function (c) { return !q || c.title.toLowerCase().indexOf(q) >= 0 || c.sub.toLowerCase().indexOf(q) >= 0; });
+    visible.forEach(function (c) {
+      html += '<div class="cmd-result-item" data-action="cmd"><span class="cmd-result-icon">' + PT.icon(c.icon, 17) + '</span>' +
+        '<div class="cmd-result-text"><div class="cmd-result-title">' + c.title + '</div><div class="cmd-result-subtitle">' + c.sub + '</div></div></div>';
+    });
     if (q.length > 1) {
       const results = PT.Store.search(q).slice(0, 8);
       if (results.length) {
         html += '<div class="cmd-group-label">Entries</div>';
         results.forEach(function (r) {
-          html += '<div class="cmd-result-item" onclick="PT.CommandPalette.close();PT.Entry.showDetail(\'' + r.id + '\')">' +
+          html += '<div class="cmd-result-item" onclick="PT.CommandPalette.close();PT.openEntry(\'' + r.id + '\')">' +
             '<span class="cmd-result-icon" style="color:' + PT.kindColor(r.object_kind) + '">' + PT.icon(PT.KIND_ICONS[r.object_kind] || 'circle', 16) + '</span>' +
             '<div class="cmd-result-text"><div class="cmd-result-title">' + PT.esc(r.name) + '</div>' +
             '<div class="cmd-result-subtitle">' + PT.prettyEnum(r.object_kind) + ' · ' + r.id + ' · ' + PT.prettyEnum(r.status) + '</div></div></div>';
@@ -44,7 +40,7 @@ PT.CommandPalette = {
     }
     el.innerHTML = html;
     el.querySelectorAll('.cmd-result-item[data-action]').forEach(function (item, i) {
-      item.addEventListener('click', function () { PT.CommandPalette.close(); commands[i] && commands[i].action && commands[i].action(); });
+      item.addEventListener('click', function () { PT.CommandPalette.close(); visible[i] && visible[i].action && visible[i].action(); });
     });
   },
 };

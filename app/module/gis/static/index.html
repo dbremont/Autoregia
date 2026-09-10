@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GIS — General Index System</title>
-  <link rel="stylesheet" href="/gis/css/variables.css">
-  <link rel="stylesheet" href="/gis/css/fonts.css">
-  <link rel="stylesheet" href="/gis/css/base.css">
-  <link rel="stylesheet" href="/gis/css/layout.css">
-  <link rel="stylesheet" href="/gis/css/components.css">
-  <link rel="stylesheet" href="/gis/css/views.css">
-  <link rel="stylesheet" href="/gis/css/command-palette.css">
+  <link rel="stylesheet" href="/gis/css/variables.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/fonts.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/base.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/layout.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/components.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/views.css?v=20260910">
+  <link rel="stylesheet" href="/gis/css/command-palette.css?v=20260910">
 </head>
 <body>
 
@@ -23,7 +23,7 @@
       <span class="brand-wordmark">General <em>Index</em> System</span>
     </div>
     <div class="header-search">
-      <span class="search-icon"><pt-icon name="search" size="16"></pt-icon></span>
+      <span class="search-glyph"><pt-icon name="search" size="13"></pt-icon></span>
       <input type="search" id="globalSearch" placeholder='Search the index… (e.g. "python", "database", "DR")' autocomplete="off">
     </div>
     <div class="header-actions">
@@ -39,32 +39,21 @@
       <ul class="sidebar-nav">
         <li><a href="#index" data-view="index"><span class="nav-icon"><pt-icon name="list" size="17"></pt-icon></span> Index</a></li>
         <li><a href="#dashboard" data-view="dashboard"><span class="nav-icon"><pt-icon name="gauge" size="17"></pt-icon></span> Dashboard</a></li>
-        <li><a href="#catalog" data-view="catalog"><span class="nav-icon"><pt-icon name="book-open" size="17"></pt-icon></span> Catalog</a></li>
-        <li><a href="#browse" data-view="browse"><span class="nav-icon"><pt-icon name="layout-grid" size="17"></pt-icon></span> Browse</a></li>
-        <li><a href="#graph" data-view="graph"><span class="nav-icon"><pt-icon name="share-2" size="17"></pt-icon></span> Relationship Graph</a></li>
-        <li><a href="#analysis" data-view="analysis"><span class="nav-icon"><pt-icon name="bar-chart-3" size="17"></pt-icon></span> Statistical Overlay</a></li>
+        <li><a href="#graph" data-view="graph"><span class="nav-icon"><pt-icon name="share-2" size="17"></pt-icon></span> Graph</a></li>
       </ul>
     </nav>
 
     <nav class="sidebar-section">
-      <div class="sidebar-label">Federation</div>
+      <div class="sidebar-label">Reference</div>
       <ul class="sidebar-nav">
-        <li><a href="#federation" data-view="federation"><span class="nav-icon"><pt-icon name="network" size="17"></pt-icon></span> System Fan-out</a></li>
+        <li><a href="#sources" data-view="sources"><span class="nav-icon"><pt-icon name="database" size="17"></pt-icon></span> Data Sources</a></li>
+        <li><a href="#handbook" data-view="handbook"><span class="nav-icon"><pt-icon name="book-open" size="17"></pt-icon></span> Documentation</a></li>
+        <li><a href="#about" data-view="about"><span class="nav-icon"><pt-icon name="info" size="17"></pt-icon></span> About</a></li>
       </ul>
     </nav>
 
     <nav class="sidebar-section">
-      <div class="sidebar-label">By Kind</div>
-      <ul class="sidebar-nav" id="kindNav"></ul>
-    </nav>
-
-    <nav class="sidebar-section">
-      <div class="sidebar-label">My Spaces</div>
-      <ul class="sidebar-nav" id="spaceNav"></ul>
-    </nav>
-
-    <nav class="sidebar-section">
-      <div class="sidebar-label">Complementary</div>
+      <div class="sidebar-label">Toolbox</div>
       <ul class="sidebar-nav">
         <li><a href="#export" data-view="export"><span class="nav-icon"><pt-icon name="download" size="17"></pt-icon></span> Export</a></li>
       </ul>
@@ -127,19 +116,18 @@
 <div class="toast" id="toast"></div>
 
 <script src="/gis/js/vendor/echarts.min.js"></script>
-<script src="/gis/js/store.js"></script>
-<script src="/gis/js/icons.js"></script>
-<script src="/gis/js/charts.js"></script>
-<script src="/gis/js/app.js"></script>
-<script src="/gis/js/search.js"></script>
-<script src="/gis/js/entry.js"></script>
-<script src="/gis/js/dashboard.js"></script>
-<script src="/gis/js/browse.js"></script>
-<script src="/gis/js/relations.js"></script>
-<script src="/gis/js/analysis.js"></script>
-<script src="/gis/js/home.js"></script>
-<script src="/gis/js/federation.js"></script>
-<script src="/gis/js/command-palette.js"></script>
+<script src="/gis/js/store.js?v=20260910"></script>
+<script src="/gis/js/icons.js?v=20260910"></script>
+<script src="/gis/js/charts.js?v=20260910"></script>
+<script src="/gis/js/app.js?v=20260910"></script>
+<script src="/gis/js/search.js?v=20260910"></script>
+<script src="/gis/js/entry.js?v=20260910"></script>
+<script src="/gis/js/dashboard.js?v=20260910"></script>
+<script src="/gis/js/relations.js?v=20260910"></script>
+<script src="/gis/js/analysis.js?v=20260910"></script>
+<script src="/gis/js/home.js?v=20260910"></script>
+<script src="/gis/js/reference.js?v=20260910"></script>
+<script src="/gis/js/command-palette.js?v=20260910"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => { PT.init(); });
 </script>

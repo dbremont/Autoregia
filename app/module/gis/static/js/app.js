@@ -64,18 +64,35 @@ PT.init = async function () {
   this.setupGlobalSearch();
   this.setupKeyboard();
   this.setupHeaderButtons();
-  this.renderKindNav();
-  if (PT.HomeIndex) PT.HomeIndex.renderSpaceNav();
-  PT.Store.subscribe(() => { this.renderKindNav(); if (PT.HomeIndex) PT.HomeIndex.renderSpaceNav(); });
   this.navigate(this.getHashView() || 'index');
+  if (location.hash.indexOf('#entry=') === 0) PT.handleEntryHash();
 };
 
 PT.setupRouter = function () {
-  window.addEventListener('hashchange', () => {
-    const v = this.getHashView(); if (v) this.navigate(v);
+  window.addEventListener('hashchange', function () {
+    if (location.hash.indexOf('#entry=') === 0) { PT.handleEntryHash(); return; }
+    const v = PT.getHashView(); if (v) PT.navigate(v);
   });
 };
 PT.getHashView = function () { return location.hash.slice(1); };
+
+// Deep-linkable entries: #entry=OBJ-… opens the detail modal; Back closes it.
+PT.openEntry = function (id) {
+  if (!id) return;
+  const target = '#entry=' + id;
+  if (location.hash === target) { PT.Entry.showDetail(id); return; }
+  location.hash = target;
+};
+PT.handleEntryHash = function () {
+  const m = location.hash.match(/^#entry=(.+)$/);
+  if (m) {
+    const e = PT.Store.getById(m[1]);
+    if (e) PT.Entry.showDetail(e.id);
+    else PT.toast('Entry not found: ' + m[1]);
+  } else {
+    PT.Entry.closeDetail();
+  }
+};
 
 PT.navigate = function (view) {
   this.currentView = view; location.hash = '#' + view;
@@ -85,23 +102,18 @@ PT.navigate = function (view) {
   const c = document.getElementById('appContent');
   switch (view) {
     case 'index':       c.innerHTML = PT.HomeIndex.render(); break;
-    case 'federation':  c.innerHTML = PT.Federation.render(); break;
-    case 'dashboard': c.innerHTML = PT.Dashboard.render(); break;
-    case 'catalog':   c.innerHTML = PT.Entry.renderList(); break;
-    case 'browse':    c.innerHTML = PT.Browse.render(); break;
-    case 'graph':     c.innerHTML = PT.Graph.render(); break;
-    case 'analysis':  c.innerHTML = PT.Analysis.render(); break;
-    case 'export':    c.innerHTML = PT.ExportView(); break;
-    default:          c.innerHTML = PT.HomeIndex.render();
+    case 'dashboard':   c.innerHTML = PT.Dashboard.render(); break;
+    case 'graph':       c.innerHTML = PT.Graph.render(); break;
+    case 'sources':     c.innerHTML = PT.Reference.sources(); break;
+    case 'handbook':    c.innerHTML = PT.Reference.handbook(); break;
+    case 'about':       c.innerHTML = PT.Reference.about(); break;
+    case 'export':      c.innerHTML = PT.ExportView(); break;
+    default:            c.innerHTML = PT.HomeIndex.render();
   }
   setTimeout(function () {
     if (view === 'index')       PT.HomeIndex.afterRender();
-    if (view === 'federation')  PT.Federation.afterRender();
-    if (view === 'dashboard') PT.Dashboard.afterRender();
-    if (view === 'browse')    PT.Browse.afterRender();
-    if (view === 'graph')     PT.Graph.afterRender();
-    if (view === 'analysis')  PT.Analysis.afterRender();
-    if (view === 'catalog')   PT.Entry.afterRender();
+    if (view === 'dashboard')   PT.Dashboard.afterRender();
+    if (view === 'graph')       PT.Graph.afterRender();
   }, 50);
 };
 
@@ -123,7 +135,13 @@ PT.setupKeyboard = function () {
   document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); PT.CommandPalette.open(''); }
     if (e.key === 'n' && !isInputFocused()) { e.preventDefault(); PT.Entry.openEditor(); }
-    if (e.key === 'Escape') { PT.CommandPalette.close(); PT.Entry.closeEditor(); PT.Entry.closeDetail(); }
+    if (e.key === 'Escape') {
+      PT.CommandPalette.close(); PT.Entry.closeEditor(); PT.Entry.closeDetail();
+      const anyOpen = ['entryModal', 'detailModal', 'cmdPalette'].some(function (id) {
+        const el = document.getElementById(id); return el && !el.classList.contains('hidden');
+      });
+      if (!anyOpen && PT.currentView === 'graph' && PT.Graph.clear) PT.Graph.clear();
+    }
   });
 };
 function isInputFocused() {
@@ -136,21 +154,6 @@ PT.setupHeaderButtons = function () {
   const im = document.getElementById('btnImport'); if (im) im.addEventListener('click', function () { document.getElementById('importFile').click(); });
   const fi = document.getElementById('importFile'); if (fi) fi.addEventListener('change', function (e) { PT.importFile(e); });
   const sv = document.getElementById('btnSaveEntry'); if (sv) sv.addEventListener('click', function () { PT.Entry.saveEditor(); });
-};
-
-PT.renderKindNav = function () {
-  const stats = PT.Store.getStats();
-  const nav = document.getElementById('kindNav'); if (!nav) return;
-  const total = stats.total;
-  const items = Object.entries(stats.byKind).sort(function (a,b) { return b[1]-a[1]; });
-  nav.innerHTML =
-    '<li><a href="#index" data-view="index" onclick="PT.HomeIndex.filterAll()">' +
-    '<span class="nav-icon"><pt-icon name="list" size="15"></pt-icon></span>All<span class="sidebar-count">' + total + '</span></a></li>' +
-    items.map(function (kc) {
-      const k = kc[0], c = kc[1];
-      return '<li><a href="#index" data-view="index" onclick="PT.HomeIndex.filterKind(\'' + k + '\')">' +
-        '<span class="nav-icon"><pt-icon name="' + (PT.KIND_ICONS[k]||'circle') + '" size="15"></pt-icon></span>' + PT.prettyEnum(k) + '<span class="sidebar-count">' + c + '</span></a></li>';
-    }).join('');
 };
 
 PT.importFile = async function (e) {
