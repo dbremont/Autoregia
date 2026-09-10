@@ -36,8 +36,8 @@ AUTOREGIA_PORT=8090 python3 app/app.py
 # deploy (build image + recreate container `autoregia`; requires CouchDB up)
 ./run.sh deploy        # also: pull | logs | stop
 
-# tests (PEOS tests need CouchDB running on 127.0.0.1:5984)
-python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py
+# tests (PEOS + GIS tests need CouchDB running on 127.0.0.1:5984)
+python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
 python3 app/support/tools/prefix_assets.py
@@ -79,6 +79,14 @@ No linter is configured.
   host`, port from `AUTOREGIA_PORT` in `.env` — 8081 on this host).
 - Container `couchdb` (couchdb:3) on `127.0.0.1:5984`, volume `couchdb_data`.
   Credentials in `.env` (git-ignored; see `.env.example`).
+- **CouchDB seeding:** each sub-system's `Store` seeds its DB from local
+  `data/*.json` fixtures **only when the DB is empty** — regenerating a
+  seed file does not refresh a running DB. To pick up a regenerated seed,
+  drop the DB and restart the server:
+  `curl -X DELETE http://admin:<password>@127.0.0.1:5984/<db>` (check the
+  DB for non-seed entries first). GIS owns two DBs: `ptocs` (entries) and
+  `ptocs_activity` (activity log). Test suites use isolated prefixes
+  (`peos_test_`, `gis_test_`) and never touch dev data.
 - Push to `main` → GitHub Actions builds and pushes the image to GHCR.
 - `app/module/pwos/` and `*.log` are git-ignored; `pwos` also has an ignore
   rule for `config/`.
@@ -95,8 +103,8 @@ No linter is configured.
 
 1. `AUTOREGIA_PORT=8090 python3 app/app.py` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py`
-   → 43 passed.
+2. `python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py`
+   → 62 passed.
 3. `./run.sh deploy` → curl the mount matrix on the container port; check
    `docker logs autoregia` for tracebacks.
 4. Update `README.md` tree/links if the layout changed.

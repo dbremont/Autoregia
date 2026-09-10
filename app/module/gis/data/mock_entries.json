@@ -28,7 +28,8 @@
     "status": "active",
     "priority": "critical",
     "owner": "self",
-    "pinned": false,
+    "pinned": true,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -95,7 +96,7 @@
       }
     ],
     "created_at": "2027-04-25T00:00:00Z",
-    "updated_at": "2026-06-27T23:43:03.690931Z",
+    "updated_at": "2027-04-25T00:00:00Z",
     "last_used_at": "2026-06-26T10:30:00Z"
   },
   {
@@ -127,7 +128,8 @@
     "status": "active",
     "priority": "critical",
     "owner": "self",
-    "pinned": false,
+    "pinned": true,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -163,11 +165,16 @@
         "target": "OBJ-2026-0003",
         "kind": "depends_on",
         "notes": "Editor calls git"
+      },
+      {
+        "target": "OBJ-2026-0024",
+        "kind": "integrates_with",
+        "notes": "Python tooling in the editor"
       }
     ],
     "annotations": [],
     "created_at": "2027-10-02T00:00:00Z",
-    "updated_at": "2026-06-27T23:43:15.309111Z",
+    "updated_at": "2027-10-02T00:00:00Z",
     "last_used_at": "2026-06-27T10:30:00Z"
   },
   {
@@ -200,6 +207,7 @@
     "priority": "critical",
     "owner": "self",
     "pinned": true,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -265,6 +273,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "self_hosted",
@@ -305,6 +314,11 @@
         "target": "OBJ-2026-0007",
         "kind": "integrates_with",
         "notes": "Mirrors repos to GitHub"
+      },
+      {
+        "target": "OBJ-2026-0024",
+        "kind": "depends_on",
+        "notes": "Flask is Python software"
       }
     ],
     "annotations": [],
@@ -341,6 +355,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "self_hosted",
@@ -418,6 +433,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -503,6 +519,7 @@
     "priority": "critical",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -574,6 +591,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -614,6 +632,11 @@
         "target": "OBJ-2026-0001",
         "kind": "complements",
         "notes": "Store papers in vault"
+      },
+      {
+        "target": "OBJ-2026-0025",
+        "kind": "complements",
+        "notes": "arXiv feeds the paper collection"
       }
     ],
     "annotations": [],
@@ -650,6 +673,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "self_hosted",
@@ -690,6 +714,16 @@
         "target": "OBJ-2026-0010",
         "kind": "contains",
         "notes": "Runs SQLite-backed services"
+      },
+      {
+        "target": "OBJ-2026-0027",
+        "kind": "integrates_with",
+        "notes": "Containers on the NixOS server"
+      },
+      {
+        "target": "OBJ-2026-0028",
+        "kind": "alternative_to",
+        "notes": null
       }
     ],
     "annotations": [],
@@ -726,6 +760,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -797,6 +832,7 @@
     "priority": "critical",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "physical",
@@ -873,6 +909,7 @@
     "priority": "low",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "physical",
@@ -938,6 +975,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "physical",
@@ -1004,6 +1042,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -1080,6 +1119,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -1120,6 +1160,11 @@
         "target": "OBJ-2026-0009",
         "kind": "depends_on",
         "notes": "Deploys to NixOS"
+      },
+      {
+        "target": "OBJ-2026-0030",
+        "kind": "serves",
+        "notes": "Pipeline ships Autoregia images"
       }
     ],
     "annotations": [],
@@ -1157,6 +1202,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -1234,6 +1280,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "in_review",
     "lifecycle_state": "provisional",
     "hosting_model": "cloud",
@@ -1315,6 +1362,7 @@
     "priority": "low",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "in_review",
     "lifecycle_state": "provisional",
     "hosting_model": "local",
@@ -1388,6 +1436,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "in_review",
     "lifecycle_state": "provisional",
     "hosting_model": "cloud",
@@ -1460,6 +1509,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "work",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "self_hosted",
@@ -1540,6 +1590,7 @@
     "priority": "medium",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "local",
@@ -1605,6 +1656,7 @@
     "priority": "high",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "adopted",
     "lifecycle_state": "active",
     "hosting_model": "cloud",
@@ -1677,6 +1729,7 @@
     "priority": "low",
     "owner": "self",
     "pinned": false,
+    "space": "personal",
     "workflow_state": "phasing_out",
     "lifecycle_state": "deprecated",
     "hosting_model": "physical",
@@ -1721,5 +1774,586 @@
     "created_at": "2028-04-19T00:00:00Z",
     "updated_at": "2028-04-19T00:00:00Z",
     "last_used_at": "2025-12-29T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0024",
+    "name": "Python",
+    "slug": "python",
+    "aliases": [],
+    "summary": "High-level programming language.",
+    "detail": "",
+    "purpose": "Primary language for Autoregia services and scripts.",
+    "function": "General-purpose scripting, services, and data work.",
+    "object_kind": "language",
+    "category": "programming-language",
+    "domain": "Software Engineering",
+    "keywords": [
+      "programming-language"
+    ],
+    "tags": [
+      "language",
+      "daily-driver"
+    ],
+    "provenance": {
+      "source_url": "https://www.python.org",
+      "vendor": "Python Software Foundation",
+      "version": "3.12",
+      "license": "PSF-2.0",
+      "acquired_at": "2029-12-10T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "pinned": true,
+    "space": "work",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "cli",
+      "install": "system package",
+      "config": null,
+      "docs_url": "https://docs.python.org",
+      "invocation": "python3"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "programming-language",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2029-12-10T00:00:00Z",
+    "updated_at": "2029-12-10T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0025",
+    "name": "Research Papers",
+    "slug": "research-papers",
+    "aliases": [],
+    "summary": "Academic papers and references.",
+    "detail": "",
+    "purpose": "Curated reading list backing the Intelligence System.",
+    "function": "Stored PDFs and preprints with notes in the vault.",
+    "object_kind": "document",
+    "category": "paper-collection",
+    "domain": "Research",
+    "keywords": [
+      "paper-collection"
+    ],
+    "tags": [
+      "research",
+      "papers",
+      "academic"
+    ],
+    "provenance": {
+      "source_url": "https://arxiv.org",
+      "vendor": "self",
+      "version": "n/a",
+      "license": "varies",
+      "acquired_at": "2026-08-28T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "pinned": false,
+    "space": "personal",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "local",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "document",
+      "install": "manual curation",
+      "config": null,
+      "docs_url": "internal",
+      "invocation": "read & annotate"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "observational",
+      "rating": 3.5
+    },
+    "strategic": {
+      "system_served": "system_4_intelligence",
+      "goal": null,
+      "objective": null,
+      "capability": "paper-collection",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2026-08-28T00:00:00Z",
+    "updated_at": "2026-08-28T00:00:00Z",
+    "last_used_at": "2026-06-25T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0026",
+    "name": "Dominican Republic Bonds",
+    "slug": "dominican-republic-bonds",
+    "aliases": [],
+    "summary": "Fixed-income instruments and market data.",
+    "detail": "",
+    "purpose": "Track personal exposure to DR sovereign debt.",
+    "function": "Yield, maturity, and price tracking for DR bonds.",
+    "object_kind": "data_source",
+    "category": "fixed-income",
+    "domain": "Finance",
+    "keywords": [
+      "fixed-income"
+    ],
+    "tags": [
+      "bonds",
+      "finance",
+      "dr"
+    ],
+    "provenance": {
+      "source_url": "https://www.hacienda.gob.do",
+      "vendor": "Ministerio de Hacienda",
+      "version": "n/a",
+      "license": "public",
+      "acquired_at": "2026-03-31T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "pinned": false,
+    "space": "work",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "open",
+    "cost": {
+      "kind": "free",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "browser",
+      "config": null,
+      "docs_url": "https://www.hacienda.gob.do",
+      "invocation": "browser"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "observational",
+      "rating": 3
+    },
+    "strategic": {
+      "system_served": "system_5_policy",
+      "goal": null,
+      "objective": null,
+      "capability": "fixed-income",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [
+      {
+        "id": "ann-0007",
+        "created_at": "2026-06-22T10:30:00Z",
+        "author": "self",
+        "kind": "question",
+        "text": "Revisit DR bond ladder maturity dates in Q4.",
+        "state": "open"
+      }
+    ],
+    "created_at": "2026-03-31T00:00:00Z",
+    "updated_at": "2026-06-26T10:30:00Z",
+    "last_used_at": "2026-06-26T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0027",
+    "name": "Docker",
+    "slug": "docker",
+    "aliases": [],
+    "summary": "Containerization platform.",
+    "detail": "",
+    "purpose": "Package and ship Autoregia services reproducibly.",
+    "function": "Build, run, and publish container images.",
+    "object_kind": "infrastructure",
+    "category": "containers",
+    "domain": "Software Engineering",
+    "keywords": [
+      "containers"
+    ],
+    "tags": [
+      "containers",
+      "devops",
+      "infra"
+    ],
+    "provenance": {
+      "source_url": "https://www.docker.com",
+      "vendor": "Docker Inc.",
+      "version": "27",
+      "license": "Apache-2.0",
+      "acquired_at": "2026-12-06T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "high",
+    "owner": "self",
+    "pinned": false,
+    "space": "work",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "freemium",
+    "cost": {
+      "kind": "freemium",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "cli",
+      "install": "apt install docker.io",
+      "config": null,
+      "docs_url": "https://docs.docker.com",
+      "invocation": "docker compose up"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "containers",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2026-12-06T00:00:00Z",
+    "updated_at": "2026-12-06T00:00:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0028",
+    "name": "AWS",
+    "slug": "aws",
+    "aliases": [],
+    "summary": "Cloud infrastructure and services.",
+    "detail": "",
+    "purpose": "Evaluate as off-site compute and storage.",
+    "function": "Compute, object storage, and managed databases.",
+    "object_kind": "service_platform",
+    "category": "cloud-infrastructure",
+    "domain": "Infrastructure",
+    "keywords": [
+      "cloud-infrastructure"
+    ],
+    "tags": [
+      "cloud",
+      "infra",
+      "aws"
+    ],
+    "provenance": {
+      "source_url": "https://aws.amazon.com",
+      "vendor": "Amazon",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2026-03-01T00:00:00Z"
+    },
+    "status": "backup",
+    "priority": "low",
+    "owner": "self",
+    "pinned": false,
+    "space": "work",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "cloud",
+    "access_model": "subscription",
+    "cost": {
+      "kind": "subscription",
+      "currency": "USD",
+      "amount": 5.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "console",
+      "config": null,
+      "docs_url": "https://docs.aws.amazon.com",
+      "invocation": "console"
+    },
+    "epistemic": {
+      "fit_confidence": "low",
+      "evidence_level": "anecdotal",
+      "rating": 3
+    },
+    "strategic": {
+      "system_served": "system_3_control",
+      "goal": null,
+      "objective": null,
+      "capability": "cloud-infrastructure",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0009",
+        "kind": "alternative_to",
+        "notes": "Cloud vs self-hosted compute"
+      }
+    ],
+    "annotations": [],
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-04-28T10:30:00Z",
+    "last_used_at": "2026-04-28T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0029",
+    "name": "Figma",
+    "slug": "figma",
+    "aliases": [],
+    "summary": "Collaborative design platform.",
+    "detail": "",
+    "purpose": "Mock-ups for Autoregia interface work.",
+    "function": "Vector editing, prototyping, and design hand-off.",
+    "object_kind": "service_platform",
+    "category": "design",
+    "domain": "Software Engineering",
+    "keywords": [
+      "design"
+    ],
+    "tags": [
+      "design",
+      "collaboration",
+      "ui"
+    ],
+    "provenance": {
+      "source_url": "https://www.figma.com",
+      "vendor": "Figma Inc.",
+      "version": "n/a",
+      "license": "proprietary",
+      "acquired_at": "2025-12-16T00:00:00Z"
+    },
+    "status": "trial",
+    "priority": "low",
+    "owner": "self",
+    "pinned": false,
+    "space": "work",
+    "workflow_state": "in_review",
+    "lifecycle_state": "provisional",
+    "hosting_model": "cloud",
+    "access_model": "freemium",
+    "cost": {
+      "kind": "freemium",
+      "currency": "USD",
+      "amount": 0.0,
+      "period": "monthly",
+      "notes": null
+    },
+    "usage": {
+      "interface": "web",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "https://help.figma.com",
+      "invocation": "https://figma.com"
+    },
+    "epistemic": {
+      "fit_confidence": "medium",
+      "evidence_level": "anecdotal",
+      "rating": 3
+    },
+    "strategic": {
+      "system_served": "system_1_operations",
+      "goal": null,
+      "objective": null,
+      "capability": "design",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2025-12-16T00:00:00Z",
+    "updated_at": "2026-05-28T10:30:00Z",
+    "last_used_at": "2026-05-28T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0030",
+    "name": "Autoregia",
+    "slug": "autoregia",
+    "aliases": [],
+    "summary": "Personal Viable System Model \u2014 this very stack.",
+    "detail": "",
+    "purpose": "Run life and work as one regulated system.",
+    "function": "Flask server mounting the self-management sub-systems.",
+    "object_kind": "project",
+    "category": "personal-vsm",
+    "domain": "Self-Management",
+    "keywords": [
+      "personal-vsm"
+    ],
+    "tags": [
+      "daily-driver",
+      "vsm"
+    ],
+    "provenance": {
+      "source_url": "https://github.com/dbremont/autoregia",
+      "vendor": "self",
+      "version": "v0.1",
+      "license": "proprietary",
+      "acquired_at": "2025-12-01T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "critical",
+    "owner": "self",
+    "pinned": true,
+    "space": "personal",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "self_hosted",
+    "access_model": "open",
+    "cost": {
+      "kind": "maintenance",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "api",
+      "install": "git clone",
+      "config": null,
+      "docs_url": "internal",
+      "invocation": "./run.sh deploy"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "observational",
+      "rating": 4.5
+    },
+    "strategic": {
+      "system_served": "system_5_policy",
+      "goal": null,
+      "objective": null,
+      "capability": "personal-vsm",
+      "initiative": null
+    },
+    "relations": [
+      {
+        "target": "OBJ-2026-0004",
+        "kind": "contains",
+        "notes": "APIs served by Flask"
+      },
+      {
+        "target": "OBJ-2026-0005",
+        "kind": "contains",
+        "notes": "Charts rendered with ECharts"
+      },
+      {
+        "target": "OBJ-2026-0024",
+        "kind": "references",
+        "notes": "Implemented mostly in Python"
+      }
+    ],
+    "annotations": [
+      {
+        "id": "ann-0008",
+        "created_at": "2026-06-26T10:30:00Z",
+        "author": "self",
+        "kind": "review",
+        "text": "Index home redesign shipped; federation view stable.",
+        "state": "resolved"
+      }
+    ],
+    "created_at": "2025-12-01T00:00:00Z",
+    "updated_at": "2026-06-27T10:30:00Z",
+    "last_used_at": "2026-06-27T10:30:00Z"
+  },
+  {
+    "id": "OBJ-2026-0031",
+    "name": "A. Castro (Accountant)",
+    "slug": "a-castro-(accountant)",
+    "aliases": [],
+    "summary": "Personal accountant \u2014 tax filings and fiscal advisory.",
+    "detail": "",
+    "purpose": "Keep fiscal obligations timely and optimized.",
+    "function": "Annual filings, monthly reconciliation, fiscal advice.",
+    "object_kind": "person",
+    "category": "advisor",
+    "domain": "Finance",
+    "keywords": [
+      "advisor"
+    ],
+    "tags": [
+      "finance",
+      "advisor"
+    ],
+    "provenance": {
+      "source_url": "n/a",
+      "vendor": "n/a",
+      "version": "n/a",
+      "license": "n/a",
+      "acquired_at": "2026-11-01T00:00:00Z"
+    },
+    "status": "active",
+    "priority": "medium",
+    "owner": "self",
+    "pinned": false,
+    "space": "personal",
+    "workflow_state": "adopted",
+    "lifecycle_state": "active",
+    "hosting_model": "physical",
+    "access_model": "invitation",
+    "cost": {
+      "kind": "one_time",
+      "currency": null,
+      "amount": null,
+      "period": null,
+      "notes": null
+    },
+    "usage": {
+      "interface": "none",
+      "install": "n/a",
+      "config": null,
+      "docs_url": "n/a",
+      "invocation": "in-person"
+    },
+    "epistemic": {
+      "fit_confidence": "high",
+      "evidence_level": "established",
+      "rating": 4
+    },
+    "strategic": {
+      "system_served": "system_3_audit_accounting",
+      "goal": null,
+      "objective": null,
+      "capability": "advisor",
+      "initiative": null
+    },
+    "relations": [],
+    "annotations": [],
+    "created_at": "2026-11-01T00:00:00Z",
+    "updated_at": "2026-11-01T00:00:00Z",
+    "last_used_at": "2026-03-29T10:30:00Z"
   }
 ]

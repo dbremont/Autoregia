@@ -5,17 +5,18 @@ Flask backend serving the General Index: a directory of ``point → element``
 entries (each entry a pointer — a name/alias — to an element: a GitHub
 project, a document, a service, or a deep-link into any other Autoregia
 system). Evolved from the PTOCS catalog; entries conform to
-spec/ptocs/schema.json plus the optional ``target`` field.
+spec/ptocs/schema.json plus the optional ``target`` and ``space`` fields.
 
 Entries are persisted in CouchDB (db ``ptocs`` — name kept for data
 continuity); seeded from data/mock_entries.json on first run against an
-empty database.
+empty database. Activity events (added / updated / viewed / deleted) are
+persisted separately in db ``ptocs_activity``.
 
 Run:   python3 gis/server.py
 Open:  http://localhost:5003
 """
 import json, os, sys, uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from collections import Counter, defaultdict
 from flask import Flask, jsonify, request, send_from_directory, Response
 
@@ -25,6 +26,19 @@ from support.storage import Store
 app = Flask(__name__, static_folder="static")
 SEED_PATH = os.path.join(os.path.dirname(__file__), "data", "mock_entries.json")
 store = Store("ptocs", seed_paths=[SEED_PATH])
+activity_store = Store("ptocs_activity")
+
+# Coarse kind groups behind the Index view's tabs (Documents / Tools / …).
+KIND_GROUPS = {
+    "documents": ("document", "reference_artifact"),
+    "tools": ("software_tool", "library_framework", "language", "hardware_device"),
+    "services": ("service_platform",),
+    "infra": ("infrastructure",),
+    "data": ("data_source",),
+    "people": ("person",),
+    "projects": ("project",),
+    "more": ("physical_instrument", "workflow_method", "capability_skill", "other"),
+}
 
 
 def now_iso():
@@ -93,6 +107,10 @@ def _score(e, q):
 
 def _apply_filters(entries, args):
     kind = args.get("kind")
+    kinds = args.get("kinds")
+    group = args.get("group")
+    space = args.get("space")
+    tag = args.get("tag")
     domain = args.get("domain")
     status = args.get("status")
     priority = args.get("priority")
@@ -103,6 +121,17 @@ def _apply_filters(entries, args):
     out = entries
     if kind:
         out = [e for e in out if e.get("object_kind") == kind]
+    if kinds:
+        wanted = {k.strip() for k in kinds.split(",") if k.strip()}
+        out = [e for e in out if e.get("object_kind") in wanted]
+    if group and group in KIND_GROUPS:
+        allowed = set(KIND_GROUPS[group])
+        out = [e for e in out if e.get("object_kind") in allowed]
+    if space:
+        out = [e for e in out if (e.get("space") or "personal") == space]
+    if tag:
+        t = tag.lower()
+        out = [e for e in out if t in [x.lower() for x in (e.get("tags") or [])]]
     if domain:
         out = [e for e in out if e.get("domain") == domain]
     if status:
@@ -160,6 +189,7 @@ def create_entry():
         "priority": data.get("priority", "medium"),
         "owner": data.get("owner", "self"),
         "pinned": bool(data.get("pinned", False)),
+        "space": data.get("space", "personal"),
         "workflow_state": data.get("workflow_state", "candidate"),
         "lifecycle_state": data.get("lifecycle_state", "provisional"),
         "hosting_model": data.get("hosting_model", "local"),
@@ -183,6 +213,7 @@ def create_entry():
         "last_used_at": data.get("last_used_at"),
     }
     saved = store.put(entry)
+    _record_activity("added", saved)
     return jsonify(saved), 201
 
 
@@ -199,6 +230,7 @@ def update_entry(entry_id):
         entry[k] = v
     entry["updated_at"] = now_iso()
     saved = store.put(entry)
+    _record_activity("updated", saved)
     return jsonify(saved)
 
 
@@ -206,6 +238,7 @@ def update_entry(entry_id):
 def delete_entry(entry_id):
     if not store.exists(entry_id):
         return jsonify({"error": "Entry not found"}), 404
+    _record_activity("deleted", store.get(entry_id))
     store.delete(entry_id)
     return jsonify({"deleted": entry_id})
 
@@ -240,6 +273,50 @@ def toggle_pin(entry_id):
     e["updated_at"] = now_iso()
     store.put(e)
     return jsonify({"id": e["id"], "pinned": e["pinned"]})
+
+
+# ── Activity log ───────────────────────────────────────────────────────────
+def _record_activity(kind, entry):
+    """Append an activity event. View/updated events are throttled by keying
+    on (kind, entry, hour) so repeated hits within the hour overwrite."""
+    ts = now_iso()
+    if kind in ("viewed", "updated"):
+        event_id = f"evt-{kind}-{entry.get('id')}-{ts[:13]}"
+    else:
+        event_id = f"evt-{kind}-{uuid.uuid4().hex[:8]}"
+    try:
+        activity_store.put({
+            "id": event_id, "ts": ts, "kind": kind,
+            "entry_id": entry.get("id"), "entry_name": entry.get("name"),
+            "object_kind": entry.get("object_kind"),
+        })
+    except Exception:
+        pass  # activity is best-effort; never block the main operation
+
+
+@app.route("/api/entries/<entry_id>/view", methods=["POST"])
+def record_view(entry_id):
+    """Record a 'viewed' event (fired when a detail view opens)."""
+    e = store.get(entry_id)
+    if e is None:
+        return jsonify({"error": "Entry not found"}), 404
+    _record_activity("viewed", e)
+    return jsonify({"ok": True}), 201
+
+
+@app.route("/api/activity", methods=["GET"])
+def recent_activity():
+    """Most recent activity events, newest first."""
+    try:
+        limit = max(1, min(int(request.args.get("limit", 15)), 100))
+    except ValueError:
+        limit = 15
+    try:
+        events = activity_store.all()
+    except Exception:
+        events = []
+    events.sort(key=lambda x: x.get("ts") or "", reverse=True)
+    return jsonify(events[:limit])
 
 
 @app.route("/api/entries/<entry_id>/relations", methods=["GET"])
@@ -280,6 +357,80 @@ def get_entry_relations(entry_id):
 
 
 # ── Retrieval & Navigation ─────────────────────────────────────────────────
+@app.route("/api/index", methods=["GET"])
+def index_projection():
+    """Paginated, filtered projection powering the General Index home view.
+
+    Filters (via _apply_filters): q, kinds (csv), group, space, tag, pinned,
+    kind, domain, status, priority, system, category, hosting.
+    Sort: relevance (default — scored when q present, else pinned → updated),
+    updated, name, created.
+    """
+    entries = _apply_filters(load_entries(), request.args)
+    total = len(entries)
+    q = (request.args.get("q") or "").lower().strip()
+    sort = request.args.get("sort", "relevance")
+    if sort == "name":
+        entries.sort(key=lambda e: (e.get("name") or "").lower())
+    elif sort == "created":
+        entries.sort(key=lambda e: e.get("created_at") or "", reverse=True)
+    elif sort == "updated":
+        entries.sort(key=lambda e: e.get("updated_at") or "", reverse=True)
+    elif q:
+        entries.sort(key=lambda e: _score(e, q), reverse=True)
+    else:
+        entries.sort(key=lambda e: (bool(e.get("pinned")),
+                                    e.get("updated_at") or ""), reverse=True)
+    try:
+        per_page = max(1, min(int(request.args.get("per_page", 12)), 100))
+    except ValueError:
+        per_page = 12
+    try:
+        page = max(1, int(request.args.get("page", 1)))
+    except ValueError:
+        page = 1
+    pages = max(1, -(-total // per_page))
+    page = min(page, pages)
+    window = entries[(page - 1) * per_page: page * per_page]
+    return jsonify({
+        "entries": window, "total": total, "page": page,
+        "per_page": per_page, "pages": pages,
+    })
+
+
+@app.route("/api/overview", methods=["GET"])
+def overview():
+    """Header stats + facet counts for the General Index home view."""
+    entries = load_entries()
+    kind_counts = Counter(e.get("object_kind", "?") for e in entries)
+    tag_counts = Counter(t for e in entries for t in (e.get("tags") or []))
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+
+    def _ts(s):
+        try:
+            return _parse_ts(s)
+        except Exception:
+            return None
+
+    added_this_week = sum(
+        1 for e in entries
+        if (ts := _ts(e.get("updated_at"))) and ts >= week_ago)
+    last_updated = max((e.get("updated_at") or "" for e in entries), default="")
+    return jsonify({
+        "total": len(entries),
+        "added_this_week": added_this_week,
+        "kinds": len([k for k in kind_counts if k != "?"]),
+        "relationships": sum(len(e.get("relations") or []) for e in entries),
+        "last_updated": last_updated or None,
+        "pinned_count": sum(1 for e in entries if e.get("pinned")),
+        "by_kind": dict(kind_counts),
+        "by_group": {g: sum(kind_counts.get(k, 0) for k in ks)
+                     for g, ks in KIND_GROUPS.items()},
+        "by_space": dict(Counter((e.get("space") or "personal") for e in entries)),
+        "top_tags": tag_counts.most_common(18),
+    })
+
+
 @app.route("/api/search", methods=["GET"])
 def search():
     q = request.args.get("q", "").lower().strip()

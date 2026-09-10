@@ -24,7 +24,7 @@
     </div>
     <div class="header-search">
       <span class="search-icon"><pt-icon name="search" size="16"></pt-icon></span>
-      <input type="search" id="globalSearch" placeholder="Search the index…" autocomplete="off">
+      <input type="search" id="globalSearch" placeholder='Search the index… (e.g. "python", "database", "DR")' autocomplete="off">
     </div>
     <div class="header-actions">
       <button class="btn btn-ghost btn-sm" id="btnImport" title="Import (JSON)"><pt-icon name="upload" size="15"></pt-icon> Import</button>
@@ -42,19 +42,25 @@
         <li><a href="#catalog" data-view="catalog"><span class="nav-icon"><pt-icon name="book-open" size="17"></pt-icon></span> Catalog</a></li>
         <li><a href="#browse" data-view="browse"><span class="nav-icon"><pt-icon name="layout-grid" size="17"></pt-icon></span> Browse</a></li>
         <li><a href="#graph" data-view="graph"><span class="nav-icon"><pt-icon name="share-2" size="17"></pt-icon></span> Relationship Graph</a></li>
+        <li><a href="#analysis" data-view="analysis"><span class="nav-icon"><pt-icon name="bar-chart-3" size="17"></pt-icon></span> Statistical Overlay</a></li>
       </ul>
     </nav>
 
     <nav class="sidebar-section">
-      <div class="sidebar-label">Analysis</div>
+      <div class="sidebar-label">Federation</div>
       <ul class="sidebar-nav">
-        <li><a href="#analysis" data-view="analysis"><span class="nav-icon"><pt-icon name="bar-chart-3" size="17"></pt-icon></span> Statistical Overlay</a></li>
+        <li><a href="#federation" data-view="federation"><span class="nav-icon"><pt-icon name="network" size="17"></pt-icon></span> System Fan-out</a></li>
       </ul>
     </nav>
 
     <nav class="sidebar-section">
       <div class="sidebar-label">By Kind</div>
       <ul class="sidebar-nav" id="kindNav"></ul>
+    </nav>
+
+    <nav class="sidebar-section">
+      <div class="sidebar-label">My Spaces</div>
+      <ul class="sidebar-nav" id="spaceNav"></ul>
     </nav>
 
     <nav class="sidebar-section">
@@ -67,7 +73,7 @@
     <div class="sidebar-colophon">
       <div class="colophon-rule"></div>
       <div class="colophon-title">GIS · Intelligence System</div>
-      <div class="colophon-meta">VSM SYSTEM 4 — v0.1</div>
+      <div class="colophon-meta">VSM SYSTEM 4 — v0.2</div>
     </div>
   </aside>
 
@@ -131,7 +137,8 @@
 <script src="/gis/js/browse.js"></script>
 <script src="/gis/js/relations.js"></script>
 <script src="/gis/js/analysis.js"></script>
-<script src="/gis/js/gis-index.js"></script>
+<script src="/gis/js/home.js"></script>
+<script src="/gis/js/federation.js"></script>
 <script src="/gis/js/command-palette.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => { PT.init(); });

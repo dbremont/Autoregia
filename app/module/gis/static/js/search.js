@@ -1,13 +1,10 @@
-/* GIS Search — header + catalog filter application */
+/* GIS Search — header search application (delegates to the Index home view) */
 PT.Search = {
   apply(q) {
-    const input = document.getElementById('catalogSearch');
-    if (input && input.value !== q) input.value = q;
-    if (PT.Entry) PT.Entry.applyFilters({ q: q });
+    if (PT.currentView !== 'index') PT.navigate('index');
+    setTimeout(function () { PT.HomeIndex.setQuery(q); }, 50);
   },
   clear() {
-    const input = document.getElementById('catalogSearch');
-    if (input) input.value = '';
-    if (PT.Entry) PT.Entry.applyFilters({});
+    if (PT.currentView === 'index') PT.HomeIndex.setQuery('');
   },
 };

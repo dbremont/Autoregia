@@ -14,13 +14,15 @@ PT.CommandPalette = {
     const q = (query || '').toLowerCase();
     const commands = [
       { icon: 'plus', title: 'New Entry', sub: 'Register a new technical object', action: function () { PT.Entry.openEditor(); } },
+      { icon: 'list', title: 'Go to Index', sub: 'The General Index home', action: function () { PT.navigate('index'); } },
       { icon: 'gauge', title: 'Go to Dashboard', sub: 'At-a-glance statistics', action: function () { PT.navigate('dashboard'); } },
-      { icon: 'list', title: 'Browse Catalog', sub: 'All technical objects', action: function () { PT.navigate('catalog'); } },
+      { icon: 'book-open', title: 'Browse Catalog', sub: 'All technical objects', action: function () { PT.navigate('catalog'); } },
       { icon: 'layout-grid', title: 'Browse Facets', sub: 'Pivot by kind/domain/status', action: function () { PT.navigate('browse'); } },
+      { icon: 'network', title: 'Federation', sub: 'Cross-system fan-out directory', action: function () { PT.navigate('federation'); } },
       { icon: 'share-2', title: 'Relationship Graph', sub: 'Visualize entry relationships', action: function () { PT.navigate('graph'); } },
       { icon: 'bar-chart-3', title: 'Statistical Overlay', sub: 'Coverage, gaps, redundancy, cost', action: function () { PT.navigate('analysis'); } },
       { icon: 'download', title: 'Export Catalog', sub: 'Download as JSON', action: function () { PT.navigate('export'); } },
-      { icon: 'search', title: 'Search Catalog…', sub: 'Focus the search box', action: function () { document.getElementById('globalSearch').focus(); } },
+      { icon: 'search', title: 'Search the Index…', sub: 'Focus the search box', action: function () { document.getElementById('globalSearch').focus(); } },
     ];
     let html = '<div class="cmd-group-label">Commands</div>';
     commands.filter(function (c) { return !q || c.title.toLowerCase().indexOf(q) >= 0 || c.sub.toLowerCase().indexOf(q) >= 0; })

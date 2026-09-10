@@ -113,6 +113,7 @@ PT.Entry = {
       f('Domain', '<input id="fld_domain" value="' + PT.esc(e.domain) + '">') +
       f('Status', '<select id="fld_status">' + sel(PT.ENUMS.status, e.status) + '</select>') +
       f('Priority', '<select id="fld_priority">' + sel(PT.ENUMS.priority, e.priority) + '</select>') +
+      f('Space', '<select id="fld_space">' + sel(['personal', 'work', 'projects'], e.space || 'personal') + '</select>') +
       f('Hosting', '<select id="fld_hosting_model">' + sel(PT.ENUMS.hosting_model, e.hosting_model) + '</select>') +
       f('Access', '<select id="fld_access_model">' + sel(PT.ENUMS.access_model, e.access_model) + '</select>') +
       f('Summary', '<input id="fld_summary" value="' + PT.esc(e.summary) + '">', true) +
@@ -150,7 +151,7 @@ PT.Entry = {
       domain: g('fld_domain') || null, status: g('fld_status'), priority: g('fld_priority'),
       hosting_model: g('fld_hosting_model'), access_model: g('fld_access_model'),
       summary: g('fld_summary'), purpose: g('fld_purpose'), function: g('fld_function'),
-      detail: g('fld_detail'), tags: tags,
+      detail: g('fld_detail'), tags: tags, space: g('fld_space') || 'personal',
       provenance: { vendor: g('fld_vendor') || null, version: g('fld_version') || null,
         license: g('fld_license') || null, source_url: g('fld_source_url') || null,
         acquired_at: (this._editing && PT.Store.getById(this._editing) && PT.Store.getById(this._editing).provenance || {}).acquired_at || null },
@@ -169,11 +170,13 @@ PT.Entry = {
     this.closeEditor();
     if (PT.currentView === 'catalog') PT.navigate('catalog');
     if (PT.currentView === 'dashboard') PT.navigate('dashboard');
+    if (PT.currentView === 'index') PT.navigate('index');
   },
 
   // ── Detail modal ──
   showDetail(id) {
     const e = PT.Store.getById(id); if (!e) return;
+    fetch('/gis/api/entries/' + id + '/view', { method: 'POST' }).catch(function () {});
     document.getElementById('detailTitle').textContent = e.name;
     document.getElementById('detailBody').innerHTML = this._detailBody(e);
     document.getElementById('detailModal').classList.remove('hidden');
@@ -279,6 +282,7 @@ PT.retire = async function (id) {
   PT.toast('Entry retired');
   PT.Entry.closeDetail();
   if (PT.currentView === 'catalog') PT.navigate('catalog');
+  if (PT.currentView === 'index') PT.navigate('index');
 };
 PT.togglePin = async function (id) {
   await PT.Store.togglePin(id);
@@ -288,10 +292,15 @@ PT.togglePin = async function (id) {
   if (!document.getElementById('detailModal').classList.contains('hidden')) PT.Entry.showDetail(id);
   if (PT.currentView === 'catalog') PT.navigate('catalog');
   if (PT.currentView === 'dashboard') PT.navigate('dashboard');
+  if (PT.currentView === 'index') PT.navigate('index');
 };
 PT.confirmDelete = function (id) {
   const e = PT.Store.getById(id); if (!e) return;
   if (confirm('Delete entry "' + e.name + '"? This cannot be undone.')) {
-    PT.Store.remove(id).then(function () { PT.toast('Entry deleted'); PT.Entry.closeDetail(); if (PT.currentView === 'catalog') PT.navigate('catalog'); });
+    PT.Store.remove(id).then(function () {
+      PT.toast('Entry deleted'); PT.Entry.closeDetail();
+      if (PT.currentView === 'catalog') PT.navigate('catalog');
+      if (PT.currentView === 'index') PT.navigate('index');
+    });
   }
 };

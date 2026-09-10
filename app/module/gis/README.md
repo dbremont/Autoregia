@@ -24,11 +24,13 @@ Autoregia UI specification ([`../spec/ui.spec`](../spec/ui.spec)).
 
 ```
 gis/
-├── server.py              # Flask API: CRUD, search, browse, analysis, export/import
+├── server.py              # Flask API: CRUD, index projection, overview, search,
+│                          #   browse, analysis, activity log, export/import
 ├── requirements.txt       # flask, flask-cors
+├── test_gis.py            # pytest suite (needs CouchDB on 127.0.0.1:5984)
 ├── README.md              # this document
 ├── data/
-│   ├── mock_entries.json  # seed catalog (23 entries, conforms to schema.json)
+│   ├── mock_entries.json  # seed catalog (31 entries, conforms to schema.json)
 │   └── gen_mock.py        # deterministic generator (+ optional schema validation)
 └── static/
     ├── index.html         # app-shell: header, sidebar, views, modals, command palette
@@ -39,7 +41,10 @@ gis/
         ├── icons.js       # self-hosted Lucide icon set (<pt-icon>)
         ├── charts.js      # ECharts wrappers within the design system
         ├── app.js         # router, view switching, keyboard, shared helpers
-        ├── search.js      # header + catalog filter application
+        ├── search.js      # header search application (delegates to the Index view)
+        ├── home.js        # General Index home: hero, stats, tabs, table/grid,
+        │                  #   pagination, right rail (filters, tags, graph, activity)
+        ├── federation.js  # cross-system fan-out directory (point → element)
         ├── entry.js       # catalog list, filters, editor & detail modals
         ├── dashboard.js   # at-a-glance statistics + charts
         ├── browse.js      # faceted pivot cards (kind/domain/status/system/…)
@@ -74,6 +79,19 @@ generator validates every entry against `spec/ptocs/schema.json`.
 Per [`../spec/ptocs/spec.md`](../spec/ptocs/spec.md):
 
 - **Catalog (CRUD):** insert, update, delete, retrieve, and pin/unpin entries.
+  Entries carry a `space` field (`personal | work | projects`) in addition to
+  `pinned` (favorites), and the kind set extends the catalog schema with
+  `document`, `language`, `person`, `project`, and `other`.
+- **Index home:** a filtered, paginated projection (`/api/index`) of every
+  entry with kind-group tabs (Documents / Tools / Services / Infra / Data /
+  People / Projects / More), sort (relevance / updated / name / created), a
+  list & grid mode, and an overview endpoint (`/api/overview`) for header
+  stats (total, kinds, relationship count, freshness) and facet counts
+  (kinds, groups, spaces, top tags).
+- **Activity log:** `added / updated / viewed / deleted` events persisted in
+  a separate CouchDB db (`ptocs_activity`; view/updated events throttled to
+  one per entry per hour), surfaced in the Recent Activity rail
+  (`POST /api/entries/<id>/view`, `GET /api/activity`).
 - **Retrieval & Navigation:** search (scored), browse by facet, capability
   discovery via the relationship graph, and entry detail with the full
   classification/provenance/delivery/cost/usage/epistemic/strategic metadata.
@@ -81,8 +99,19 @@ Per [`../spec/ptocs/spec.md`](../spec/ptocs/spec.md):
   analysis, redundancy/overlap detection, dependency-graph analytics (depth,
   fan-in/out, single points of failure), cost exposure, lifecycle/freshness,
   ecosystem health (orphans, vendor/license concentration), and provenance/trust.
+- **Federation:** a read-only fan-out across the running sibling systems'
+  public APIs (`#federation` view), each item deep-linked back to its origin.
 - **Derivative:** JSON export & import (merge-by-id).
 - **Append-only Annotation Log:** per-entry commentary without mutating content.
+
+### Tests
+
+```bash
+python3 -m pytest test_gis.py   # needs CouchDB on 127.0.0.1:5984
+```
+
+Uses an isolated `gis_test_` CouchDB DB prefix; the dev/prod `ptocs` data is
+never touched.
 
 ### UI / UX
 

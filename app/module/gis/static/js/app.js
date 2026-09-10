@@ -5,14 +5,34 @@ PT.KIND_COLORS = {
   software_tool: '#7A1A2A', library_framework: '#B4742A', service_platform: '#3F6092',
   data_source: '#2D6A4F', infrastructure: '#6B5B95', hardware_device: '#A8854A',
   physical_instrument: '#8C6E54', reference_artifact: '#3F6E50', workflow_method: '#5C4E78',
-  capability_skill: '#9A9589',
+  capability_skill: '#9A9589', document: '#8C877B', language: '#2D6A4F',
+  person: '#3F6092', project: '#7A1A2A', other: '#9A9589',
 };
 PT.KIND_ICONS = {
   software_tool: 'box', library_framework: 'layers', service_platform: 'cloud',
   data_source: 'database', infrastructure: 'server', hardware_device: 'cpu',
   physical_instrument: 'hard-drive', reference_artifact: 'book-open',
   workflow_method: 'workflow', capability_skill: 'graduation-cap',
+  document: 'file-text', language: 'code', person: 'user', project: 'rocket',
+  other: 'circle',
 };
+// Coarse groups behind the Index view tabs (mirrors server KIND_GROUPS).
+PT.KIND_GROUPS = {
+  documents: ['document', 'reference_artifact'],
+  tools: ['software_tool', 'library_framework', 'language', 'hardware_device'],
+  services: ['service_platform'],
+  infra: ['infrastructure'],
+  data: ['data_source'],
+  people: ['person'],
+  projects: ['project'],
+  more: ['physical_instrument', 'workflow_method', 'capability_skill', 'other'],
+};
+PT.SPACES = [
+  { id: 'personal', label: 'Personal', icon: 'user' },
+  { id: 'work', label: 'Work', icon: 'briefcase' },
+  { id: 'projects', label: 'Projects', icon: 'folder' },
+  { id: 'favorites', label: 'Favorites', icon: 'star' },
+];
 PT.RELATION_COLORS = {
   depends_on: '#A33434', required_by: '#A33434', integrates_with: '#3F6092',
   alternative_to: '#B4742A', complements: '#3F6E50', contains: '#6B5B95',
@@ -20,7 +40,7 @@ PT.RELATION_COLORS = {
   version_of: '#9A9589', supersedes: '#7A1A2A', consumes: '#A8854A', produces: '#A8854A',
 };
 PT.ENUMS = {
-  object_kind: ['software_tool','library_framework','service_platform','data_source','infrastructure','hardware_device','physical_instrument','reference_artifact','workflow_method','capability_skill'],
+  object_kind: ['software_tool','library_framework','service_platform','data_source','infrastructure','hardware_device','physical_instrument','reference_artifact','workflow_method','capability_skill','document','language','person','project','other'],
   status: ['provisional','active','trial','backup','deprecated','retired'],
   priority: ['critical','high','medium','low'],
   workflow_state: ['candidate','adopted','in_review','phasing_out','removed'],
@@ -45,7 +65,8 @@ PT.init = async function () {
   this.setupKeyboard();
   this.setupHeaderButtons();
   this.renderKindNav();
-  PT.Store.subscribe(() => { this.renderKindNav(); });
+  if (PT.HomeIndex) PT.HomeIndex.renderSpaceNav();
+  PT.Store.subscribe(() => { this.renderKindNav(); if (PT.HomeIndex) PT.HomeIndex.renderSpaceNav(); });
   this.navigate(this.getHashView() || 'index');
 };
 
@@ -63,17 +84,19 @@ PT.navigate = function (view) {
   if (active) active.classList.add('active');
   const c = document.getElementById('appContent');
   switch (view) {
-    case 'index':     c.innerHTML = PT.GISIndex.render(); break;
+    case 'index':       c.innerHTML = PT.HomeIndex.render(); break;
+    case 'federation':  c.innerHTML = PT.Federation.render(); break;
     case 'dashboard': c.innerHTML = PT.Dashboard.render(); break;
     case 'catalog':   c.innerHTML = PT.Entry.renderList(); break;
     case 'browse':    c.innerHTML = PT.Browse.render(); break;
     case 'graph':     c.innerHTML = PT.Graph.render(); break;
     case 'analysis':  c.innerHTML = PT.Analysis.render(); break;
     case 'export':    c.innerHTML = PT.ExportView(); break;
-    default:          c.innerHTML = PT.GISIndex.render();
+    default:          c.innerHTML = PT.HomeIndex.render();
   }
   setTimeout(function () {
-    if (view === 'index')     PT.GISIndex.afterRender();
+    if (view === 'index')       PT.HomeIndex.afterRender();
+    if (view === 'federation')  PT.Federation.afterRender();
     if (view === 'dashboard') PT.Dashboard.afterRender();
     if (view === 'browse')    PT.Browse.afterRender();
     if (view === 'graph')     PT.Graph.afterRender();
@@ -87,9 +110,9 @@ PT.setupGlobalSearch = function () {
   input.addEventListener('input', function (e) { clearTimeout(timer); timer = setTimeout(function () {
     const q = e.target.value.trim();
     if (q.length > 0) {
-      if (PT.currentView !== 'catalog') PT.navigate('catalog');
-      setTimeout(function () { PT.Search.apply(q); }, 50);
-    } else if (PT.Search) { PT.Search.clear(); }
+      if (PT.currentView !== 'index') PT.navigate('index');
+      setTimeout(function () { PT.HomeIndex.setQuery(q); }, 50);
+    } else if (PT.currentView === 'index') { PT.HomeIndex.setQuery(''); }
   }, 250); });
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); PT.CommandPalette.open(input.value); input.blur(); }
@@ -118,11 +141,16 @@ PT.setupHeaderButtons = function () {
 PT.renderKindNav = function () {
   const stats = PT.Store.getStats();
   const nav = document.getElementById('kindNav'); if (!nav) return;
-  nav.innerHTML = Object.entries(stats.byKind).sort(function (a,b) { return b[1]-a[1]; }).map(function (kc) {
-    const k = kc[0], c = kc[1];
-    return '<li><a href="#catalog" data-view="catalog" onclick="PT.Entry.filterKind(\'' + k + '\')">' +
-      '<span class="nav-icon"><pt-icon name="' + (PT.KIND_ICONS[k]||'circle') + '" size="15"></pt-icon></span>' + PT.prettyEnum(k) + '<span class="sidebar-count">' + c + '</span></a></li>';
-  }).join('');
+  const total = stats.total;
+  const items = Object.entries(stats.byKind).sort(function (a,b) { return b[1]-a[1]; });
+  nav.innerHTML =
+    '<li><a href="#index" data-view="index" onclick="PT.HomeIndex.filterAll()">' +
+    '<span class="nav-icon"><pt-icon name="list" size="15"></pt-icon></span>All<span class="sidebar-count">' + total + '</span></a></li>' +
+    items.map(function (kc) {
+      const k = kc[0], c = kc[1];
+      return '<li><a href="#index" data-view="index" onclick="PT.HomeIndex.filterKind(\'' + k + '\')">' +
+        '<span class="nav-icon"><pt-icon name="' + (PT.KIND_ICONS[k]||'circle') + '" size="15"></pt-icon></span>' + PT.prettyEnum(k) + '<span class="sidebar-count">' + c + '</span></a></li>';
+    }).join('');
 };
 
 PT.importFile = async function (e) {
@@ -141,7 +169,7 @@ PT.importFile = async function (e) {
 PT.ExportView = function () {
   return '<div class="content-header"><div><span class="eyebrow">Derivative</span><h1>Export</h1></div>' +
     '<div class="actions"><a class="btn btn-primary btn-sm" href="/gis/api/export"><pt-icon name="download" size="15"></pt-icon> Download JSON</a></div></div>' +
-    '<div class="card"><div class="card-body"><p>Export the entire catalog as a JSON array conforming to <code>spec/gis/schema.json</code>. Use the Import button (top-right) to merge entries back in by id.</p>' +
+    '<div class="card"><div class="card-body"><p>Export the entire catalog as a JSON array of entry objects. Use the Import button (top-right) to merge entries back in by id.</p>' +
     '<p class="text-muted text-sm">Total entries: ' + PT.Store.getStats().total + '.</p></div></div>';
 };
 
