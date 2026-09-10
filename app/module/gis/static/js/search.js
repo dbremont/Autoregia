@@ -1,4 +1,4 @@
-/* PTOCS Search — header + catalog filter application */
+/* GIS Search — header + catalog filter application */
 PT.Search = {
   apply(q) {
     const input = document.getElementById('catalogSearch');

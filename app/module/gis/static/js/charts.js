@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   PTOCS Charts — ECharts wrappers within the design system.
+   GIS Charts — ECharts wrappers within the design system.
    Palettes reference the warm-parchment Oxford tokens.
    ════════════════════════════════════════════════════════════ */
 PT.Charts = {

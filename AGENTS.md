@@ -14,7 +14,7 @@ See `README.md` for the system map and `logos.log.md` for the decision log.
 app/                 the application
 ├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix dispatcher)
 ├── index.html       landing plate        ├── about.html   docs.html
-├── module/          the sub-systems (prs, pkts, pais, peos, ptocs, pps, aias,
+├── module/          the sub-systems (prs, pkts, pais, peos, gis, pps, aias,
 │                    aoos, awes, pras, asrs, acsms, loop, pwos)
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
 └── support/         shared code: storage/ (CouchDB Store), shared/

@@ -13,7 +13,7 @@ index at the root.
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
     /pais/...   Personal Application Interaction System  (Accounting / audit)
     /peos/...   Personal External Observation System  (Perception — external world)
-    /ptocs/...   Personal Technical Object Catalog (Situation Model)
+    /gis/...     General Index (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
     /awes/...    Automated Work Execution System    (System 1 — Execution)
@@ -64,7 +64,7 @@ SUBSYSTEMS = [
     ("pkts", "Personal Keyword Tracking System", "module/pkts/server.py"),
     ("pais", "Personal Application Interaction System", "module/pais/server.py"),
     ("peos", "Personal External Observation System", "module/peos/server.py"),
-    ("ptocs", "Personal Technical Object Catalog System", "module/ptocs/server.py"),
+    ("gis", "General Index System", "module/gis/server.py"),
     ("pps", "Personal Policy System", "module/pps/server.py"),
     ("aias", "Agent Intent Aid System", "module/aias/server.py"),
     ("aoos", "Agent Operation Organization System", "module/aoos/server.py"),

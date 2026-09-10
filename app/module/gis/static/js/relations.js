@@ -1,4 +1,4 @@
-/* PTOCS Relations — relationship graph view (ECharts force layout) */
+/* GIS Relations — relationship graph view (ECharts force layout) */
 PT.Graph = {
   _chart: null,
   render() {

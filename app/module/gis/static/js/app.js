@@ -1,4 +1,4 @@
-/* PTOCS App — Main Application, Router, View Switching, Shared helpers */
+/* GIS App — Main Application, Router, View Switching, Shared helpers */
 const PT = window.PT || {};
 
 PT.KIND_COLORS = {
@@ -39,14 +39,14 @@ PT.ENUMS = {
 
 PT.init = async function () {
   await PT.Store.load();
-  this.currentView = 'catalog';
+  this.currentView = 'index';
   this.setupRouter();
   this.setupGlobalSearch();
   this.setupKeyboard();
   this.setupHeaderButtons();
   this.renderKindNav();
   PT.Store.subscribe(() => { this.renderKindNav(); });
-  this.navigate(this.getHashView() || 'dashboard');
+  this.navigate(this.getHashView() || 'index');
 };
 
 PT.setupRouter = function () {
@@ -63,15 +63,17 @@ PT.navigate = function (view) {
   if (active) active.classList.add('active');
   const c = document.getElementById('appContent');
   switch (view) {
+    case 'index':     c.innerHTML = PT.GISIndex.render(); break;
     case 'dashboard': c.innerHTML = PT.Dashboard.render(); break;
     case 'catalog':   c.innerHTML = PT.Entry.renderList(); break;
     case 'browse':    c.innerHTML = PT.Browse.render(); break;
     case 'graph':     c.innerHTML = PT.Graph.render(); break;
     case 'analysis':  c.innerHTML = PT.Analysis.render(); break;
     case 'export':    c.innerHTML = PT.ExportView(); break;
-    default:          c.innerHTML = PT.Dashboard.render();
+    default:          c.innerHTML = PT.GISIndex.render();
   }
   setTimeout(function () {
+    if (view === 'index')     PT.GISIndex.afterRender();
     if (view === 'dashboard') PT.Dashboard.afterRender();
     if (view === 'browse')    PT.Browse.afterRender();
     if (view === 'graph')     PT.Graph.afterRender();
@@ -128,7 +130,7 @@ PT.importFile = async function (e) {
   const text = await file.text();
   try {
     const data = JSON.parse(text);
-    const res = await fetch('/ptocs/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch('/gis/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const r = await res.json();
     PT.toast('Imported ' + r.imported + ' entries (total ' + r.total + ')');
     await PT.Store.refreshFromAPI();
@@ -138,8 +140,8 @@ PT.importFile = async function (e) {
 
 PT.ExportView = function () {
   return '<div class="content-header"><div><span class="eyebrow">Derivative</span><h1>Export</h1></div>' +
-    '<div class="actions"><a class="btn btn-primary btn-sm" href="/ptocs/api/export"><pt-icon name="download" size="15"></pt-icon> Download JSON</a></div></div>' +
-    '<div class="card"><div class="card-body"><p>Export the entire catalog as a JSON array conforming to <code>spec/ptocs/schema.json</code>. Use the Import button (top-right) to merge entries back in by id.</p>' +
+    '<div class="actions"><a class="btn btn-primary btn-sm" href="/gis/api/export"><pt-icon name="download" size="15"></pt-icon> Download JSON</a></div></div>' +
+    '<div class="card"><div class="card-body"><p>Export the entire catalog as a JSON array conforming to <code>spec/gis/schema.json</code>. Use the Import button (top-right) to merge entries back in by id.</p>' +
     '<p class="text-muted text-sm">Total entries: ' + PT.Store.getStats().total + '.</p></div></div>';
 };
 

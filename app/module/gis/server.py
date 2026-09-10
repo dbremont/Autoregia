@@ -1,14 +1,17 @@
 """
-Personal Technical Object Catalog System (PTOCS) — API Server.
+General Index System (GIS) — API Server.
 
-Flask backend serving the PTOCS catalog (conforming to spec/ptocs/schema.json)
-for the PTOCS web client. Implements the catalog layer (CRUD), retrieval &
-navigation (search/browse), and the Statistical Overlay (analysis).
+Flask backend serving the General Index: a directory of ``point → element``
+entries (each entry a pointer — a name/alias — to an element: a GitHub
+project, a document, a service, or a deep-link into any other Autoregia
+system). Evolved from the PTOCS catalog; entries conform to
+spec/ptocs/schema.json plus the optional ``target`` field.
 
-Catalog is persisted in CouchDB (db ``ptocs``); seeded from
-data/mock_entries.json on first run against an empty database.
+Entries are persisted in CouchDB (db ``ptocs`` — name kept for data
+continuity); seeded from data/mock_entries.json on first run against an
+empty database.
 
-Run:   python3 ptocs/server.py
+Run:   python3 gis/server.py
 Open:  http://localhost:5003
 """
 import json, os, sys, uuid
@@ -145,6 +148,8 @@ def create_entry():
         "detail": data.get("detail", ""),
         "purpose": data.get("purpose", ""),
         "function": data.get("function", ""),
+        "target": data.get("target") or {"kind": None, "system": None,
+                                         "url": None, "ref": None},
         "object_kind": data.get("object_kind", "software_tool"),
         "category": data.get("category"),
         "domain": data.get("domain"),
@@ -508,7 +513,7 @@ def export_data():
     entries = load_entries()
     return Response(json.dumps(entries, indent=2, default=str),
                     mimetype="application/json",
-                    headers={"Content-Disposition": "attachment;filename=ptocs_export.json"})
+                    headers={"Content-Disposition": "attachment;filename=gis_export.json"})
 
 
 @app.route("/api/import", methods=["POST"])

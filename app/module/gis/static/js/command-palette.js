@@ -1,4 +1,4 @@
-/* PTOCS Command Palette — Ctrl+K universal command interface */
+/* GIS Command Palette — Ctrl+K universal command interface */
 PT.CommandPalette = {
   open(initialQuery) {
     const overlay = document.getElementById('cmdPalette');

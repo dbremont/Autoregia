@@ -1,4 +1,4 @@
-/* PTOCS Browse — faceted pivot cards */
+/* GIS Browse — faceted pivot cards */
 PT.Browse = {
   render() {
     return '<div class="content-header"><div><span class="eyebrow">Navigation</span><h1>Browse</h1></div></div>' +
@@ -6,7 +6,7 @@ PT.Browse = {
   },
   async afterRender() {
     let data;
-    try { const r = await fetch('/ptocs/api/browse'); data = await r.json(); }
+    try { const r = await fetch('/gis/api/browse'); data = await r.json(); }
     catch (e) { data = PT.Store.getAll().length ? this._localFacets() : {}; }
     this._renderFacets(data);
   },

@@ -1,4 +1,4 @@
-/* PTOCS Dashboard — at-a-glance statistics, charts, recent entries */
+/* GIS Dashboard — at-a-glance statistics, charts, recent entries */
 PT.Dashboard = {
   render() {
     const s = PT.Store.getStats();

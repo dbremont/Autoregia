@@ -205,7 +205,7 @@
       <span class="sh-gloss">the agent control loop — every chip is a system</span>
     </div>
     <figure class="plate" style="margin-top:24px">
-      <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon), the Agent State (ASRS + PTOCS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
+      <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon), the Agent State (ASRS + GIS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: AWES. Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A8854A"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
@@ -300,7 +300,7 @@
             <text class="lbl" x="0" y="-6" text-anchor="middle">Agent State</text>
             <text class="cap" x="0" y="12" text-anchor="middle">world &amp; self-model</text>
             <a href="/asrs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
-            <a href="/ptocs/"><g transform="translate(30,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PTOCS</text></g></a>
+            <a href="/gis/"><g transform="translate(30,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">GIS</text></g></a>
           </g>
 
           <!-- Capability Self-Management -->
@@ -493,7 +493,7 @@
     {prefix:'pps',label:'PPS',wrap:true,map:function(r){return{title:r.title,snippet:r.snippet,href:'/pps'+r.path}}},
     {prefix:'pras',label:'PRAS',wrap:true,map:function(r){return{title:r.title,snippet:r.snippet,href:'/pras'+r.path}}},
     {prefix:'aias',label:'AIAS',wrap:false,map:function(i){return{title:i.description||i.id,snippet:i.expected_value||('intent · '+(i.status||'')),href:'/aias/'}}},
-    {prefix:'ptocs',label:'PTOCS',wrap:false,map:function(e){return{title:e.name||e.title||e.id,snippet:e.summary||e.description||'',href:'/ptocs/'}}},
+    {prefix:'gis',label:'GIS',wrap:false,map:function(e){return{title:e.name||e.title||e.id,snippet:e.summary||e.description||'',href:'/gis/'}}},
     {prefix:'prs',label:'PRS',wrap:false,map:function(r){return{title:(r.content||r.id||'').slice(0,90),snippet:r.detail||'',href:'/prs/'}}}
   ];
   function rows(j,w){return w?(j&&j.results)||[]:(Array.isArray(j)?j:[])}

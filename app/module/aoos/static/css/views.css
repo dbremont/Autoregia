@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   PTOCS Views — Catalog, Detail, Browse, Relations, Analysis
+   GIS Views — Catalog, Detail, Browse, Relations, Analysis
    Editorial refinement · manuscript column · hairline rules
    ════════════════════════════════════════════════════════════ */
 
@@ -100,7 +100,7 @@
 .meta-section-body { padding: var(--space-4); display: none; border-top: var(--hairline) solid var(--color-border-light); background: var(--color-surface); }
 .meta-section.open .meta-section-body { display: block; animation: fadeIn 180ms var(--ease-out-soft); }
 
-/* ── Icon element (PTOCS alias) ──────────────────────── */
+/* ── Icon element (GIS alias) ──────────────────────── */
 .ao-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
 ao-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 

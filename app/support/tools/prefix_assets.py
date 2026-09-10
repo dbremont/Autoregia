@@ -23,7 +23,7 @@ TOOLS = {
     "prs": ["module/prs/static"],
     "pkts": ["module/pkts/static"],
     "pais": ["module/pais/static"],
-    "ptocs": ["module/ptocs/static"],
+    "gis": ["module/gis/static"],
     "pps": ["module/pps/static", "module/pps/index.html", "module/pps/policies"],
     "aoos": ["module/aoos/static"],
 }

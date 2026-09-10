@@ -1,27 +1,29 @@
-# Personal Technical Object Catalog System (PTOCS)
+# General Index System (GIS)
 
-> PTOCS is the **Personal Technical Object Catalog System** — an Autoregia
-> sub-project within the **Intelligence System** (VSM System 4 – Intelligence).
-> It builds and maintains a **catalog of the technical objects** (software,
-> services, hardware, references, capabilities, and infrastructure) the agent
-> uses in daily life, enabling their persistent recording, discovery,
-> retrieval, navigation, and analysis over time.
+> GIS is the **General Index System** — an Autoregia sub-project within the
+> **Intelligence System** (VSM System 4 – Intelligence). It is the **general
+> index of everything** the agent knows and uses: each entry is a
+> **point → element** pair, where the point is the handle (a name/alias) and
+> the element is what it points to — a GitHub project, a document, a service,
+> a capability, or a deep-link into any other Autoregia system. The index is
+> the **entry point to everything**, aggregated with the running systems
+> through a read-only fan-out across their public APIs.
 
-> This directory contains the **prototype implementation**. Conceptual
-> foundations, the data model, and the full functional specification live in
-> [`../spec/ptocs/`](../spec/ptocs) ([`spec.md`](../spec/ptocs/spec.md),
-> [`schema.json`](../spec/ptocs/schema.json),
-> [`spec.json`](../spec/ptocs/spec.json)).
+> This directory contains the **prototype implementation**. It evolved from
+> the PTOCS catalog (Personal Technical Object Catalog System); entries
+> follow the catalog schema plus an optional `target` field
+> (`{kind, system, url, ref}`) that turns a catalog entry into a live index
+> pointer. The CouchDB database remains `ptocs` for data continuity.
 
 ## Prototype
 
-A Flask mock-API server plus a vanilla HTML/CSS/JS client that conforms to the
+A Flask API server plus a vanilla HTML/CSS/JS client that conforms to the
 Autoregia UI specification ([`../spec/ui.spec`](../spec/ui.spec)).
 
 ### Structure
 
 ```
-ptocs/
+gis/
 ├── server.py              # Flask API: CRUD, search, browse, analysis, export/import
 ├── requirements.txt       # flask, flask-cors
 ├── README.md              # this document

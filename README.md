@@ -48,7 +48,7 @@ Autoregia/
     │   │   ├── data/
     │   │   ├── static/
     │   │   └── test_peos.py
-    │   └── ...          # ptocs, pps, aias, aoos, awes, pras, asrs, acsms, loop, pwos
+    │   └── ...          # gis, pps, aias, aoos, awes, pras, asrs, acsms, loop, pwos
     └── support/         # everything that supports the modules
         ├── storage/     # shared CouchDB document store (Store)
         ├── shared/      # shared Python package (focus_watcher, …)
@@ -68,7 +68,7 @@ Autoregia/
 | **Part** | **Description** | **Level (VSM)** | **Implementation** |
 | --- | --- | --- | --- |
 | **Policy System** | Defines long-term direction, identity, principles, constraints, commitments, and life-policy. | **System 5 – Policy** | Personal Constitution, Core Values Document, Life Strategy Note  (Personal Policy System (PPS)) |
-| **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | Personal Technical Object Catalog System (PTOCS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
+| **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | General Index System (GIS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
 | **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
 | **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
 | **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PRS**, **PKTS**, **PAIS** |
@@ -89,7 +89,7 @@ The sub-systems developed within this workspace:
 - **[Personal Keyword Tracking System (PKTS)](app/module/pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
 - **[Personal Application Interaction System (PAIS)](app/module/pais/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`app/support/shared/focus_watcher.py`](app/support/shared/) as the single source of truth for the focused window with PKTS.
 - **[Personal External Observation System (PEOS)](app/module/peos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): collects what *other agents* say about the world from free, no-auth public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an `observational` event in CouchDB, with batch topic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PRS. See the PEOS [specification](spec/peos/spec.md) and [implementation](app/module/peos/README.md#run).
-- **[Personal Technical Object Catalog System (PTOCS)](app/module/ptocs/README.md)** — the Intelligence System component; a structured catalog of the technical objects the agent relies on, with retrieval, navigation, and a statistical overlay.
+- **[General Index System (GIS)](app/module/gis/README.md)** — the Intelligence System component; a general index of everything the agent knows and uses — each entry a point → element pair pointing into the systems or out to the world (GitHub projects, documents, services). The entry point to everything.
 - **[Personal Policy System (PPS)](app/module/pps/README.md)** — the Policy System component (VSM System 5); a set of policy documents (charter, principles, values, commitments, domain policies) defining long-term direction and constraints, with a main entry and full-text search over the corpus.
 - **[Agent Operation Organization System (AOOS)](app/module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PRS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
 

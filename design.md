@@ -92,7 +92,7 @@ views.css       # view-specific styles
 command-palette.css
 ```
 
-Users of this archetype: `prs`, `pkts`, `pais`, `peos`, `ptocs`, `aias`,
+Users of this archetype: `prs`, `pkts`, `pais`, `peos`, `gis`, `aias`,
 `aoos`, `loop`.
 
 ### 3.2 Standalone document page (landings, policies, deliberations)
@@ -125,7 +125,7 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `prs`, `pkts`, `pais`, `peos`, `ptocs`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
+| `prs`, `pkts`, `pais`, `peos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
 | `pps` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
 | `asrs`                             | standalone | ✅ conforms |

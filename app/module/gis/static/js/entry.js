@@ -1,4 +1,4 @@
-/* PTOCS Entry — Catalog list, filters, editor modal, detail modal */
+/* GIS Entry — Catalog list, filters, editor modal, detail modal */
 PT.Entry = {
   _filters: {},
 
