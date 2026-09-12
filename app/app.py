@@ -16,7 +16,7 @@ index at the root.
     /gis/...     General Index (Situation Model)
     /pps/...     Personal Policy System            (System 5 — Policy)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
-    /awes/...    Automated Work Execution System    (System 1 — Execution)
+    /ate/...     Agent Toolbox Ecosystem — the tools an agent uses to get work done (/ate/tool/awes …)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /asrs/...    Agent Self Representation System  (System 5 — representational substrate)
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
@@ -31,10 +31,19 @@ import importlib.util
 import os
 import sys
 
-from flask import Flask, jsonify, send_from_directory
+from dotenv import load_dotenv
+from flask import Flask, jsonify, redirect, send_from_directory
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(ROOT)  # repository root: docs, spec, img/ live here
+
+# Load repo-local defaults (.env is git-ignored). Loaded before any sub-system
+# import: storage/couchdb_store.py reads its config from the environment at
+# import time. Existing environment variables are not overridden, so real env
+# vars (and run.sh exports) still win. In the container run.sh mounts this
+# file at /srv/.env, which this path resolves to as well.
+load_dotenv(os.path.join(REPO, ".env"))
+
 DEFAULT_PORT = int(os.environ.get("AUTOREGIA_PORT", "8080"))
 
 app = Flask(__name__, static_folder=None)
@@ -68,7 +77,7 @@ SUBSYSTEMS = [
     ("pps", "Personal Policy System", "module/pps/server.py"),
     ("aias", "Agent Intent Aid System", "module/aias/server.py"),
     ("aoos", "Agent Operation Organization System", "module/aoos/server.py"),
-    ("awes", "Automated Work Execution System", "module/awes/server.py"),
+    ("ate", "Agent Toolbox Ecosystem", "module/ate/server.py"),
     ("pras", "Personal Reflection & Adaptation System", "module/pras/server.py"),
     ("asrs", "Agent Self Representation System", "module/asrs/server.py"),
     ("acsms", "Agent Capability Self Management System", "module/acsms/server.py"),
@@ -96,6 +105,13 @@ def api_index():
 @app.route("/")
 def index():
     return send_from_directory(ROOT, "index.html")
+
+
+@app.route("/index.html")
+def index_html():
+    # Canonical alias for "/" — the context-chrome brand lockups link here
+    # (a bare href="/" would be rewritten by support/tools/prefix_assets.py).
+    return redirect("/")
 
 
 @app.route("/about.html")

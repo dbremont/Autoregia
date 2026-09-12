@@ -18,7 +18,8 @@ import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# (prefix, [asset dirs/files relative to repo root])
+# (prefix, [asset dirs/files relative to repo root]). Prefixes may be nested
+# paths — ATE's tools live at /ate/tool/<id>/ (hosted by module/ate).
 TOOLS = {
     "prs": ["module/prs/static"],
     "pkts": ["module/pkts/static"],
@@ -26,6 +27,7 @@ TOOLS = {
     "gis": ["module/gis/static"],
     "pps": ["module/pps/static", "module/pps/index.html", "module/pps/policies"],
     "aoos": ["module/aoos/static"],
+    "ate/tool/awes": ["module/ate/tool/awes/static"],
 }
 
 # Path segments served under each tool's mount that must be prefixed.

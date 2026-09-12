@@ -15,8 +15,10 @@ app/                 the application
 ├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix dispatcher)
 ├── index.html       landing plate        ├── about.html   docs.html
 ├── module/          the sub-systems (prs, pkts, pais, peos, gis, pps, aias,
-│                    aoos, awes, pras, asrs, acsms, loop, pwos)
+│                    aoos, ate, pras, asrs, acsms, loop, pwos)
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
+│       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
+│         └── awes/  a tool (own Flask app, mounted at /ate/tool/awes/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
 spec/                conceptual specs (spec/ui.spec = normative design spec)
@@ -37,7 +39,7 @@ AUTOREGIA_PORT=8090 python3 app/app.py
 ./run.sh deploy        # also: pull | logs | stop
 
 # tests (PEOS + GIS tests need CouchDB running on 127.0.0.1:5984)
-python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py
+python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
 python3 app/support/tools/prefix_assets.py
@@ -55,7 +57,9 @@ No linter is configured.
 - **Sub-system servers** expose a Flask `app` and are loaded by `app/app.py`
   via `importlib` (registered in `sys.modules` so Flask resolves each tool's
   `static_folder`). New sub-systems: add `app/module/<sys>/` + one line in
-  `SUBSYSTEMS`.
+  `SUBSYSTEMS`. ATE-hosted tools (under `app/module/ate/tool/<id>/`) instead
+  get one entry in `TOOLS` in `app/module/ate/server.py`, which mounts them
+  at `/ate/tool/<id>/`.
 - **`sys.path` inserts are `__file__`-relative.** Module code inserts the app
   root (for `from support.storage import Store`) and sometimes `module/` (for
   intra-module imports) by walking up a fixed number of `dirname`s. If you
@@ -67,7 +71,7 @@ No linter is configured.
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
   (`static/fonts/`) — never add CDN links. Normative spec: `spec/ui.spec`;
   reference implementation: `app/module/prs/static/`.
-- **AWES DOM contract:** `app/module/awes/static/js/exec.js` addresses the
+- **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,
   `badge badge-<status>`) and the CSS vars `--text-dim`, `--red`. Restyling
@@ -103,7 +107,7 @@ No linter is configured.
 
 1. `AUTOREGIA_PORT=8090 python3 app/app.py` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `python3 -m pytest app/module/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py`
+2. `python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py`
    → 62 passed.
 3. `./run.sh deploy` → curl the mount matrix on the container port; check
    `docker logs autoregia` for tracebacks.

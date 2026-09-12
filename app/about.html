@@ -19,6 +19,12 @@
     a.back{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
     a.back:hover{color:var(--accent)}
     a.back::before{content:"← "}
+    nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+    nav.topnav .topnav-in{max-width:880px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:18px}
+    nav.topnav .lockup{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+    nav.topnav .links{margin-left:auto;display:flex;gap:26px}
+    nav.topnav .links a{font-family:var(--sans);font-size:13px;color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+    nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
     header.masthead{padding:24px 0 40px;text-align:center}
     h1.title{font-size:clamp(44px,7vw,68px);font-weight:400;letter-spacing:-.02em;line-height:1;margin-bottom:24px}
     h1.title em{font-style:italic;color:var(--accent)}
@@ -82,7 +88,16 @@
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="/">Index</a>
+  <nav class="topnav">
+    <div class="topnav-in">
+      <a class="lockup" href="/index.html">Autoregia</a>
+      <div class="links">
+        <a href="/#loop">Systems</a>
+        <a href="/#situation">Situation</a>
+        <a href="/docs.html">Docs</a>
+      </div>
+    </div>
+  </nav>
   <header class="masthead">
     <h1 class="title">Autoregia</h1>
     <p class="lede">An enabling exoskeleton for agency — augmenting an agent's capacity for self-regulation, resource and intention management, monitoring, and adaptation.</p>

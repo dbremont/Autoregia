@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATE — Agent Toolbox Ecosystem</title>
+<style>
+  /* Autoregia warm-parchment aesthetic — tokens per design.md / spec/ui.spec */
+  :root {
+    --ink: #2C2A26;
+    --ink-soft: #44413B;
+    --muted: #6B665B;
+    --faint: #8C877B;
+    --rule: #E2DED4;
+    --rule-soft: #EEEAE0;
+    --paper: #FAFAF6;
+    --surface: #FFFFFF;
+    --surface-warm: #FBF9F4;
+    --oxford: #7A1A2A;
+    --oxford-deep: #641020;
+    --oxford-tint: #F4E8EA;
+    --gold: #A8854A;
+    --gold-soft: #C7A972;
+    --serif: "Spectral", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem 2rem 3rem;
+    line-height: 1.55;
+  }
+  a.back {
+    display: inline-block; font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--faint); text-decoration: none; margin-top: 12px;
+  }
+  a.back:hover { color: var(--oxford); }
+  a.back::before { content: "← "; }
+  nav.topnav {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  nav.topnav .topnav-in {
+    max-width: 1000px; margin: 0 auto; padding: 0 2rem;
+    display: flex; align-items: center; height: 60px; gap: 18px;
+  }
+  nav.topnav .lockup {
+    font-family: var(--serif); font-size: 20px; font-weight: 500;
+    letter-spacing: -.01em; color: var(--ink); text-decoration: none;
+  }
+  nav.topnav .links { margin-left: auto; display: flex; gap: 26px; }
+  nav.topnav .links a {
+    font-family: var(--sans); font-size: 13px; color: var(--muted);
+    text-decoration: none; padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  nav.topnav .links a:hover { color: var(--oxford); border-bottom-color: var(--oxford); }
+  header.masthead { padding: 16px 0 8px; text-align: center; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--serif); font-size: 2rem; font-weight: 400;
+    letter-spacing: -.015em; color: var(--ink);
+  }
+  .subtitle {
+    font-family: var(--serif); font-style: italic;
+    color: var(--muted); font-size: .95rem; margin-top: 6px;
+  }
+  .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto 8px; opacity: .7; }
+  .lede {
+    max-width: 640px; margin: 0 auto; text-align: center;
+    color: var(--muted); font-size: .92rem; padding-top: 10px;
+  }
+  h2 {
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 500;
+    margin: 1.6rem 0 .7rem; color: var(--ink);
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: .75rem;
+  }
+  a.tool-card {
+    display: block;
+    background: var(--surface-warm);
+    border: 1px solid var(--rule-soft);
+    border-radius: 6px;
+    padding: .9rem 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color .15s;
+  }
+  a.tool-card:hover { border-color: var(--gold-soft); }
+  .tool-card .head { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
+  .tool-card .code {
+    font-family: var(--mono); font-size: .8rem; font-weight: 600;
+    color: var(--oxford); letter-spacing: .06em;
+  }
+  .tool-card .vsm {
+    font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--faint); white-space: nowrap;
+  }
+  .tool-card .name {
+    font-family: var(--serif); font-size: 1.02rem; margin-top: .2rem; color: var(--ink);
+  }
+  .tool-card .summary { font-size: .84rem; color: var(--muted); margin-top: .35rem; }
+  .tool-card .open {
+    font-size: .78rem; color: var(--gold); margin-top: .5rem;
+    font-family: var(--mono);
+  }
+  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+</style>
+</head>
+<body>
+  <nav class="topnav">
+    <div class="topnav-in">
+      <a class="lockup" href="/index.html">Autoregia</a>
+      <div class="links">
+        <a href="/ate/tool/awes/">AWES</a>
+        <a href="/about.html">About</a>
+        <a href="/docs.html">Docs</a>
+      </div>
+    </div>
+  </nav>
+  <header class="masthead">
+    <div class="eyebrow">Toolbox</div>
+    <h1>ATE</h1>
+    <div class="subtitle">Agent Toolbox Ecosystem</div>
+    <div class="gold-rule"></div>
+    <p class="lede">The tools an agent uses to get work done. Each tool provides a
+    specific capability—from running code and accessing information to creating
+    and manipulating things—extending what the agent can accomplish.</p>
+  </header>
+
+  <h2>Tools</h2>
+  <div class="panel"><div class="tool-grid" id="tool-grid"></div></div>
+
+  <footer>ATE · Agent Toolbox Ecosystem — <span id="tool-count">0</span> tools</footer>
+
+<script>
+const API_BASE = "/ate";
+
+async function loadTools() {
+  const res = await fetch(API_BASE + "/api/tools");
+  const data = await res.json();
+  const grid = document.getElementById("tool-grid");
+  grid.innerHTML = "";
+  for (const tool of data.tools) {
+    const card = document.createElement("a");
+    card.className = "tool-card";
+    card.href = tool.href;
+    card.innerHTML = `
+      <div class="head"><span class="code">${tool.id}</span><span class="vsm">${tool.vsm}</span></div>
+      <div class="name">${tool.name}</div>
+      <div class="summary">${tool.summary}</div>
+      <div class="open">open →</div>
+    `;
+    grid.appendChild(card);
+  }
+  document.getElementById("tool-count").textContent = data.tools.length;
+}
+
+loadTools();
+</script>
+</body>
+</html>

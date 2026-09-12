@@ -95,6 +95,10 @@ command-palette.css
 Users of this archetype: `prs`, `pkts`, `pais`, `peos`, `gis`, `aias`,
 `aoos`, `loop`.
 
+The shell's sticky header and sidebar — closed by the `.sidebar-colophon` —
+satisfy the context-chrome rule (Rule 7): no additional navbar/footer is
+required on these surfaces.
+
 ### 3.2 Standalone document page (landings, policies, deliberations)
 
 Self-contained HTML with the token block inlined in `<style>` (copy §2.1–2.2
@@ -102,6 +106,11 @@ exactly — do not invent values), parchment background, centered column
 (`max-width: ~880px`), breadcrumb `← Index`, masthead (eyebrow · title ·
 gold rule · lede), sections with `.section-label`, editorial tables, footer
 colophon.
+
+Every standalone page must contain its own `<nav>` navbar and `<footer>`
+(Rule 7, context chrome) — self-contained markup, no shared include. The
+navbar copies the root landing's `topnav` styling; its links are contextual
+to the page's own project.
 
 Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 `asrs`, `acsms`, root plates (`index.html`, `about.html`, `docs.html`).
@@ -117,7 +126,14 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
    may not introduce an alien theme (`spec/ui.spec` §11.4).
 4. **Mono for data** — identifiers, timestamps, payloads, and numeric data set
    in `--mono`.
-5. **Motion with purpose** — guarded by `prefers-reduced-motion`.
+6. **Motion with purpose** — guarded by `prefers-reduced-motion`.
+7. **Context chrome** — every page must have a **navbar** and a **footer**.
+   Both provide context. The navbar follows the root landing's `topnav`
+   styling (sticky bar, serif `Autoregia` lockup, sans links with accent
+   hover-underline); its **links are contextual** — the index, siblings, and
+   parents of the page's own project, plus About/Docs — never a bare global
+   list of systems. Each page implements its own markup; no shared include
+   (`spec/ui.spec` §12).
 
 ---
 
@@ -130,7 +146,8 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 | `pras` — deliberations             | standalone | ✅ conforms |
 | `asrs`                             | standalone | ✅ conforms |
 | `acsms` — landing                  | standalone | ✅ conforms |
-| `awes` — console                   | standalone | ✅ conforms (restyled 2026-09) |
+| `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
+| `ate` — toolbox index               | standalone | ✅ conforms |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (tokens aligned 2026-09) |
 
 **Residual convergence items** (tracked, non-blocking):

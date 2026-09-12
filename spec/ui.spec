@@ -404,6 +404,31 @@ The PRS prototype (`prs/static/`) is the reference. When in doubt, the PRS imple
 
 ---
 
+## 12. Context Chrome
+
+> Every Autoregia page must have a **navbar** and a **footer** — both provide
+> context. Each page implements its own markup; there is **no shared
+> include** — no injected script, no served fragment; a page owns its chrome
+> outright.
+
+- **Landmarks:** the navbar is a `<nav>` element; the footer is a `<footer>`
+  element.
+- **Navbar styling:** follows the root landing's `topnav` — sticky bar on
+  paper with a hairline bottom border; serif `Autoregia` lockup linking to
+  `/`; sans-serif links with an accent hover-underline.
+- **Navbar content:** contextual to the page's own project — its index,
+  siblings, and parents, plus the About/Docs plates. A navbar that is a bare
+  list of all systems does **not** satisfy this rule.
+- **Standalone pages** (design.md §3.2): self-contained inline `<nav>` +
+  `<footer>` in the page's own HTML/CSS. A bare back-link breadcrumb alone
+  does not satisfy the navbar requirement.
+- **App-shell surfaces** (§5.2): the sticky header and warm sidebar — closed
+  by the `.sidebar-colophon` (§7.10) — satisfy both requirements; no
+  additional chrome is required.
+- A page without both elements is non-conformant, regardless of archetype.
+
+---
+
 ## References
 
 - [Autoregia](../README.md) — workspace overview & VSM mapping.

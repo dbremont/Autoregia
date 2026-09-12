@@ -19,6 +19,12 @@
     a.back{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
     a.back:hover{color:var(--accent)}
     a.back::before{content:"← "}
+    nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+    nav.topnav .topnav-in{max-width:880px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:18px}
+    nav.topnav .lockup{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+    nav.topnav .links{margin-left:auto;display:flex;gap:26px}
+    nav.topnav .links a{font-family:var(--sans);font-size:13px;color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+    nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
     header.masthead{padding:24px 0 40px;text-align:center}
     .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px}
     h1.title{font-size:clamp(38px,6vw,56px);font-weight:400;letter-spacing:-.02em;line-height:1.05;margin-bottom:10px}
@@ -62,7 +68,18 @@
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="/">Index</a>
+  <nav class="topnav">
+    <div class="topnav-in">
+      <a class="lockup" href="/index.html">Autoregia</a>
+      <div class="links">
+        <a href="/asrs/">ASRS</a>
+        <a href="/pps/">PPS</a>
+        <a href="/ate/tool/awes/">AWES</a>
+        <a href="/about.html">About</a>
+        <a href="/docs.html">Docs</a>
+      </div>
+    </div>
+  </nav>
   <header class="masthead">
     <div class="eyebrow">Substrate · Capability Self-Management</div>
     <h1 class="title">Agent Capability Self Management System<span class="abbr">ACSMS</span></h1>
@@ -73,7 +90,7 @@
   <section id="formulation">
     <div class="section-label">Formulation</div>
     <blockquote>An ACSMS is best understood by analogy to an <b>athlete's training regime</b> or an organization's <b>R&amp;D function</b>. Performance today is produced by the current capability set; the regime exists to change that set deliberately — identifying weaknesses, scheduling practice, demanding evidence, and retiring what no longer serves.</blockquote>
-    <p class="body">It does not perform the agent's work (that is <a href="/awes/" style="color:inherit">AWES</a>) and does not choose what the agent values (that is <a href="/pps/" style="color:inherit">PPS</a>). It maintains the <b>pipeline that converts intent into capability</b>, so that growth is a managed flow rather than an accident of whatever work happens to teach something. It keeps improvement resource-feasible, demands <em>evidence over exposure</em>, and keeps the capability set current — consolidating what is held, reviewing what decays, and culling what no longer serves.</p>
+    <p class="body">It does not perform the agent's work (that is <a href="/ate/tool/awes/" style="color:inherit">AWES</a>) and does not choose what the agent values (that is <a href="/pps/" style="color:inherit">PPS</a>). It maintains the <b>pipeline that converts intent into capability</b>, so that growth is a managed flow rather than an accident of whatever work happens to teach something. It keeps improvement resource-feasible, demands <em>evidence over exposure</em>, and keeps the capability set current — consolidating what is held, reviewing what decays, and culling what no longer serves.</p>
   </section>
 
   <section id="why">

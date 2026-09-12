@@ -48,7 +48,10 @@ Autoregia/
     │   │   ├── data/
     │   │   ├── static/
     │   │   └── test_peos.py
-    │   └── ...          # gis, pps, aias, aoos, awes, pras, asrs, acsms, loop, pwos
+    │   ├── ate/         # Agent Toolbox Ecosystem — hosts tools under tool/
+    │   │   ├── server.py    # toolbox registry + /ate/tool/<id>/ mounting
+    │   │   └── tool/awes/   # Automated Work Execution System (a tool)
+    │   └── ...          # gis, pps, aias, aoos, pras, asrs, acsms, loop, pwos
     └── support/         # everything that supports the modules
         ├── storage/     # shared CouchDB document store (Store)
         ├── shared/      # shared Python package (focus_watcher, …)

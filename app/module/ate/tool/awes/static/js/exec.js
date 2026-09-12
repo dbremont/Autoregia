@@ -1,4 +1,4 @@
-const API = "";
+const API = "/ate/tool/awes";
 
 async function api(path, opts = {}) {
   const res = await fetch(API + path, {
@@ -9,7 +9,7 @@ async function api(path, opts = {}) {
 }
 
 async function loadEnvironments() {
-  const envs = await api("/api/environments");
+  const envs = await api("/ate/tool/awes/api/environments");
   const grid = document.getElementById("env-grid");
   const select = document.getElementById("env-select");
   grid.innerHTML = "";
@@ -31,7 +31,7 @@ async function loadEnvironments() {
 }
 
 async function loadSessions() {
-  const sessions = await api("/api/sessions");
+  const sessions = await api("/ate/tool/awes/api/sessions");
   const list = document.getElementById("session-list");
   list.innerHTML = sessions.map(s => {
     const statusClass = `badge-${s.status}`;
@@ -60,7 +60,7 @@ async function run() {
   btn.disabled = true;
   status.textContent = "Running...";
   try {
-    const result = await api("/api/execute", {
+    const result = await api("/ate/tool/awes/api/execute", {
       method: "POST",
       body: JSON.stringify({
         env_id: document.getElementById("env-select").value,
@@ -79,7 +79,7 @@ async function run() {
 }
 
 async function clearSessions() {
-  await api("/api/sessions", { method: "DELETE" });
+  await api("/ate/tool/awes/api/sessions", { method: "DELETE" });
   await loadSessions();
 }
 
