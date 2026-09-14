@@ -2,7 +2,7 @@
    PEOS Landscape — the vocabulary of the stream.
    Word cloud ⇄ treemap of top terms/bigrams (toggle), and a
    term co-occurrence force graph (the conceptual landscape).
-   Click any word to filter Reading.
+   Click any word to filter Search.
    ════════════════════════════════════════════════════════════ */
 window.PEOS = window.PEOS || {};
 PEOS.Landscape = (() => {

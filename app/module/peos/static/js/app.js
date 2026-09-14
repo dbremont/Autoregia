@@ -2,38 +2,49 @@
    PEOS App — sidebar router, window selector, keyboard, chrome.
    The click→filter bus: any chart that wires PEOS.Charts.onClick
    ends in PEOS.applyFilter(), which updates Store state and sends
-   the user to Reading with the filter applied.
+   the user to Search with the filter applied.
    ════════════════════════════════════════════════════════════ */
 window.PEOS = window.PEOS || {};
 const PEOS = window.PEOS;
 
 PEOS.VIEWS = [
-  { id:'pulse',       label:'Pulse',        icon:'activity',    desc:'volume, spikes, what is hot now' },
-  { id:'flow',        label:'Flow',         icon:'waves',       desc:'stream graph over time' },
-  { id:'composition', label:'Composition',  icon:'git-branch',  desc:'topic → source make-up' },
-  { id:'landscape',   label:'Landscape',    icon:'network',     desc:'words & co-occurrence' },
-  { id:'clusters',    label:'Clusters',     icon:'layers',      desc:'semantic topic clusters' },
-  { id:'reading',     label:'Reading',      icon:'list',        desc:'the signal stream' },
-  { id:'topics',      label:'Topics',       icon:'tag',         desc:'watched feeds' },
+  { id:'dashboard',   label:'Dashboard',   icon:'activity',   group:'Analysis', desc:'volume, spikes, what is hot now' },
+  { id:'flow',        label:'Flow',        icon:'waves',      group:'Analysis', desc:'stream graph over time' },
+  { id:'composition', label:'Composition', icon:'git-branch', group:'Analysis', desc:'topic → source make-up' },
+  { id:'landscape',   label:'Landscape',   icon:'network',    group:'Analysis', desc:'words & co-occurrence' },
+  { id:'clusters',    label:'Clusters',    icon:'layers',     group:'Analysis', desc:'semantic topic clusters' },
+  { id:'search',      label:'Search',      icon:'list',       group:'Signal',   desc:'the observation stream' },
+  { id:'sources',     label:'Sources',     icon:'tag',        group:'Sources',  desc:'watched feeds' },
 ];
+
+// Pre-rename hashes, kept as aliases so old bookmarks keep working.
+PEOS._ALIASES = { pulse:'dashboard', reading:'search', topics:'sources' };
 
 PEOS.init = async function () {
   try { await PEOS.Store.load(); } catch(e){ console.error('load failed', e); }
-  this.current = 'pulse';
+  this.current = 'dashboard';
   this.renderSidebar();
   this.setupRouter();
   this.setupKeyboard();
   this.setupHeader();
   this.setupWindow();
-  this.navigate(this.getHash() || 'pulse');
+  this.navigate(this.getHash() || 'dashboard');
 };
 
 PEOS.renderSidebar = function () {
   const nav = document.getElementById('sidebarNav');
   const a = PEOS.Store.analytics() || {};
-  const counts = { pulse:'', flow:'', composition:'', landscape:'', clusters: (a.clusters&&a.clusters.k)||'', reading: PEOS.Store.observations().length, topics: PEOS.Store.topics().length };
-  nav.innerHTML = `<div class="sidebar-label">Instruments</div>` + PEOS.VIEWS.map(v =>
-    `<a href="#${v.id}" data-view="${v.id}"><span class="nav-icon">${PEOS.icon(v.icon,16)}</span><span>${v.label}</span>${counts[v.id]!==''?`<span class="nav-count">${counts[v.id]}</span>`:''}</a>`
+  const counts = { dashboard:'', flow:'', composition:'', landscape:'', clusters: (a.clusters&&a.clusters.k)||'', search: PEOS.Store.observations().length, sources: PEOS.Store.topics().length };
+  const groups = [];
+  PEOS.VIEWS.forEach(v => {
+    let g = groups[groups.length-1];
+    if (!g || g.name !== v.group){ g = { name: v.group, views: [] }; groups.push(g); }
+    g.views.push(v);
+  });
+  nav.innerHTML = groups.map(g =>
+    `<div class="sidebar-label">${g.name}</div>` + g.views.map(v =>
+      `<a href="#${v.id}" data-view="${v.id}"><span class="nav-icon">${PEOS.icon(v.icon,16)}</span><span>${v.label}</span>${counts[v.id]!==''?`<span class="nav-count">${counts[v.id]}</span>`:''}</a>`
+    ).join('')
   ).join('');
 };
 
@@ -43,6 +54,7 @@ PEOS.setupRouter = function () {
 PEOS.getHash = () => location.hash.slice(1);
 
 PEOS.navigate = function (view) {
+  if (PEOS._ALIASES[view]) view = PEOS._ALIASES[view];
   this.current = view; location.hash = '#'+view;
   document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===view));
   const c = document.getElementById('appContent');
@@ -62,7 +74,7 @@ PEOS.updateFooter = function () {
 PEOS.applyFilter = async function (patch) {
   await PEOS.Store.applyFilter(patch);
   this.renderSidebar();
-  this.navigate('reading');
+  this.navigate('search');
 };
 
 PEOS.setupKeyboard = function () {
@@ -74,10 +86,11 @@ PEOS.setupKeyboard = function () {
 };
 
 PEOS.setupHeader = function () {
+  document.getElementById('btnBack')?.addEventListener('click', ()=>window.history.back());
   document.getElementById('btnExport')?.addEventListener('click', ()=>PEOS.exportData());
   document.getElementById('btnDocs')?.addEventListener('click', ()=>PEOS.openDocs());
   const gs = document.getElementById('globalSearch');
-  gs?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); PEOS.Store.applyFilter({q: gs.value.trim()}); PEOS.renderSidebar(); PEOS.navigate('reading'); } });
+  gs?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); PEOS.Store.applyFilter({q: gs.value.trim()}); PEOS.renderSidebar(); PEOS.navigate('search'); } });
 };
 
 PEOS.setupWindow = function () {
@@ -110,9 +123,9 @@ PEOS.docsHTML = function () {
     <h4>Purpose</h4>
     <p>A sense-making dashboard over what <strong>other agents</strong> say about the world — comments, posts and news collected from free feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT). Every item is stored as an <em>observational</em> event in CouchDB; the instruments here turn that stream into orientation.</p>
     <h4>The instruments</h4>
-    <p><strong>Pulse</strong> orients — volume over time, spikes, and what is hot now. <strong>Flow</strong> is the stream graph (a timeline of ribbons by source/topic/cluster). <strong>Composition</strong> shows how each topic splits across sources (sankey). <strong>Landscape</strong> maps the vocabulary (word cloud ⇄ treemap) and term co-occurrence. <strong>Clusters</strong> groups items into semantic topics via a local embedding model. <strong>Reading</strong> is the ground-truth stream. <strong>Topics</strong> manages the watched feeds.</p>
+    <p><strong>Dashboard</strong> orients — volume over time, spikes, and what is hot now. <strong>Flow</strong> is the stream graph (a timeline of ribbons by source/topic/cluster). <strong>Composition</strong> shows how each topic splits across sources (sankey). <strong>Landscape</strong> maps the vocabulary (word cloud ⇄ treemap) and term co-occurrence. <strong>Clusters</strong> groups items into semantic topics via a local embedding model. <strong>Search</strong> is the ground-truth observation stream. <strong>Sources</strong> manages the watched feeds.</p>
     <h4>The click→filter bus</h4>
-    <p>Click almost any chart element (a source wedge, a sankey node, a cluster card, a word) to filter the Reading stream. It is how the charts stop being decoration and start being sense.</p>
+    <p>Click almost any chart element (a source wedge, a sankey node, a cluster card, a word) to filter the Search stream. It is how the charts stop being decoration and start being sense.</p>
     <h4>Navigation</h4><div class="kbd-grid">${binds}</div>
     <h4>Shortcuts</h4>
     <div class="kbd-grid">

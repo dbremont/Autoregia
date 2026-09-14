@@ -7,12 +7,17 @@ here and it is available everywhere.
 from __future__ import annotations
 
 from .base import Observation, Source, Topic, now_ms, obs_id, slugify
+from .arxiv import ArxivSource
+from .biorxiv import BiorxivSource
+from .crossref import CrossrefSource
 from .gdelt import GDELTSource
 from .hackernews import HackerNewsSource
 from .lobsters import LobstersSource
 from .mastodon import MastodonSource
 from .nitter import NitterSource
+from .openalex import OpenAlexSource
 from .reddit_rss import RedditSource
+from .rss import RssSource
 
 _INSTANCES = {
     HackerNewsSource.name: HackerNewsSource(),
@@ -21,6 +26,11 @@ _INSTANCES = {
     MastodonSource.name: MastodonSource(),
     GDELTSource.name: GDELTSource(),
     NitterSource.name: NitterSource(),
+    ArxivSource.name: ArxivSource(),
+    OpenAlexSource.name: OpenAlexSource(),
+    CrossrefSource.name: CrossrefSource(),
+    BiorxivSource.name: BiorxivSource(),
+    RssSource.name: RssSource(),
 }
 
 SOURCE_REGISTRY: dict[str, Source] = _INSTANCES

@@ -11,6 +11,11 @@ os.environ["COUCHDB_DB_PREFIX"] = "peos_test_"
 os.environ.setdefault("COUCHDB_URL", "http://localhost:5984")
 os.environ.setdefault("COUCHDB_USER", "admin")
 os.environ.setdefault("COUCHDB_PASSWORD", "admin")
+# Pin the sources policy file to the bundled seed so tests always see the
+# historical 25-handle set, independent of a repo config/peos_sources.json
+# (and so the env-override resolution path itself is what gets exercised).
+os.environ["PEOS_SOURCES_FILE"] = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "data", "nitter_handles.json")
 
 # Drop any stale test DB before the server module creates & seeds it.
 import couchdb  # noqa: E402
@@ -37,6 +42,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import peos.server as srv  # noqa: E402
 import peos.sources as src_pkg  # noqa: E402
 from peos.sources import hackernews, lobsters, reddit_rss, gdelt, mastodon, nitter  # noqa: E402
+from peos.sources import arxiv as peos_arxiv  # noqa: E402
+from peos.sources import biorxiv as peos_biorxiv  # noqa: E402
+from peos.sources import crossref as peos_crossref  # noqa: E402
+from peos.sources import openalex as peos_openalex  # noqa: E402
+from peos.sources import rss as peos_rss  # noqa: E402
 from peos.sources.base import Topic, Observation, obs_id  # noqa: E402
 
 
@@ -182,6 +192,9 @@ def test_nitter_retweet_uses_original_author(monkeypatch):
 
 
 def test_nitter_multi_instance_failover(monkeypatch):
+    # Pin the instance list so the test exercises failover logic itself,
+    # independent of the shipped default order.
+    monkeypatch.setenv("PEOS_NITTER_INSTANCES", "nitter.net,nitter.privacydev.net")
     calls = []
 
     def fake(url, *a, **k):
@@ -462,3 +475,215 @@ def test_clusters_endpoints(client):
     # empty store → k=0
     assert client.get("/api/clusters").get_json()["k"] == 0
 
+
+# ── DB-resident search (ddoc views + Mango) ──────────────────────────────────
+def _obs(n, **kw):
+    d = {"source": "hackernews", "source_type": "story", "native_id": f"S{n}",
+         "native_url": f"u{n}", "observed_at_ms": 1000 + n, "author": "ann",
+         "title": f"title {n}", "body": f"body {n}", "topics": ["t"]}
+    d.update(kw)
+    return d
+
+
+def _ingest(client, *obs):
+    r = client.post("/api/ingest", json={"observations": list(obs)})
+    assert r.status_code == 202
+
+
+def test_ensure_search_layer_idempotent():
+    srv._ensure_search_layer()
+    srv._ensure_search_layer()                      # second call: no-op
+    ddoc = srv.store.get("_design/" + srv._SEARCH_DDOC)
+    assert ddoc and set(srv._SEARCH_VIEWS) <= set(ddoc.get("views", {}))
+
+
+def test_search_token_prefix_and(client):
+    _ingest(client,
+            _obs(1, title="Transformers explained", body="attention layers",
+                 observed_at_ms=2000),
+            _obs(2, title="transformer scaling laws", body="compute",
+                 observed_at_ms=3000, topics=["t2"]),
+            _obs(3, title="Rust rewriting Bun", body="zig considered",
+                 observed_at_ms=4000))
+    # exact token: both transformer docs
+    r = client.get("/api/search?q=transformer").get_json()["items"]
+    assert {d["native_id"] for d in r} == {"S1", "S2"}
+    # prefix: same docs again
+    r = client.get("/api/search?q=trans").get_json()["items"]
+    assert {d["native_id"] for d in r} == {"S1", "S2"}
+    # multi-token AND: only the doc with both 'transformer' and 'scal'
+    r = client.get("/api/search?q=transformer+scal").get_json()["items"]
+    assert {d["native_id"] for d in r} == {"S2"}
+
+
+def test_search_structured_filters(client):
+    _ingest(client,
+            _obs(1, source="lobsters", observed_at_ms=2000),
+            _obs(2, source="hackernews", topics=["only-here"],
+                 observed_at_ms=3000),
+            _obs(3, observed_at_ms=5000))
+    assert {d["native_id"] for d in
+            client.get("/api/search?source=lobsters").get_json()["items"]} == {"S1"}
+    assert {d["native_id"] for d in
+            client.get("/api/search?topic=only-here").get_json()["items"]} == {"S2"}
+    assert {d["native_id"] for d in
+            client.get("/api/search?since_ms=2500").get_json()["items"]} == {"S2", "S3"}
+    # q + structured filter compose
+    r = client.get("/api/search?q=title&source=hackernews").get_json()["items"]
+    assert {d["native_id"] for d in r} == {"S2", "S3"}
+
+
+def test_search_recency_and_score(client):
+    _ingest(client, _obs(1, observed_at_ms=1000, score=5),
+            _obs(2, observed_at_ms=9000, score=0))
+    r = client.get("/api/search?sort=recent&limit=1").get_json()["items"]
+    assert r[0]["native_id"] == "S2"                # newest first
+    r = client.get("/api/search?sort=score&limit=2").get_json()["items"]
+    assert r[0]["native_id"] == "S1"                # score beats recency
+
+
+def test_search_short_q_substring_fallback(client):
+    _ingest(client, _obs(1, title="a bug in the matrix"),
+            _obs(2, title="unrelated"))
+    r = client.get("/api/search?q=a+bug").get_json()["items"]
+    assert {d["native_id"] for d in r} == {"S1"}
+
+
+def test_search_paging(client):
+    _ingest(client, *[_obs(i, observed_at_ms=1000 + i) for i in range(1, 6)])
+    p1 = client.get("/api/search?limit=2").get_json()
+    assert [d["native_id"] for d in p1["items"]] == ["S5", "S4"]   # newest first
+    assert p1["has_more"] is True and p1["page"] == 1
+    p2 = client.get("/api/search?limit=2&offset=2").get_json()
+    assert [d["native_id"] for d in p2["items"]] == ["S3", "S2"]
+    assert p2["has_more"] is True and p2["page"] == 2
+    p3 = client.get("/api/search?limit=2&offset=4").get_json()
+    assert [d["native_id"] for d in p3["items"]] == ["S1"]
+    assert p3["has_more"] is False
+    p4 = client.get("/api/search?limit=2&offset=9").get_json()
+    assert p4["items"] == [] and p4["has_more"] is False
+    # q path pages too (5 docs contain 'title' in title/body)
+    pq = client.get("/api/search?q=title&limit=2&offset=2").get_json()
+    assert len(pq["items"]) == 2 and pq["has_more"] is True
+
+
+def test_search_matches_legacy_endpoint(client):
+    _ingest(client,
+            _obs(1, title="Rust release", body="rc info", source="lobsters",
+                 observed_at_ms=2000),
+            _obs(2, title="Other", body="python note",
+                 observed_at_ms=3000))
+    for params in ("?q=rust", "?source=lobsters", "?topic=t", "?since_ms=2500",
+                   "?limit=1"):
+        legacy = client.get(f"/api/observations{params}").get_json()
+        modern = client.get(f"/api/search{params}").get_json()["items"]
+        assert {d["id"] for d in legacy} == {d["id"] for d in modern}, params
+
+
+
+# ── paper sources (arXiv · OpenAlex · Crossref · bioRxiv · generic RSS) ──────
+def test_paper_sources_registered():
+    for name in ("arxiv", "openalex", "crossref", "biorxiv", "rss"):
+        assert name in src_pkg.SOURCE_REGISTRY
+        assert any(m["name"] == name for m in src_pkg.SOURCE_META)
+
+
+def test_arxiv_parse(monkeypatch):
+    class F:
+        entries = [{
+            "id": "http://arxiv.org/abs/2609.11873v1",
+            "title": " Recursive Self-Improvement ",
+            "summary": "<p>An abstract.</p>",
+            "published_parsed": (2026, 9, 13, 12, 0, 0, 0, 0, 0),
+            "authors": [{"name": "Yi Duan"}, {"name": "Ying Liu"}],
+        }]
+    monkeypatch.setattr(peos_arxiv, "_throttle", lambda: None)
+    monkeypatch.setattr(peos_arxiv, "get_feed", lambda url, **k: F())
+    obs = peos_arxiv.ArxivSource().poll(Topic("arxiv-t", "arxiv", "cat:cs.AI"), None)
+    assert len(obs) == 1
+    o = obs[0]
+    assert o.source_type == "paper" and o.native_id == "2609.11873"
+    assert o.native_url == "https://arxiv.org/abs/2609.11873"
+    assert "<p>" not in o.body and o.author == "Yi Duan"
+    obs2 = peos_arxiv.ArxivSource().poll(
+        Topic("arxiv-t", "arxiv", "q"), 9_999_999_999_999)
+    assert obs2 == []
+
+
+def test_arxiv_throttle(monkeypatch):
+    sleeps = []
+    monkeypatch.setattr(peos_arxiv.time, "sleep", lambda s: sleeps.append(s))
+    monkeypatch.setattr(peos_arxiv.time, "time", lambda: 100.0)
+    peos_arxiv._LAST_REQUEST[0] = 99.0
+    peos_arxiv._throttle()
+    assert sleeps == [2.0] and peos_arxiv._LAST_REQUEST[0] == 100.0
+
+
+def test_openalex_parse(monkeypatch):
+    data = {"results": [{
+        "doi": "https://doi.org/10.1111/ABC.2", "display_name": "Federated Learning",
+        "abstract_inverted_index": {"Learning": [1], "Federated": [0]},
+        "publication_date": "2026-09-01",
+        "authorships": [{"author": {"display_name": "A. Author"}}],
+        "cited_by_count": 7, "id": "https://openalex.org/W1",
+        "primary_location": {"source": {"display_name": "Nature"}},
+    }]}
+    monkeypatch.setattr(peos_openalex, "get_json", lambda url, **k: data)
+    obs = peos_openalex.OpenAlexSource().poll(
+        Topic("oa", "openalex", "federated learning"), None)
+    o = obs[0]
+    assert o.native_id == "10.1111/abc.2" and o.body == "Federated Learning"
+    assert o.score == 7 and o.author == "A. Author"
+
+
+def test_crossref_parse(monkeypatch):
+    data = {"message": {"items": [{
+        "DOI": "10.5555/XYZ.1", "title": ["A Journal Paper"],
+        "abstract": "<jats:p>Plain body text</jats:p>",
+        "author": [{"given": "Ada", "family": "Lovelace"}],
+        "created": {"date-time": "2026-09-05T10:00:00Z"},
+        "container-title": ["Journal"], "URL": "https://doi.org/10.5555/xyz.1",
+    }]}}
+    monkeypatch.setattr(peos_crossref, "get_json", lambda url, **k: data)
+    obs = peos_crossref.CrossrefSource().poll(
+        Topic("cr", "crossref", "papers"), None)
+    o = obs[0]
+    assert o.native_id == "10.5555/xyz.1" and o.author == "Ada Lovelace"
+    assert "jats:" not in o.body and o.body == "Plain body text"
+    assert o.observed_at_ms > 1_700_000_000_000
+
+
+def test_biorxiv_parse(monkeypatch):
+    pages = [
+        {"collection": [
+            {"doi": "10.1101/2026.09.01.1", "title": "Cell atlas",
+             "abstract": "tissue", "date": "2026-09-01",
+             "category": "genomics", "authors": "Li; Wang"},
+            {"doi": "10.1101/2026.09.02.2", "title": "Protein folding",
+             "abstract": "x", "date": "2026-09-02",
+             "category": "structbio", "authors": "Kim"},
+        ], "messages": [{"cursor": 2, "count": 2}]},
+        {"collection": [], "messages": [{"cursor": 2, "count": 0}]},
+    ]
+    seq = iter(pages)
+    monkeypatch.setattr(peos_biorxiv, "get_json", lambda url, **k: next(seq))
+    obs = peos_biorxiv.BiorxivSource().poll(
+        Topic("bx", "biorxiv", "atlas"), None)
+    assert len(obs) == 1 and obs[0].native_id == "10.1101/2026.09.01.1"
+    assert obs[0].author == "Li"
+
+
+def test_rss_parse(monkeypatch):
+    class F:
+        entries = [{
+            "id": "https://doi.org/10.1093/nature/1", "title": "News feature",
+            "summary": "<p>n body</p>", "link": "https://www.nature.com/articles/x",
+            "published_parsed": (2026, 9, 12, 9, 0, 0, 0, 0, 0),
+        }]
+    monkeypatch.setattr(peos_rss, "get_feed", lambda url, **k: F())
+    obs = peos_rss.RssSource().poll(
+        Topic("rs", "rss", "https://www.nature.com/nature.rss"), None)
+    assert obs[0].native_id == "https://doi.org/10.1093/nature/1"
+    assert obs[0].native_url.endswith("/x")
+    # a non-URL query is a config error, not a fetch: no observations
+    assert peos_rss.RssSource().poll(Topic("rs", "rss", "not-a-url"), None) == []

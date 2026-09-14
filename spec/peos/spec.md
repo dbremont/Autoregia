@@ -338,12 +338,16 @@ python3 -m pytest peos/test_peos.py -v
    "observational"` — the [PWMS](../asrs/pwms/) event-type defined as *"a reading
    the agent actively takes"*.
 3. **Source policy.** Sources must be **free and no-auth**. Twitter/X is reached
-   via **Nitter RSS mirrors** (`PEOS_NITTER_INSTANCES`) rather than the official
-   API (which has no realistic free read tier). The canonical `nitter.net` is
-   intermittent, so the Nitter source is multi-instance by design: it tries each
-   configured mirror and skips failures, keeping the sense organ operational as
-   long as at least one mirror is up. Tweet `status_id`s are globally unique on
-   X, so they serve as the natural dedup key.
+   via **Nitter RSS mirrors** rather than the official API (which has no
+   realistic free read tier). `xcancel.com`-class mirrors rotate; the source
+   is multi-instance by design: it tries each configured mirror and skips
+   failures, keeping the sense organ operational as long as at least one mirror
+   is up. Tweet `status_id`s are globally unique on X, so they serve as the
+   natural dedup key. The tracked sources and the mirror order live outside the
+   code tree in the **sources policy file** `config/peos_sources.json` — see
+   [`policy.md`](policy.md). Collection itself is bound by the etiquette rules
+   in [`collection.md`](collection.md) (manual polls today; target automation
+   in [`automation.md`](automation.md)).
 4. **Single store, three doc kinds.** `topic`, `observation`, and `state` share
    one CouchDB database, discriminated by `doc_type`. Only the server writes; the
    collector is a pure HTTP client.

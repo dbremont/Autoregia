@@ -1,10 +1,10 @@
 /* ════════════════════════════════════════════════════════════
-   PEOS Pulse — the orienting overview.
+   PEOS Dashboard — the orienting overview.
    stat-row (volume · sources · latest · tone gauge) → volume-over-time
    stacked area + spike markers → "what's hot now" + trending terms.
    ════════════════════════════════════════════════════════════ */
 window.PEOS = window.PEOS || {};
-PEOS.Pulse = (() => {
+PEOS.Dashboard = (() => {
   const v = PEOS.view;
   function render(){
     const a = PEOS.Store.analytics()||{};
@@ -16,7 +16,7 @@ PEOS.Pulse = (() => {
     const trend = (a.trending||[]).slice(0,6).map(t=>`<div class="bar-row"><span class="bar-label">${t.name}</span><span class="bar-val">${t.recent} <span class="text-faint">↗</span></span></div>`).join('') || '<div class="empty-state">nothing trending</div>';
     const spikes = (a.spikes||[]).map(s=>`<span class="pill warning">${s.bucket} <span class="text-faint">z${s.z}</span></span>`).join(' ');
     return `
-      ${v.header('environment observation','Pulse', v.windowSeg())}
+      ${v.header('environment observation','Dashboard', v.windowSeg())}
       <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">What the world is saying right now — volume over time, spikes against the trailing baseline, and the terms rising fastest in the last 24 hours.</p>
       <div class="stat-row animate-in">
         ${v.statCard(a.n||0, 'observations in window')}
@@ -43,7 +43,7 @@ PEOS.Pulse = (() => {
     const C = PEOS.Charts;
     const vol = a.volume||{buckets:[],series:[]};
     C.stackedArea('chartVolume', vol.buckets, vol.series, {yName:'items', zoomStart: Math.max(0,100-Math.min(100,vol.buckets.length*2))});
-    // hot now + trending as hbars → click filters reading
+    // hot now + trending as hbars → click filters search
     C.onClick('hbar', (name)=>PEOS.applyFilter({q:name}));
     const hot = (a.hot_now||[]).slice(0,8).map(h=>({label:h.name, value:h.value}));
     if(hot.length) C.hbar('chartHot', hot);

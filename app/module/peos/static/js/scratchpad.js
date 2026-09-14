@@ -9,7 +9,7 @@ window.PEOS = window.PEOS || {};
 PEOS.scratchpad = {
   open(){ document.getElementById('scratchpadOverlay').classList.remove('hidden'); const ta=document.getElementById('scratchpadText'); ta.value=''; setTimeout(()=>ta.focus(),100); },
   close(){ document.getElementById('scratchpadOverlay').classList.add('hidden'); },
-  save(){ const t=document.getElementById('scratchpadText').value.trim(); if(!t) return; this.close(); PEOS.Store.applyFilter({q:t}); PEOS.renderSidebar(); PEOS.navigate('reading'); PEOS.toast('Filtering stream for: '+t); }
+  save(){ const t=document.getElementById('scratchpadText').value.trim(); if(!t) return; this.close(); PEOS.Store.applyFilter({q:t}); PEOS.renderSidebar(); PEOS.navigate('search'); PEOS.toast('Filtering stream for: '+t); }
 };
 
 PEOS.toast = function(msg){

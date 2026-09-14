@@ -163,3 +163,91 @@ class Store:
                 self.put(doc)
                 n += 1
         return n
+
+    # ── query layer (views + Mango — queries execute inside CouchDB) ────────
+    def ensure_view(self, ddoc, name, map_fun, reduce_fun=None):
+        """Idempotently define ``ddoc/name``; True if the ddoc was written.
+
+        ``ddoc`` is the design-document name (stored as ``_design/<ddoc>``).
+        The view is (re)written only when its definition changed, so startup
+        calls are cheap and do not rebuild indexes needlessly.
+        """
+        doc_id = f"_design/{ddoc}"
+        current = self.db.get(doc_id) or {}
+        views = dict(current.get("views") or {})
+        target = {"map": map_fun}
+        if reduce_fun:
+            target["reduce"] = reduce_fun
+        if views.get(name) == target:
+            return False
+        views[name] = target
+        doc = dict(current)
+        doc["language"] = "javascript"
+        doc["views"] = views
+        if current.get("_rev"):
+            doc["_rev"] = current["_rev"]
+        self.db[doc_id] = doc
+        return True
+
+    @staticmethod
+    def _resource_data(res):
+        """couchdb-python resource calls return (status, headers, body)."""
+        body = res[2] if isinstance(res, tuple) else res
+        if hasattr(body, "read"):                        # http.ResponseBody
+            import json as _json
+            body = _json.loads(body.read())
+        return body
+
+    def ensure_indexes(self, indexes):
+        """Idempotently create Mango indexes (``[{"name":…, "fields":[…]}]``)."""
+        try:
+            existing = {i.get("name"): i.get("def", {}).get("fields")
+                        for i in (self._resource_data(
+                            self.db.resource.get("_index")) or [])}
+        except Exception:
+            existing = {}
+        for idx in indexes:
+            name, fields = idx["name"], idx["fields"]
+            if existing.get(name) == fields:
+                continue
+            body = {"index": {"fields": fields}, "name": name,
+                    "type": "json", "ddoc": f"idx-{name}"}
+            self.db.resource.post("_index", body=body)
+
+    def query_view(self, ddoc, name, *, startkey=None, endkey=None, keys=None,
+                   descending=False, limit=None, include_docs=False):
+        """Query ``ddoc/name``; returns rows as dicts (id/key/value/doc).
+
+        ``doc`` is populated only with ``include_docs=True``. All options map
+        1:1 onto CouchDB view query parameters.
+        """
+        opts = {}
+        if startkey is not None:
+            opts["startkey"] = startkey
+        if endkey is not None:
+            opts["endkey"] = endkey
+        if keys is not None:
+            opts["keys"] = keys
+        if descending:
+            opts["descending"] = True
+        if limit is not None:
+            opts["limit"] = limit
+        if include_docs:
+            opts["include_docs"] = True
+        rows = self.db.view(f"{ddoc}/{name}", **opts)
+        return [{"id": r.id, "key": r.key, "value": r.value,
+                 "doc": self._clean(r.doc) if include_docs and r.doc else None}
+                for r in rows]
+
+    def find(self, selector, *, fields=None, sort=None, limit=None, skip=0):
+        """Mango ``_find``: query documents by selector, inside the DB."""
+        query = {"selector": selector}
+        if fields:
+            query["fields"] = fields
+        if sort:
+            query["sort"] = sort
+        if limit is not None:
+            query["limit"] = limit
+        if skip:
+            query["skip"] = skip
+        return [self._clean(d) for d in self.db.find(query)]

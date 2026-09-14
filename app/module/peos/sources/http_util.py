@@ -41,6 +41,16 @@ def post_json(url, json_body=None, headers=None, timeout=90):
     return r.json() if r.content else {}
 
 
+def patch_json(url, json_body=None, headers=None, timeout=90):
+    """PATCH JSON and return the parsed response (used by the source sync helper)."""
+    h = {"User-Agent": USER_AGENT}
+    if headers:
+        h.update(headers)
+    r = requests.patch(url, json=json_body, headers=h, timeout=timeout)
+    r.raise_for_status()
+    return r.json() if r.content else {}
+
+
 def get_feed(url, params=None, headers=None, timeout=20):
     """GET ``url`` and return a feedparser-parsed RSS/Atom feed."""
     h = {"User-Agent": USER_AGENT}

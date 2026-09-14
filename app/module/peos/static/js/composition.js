@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    PEOS Composition — how the stream is made up.
    topic → source sankey (the composition), source donut, and
-   cluster distribution. Every node filters Reading on click.
+   cluster distribution. Every node filters Search on click.
    ════════════════════════════════════════════════════════════ */
 window.PEOS = window.PEOS || {};
 PEOS.Composition = (() => {

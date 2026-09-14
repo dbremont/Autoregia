@@ -1,22 +1,22 @@
 /* ════════════════════════════════════════════════════════════
-   PEOS Topics — manage the watched feeds (runtime CRUD via the
-   API), on-system. Each topic shows its source, query, interval,
+   PEOS Sources — manage the watched feeds (runtime CRUD via the
+   API), on-system. Each source shows its kind, query, interval,
    last-fetched cursor, and a poll-now button.
    ════════════════════════════════════════════════════════════ */
 window.PEOS = window.PEOS || {};
-PEOS.Topics = (() => {
+PEOS.Sources = (() => {
   const v = PEOS.view;
-  const SOURCES = ['hackernews','lobsters','reddit','mastodon','gdelt'];
+  const KINDS = ['hackernews','lobsters','reddit','mastodon','gdelt','nitter','arxiv','openalex','crossref','biorxiv','rss'];
   async function pollNow(tid){ PEOS.toast('Polling…'); try{ await fetch(`./api/poll`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic_id:tid,force:true})}); await PEOS.Store.loadAnalytics(); await PEOS.Store.loadObservations(); PEOS.renderSidebar(); PEOS.toast('Polled'); }catch(e){PEOS.toast('Poll failed');} }
-  async function del(tid){ if(!confirm('Delete this topic?')) return; await fetch(`./api/topics/${tid}`,{method:'DELETE'}); PEOS.Store.loadTopics().then(()=>PEOS.navigate('topics')); }
-  async function toggle(tid, on){ await fetch(`./api/topics/${tid}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled:on})}); PEOS.Store.loadTopics().then(()=>PEOS.navigate('topics')); }
+  async function del(tid){ if(!confirm('Delete this source?')) return; await fetch(`./api/topics/${tid}`,{method:'DELETE'}); PEOS.Store.loadTopics().then(()=>PEOS.navigate('sources')); }
+  async function toggle(tid, on){ await fetch(`./api/topics/${tid}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled:on})}); PEOS.Store.loadTopics().then(()=>PEOS.navigate('sources')); }
   async function add(e){
     e.preventDefault();
     const f=e.target; const body={source:f.source.value, query:f.query.value.trim(), interval_s:parseInt(f.interval.value||'0',10)};
     if(!body.query) return;
     const r=await fetch(`./api/topics`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!r.ok){ const j=await r.json(); PEOS.toast(j.error||'failed'); return; }
-    f.query.value=''; await PEOS.Store.loadTopics(); PEOS.navigate('topics');
+    f.query.value=''; await PEOS.Store.loadTopics(); PEOS.navigate('sources');
   }
   function render(){
     const topics = PEOS.Store.topics();
@@ -31,10 +31,10 @@ PEOS.Topics = (() => {
           </div></div>
         <div class="card-footer">${t.topic_id} · ${t.interval_s?t.interval_s+'s':'auto'} · ${t.note?PEOS.esc(t.note):''}</div>
       </div>`;
-    }).join('') || '<div class="empty-state"><h3>No topics yet</h3></div>';
-    const srcOpts = SOURCES.map(s=>`<option value="${s}">${s}</option>`).join('');
+    }).join('') || '<div class="empty-state"><h3>No sources yet</h3></div>';
+    const srcOpts = KINDS.map(s=>`<option value="${s}">${s}</option>`).join('');
     return `
-      ${v.header('watched feeds','Topics')}
+      ${v.header('watched feeds','Sources')}
       <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">What the system watches. Query semantics are source-specific: search string (HN/Lobsters/GDELT), subreddit (Reddit), hashtag (Mastodon). Use <code class="text-mono">t:tag</code> on Lobsters for a tag feed.</p>
       <form class="topic-form card animate-in" id="topicForm">
         <div class="form-row">

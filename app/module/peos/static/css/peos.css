@@ -4,6 +4,88 @@
    precedent: app-specific components only.
    ════════════════════════════════════════════════════════════ */
 
+/* ── search view ────────────────────────────────────────────── */
+.search-bar { display: flex; gap: var(--space-2); align-items: stretch; margin: 0 0 var(--space-3); max-width: 760px; }
+.search-input-wrap { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; }
+.search-input-wrap .search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-5); pointer-events: none; display: inline-flex;
+}
+.search-input-wrap input {
+  width: 100%; min-width: 0;
+  padding: 9px 34px 9px 36px;
+  border: var(--hairline) solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-surface-1); color: var(--ink-1);
+  font: inherit; font-size: var(--text-sm);
+  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+.search-input-wrap input:focus {
+  outline: none; border-color: var(--oxford); background: var(--color-surface);
+  box-shadow: var(--ring-focus);
+}
+.search-input-wrap input::placeholder { color: var(--ink-6); }
+.search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  border: none; background: transparent; color: var(--ink-5); cursor: pointer;
+  padding: 2px 6px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1;
+}
+.search-clear:hover { color: var(--oxford); background: var(--color-surface-2); }
+.search-bar .btn { white-space: nowrap; }
+
+.search-controls {
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+  margin: 0 0 var(--space-4);
+}
+.results-meta {
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  text-transform: uppercase; letter-spacing: var(--tracking-wider);
+  font-variant: small-caps; color: var(--ink-5);
+}
+
+/* segmented controls — shared: search strip, dashboard window selector */
+.seg {
+  display: inline-flex; gap: 2px; padding: 2px;
+  background: var(--color-surface-2);
+  border: var(--hairline) solid var(--color-border-light);
+  border-radius: var(--radius-pill);
+}
+.seg .seg-btn {
+  border: none; background: transparent; cursor: pointer;
+  font-family: var(--font-mono); font-size: var(--text-2xs);
+  color: var(--color-text-secondary); padding: 3px 11px;
+  border-radius: var(--radius-pill); letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.seg .seg-btn:hover { color: var(--ink-1); }
+.seg .seg-btn.active { background: var(--oxford); color: #FAF1E6; }
+.seg .seg-btn:focus-visible { outline: 2px solid var(--oxford); outline-offset: 1px; }
+
+/* grouped facets */
+.facet-group { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: 6px; }
+.facet-label {
+  min-width: 52px;
+  font-size: var(--text-2xs); text-transform: uppercase;
+  letter-spacing: var(--tracking-wider); font-variant: small-caps;
+  color: var(--ink-5);
+}
+
+/* reading list refinements */
+.read-list.loading { opacity: 0.5; pointer-events: none; }
+.read-title .unread-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); margin-right: 6px; vertical-align: 2px;
+}
+.read-meta .read-time { margin-left: auto; white-space: nowrap; }
+.pager { display: flex; align-items: center; justify-content: center; gap: var(--space-3); padding: var(--space-4) 0; }
+.pager .btn[disabled] { opacity: 0.4; cursor: default; }
+
+.search-empty { border-style: dashed; text-align: center; padding: var(--space-8) var(--space-5); }
+.search-empty .btn { margin-top: var(--space-3); }
+
+.chip:focus-visible, .facet-chip:focus-visible, .filter-chip:focus-visible { outline: 2px solid var(--oxford); outline-offset: 1px; }
+
 /* ── facets & filter chips ──────────────────────────────────── */
 .facets { margin-bottom: var(--space-4); }
 .facet-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }

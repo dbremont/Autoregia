@@ -12,6 +12,9 @@ PEOS.Store = (() => {
   let _stopwords = new Set();
   // filter state — the click→filter bus reads and writes this
   const state = { source:null, topic:null, cluster:null, term:null, sinceMs:null, q:'', hideRead:false };
+  // server-side paging over /api/search
+  const PAGE_SIZE = 20;
+  let _offset = 0, _paging = { has_more:false, page:1, total:0 };
   // window presets (hours); 0 = All
   const WINDOWS = [ {h:24,label:'24h'}, {h:168,label:'7d'}, {h:720,label:'30d'}, {h:0,label:'All'} ];
   let _windowH = 168;
@@ -44,21 +47,33 @@ PEOS.Store = (() => {
     return _analytics;
   }
   async function loadObservations(){
-    const params = { limit: 500 };
+    const params = { limit: PAGE_SIZE, offset: _offset };
     if (state.source) params.source = state.source;
     if (state.topic) params.topic = state.topic;
     if (state.cluster) params.cluster = state.cluster;
     const since = state.sinceMs != null ? state.sinceMs : (_windowH ? (Date.now()-_windowH*3600000) : null);
     if (since) params.since_ms = since;
     if (state.q) params.q = state.q;
-    _obs = await _j(`${API}/api/observations`, params);
+    const res = await _j(`${API}/api/search`, params);
+    if (Array.isArray(res)) { _obs = res; _paging = { has_more:false, page:1, total:res.length }; }
+    else {
+      _obs = res.items || [];
+      _paging = { has_more:!!res.has_more, page:res.page||1, total:res.total||0 };
+    }
     return _obs;
   }
   async function loadTopics(){ _topics = await _j(`${API}/api/topics`); return _topics; }
 
+  // ── paging ──
+  function getPaging(){ return Object.assign({ offset:_offset }, _paging); }
+  function resetOffset(){ _offset = 0; }
+  async function nextPage(){ _offset += PAGE_SIZE; await loadObservations(); }
+  async function prevPage(){ _offset = Math.max(0, _offset - PAGE_SIZE); await loadObservations(); }
+
   // ── filter bus ──
   function applyFilter(patch){
     Object.assign(state, patch);
+    _offset = 0;                       // any filter change restarts paging
     return loadObservations();
   }
   function resetFilter(){ Object.assign(state, {source:null,topic:null,cluster:null,term:null,sinceMs:null,q:''}); }
@@ -144,6 +159,7 @@ PEOS.Store = (() => {
   return {
     load, loadLexicon, loadAnalytics, loadObservations, loadTopics,
     applyFilter, resetFilter, getState, filterSummary,
+    getPaging, resetOffset, nextPage, prevPage,
     getWindow, setWindow, WINDOWS: WINDOWS_,
     isRead, markRead, markAllRead,
     termFreq, toneOf, toneClass, esc, highlight, dedupThreads,

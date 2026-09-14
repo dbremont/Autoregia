@@ -22,6 +22,7 @@ Open:  http://localhost:8080/peos/
 """
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 
@@ -38,14 +39,76 @@ from peos.sources.base import Topic, now_ms, obs_id, slugify
 
 app = Flask(__name__, static_folder="static")
 _DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+_APP_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))  # server.py → module/peos → module → app → repo root
 SEED_PATH = os.path.join(_DATA_DIR, "mock_topics.json")
 NITTER_SEED_PATH = os.path.join(_DATA_DIR, "nitter_handles.json")
+# Sources policy file (spec/peos/policy.md) — the desired-state list of tracked
+# sources, kept in ``config/`` outside the code tree. Resolution:
+# PEOS_SOURCES_FILE env override > repo ``config/peos_sources.json`` > the
+# bundled ``data/nitter_handles.json`` seed. As with every seed, it is applied
+# only when the DB is empty (repo invariant).
+POLICY_PATH = os.environ.get("PEOS_SOURCES_FILE") or os.path.join(
+    _APP_ROOT, "config", "peos_sources.json")
+POLICY_SEED_PATH = POLICY_PATH if os.path.isfile(POLICY_PATH) else None
+if os.environ.get("PEOS_SOURCES_FILE") and not POLICY_SEED_PATH:
+    print(f"[peos] warning: PEOS_SOURCES_FILE={POLICY_PATH} not found; "
+          f"falling back to the bundled seed {NITTER_SEED_PATH}")
+if POLICY_SEED_PATH:
+    try:
+        with open(POLICY_SEED_PATH, "r", encoding="utf-8") as _fh:
+            _policy = json.load(_fh)
+        _instances = (_policy.get("settings") or {}).get("nitter_instances") \
+            if isinstance(_policy, dict) else None
+        if _instances:
+            os.environ.setdefault("PEOS_NITTER_INSTANCES", ",".join(_instances))
+    except (OSError, ValueError) as _exc:
+        print(f"[peos] warning: cannot read sources policy file: {_exc}")
 with open(os.path.join(_DATA_DIR, "vader.json"), "r", encoding="utf-8") as _fh:
     VADER = json.load(_fh)
 with open(os.path.join(_DATA_DIR, "stopwords-en.json"), "r", encoding="utf-8") as _fh:
     STOPWORDS = json.load(_fh)
-store = Store("peos", seed_paths=[SEED_PATH, NITTER_SEED_PATH])
+store = Store("peos", seed_paths=[SEED_PATH, POLICY_SEED_PATH or NITTER_SEED_PATH])
 CLUSTERS_DOC_ID = "CLUSTERS-current"
+
+# ── search: the DB-resident query layer ──────────────────────────────────────
+# The design doc + Mango indexes below ARE the initializer documents of
+# search: they are created idempotently at startup, and every /api/search
+# query then executes inside CouchDB (views / Mango), never as a Python
+# full-scan. See spec/peos/collection.md and spec/peos/automation.md.
+_SEARCH_DDOC = "peos-search"
+_SEARCH_VIEWS = {
+    # newest-first reads: startkey=[<upper>], endkey=[<lower>], descending
+    "by_time": ("function(doc){if(doc.doc_type!=='observation'||!doc.observed_at_ms)return;"
+                "emit([doc.observed_at_ms],null);}"),
+    "by_source": ("function(doc){if(doc.doc_type!=='observation'||!doc.source||!doc.observed_at_ms)return;"
+                  "emit([doc.source,doc.observed_at_ms],null);}"),
+    "by_topic": ("function(doc){if(doc.doc_type!=='observation')return;"
+                 "var t=doc.topics||[];for(var i=0;i<t.length;i++)"
+                 "emit([t[i],doc.observed_at_ms||0],null);}"),
+    # token search: normalized words of title+body+author → [token, time]
+    "token": ("function(doc){if(doc.doc_type!=='observation')return;"
+              "var txt=((doc.title||'')+' '+(doc.body||'')+' '+(doc.author||'')).toLowerCase();"
+              "var m=txt.match(/[a-z0-9_]{2,}/g);if(!m)return;"
+              "for(var i=0;i<m.length;i++)emit([m[i],doc.observed_at_ms||0],null);}"),
+}
+_SEARCH_INDEXES = [
+    {"name": "obs-time", "fields": ["doc_type", "observed_at_ms"]},
+    {"name": "obs-source", "fields": ["doc_type", "source", "observed_at_ms"]},
+]
+
+
+def _ensure_search_layer() -> None:
+    """Idempotently create the search ddoc + Mango indexes (the initializers)."""
+    try:
+        for name, map_fun in _SEARCH_VIEWS.items():
+            store.ensure_view(_SEARCH_DDOC, name, map_fun)
+        store.ensure_indexes(_SEARCH_INDEXES)
+    except Exception as exc:  # pragma: no cover - CouchDB version quirks
+        print(f"[peos] warning: could not ensure search layer: {exc}")
+
+
+_ensure_search_layer()
 
 
 def now_iso() -> str:
@@ -146,6 +209,8 @@ def create_topic():
         "interval_s": int(data.get("interval_s") or 0),
         "enabled": bool(data.get("enabled", True)),
         "note": data.get("note", ""),
+        "name": data.get("name", ""),
+        "domain": data.get("domain", ""),
         "created_at": now_iso(),
     }
     return jsonify(store.put(doc)), 201
@@ -157,7 +222,7 @@ def update_topic(topic_id):
     if not doc:
         return jsonify({"error": "topic not found"}), 404
     data = request.get_json(silent=True) or {}
-    for key in ("query", "interval_s", "enabled", "note"):
+    for key in ("query", "interval_s", "enabled", "note", "name", "domain"):
         if key in data:
             doc[key] = data[key]
     return jsonify(store.put(doc))
@@ -208,6 +273,137 @@ def get_observations():
                          + d.get("author", "")).lower()]
     docs.sort(key=lambda d: d.get("observed_at_ms") or 0, reverse=True)
     return jsonify(docs[:limit])
+
+
+# ── search: queries execute inside CouchDB (views + Mango) ───────────────────
+def _tokenize(q: str) -> list[str]:
+    """Match the ddoc ``token`` view: lowercase words, length ≥ 2."""
+    return re.findall(r"[a-z0-9_]{2,}", (q or "").lower())
+
+
+def _search_structured(source, topic, since_ms, sort) -> list[dict]:
+    """Windowed newest-first docs straight from the ddoc views (no q).
+
+    Fetches the bounded window (≤1000) so sort/offset/paging compose
+    uniformly; CouchDB serves this from the view in one round-trip.
+    """
+    since = since_ms or 0
+    if topic:
+        rows = store.query_view(_SEARCH_DDOC, "by_topic", include_docs=True,
+                                startkey=[topic, {}], endkey=[topic, since],
+                                descending=True, limit=1000)
+    elif source:
+        rows = store.query_view(_SEARCH_DDOC, "by_source", include_docs=True,
+                                startkey=[source, {}], endkey=[source, since],
+                                descending=True, limit=1000)
+    else:
+        rows = store.query_view(_SEARCH_DDOC, "by_time", include_docs=True,
+                                startkey=[{}], endkey=[since],
+                                descending=True, limit=1000)
+    docs = [r["doc"] for r in rows if r.get("doc")]
+    if sort == "score":
+        docs.sort(key=lambda d: (d.get("score") or 0,
+                                 d.get("observed_at_ms") or 0), reverse=True)
+    return docs
+
+
+def _search_q(q, source, topic, since_ms, sort) -> list[dict]:
+    """Token search: prefix ranges per token, AND-composed, ranked."""
+    tokens = _tokenize(q)
+    if not tokens:
+        return []
+    scores: dict[str, int] = {}
+    latest: dict[str, int] = {}
+    for tok in tokens:
+        rows = store.query_view(_SEARCH_DDOC, "token",
+                                startkey=[tok], endkey=[tok + "\uffff"],
+                                limit=2000)
+        for r in rows:
+            obs_ms = r["key"][1] or 0
+            if since_ms and obs_ms < since_ms:
+                continue
+            oid = r["id"]
+            scores[oid] = scores.get(oid, 0) + 1
+            if obs_ms > latest.get(oid, 0):
+                latest[oid] = obs_ms
+    # AND semantics: a doc must match every token (prefix-wise).
+    cand = [oid for oid, s in scores.items() if s == len(tokens)]
+    if not cand:
+        return []
+    cand.sort(key=lambda oid: (scores[oid], latest.get(oid, 0)), reverse=True)
+    selector: dict = {"_id": {"$in": cand[:1000]}}
+    if source:
+        selector["source"] = source
+    if topic:
+        selector["topics"] = topic          # Mango: matches array elements
+    if since_ms:
+        selector["observed_at_ms"] = {"$gte": since_ms}
+    docs = store.find(selector, limit=1000)
+    if sort == "score":
+        docs.sort(key=lambda d: (d.get("score") or 0,
+                                 d.get("observed_at_ms") or 0), reverse=True)
+    else:
+        docs = sorted(docs,
+                      key=lambda d: (scores.get(d["id"], 0),
+                                     d.get("observed_at_ms") or 0),
+                      reverse=True)
+    return docs
+
+
+@app.route("/api/search", methods=["GET"])
+def api_search():
+    """Search observations directly in CouchDB, paginated.
+
+    Structured filters (source/topic/since_ms) run as ddoc-view ranges; ``q``
+    runs as token prefix lookups composed with Mango. Response envelope:
+    ``{"items": [...], "has_more": bool, "offset": int, "page": int,
+    "total": int}`` — ``total`` is the size of the bounded query window, not
+    a full-corpus count. ``q`` terms shorter than 2 chars (or non-latin)
+    fall back to a window-local substring filter, matching legacy behavior.
+    """
+    source = request.args.get("source")
+    topic = request.args.get("topic")
+    cluster = request.args.get("cluster")
+    since_ms = request.args.get("since_ms")
+    sort = request.args.get("sort", "recent")
+    q = request.args.get("q", "").lower().strip()
+    try:
+        limit = min(int(request.args.get("limit") or 200), 1000)
+    except ValueError:
+        limit = 200
+    try:
+        offset = max(int(request.args.get("offset") or 0), 0)
+    except ValueError:
+        offset = 0
+    since = None
+    if since_ms:
+        try:
+            since = int(since_ms)
+        except ValueError:
+            since = None
+
+    if _tokenize(q):
+        docs = _search_q(q, source, topic, since, sort)
+    else:
+        docs = _search_structured(source, topic, since, sort)
+        if q:  # no usable tokens → legacy substring over the fetched window
+            docs = [d for d in docs
+                    if q in (d.get("title", "") + d.get("body", "")
+                             + d.get("author", "")).lower()]
+
+    if cluster:
+        cmap = _clusters_doc().get("assignments", {})
+        docs = [d for d in docs
+                if cmap.get(d.get("id"), {}).get("cluster_id") == cluster]
+
+    items = docs[offset:offset + limit]
+    return jsonify({
+        "items": items,
+        "has_more": (offset + len(items)) < len(docs),
+        "offset": offset,
+        "page": (offset // limit) + 1 if limit else 1,
+        "total": len(docs),
+    })
 
 
 # ── observations: write (collector -> store) ─────────────────────────────────

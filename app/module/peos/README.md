@@ -38,16 +38,24 @@ PEOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 | **Mastodon** | `/api/v1/timelines/tag/<tag>` | none (token optional) | hashtag (`AI` or `#AI`) |
 | **GDELT** | DOC 2.0 `artlist` | none | news query (e.g. `artificial intelligence`) |
 | **Nitter** | `/<handle>/rss` (multi-instance) | none | Twitter/X handle (`teortexasTex` or `@teortexasTex`) |
+| **arXiv** | Atom API `export.arxiv.org/api/query` | none (1 req / 3 s enforced) | arXiv search syntax (`cat:cs.LG`, `all:scaling laws`) |
+| **OpenAlex** | Graph API `/works` | none (`mailto` polite pool via `PEOS_CONTACT_EMAIL`) | free-text search (`large language models`) |
+| **Crossref** | REST `/works` | none (`mailto` polite pool) | free-text search (`economics machine learning`) |
+| **bioRxiv** | `api.biorxiv.org/details/…` date cursor | none | `all`, or a title/category substring filter |
+| **RSS (generic)** | any RSS/Atom feed URL | none | full feed URL (Nature, NBER, any journal) |
 
 > **Twitter/X via Nitter mirrors.** The official X API has no realistic free
 > read tier, so PEOS goes through community-run Nitter instances (env
-> `PEOS_NITTER_INSTANCES`). Instances come and go and the canonical
-> `nitter.net` has been intermittent since early 2024; the source tries each
+> `PEOS_NITTER_INSTANCES`; `xcancel.com` is the default primary —
+> `nitter.net` has been intermittent since early 2024). The source tries each
 > configured instance and skips failures, so a healthy mirror keeps the sense
 > organ operational. Click-through `native_url`s are rewritten to
-> `twitter.com`. A curated seed set of ~25 handles (teortexasTex, tphuang,
-> karpathy, 3blue1brown, TerenceTao, bcantrill, …) is in
-> [`data/nitter_handles.json`](data/nitter_handles.json).
+> `twitter.com`. The tracked handles live in the sources policy file
+> [`config/peos_sources.json`](../../../config/peos_sources.json) (126
+> handles; policy spec: [`spec/peos/policy.md`](../../../spec/peos/policy.md));
+> the bundled [`data/nitter_handles.json`](data/nitter_handles.json) is only
+> the fallback seed. Reconcile a running DB with the file via
+> [`sync_sources.py`](sync_sources.py).
 
 ## Architecture
 
@@ -95,11 +103,21 @@ defaults `http://localhost:5984` / `admin` / `admin`).
 | GET | `/peos/api/sources` | registered sources + default intervals |
 | GET / POST | `/peos/api/topics` | list / create watched topics |
 | PATCH / DELETE | `/peos/api/topics/<id>` | update / remove a topic |
-| GET | `/peos/api/observations?source=&topic=&since_ms=&q=&limit=` | read stream |
+| GET | `/peos/api/observations?source=&topic=&since_ms=&q=&limit=` | read stream (legacy full-scan) |
+| GET | `/peos/api/search?q=&source=&topic=&cluster=&since_ms=&sort=&limit=` | search — executes inside CouchDB (ddoc views + Mango) |
 | POST | `/peos/api/ingest` | write observations (collector → store) |
 | GET / POST | `/peos/api/state` | poll cursors |
 | POST | `/peos/api/poll` | `{"topic_id": "...", "force": false}` poll now |
 | GET | `/peos/api/dashboard/stats` | counts by source |
+
+> **Search & collection.** `/api/search` runs entirely in CouchDB: a design
+> doc (`peos-search` — views `by_time` / `by_source` / `by_topic` / `token`)
+> and Mango indexes are created idempotently at startup, so queries never
+> scan in Python. Collection is **manual** today (poll buttons / `POST
+> /api/poll`) and bound by the rules in
+> [`spec/peos/collection.md`](../../../spec/peos/collection.md); the target
+> automation design lives in
+> [`spec/peos/automation.md`](../../../spec/peos/automation.md).
 
 ## Configuration
 
@@ -111,7 +129,8 @@ defaults `http://localhost:5984` / `admin` / `admin`).
 | `PEOS_SWEEP_S` | `60` | seconds between collector sweeps |
 | `PEOS_MASTODON_INSTANCES` | `mastodon.social,fosstodon.org,hachyderm.io` | comma list |
 | `PEOS_MASTODON_ACCESS_TOKEN` | _(empty)_ | optional, for instances that require auth |
-| `PEOS_NITTER_INSTANCES` | `nitter.net,nitter.privacydev.net,nitter.poast.org` | comma list; primary often down — list alternates |
+| `PEOS_NITTER_INSTANCES` | `xcancel.com,nitter.net,nitter.privacydev.net,nitter.poast.org` | comma list; `config/peos_sources.json` `settings.nitter_instances` seeds it, env wins |
+| `PEOS_SOURCES_FILE` | `config/peos_sources.json` | sources policy file (desired state); see `spec/peos/policy.md` |
 | `PEOS_USER_AGENT` | _(browser-like)_ | override the HTTP User-Agent |
 
 ## Tests

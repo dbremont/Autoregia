@@ -6,9 +6,12 @@ tweets. We query a configurable list of instances (env ``PEOS_NITTER_INSTANCES``
 and mirror the :mod:`peos.sources.mastodon` pattern: instances come and go, so we
 try each one and skip any that fail.
 
-The canonical ``nitter.net`` has been intermittent since early 2024; the source
-is multi-instance by design so a working mirror keeps the sense organ
-operational. The ``native_url`` is rewritten to ``https://twitter.com/<handle>
+The default instance list is the set of mirrors that served ``/<handle>/rss``
+when last probed (2026-09; ``nitter.net`` is dead). The source is
+multi-instance by design so a working mirror keeps the sense organ operational.
+The instance order may be seeded from the sources policy file
+(``config/peos_sources.json``, ``settings.nitter_instances`` — see
+``spec/peos/policy.md``) and is overridden by ``PEOS_NITTER_INSTANCES``. The ``native_url`` is rewritten to ``https://twitter.com/<handle>
 /status/<id>`` so click-throughs land on the original tweet regardless of which
 mirror served the feed.
 
@@ -27,7 +30,10 @@ import re
 from .base import Observation, Source, Topic
 from .http_util import feed_time_ms, get_feed, strip_html
 
-_DEFAULT_INSTANCES = "nitter.net,nitter.privacydev.net,nitter.poast.org"
+_DEFAULT_INSTANCES = ("nitter.kareem.one,nitter.meowing.monster,nitter.netbub.com,"
+                      "nitter.jaydenha.uk,x.n0g.xyz,tw.eir-nya.gay,"
+                      "nitter.tiekoetter.com,nitter.fullex.fr,nitter.anoxinon.de,"
+                      "nitter.zebes.info,xcancel.com")
 _STATUS_RE = re.compile(r"/status/(\d+)", re.IGNORECASE)
 # "RT by @karpathy: ..." → strip the RT-by prefix so the title reads cleanly.
 _RT_PREFIX_RE = re.compile(r"^RT\s+by\s+@[\w]+:\s*", re.IGNORECASE)
