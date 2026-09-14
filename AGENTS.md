@@ -22,6 +22,8 @@ app/                 the application
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
 spec/                conceptual specs (spec/ui.spec = normative design spec)
+config/              deployed config — peos_sources.json = PEOS sources policy
+                     file (spec/peos/policy.md); seeds only an empty DB
 design.md            style standard (tokens, typography, conformance)
 img/  requirements.txt  Dockerfile  run.sh  .env (git-ignored)
 ```
@@ -97,10 +99,45 @@ No linter is configured.
 
 ## Git conventions
 
-- **Pre-commit hook requires marking files first:**
-  `mark-for-commit <file> …` for every changed file, then `git commit`.
-  The hook enforces an authorization policy and an annotation policy, and
-  normalizes the commit message (history shows `type(main): message`).
+Git hooks are global (`core.hooksPath = ~/configs/global/git/hooks`), not
+in-repo. Commits are SSH-signed via 1Password (`op-ssh-sign`).
+
+- **Commit message:** `<type>(<optional scope>): <description>`; type is one of
+  `feat | fix | docs | style | refactor | test | chore` (see `guideline.md`).
+- **Pre-commit policies** (run in order from `pre-commit.d/`):
+  1. *Authorization* — every staged file needs xattr `user.checkin=1`;
+     mark first: `mark-for-commit <file> …`, then `git commit`.
+  2. *Annotations* — staged sources containing `@WORKING @FIXME @QUESTION
+     @VERIFY` reject the commit (`@TODO @HACK @WORKAROUND` warn; `@TECH-DEBT
+     @REFACTOR @OPTIMIZE @RATIONALE @NOTE` are informational). Applies to the
+     source patterns in `annotations.conf` (`.py`, `.js`, `.html`, `.css`, …).
+  3. *Encoding* — staged text files must be UTF-8, no BOM, LF line endings
+     (`dos2unix <file>` fixes CRLF).
+- **`prepare-commit-msg` rewrites the message** to
+  `type(<branch-or-Jira>): message` — `git commit -m` is NOT exempt, and
+  neither is `--amend -m` (with `-m` the hook sees `COMMIT_SOURCE=message`
+  and overwrites). To set a real message: commit, then bypass the hook for
+  the amend:
+  `git -c core.hooksPath=/dev/null commit --amend -m "<type>(<scope>): <desc>"`.
+  (History shows `type(main): message` commits from `-m`-only flows.)
+- **Post-commit** clears `user.checkin` marks from committed files.
+- **Commit workflow (step by step):**
+  1. *Inspect* — `git status`, `git diff`, `git log --oneline -5`; stage only
+     intended files (`git add <paths>`), never blanket `git add .`.
+  2. *Authorize* — `mark-for-commit <file> …` for every staged file (sets
+     xattr `user.checkin=1`; unmarked files reject the commit).
+  3. *Pre-flight* — annotation policy: sources containing `@WORKING @FIXME
+     @QUESTION @VERIFY` block the commit — fix or reword before staging.
+     Encoding: UTF-8, no BOM, LF (`dos2unix <file>` if needed).
+  4. *Commit* — `git commit -m "wip"` is acceptable at this step because the
+     hook rewrites the message anyway.
+  5. *Set the real message* — `git -c core.hooksPath=/dev/null commit
+     --amend -m "<type>(<scope>): <desc>"` (bypass the hook: a plain
+     `--amend -m` is rewritten too). Verify with `git log --oneline -1`
+     that the message survived; never leave a hook-rewritten
+     `type(main): wip` behind.
+  6. *Cleanup* — post-commit clears the xattr marks automatically; re-verify
+     the diff after any structural moves.
 - Keep commits scoped; re-verify after structural moves (see checklist).
 
 ## Post-change checklist

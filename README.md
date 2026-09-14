@@ -20,6 +20,7 @@ Autoregia/
 ├── design.md            # style standard for every plate and module UI
 ├── logos.log.md         # decision & design log
 ├── spec/                # conceptual specifications of every sub-system
+├── config/              # deployed configuration — peos_sources.json (PEOS tracked sources, spec/peos/policy.md)
 ├── img/                 # images (control-loop diagrams, …)
 ├── requirements.txt     # root application dependencies
 ├── Dockerfile, run.sh   # deployment (build + run the unified container)
@@ -28,6 +29,7 @@ Autoregia/
     ├── index.html       # project landing / index page
     ├── about.html       # the system described in full
     ├── docs.html        # documentation plate
+    ├── pwms/, psms/     # landing plates for systems defined in the model, not yet built
     ├── module/          # all materialized sub-systems
     │   ├── prs/         # Personal Recording System
     │   │   ├── README.md
