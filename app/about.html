@@ -45,6 +45,8 @@
     table.t th,table.t td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
     table.t th{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:2px solid var(--ink)}
     table.t td.code{font-family:var(--mono);font-size:12.5px;color:var(--accent);white-space:nowrap}
+    table.t td.code a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+    table.t td.code a:hover{border-bottom-color:var(--accent)}
     .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:28px 16px;margin:10px 0 6px}
     .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
     .diagram-caption{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:14px}
@@ -72,6 +74,8 @@
     .qa-atext em{font-style:italic}
     footer{border-top:1px solid var(--rule);padding:32px 0 56px;text-align:center}
     footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+    footer .mono a{color:var(--muted);text-decoration:none}
+    footer .mono a:hover{color:var(--accent)}
     .toc{position:fixed;top:50%;transform:translateY(-50%);left:calc(50% + 452px);width:176px;max-height:84vh;overflow:auto;z-index:25}
     .toc-cap{font-family:var(--sans);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 12px 14px;margin-bottom:6px;border-bottom:1px solid var(--rule)}
     .toc-link{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;padding:9px 0 9px 14px;border-left:2px solid transparent;text-decoration:none;color:var(--ink-soft);transition:color .18s,border-color .18s}
@@ -202,20 +206,20 @@
     <table class="t">
       <thead><tr><th>Element</th><th>System</th><th>Stage</th><th>Role</th></tr></thead>
       <tbody>
-        <tr><td class="code">ASRS</td><td>Agent Self-Representation System</td><td>Substrate</td><td>Binds the World boundary, the World Model (PWMS), the Self Model (PSMS), and Policy (PPS) into one coherent structure; checks over-allocation, constraint violation, and value drift.</td></tr>
-        <tr><td class="code">PWMS</td><td>Personal World Model System</td><td>Substrate · World Model</td><td>Typed ontology of the external world — entity, event, relation, and domain types. Generative: derives recording templates.</td></tr>
-        <tr><td class="code">PSMS</td><td>Personal Self Model System</td><td>Substrate · Self Model</td><td>Typed model of the self — identity, capability, resource, belief, commitment, constraint. Generative.</td></tr>
-        <tr><td class="code">PPS</td><td>Personal Policy System</td><td>Substrate · Policy</td><td>Charter, principles, values, commitments, and domain policies defining direction and limits; feeds the Decision stage.</td></tr>
-        <tr><td class="code">GIS</td><td>General Index System</td><td>Substrate · Capability</td><td>The general index of everything the agent knows and uses — each entry a point → element pair pointing into the systems or out to the world (GitHub projects, documents, services).</td></tr>
-        <tr><td class="code">PRS</td><td>Personal Recording System</td><td>Perception</td><td>Externalizes internal &amp; environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop.</td></tr>
-        <tr><td class="code">PKTS</td><td>Personal Keyword Tracking System</td><td>Perception · Audit</td><td>Tracks resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</td></tr>
-        <tr><td class="code">PAIS</td><td>Personal Application Interaction System</td><td>Perception</td><td>Records mouse &amp; focus interaction; joins PKTS to surface per-application interaction analytics.</td></tr>
-        <tr><td class="code">PEOS</td><td>Personal External Observation System</td><td>Perception · External World</td><td>Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and stores each item as an observational event; an analytical layer (volume, spikes, topic→source sankey, term co-occurrence, semantic clusters) turns the stream into orientation.</td></tr>
-        <tr><td class="code">AIAS</td><td>Agent Intent Aid System</td><td>Intent Management</td><td>Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the <b>Active Intent Set</b> that directs planning and execution.</td></tr>
-        <tr><td class="code">AOOS</td><td>Agent Operation Organization System</td><td>Action Selection</td><td>Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan.</td></tr>
-        <tr><td class="code">AWES</td><td>Automated Work Execution System</td><td>Execution</td><td>Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop.</td></tr>
-        <tr><td class="code">PRAS</td><td>Personal Reflection &amp; Adaptation System</td><td>Feedback</td><td>A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations.</td></tr>
-        <tr><td class="code">ACSMS</td><td>Agent Capability Self Management System</td><td>Substrate · Capability Self-Management</td><td>The agent's improvement engine — turns detected capability gaps (GIS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (PSMS) and the index (GIS).</td></tr>
+        <tr><td class="code"><a href="/asrs/">ASRS</a></td><td>Agent Self-Representation System</td><td>Substrate</td><td>Binds the World boundary, the World Model (PWMS), the Self Model (PSMS), and Policy (PPS) into one coherent structure; checks over-allocation, constraint violation, and value drift.</td></tr>
+        <tr><td class="code"><a href="/pwms/">PWMS</a></td><td>Personal World Model System</td><td>Substrate · World Model</td><td>Typed ontology of the external world — entity, event, relation, and domain types. Generative: derives recording templates.</td></tr>
+        <tr><td class="code"><a href="/psms/">PSMS</a></td><td>Personal Self Model System</td><td>Substrate · Self Model</td><td>Typed model of the self — identity, capability, resource, belief, commitment, constraint. Generative.</td></tr>
+        <tr><td class="code"><a href="/pps/">PPS</a></td><td>Personal Policy System</td><td>Substrate · Policy</td><td>Charter, principles, values, commitments, and domain policies defining direction and limits; feeds the Decision stage.</td></tr>
+        <tr><td class="code"><a href="/gis/">GIS</a></td><td>General Index System</td><td>Substrate · Capability</td><td>The general index of everything the agent knows and uses — each entry a point → element pair pointing into the systems or out to the world (GitHub projects, documents, services).</td></tr>
+        <tr><td class="code"><a href="/prs/">PRS</a></td><td>Personal Recording System</td><td>Perception</td><td>Externalizes internal &amp; environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop.</td></tr>
+        <tr><td class="code"><a href="/pkts/">PKTS</a></td><td>Personal Keyword Tracking System</td><td>Perception · Audit</td><td>Tracks resource usage and keyword attention over time; a longitudinal signal feeding back into the loop.</td></tr>
+        <tr><td class="code"><a href="/pais/">PAIS</a></td><td>Personal Application Interaction System</td><td>Perception</td><td>Records mouse &amp; focus interaction; joins PKTS to surface per-application interaction analytics.</td></tr>
+        <tr><td class="code"><a href="/peos/">PEOS</a></td><td>Personal External Observation System</td><td>Perception · External World</td><td>Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and stores each item as an observational event; an analytical layer (volume, spikes, topic→source sankey, term co-occurrence, semantic clusters) turns the stream into orientation.</td></tr>
+        <tr><td class="code"><a href="/aias/">AIAS</a></td><td>Agent Intent Aid System</td><td>Intent Management</td><td>Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the <b>Active Intent Set</b> that directs planning and execution.</td></tr>
+        <tr><td class="code"><a href="/aoos/">AOOS</a></td><td>Agent Operation Organization System</td><td>Action Selection</td><td>Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan.</td></tr>
+        <tr><td class="code"><a href="/ate/tool/awes/">AWES</a></td><td>Automated Work Execution System</td><td>Execution</td><td>Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop.</td></tr>
+        <tr><td class="code"><a href="/pras/">PRAS</a></td><td>Personal Reflection &amp; Adaptation System</td><td>Feedback</td><td>A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations.</td></tr>
+        <tr><td class="code"><a href="/acsms/">ACSMS</a></td><td>Agent Capability Self Management System</td><td>Substrate · Capability Self-Management</td><td>The agent's improvement engine — turns detected capability gaps (GIS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (PSMS) and the index (GIS).</td></tr>
 
 
         <tr>
@@ -377,7 +381,7 @@
   </section>
 
   <footer>
-    <span class="mono">Autoregia · Abstract Agency Framework</span>
+    <span class="mono">Autoregia · Abstract Agency Framework · <a href="/pwms/" title="in the model, not yet built">PWMS</a> · <a href="/psms/" title="in the model, not yet built">PSMS</a></span>
   </footer>
 </div>
 

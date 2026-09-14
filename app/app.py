@@ -118,6 +118,31 @@ def index_html():
 def about():
     return send_from_directory(ROOT, "about.html")
 
+
+@app.route("/pwms/")
+def pwms():
+    # Landing plate for a system defined in the model but not yet built.
+    # When PWMS is implemented (module/pwms + SUBSYSTEMS), that mount
+    # shadows this route.
+    return send_from_directory(ROOT, "pwms/index.html")
+
+
+@app.route("/pwms")
+def pwms_redirect():
+    return redirect("/pwms/")
+
+
+@app.route("/psms/")
+def psms():
+    # Landing plate for a system defined in the model but not yet built.
+    return send_from_directory(ROOT, "psms/index.html")
+
+
+@app.route("/psms")
+def psms_redirect():
+    return redirect("/psms/")
+
+
 @app.route("/img/<path:filename>")
 def control_loop(filename):
     return send_from_directory(REPO, f"img/{filename}")

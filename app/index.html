@@ -205,7 +205,7 @@
       <span class="sh-gloss">the agent control loop — every chip is a system</span>
     </div>
     <figure class="plate" style="margin-top:24px">
-      <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon), the Agent State (ASRS + GIS) — the internal substrate of world-model PWMS, self-model PSMS and policy PPS — and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS + PKTS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: ATE (Agent Toolbox Ecosystem — the tools an agent uses to get work done; hosting the AWES tool). Feedback: PRAS, observing the act path and regulating the cycle. Each tool chip links to its app.">
+      <svg viewBox="0 0 1320 690" role="img" aria-label="The agent control loop, figure plate. Header: The Agent Control Loop. Substrate foundation (lower-left): the World (environment, perceived and acted upon), the Agent State (ASRS, GIS, PWMS and PSMS — the latter two not yet built) — the internal substrate of world model, self model and policy PPS — and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PRS, PKTS, PAIS and PEOS (Perception), AIAS (Intent Management — the Situation Model stage still has no dedicated system), PPS (Decision), AOOS (Action Selection). Execution: ATE (Agent Toolbox Ecosystem — the tools an agent uses to get work done; hosting the AWES tool). Feedback: PRAS, observing the act path and regulating the cycle. Each chip enters its app; PWMS and PSMS open landing plates for the systems not yet built.">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A8854A"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
@@ -299,8 +299,10 @@
             <text class="num-sub" x="-78" y="-25">SUBSTRATE</text>
             <text class="lbl" x="0" y="-6" text-anchor="middle">Agent State</text>
             <text class="cap" x="0" y="12" text-anchor="middle">world &amp; self-model</text>
-            <a href="/asrs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
-            <a href="/gis/"><g transform="translate(30,31)"><rect class="tool-bg" x="-28" y="-11" width="56" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">GIS</text></g></a>
+            <a href="/asrs/"><g transform="translate(-57,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">ASRS</text></g></a>
+            <a href="/gis/"><g transform="translate(-19,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">GIS</text></g></a>
+            <a href="/pwms/"><g transform="translate(19,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PWMS</text></g></a>
+            <a href="/psms/"><g transform="translate(57,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PSMS</text></g></a>
           </g>
 
           <!-- Capability Self-Management -->
@@ -320,8 +322,10 @@
             <text class="num" x="-78" y="-25">01</text>
             <text class="lbl" x="0" y="-6" text-anchor="middle">Perception</text>
             <text class="cap" x="0" y="12" text-anchor="middle">acquire information</text>
-            <a href="/prs/"><g transform="translate(-30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRS</text></g></a>
-            <a href="/pkts/"><g transform="translate(30,31)"><rect class="tool-bg" x="-26" y="-11" width="52" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PKTS</text></g></a>
+            <a href="/prs/"><g transform="translate(-57,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PRS</text></g></a>
+            <a href="/pkts/"><g transform="translate(-19,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PKTS</text></g></a>
+            <a href="/pais/"><g transform="translate(19,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PAIS</text></g></a>
+            <a href="/peos/"><g transform="translate(57,31)"><rect class="tool-bg" x="-18" y="-11" width="36" height="22" rx="5"/><text class="tool-t" x="0" y="4" text-anchor="middle">PEOS</text></g></a>
           </g>
 
           <!-- Situation Model -->
@@ -453,7 +457,7 @@
   <footer>
     <div class="f-row">
       <div><span class="f-brand">Autoregia</span> <span class="f-mono">· Personal Viable System Model</span></div>
-      <nav class="f-links"><a href="about.html">About</a><a href="docs.html">Docs</a></nav>
+      <nav class="f-links"><a href="/pwms/" title="in the model, not yet built">PWMS</a><a href="/psms/" title="in the model, not yet built">PSMS</a><a href="about.html">About</a><a href="docs.html">Docs</a></nav>
     </div>
   </footer>
 </div>
