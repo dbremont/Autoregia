@@ -6,4 +6,4 @@ __pycache__
 env/
 *.log
 .env
-run.sh
+Makefile
