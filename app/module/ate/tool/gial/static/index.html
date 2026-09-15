@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIAL — General Integration Abstraction Layer</title>
+<style>
+  /* Self-hosted typefaces — Spectral · Inter · IBM Plex Mono (relative copies) */
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:300;font-display:swap;src:url('/pbs/fonts/spectral-300.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/spectral-500.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:italic;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400i.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/inter-400.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/inter-500.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/pbs/fonts/inter-600.woff2') format('woff2')}
+  @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/plexmono-400.woff2') format('woff2')}
+  @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/plexmono-500.woff2') format('woff2')}
+
+  :root{
+    --ink:#1c1916; --ink-soft:#4a443d; --muted:#7a736a;
+    --rule:#d8d0c4; --paper:#FAFAF6; --surface:#fffdf8;
+    --accent:#7A1A2A; --gold:#A8854A;
+    --serif:"Spectral","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono","SF Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 28px}
+  nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+  nav.topnav .topnav-in{max-width:880px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:18px}
+  nav.topnav .lockup{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  nav.topnav .links{margin-left:auto;display:flex;gap:26px}
+  nav.topnav .links a{font-family:var(--sans);font-size:13px;color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+  nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  header.masthead{padding:72px 0 0;text-align:center}
+  .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:16px}
+  h1.title{font-size:clamp(52px,8vw,84px);font-weight:300;letter-spacing:-.02em;line-height:1;margin-bottom:10px}
+  .subtitle{font-size:20px;color:var(--ink-soft);font-style:italic}
+  .gold-rule{height:1px;background:var(--gold);width:64px;margin:28px auto;opacity:.7}
+  p.lede{font-size:17.5px;color:var(--ink-soft);max-width:640px;margin:0 auto;line-height:1.65}
+  .status{margin:36px auto 0;max-width:640px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 20px;font-family:var(--sans);font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:baseline;text-align:left}
+  .status .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding:2px 7px;white-space:nowrap}
+  .section-eyebrow{margin:56px 0 0;font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:14px 0 0}
+  .model-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+  .mc-code{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+  .mc-desc{font-size:14px;color:var(--ink-soft);font-style:italic;margin-top:7px;line-height:1.55}
+  table.matrix{width:100%;border-collapse:collapse;margin:14px 0 0;font-family:var(--sans);font-size:13px}
+  table.matrix th{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule)}
+  table.matrix td{padding:10px;border-bottom:1px solid var(--rule);color:var(--ink-soft);vertical-align:top}
+  table.matrix td:first-child{font-family:var(--mono);font-size:12px;color:var(--ink);white-space:nowrap}
+  table.matrix .st-live{color:var(--accent);font-weight:600}
+  table.matrix .st-dormant{color:var(--gold);font-weight:600}
+  .auth-ladder{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-soft);border:1px solid var(--rule);border-radius:20px;padding:5px 13px;background:var(--surface)}
+  .chip.hot{color:var(--accent);border-color:var(--gold)}
+  .consent-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:16px 0 0}
+  .step{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+  .step .n{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.12em}
+  .step .t{font-family:var(--sans);font-size:13px;font-weight:600;margin-top:4px}
+  .step .d{font-size:13.5px;color:var(--ink-soft);font-style:italic;margin-top:5px;line-height:1.5}
+  .note{max-width:640px;font-size:14.5px;color:var(--ink-soft);font-style:italic;margin-top:14px;line-height:1.6}
+  footer{border-top:1px solid var(--rule);margin-top:72px;padding:32px 0 56px;text-align:center}
+  footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-in">
+    <a class="lockup" href="/index.html">Autoregia</a>
+    <div class="links">
+      <a href="/ate/">Toolbox</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">ATE · Tool</div>
+    <h1 class="title">GIAL</h1>
+    <div class="subtitle">General Integration Abstraction Layer</div>
+    <div class="gold-rule"></div>
+    <p class="lede">One uniform abstraction for connecting to the services the world runs on — Gmail, Google Drive, GitHub, or any HTTP API — in the tradition of Zapier and n8n: integrations, connections, actions, and logged executions. The connection layer the rest of the toolbox orchestrates over; deliberately not a workflow engine.</p>
+    <div class="status">
+      <span class="tag">designed — not yet implemented</span>
+      <span>The full design is written — concepts, taxonomy, authentication, adapters, API surface, storage, and the playground. This plate reserves GIAL's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/gial/</span>.</span>
+    </div>
+  </header>
+
+  <div class="section-eyebrow">The Model</div>
+  <div class="model-grid">
+    <div class="model-card">
+      <div class="mc-code">INTEGRATION</div>
+      <div class="mc-desc">A connector definition — one Python adapter per external system, declaring its auth scheme and action set. The unit of capability.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">ACTION</div>
+      <div class="mc-desc">One operation with a declared parameter schema — write, search, find-or-create; triggers reserved. The unit of work.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">CONNECTION</div>
+      <div class="mc-desc">A configured instance — settings plus credentials held server-side, masked at every API edge. The unit of access.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">EXECUTION</div>
+      <div class="mc-desc">A logged run — request, response, status, latency. The unit of evidence.</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">Adapters · v1</div>
+  <table class="matrix">
+    <tr><th>Integration</th><th>Auth</th><th>Status</th><th>Actions</th></tr>
+    <tr><td>http</td><td>bearer · basic · api-key</td><td class="st-live">live</td><td>request — the universal HTTP operation; the workhorse</td></tr>
+    <tr><td>rss</td><td>none</td><td class="st-live">live</td><td>read — feed entries; the zero-config demo</td></tr>
+    <tr><td>github</td><td>bearer (optional)</td><td class="st-live">live</td><td>list_repos, list_issues — public API; a PAT lifts rate limits</td></tr>
+    <tr><td>gmail</td><td>oauth2</td><td class="st-dormant">flow-complete · dormant</td><td>send, list, find</td></tr>
+    <tr><td>drive</td><td>oauth2</td><td class="st-dormant">flow-complete · dormant</td><td>upload_file, create_folder, move_file, find_file, find_or_create_folder</td></tr>
+  </table>
+  <p class="note">Dormant means the code path — consent, exchange, refresh, actions — is complete and tested against a mock token endpoint; it wakes when a Google OAuth client is pasted once. OAuth2 is click-and-consent forever after: the user never handles keys or tokens.</p>
+
+  <div class="section-eyebrow">Authentication</div>
+  <div class="auth-ladder">
+    <span class="chip">none</span>
+    <span class="chip">bearer</span>
+    <span class="chip">basic</span>
+    <span class="chip">api-key-header</span>
+    <span class="chip hot">oauth2 · click-consent</span>
+  </div>
+  <div class="consent-steps">
+    <div class="step">
+      <div class="n">01</div>
+      <div class="t">Connect</div>
+      <div class="d">The Connect button opens the provider's consent screen — scopes declared by the integration.</div>
+    </div>
+    <div class="step">
+      <div class="n">02</div>
+      <div class="t">Consent</div>
+      <div class="d">One click from the user; the provider redirects back with a code.</div>
+    </div>
+    <div class="step">
+      <div class="n">03</div>
+      <div class="t">Exchange &amp; store</div>
+      <div class="d">GIAL stores the tokens server-side and refreshes them transparently on expiry.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap"><span class="mono">Autoregia · GIAL — the connection layer of the toolbox</span></div>
+</footer>
+
+</body>
+</html>

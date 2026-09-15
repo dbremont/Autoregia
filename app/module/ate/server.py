@@ -54,6 +54,16 @@ TOOLS = [
         "vsm": "System 1 — Execution",
         "href": "/ate/tool/awes/",
     },
+    {
+        "id": "gial",
+        "name": "General Integration Abstraction Layer",
+        "summary": ("One abstraction for connections to external systems — "
+                    "integrations, connections, actions, and logged "
+                    "executions, in the n8n / Zapier tradition. Designed; "
+                    "plate only."),
+        "vsm": "Toolbox — Integration",
+        "href": "/ate/tool/gial/",
+    },
 ]
 
 app = Flask(__name__, static_folder=None)
