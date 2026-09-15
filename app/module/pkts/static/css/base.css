@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    PKTS Base Styles — Reset, Typography, Global
    Editorial refinement: OpenType features, measure, paper grain
-   (mirrors PRS base.css; prs-icon -> pkts-icon)
+   (mirrors PBS base.css; pbs-icon -> pkts-icon)
    ════════════════════════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

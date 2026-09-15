@@ -1,12 +1,12 @@
 # Autoregia UI Specification
 
-> This document establishes the **canonical user-interface standard for every Autoregia sub-project** — the Personal Recording System (PRS), the Personal Keyword Tracking System (PKTS), the Autoregia landing/index pages, and any future tool developed within this workspace.
+> This document establishes the **canonical user-interface standard for every Autoregia sub-project** — the Personal Binnacle System (PBS), the Personal Keyword Tracking System (PKTS), the Autoregia landing/index pages, and any future tool developed within this workspace.
 
 > Its purpose is **standardization and consistency**: a single visual language, a single design-token vocabulary, and a single component grammar shared across all surfaces, so that any Autoregia tool is instantly recognizable and behaves predictably.
 
-> The reference implementation is the **Personal Recording System (PRS)** prototype. Its design tokens (`prs/static/css/variables.css`), typography, layout, and component library are normative: every value, name, and pattern below is lifted from that implementation. PRS is the source of truth; all other sub-projects must converge on it.
+> The reference implementation is the **Personal Binnacle System (PBS)** prototype. Its design tokens (`pbs/static/css/variables.css`), typography, layout, and component library are normative: every value, name, and pattern below is lifted from that implementation. PBS is the source of truth; all other sub-projects must converge on it.
 
-> **Relation to other specs:** This is the *project-wide* UI layer. Sub-project conceptual/architectural specs live alongside it: [`spec/prs/`](prs/) (PRS foundations & functionality) and [`spec/pkts/`](pkts/) (PKTS client behavior). Where a sub-project spec describes *what* a screen must do, this document specifies *how every screen must look and feel*.
+> **Relation to other specs:** This is the *project-wide* UI layer. Sub-project conceptual/architectural specs live alongside it: [`spec/pbs/`](pbs/) (PBS foundations & functionality) and [`spec/pkts/`](pkts/) (PKTS client behavior). Where a sub-project spec describes *what* a screen must do, this document specifies *how every screen must look and feel*.
 
 ---
 
@@ -237,7 +237,7 @@ All paddings, margins, gaps, and grid gutters must be drawn from this scale.
 | `--header-height`   | `58px`   | Sticky top header           |
 | `--content-max`     | `1200px` | Max content column          |
 
-The canonical **application shell** is a two-column CSS grid: a sticky header spanning both columns, a warm-toned left sidebar, and a scrolling main content region. This shell is normative for full application surfaces (PRS, PKTS).
+The canonical **application shell** is a two-column CSS grid: a sticky header spanning both columns, a warm-toned left sidebar, and a scrolling main content region. This shell is normative for full application surfaces (PBS, PKTS).
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -260,18 +260,18 @@ Grid utilities: `.grid-2`, `.grid-3`, `.grid-4` (responsive, collapsing at 900px
 
 > Icons are drawn from the **Lucide** monoline set: 1.6px stroke, 24px grid, rounded line caps/joins. **No Unicode glyphs or emoji** may substitute for an icon.
 
-Icons are rendered via a per-project custom element (`<prs-icon name="…">` in PRS; each tool defines an analogous `<*-icon>` element) backed by a self-hosted icon registry (`icons.js`). Icon color inherits `currentColor` so icons tint with their context; opacity sits at ~0.85 inside buttons and ~0.9 in nav.
+Icons are rendered via a per-project custom element (`<pbs-icon name="…">` in PBS; each tool defines an analogous `<*-icon>` element) backed by a self-hosted icon registry (`icons.js`). Icon color inherits `currentColor` so icons tint with their context; opacity sits at ~0.85 inside buttons and ~0.9 in nav.
 
 ---
 
 ## 7. Component Catalog
 
-> The PRS component library is normative. Each sub-project must reproduce these components with identical names, tokens, and behaviors. Components live in one `components.css` file (plus `command-palette.css` for the overlay class).
+> The PBS component library is normative. Each sub-project must reproduce these components with identical names, tokens, and behaviors. Components live in one `components.css` file (plus `command-palette.css` for the overlay class).
 
 ### 7.1 Buttons
 
 `.btn` (base, inline-flex, `--radius-md`, `--transition-fast`).
-Variants: `.btn-primary` (Oxford fill, cream text, lift on hover), `.btn-secondary` (surface fill, hairline border), `.btn-ghost` (transparent, surface-2 on hover). Sizes: `.btn-sm`, `.btn-lg`. Icons inside buttons use `.prs-icon` at `size="15"`–`17`.
+Variants: `.btn-primary` (Oxford fill, cream text, lift on hover), `.btn-secondary` (surface fill, hairline border), `.btn-ghost` (transparent, surface-2 on hover). Sizes: `.btn-sm`, `.btn-lg`. Icons inside buttons use `.pbs-icon` at `size="15"`–`17`.
 
 `.btn-icon` — 32×32 square icon button (transparent → surface-2 on hover), used for close/overflow actions.
 
@@ -367,13 +367,13 @@ Essential metadata first; advanced sections collapse (`.meta-section` with chevr
 
 ### 11.1 Stack
 
-> UI is built with **vanilla CSS, JS, and HTML**. Libraries are permitted; **frameworks are not.** (Per the PRS technical element set; applies project-wide.)
+> UI is built with **vanilla CSS, JS, and HTML**. Libraries are permitted; **frameworks are not.** (Per the PBS technical element set; applies project-wide.)
 
 Exceptions for data-rich visualization surfaces (e.g., PKTS) may adopt a charting library (Apache ECharts) — but must do so *within* this design system: chart palettes, typography, and grid must reference the tokens in §3–§4, not introduce an alien theme.
 
 ### 11.2 CSS File Split (normative)
 
-Each project's `static/css/` must mirror the PRS structure:
+Each project's `static/css/` must mirror the PBS structure:
 
 ```
 css/
@@ -400,7 +400,7 @@ A sub-project may **extend** the token set or component catalog (new views, doma
 
 ### 11.5 Reference Implementation
 
-The PRS prototype (`prs/static/`) is the reference. When in doubt, the PRS implementation wins over prose in this document; contradictions should be filed against this spec, not the code.
+The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS implementation wins over prose in this document; contradictions should be filed against this spec, not the code.
 
 ---
 
@@ -432,7 +432,7 @@ The PRS prototype (`prs/static/`) is the reference. When in doubt, the PRS imple
 ## References
 
 - [Autoregia](../README.md) — workspace overview & VSM mapping.
-- [PRS — README](prs/README.md) / [spec](prs/spec.md) — conceptual foundations, functionality, and the `UI - UX Guiding Principle` table this spec promotes project-wide.
+- [PBS — README](pbs/README.md) / [spec](pbs/spec.md) — conceptual foundations, functionality, and the `UI - UX Guiding Principle` table this spec promotes project-wide.
 - [PKTS — client spec](pkts/client.spec) — analytical surface to be reconciled with this standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6)
 - [Lucide Icons](https://lucide.dev) — icon source set.

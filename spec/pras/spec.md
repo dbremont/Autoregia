@@ -23,7 +23,7 @@ The objective is not exhaustive journaling but **selective persistence of operat
 
 ## Data Model
 
-> The deliberations *are* the data. There is no separate database: each deliberation is a self-contained document (HTML in the prototype) under `pras/deliberations/`. The server indexes the documents at startup to provide search and a listing. This mirrors the [PPS](../../pps/README.md) "documents-as-data" model.
+> The deliberations *are* the data. There is no separate database: each deliberation is a self-contained document (HTML in the prototype) under `pras/deliberations/`. The server indexes the documents at startup to provide search and a listing. This mirrors the [AGS](/about.html#elements) "documents-as-data" model.
 
 ### The Deliberation
 
@@ -37,11 +37,11 @@ The objective is not exhaustive journaling but **selective persistence of operat
 | `status` | Lifecycle state (see below). |
 | `date` | ISO date the deliberation was opened. |
 | `tags` | Free-form keyword list. |
-| `feeds` | Destination system(s) for the adaptation — subset of `pps, aoos, prs, ptocs`. |
+| `feeds` | Destination system(s) for the adaptation — subset of `ags, aoos, pbs, ptocs`. |
 | `observation` | What was noticed (the trigger of the deliberation). |
 | `deliberation` | The reasoning: why it happened, what it means. |
 | `adaptation` | The proposed change, and where it should be enacted. |
-| `links` | References to records (PRS), policies (PPS), actions (AOOS), capabilities (PTOCS). |
+| `links` | References to records (PBS), policies (AGS), actions (AOOS), capabilities (PTOCS). |
 
 ### Deliberation Types
 
@@ -64,7 +64,7 @@ The objective is not exhaustive journaling but **selective persistence of operat
 
 ### The Apex — Reflection Practice
 
-The document `practice.html` is the **apex / main entry** of the corpus. It is not an instance of reflection but the **standing practice** that governs how deliberations are conducted and how they mature into adaptations. It is the analogue of the PPS charter: where the charter states identity and policy direction, the practice states the *method of reflection*.
+The document `practice.html` is the **apex / main entry** of the corpus. It is not an instance of reflection but the **standing practice** that governs how deliberations are conducted and how they mature into adaptations. It is the analogue of the AGS charter: where the charter states identity and policy direction, the practice states the *method of reflection*.
 
 ## Functionality
 
@@ -85,19 +85,19 @@ Each deliberation renders as a manuscript with:
 - links to related records, policies, actions, and capabilities.
 
 ### Lifecycle Actions (prototype scope)
-- The prototype is **read / browse / search**. Adding a deliberation means dropping an HTML file into `pras/deliberations/` and restarting (the index rebuilds at startup), exactly as in PPS.
+- The prototype is **read / browse / search**. Adding a deliberation means dropping an HTML file into `pras/deliberations/` and restarting (the index rebuilds at startup), exactly as in AGS.
 - Lifecycle transitions (`open → concluded → enacted`) are expressed by editing the document's `pra-status` meta and recording the enactment in the adaptation section. A future revision will expose creation, transition, and cross-system enactment through the Personal Event Bus ([ISCB](../iscb/spec.md)).
 
 ## Implementation Notes
 
 - **Stack:** Flask + vanilla HTML/CSS/JS, conforming to the [Autoregia UI Specification](../ui.spec).
 - **Documents are the data:** no database, no schema file, no separate record store. The `pra-*` `<meta>` tags are the structured surface the server indexes; the body is the prose.
-- **Mounting:** under the unified `app.py` at the `/pras/` prefix (distinct from the Recording System's `/prs/`).
-- **Feeds (future):** once the [ISCB](../iscb/spec.md) event bus exists, an `enacted` deliberation emits an event (`AdaptationEnacted`) carrying its destination, so PPS / AOOS / PRS / PTOCS can react without hard-coupling.
+- **Mounting:** under the unified `app.py` at the `/pras/` prefix (distinct from the Recording System's `/pbs/`).
+- **Feeds (future):** once the [ISCB](../iscb/spec.md) event bus exists, an `enacted` deliberation emits an event (`AdaptationEnacted`) carrying its destination, so AGS / AOOS / PBS / PTOCS can react without hard-coupling.
 
 ## References
 
 - [Autoregia Specification](../README.md) — the PVSM, the agent control loop, the Feedback stage.
-- [PPS](../../pps/README.md) — the sibling Policy System; PRAS deliberations feed it.
+- [AGS](/about.html#elements) — the sibling Policy System; PRAS deliberations feed it.
 - [ISCB](../iscb/spec.md) — the Personal Event Bus that will carry enactment events.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

@@ -1,4 +1,4 @@
-# pais@autoregia — GNOME Shell Focus Bridge
+# pwts@autoregia — GNOME Shell Focus Bridge
 
 A GNOME Shell extension (45/46/47) that exposes the focused window over the
 session D-Bus, so [`shared/focus_watcher.py`](../../focus_watcher.py) can read
@@ -43,7 +43,7 @@ session start, hence the one-time re-login.
 ## Files
 
 ```
-pais@autoregia/
+pwts@autoregia/
 ├── metadata.json   # uuid, shell-version, session-modes
 └── extension.js    # ESM module exporting the focus bridge
 ```

@@ -6,8 +6,8 @@
 
 **Normative source:** [`spec/ui.spec`](spec/ui.spec) — tokens, typography,
 components, interaction, deviation policy.
-**Reference implementation:** [`app/module/prs/static/`](app/module/prs/static/) — when in doubt,
-the PRS implementation wins over prose.
+**Reference implementation:** [`app/module/pbs/static/`](app/module/pbs/static/) — when in doubt,
+the PBS implementation wins over prose.
 
 ---
 
@@ -72,7 +72,7 @@ Type scale is modular (1.250, major third) — see `spec/ui.spec` §4.2.
 - **Eyebrow** — small-caps sans label, wide tracking (`.2em+`), `--gold` or `--muted`.
 - **Editorial tables** — thin sans uppercase headers with a `2px` ink bottom
   border; row hairlines `--rule`; code cells in `--mono` + `--oxford`.
-- **Footer colophon** — mono micro-text, e.g. `PPS · VSM System 5 — Policy`.
+- **Footer colophon** — mono micro-text, e.g. `AGS · VSM System 5 — Policy`.
 
 ---
 
@@ -80,7 +80,7 @@ Type scale is modular (1.250, major third) — see `spec/ui.spec` §4.2.
 
 ### 3.1 App shell (interactive sub-system UIs)
 
-Mirror the PRS structure — `static/css/`:
+Mirror the PBS structure — `static/css/`:
 
 ```
 variables.css   # tokens — single source of truth
@@ -92,7 +92,7 @@ views.css       # view-specific styles
 command-palette.css
 ```
 
-Users of this archetype: `prs`, `pkts`, `pais`, `peos`, `gis`, `aias`,
+Users of this archetype: `pbs`, `pkts`, `pwts`, `peos`, `gis`, `aias`,
 `aoos`, `loop`.
 
 The shell's sticky header and sidebar — closed by the `.sidebar-colophon` —
@@ -112,8 +112,8 @@ Every standalone page must contain its own `<nav>` navbar and `<footer>`
 navbar copies the root landing's `topnav` styling; its links are contextual
 to the page's own project.
 
-Users of this archetype: `pps` (policy pages), `pras` (deliberations),
-`asrs`, `acsms`, root plates (`index.html`, `about.html`, `docs.html`).
+Users of this archetype: `ags` (policy pages), `pras` (deliberations),
+`ags`, `acsms`, root plates (`index.html`, `about.html`, `docs.html`).
 
 ---
 
@@ -141,10 +141,10 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `prs`, `pkts`, `pais`, `peos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
-| `pps` — policy pages               | standalone | ✅ conforms |
+| `pbs`, `pkts`, `pwts`, `peos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
+| `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
-| `asrs`                             | standalone | ✅ conforms |
+| `ags`                             | standalone | ✅ conforms |
 | `acsms` — landing                  | standalone | ✅ conforms |
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `ate` — toolbox index               | standalone | ✅ conforms |
@@ -180,7 +180,7 @@ Users of this archetype: `pps` (policy pages), `pras` (deliberations),
 
 - [`spec/ui.spec`](spec/ui.spec) — normative specification (§3 tokens, §4
   typography, §7 component catalog, §11 implementation conventions).
-- [`app/module/prs/static/css/variables.css`](app/module/prs/static/css/variables.css) — canonical
+- [`app/module/pbs/static/css/variables.css`](app/module/pbs/static/css/variables.css) — canonical
   token file (extended ramp).
-- [`app/module/pps/static/css/policy.css`](app/module/pps/static/css/policy.css) — canonical
+- [`app/module/ags/static/css/policy.css`](app/module/ags/static/css/policy.css) — canonical
   standalone token block.

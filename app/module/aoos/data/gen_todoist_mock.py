@@ -40,11 +40,11 @@ COLORS = [
 # Names mirror the kinds of things a single technical operator actually tracks.
 PROJECT_TREE = [
     ("Autoregia", [
-        ("PRS — Recording System", "blue"),
+        ("PBS — Recording System", "blue"),
         ("AOOS — Work Organization", "blue"),
         ("PKTS — Knowledge System", "teal"),
         ("PTOCS — Capability Catalog", "green"),
-        ("PPS — Policy Corpus", "grape"),
+        ("AGS — Policy Corpus", "grape"),
         ("Autoregia UI Design System", "violet"),
     ]),
     ("Engineering", [

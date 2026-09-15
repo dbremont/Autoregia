@@ -9,8 +9,8 @@
     "expected_value": "Closes the missing center of the loop; unifies perception into a state estimate.",
     "deadline": "2026-07-12",
     "owner": "Self",
-    "constraints": ["must not break the existing PRS API", "offline-first"],
-    "dependencies": ["PWMS entity types", "PRS event stream"],
+    "constraints": ["must not break the existing PBS API", "offline-first"],
+    "dependencies": ["AGS entity types", "PBS event stream"],
     "review_schedule": "every Friday",
     "termination_condition": "Situation Model panel live on the loop dashboard",
     "created_at": "2026-06-20T09:12:00Z",
@@ -37,7 +37,7 @@
     "created_at": "2026-07-04T20:10:00Z",
     "updated_at": "2026-07-04T20:10:00Z",
     "notes": [
-      { "id": "n1", "at": "2026-07-04T20:10:00Z", "author": "Self", "kind": "created", "text": "Detected by ASRS: over-allocated 5h this week." }
+      { "id": "n1", "at": "2026-07-04T20:10:00Z", "author": "Self", "kind": "created", "text": "Detected by AGS: over-allocated 5h this week." }
     ]
   },
   {
@@ -284,7 +284,7 @@
   },
   {
     "id": "INT-2026-0016",
-    "description": "Ship the ASRS consistency-check (over-allocation, constraint violation, value drift)",
+    "description": "Ship the AGS consistency-check (over-allocation, constraint violation, value drift)",
     "source": "Commitment",
     "priority": "High",
     "status": "Superseded",
@@ -295,7 +295,7 @@
     "constraints": [],
     "dependencies": [],
     "review_schedule": null,
-    "termination_condition": "Live in ASRS",
+    "termination_condition": "Live in AGS",
     "created_at": "2026-04-20T09:00:00Z",
     "updated_at": "2026-06-05T16:00:00Z",
     "notes": [

@@ -3,7 +3,7 @@
 > This document establishes the conceptual foundations, data model, functionality,
 > and implementation of a **Agent Operation Organization System (AOOS)**. A AOOS is a
 > technical object engineered to `organize the agent's operative action` — it lifts
-> the action-bearing states recorded elsewhere (in the PRS) into a steerable,
+> the action-bearing states recorded elsewhere (in the PBS) into a steerable,
 > dependency-aware, capacity-checked, and calendar-coordinated execution structure,
 > and it keeps that structure synchronized with the platforms the agent actually
 > operates through.
@@ -60,7 +60,7 @@ AOOS — Agent Operation Organization System  (VSM System 1 – Operations)
  +-- [A] Work Organization & Registration
  |     \_ Action Constructs (tasks, projects, routines, commitments,
  |        initiatives, objectives) + dependency graph + effort/capacity
- |        Operates OVER PRS records (single source of truth) + a thin
+ |        Operates OVER PBS records (single source of truth) + a thin
  |        operational extension (dependencies, estimates, scheduling).
  |
  +-- [B] Work Calendarization  — the calendar system
@@ -87,11 +87,11 @@ AOOS — Agent Operation Organization System  (VSM System 1 – Operations)
 | Component | Role | Owns | Does NOT own |
 | --- | --- | --- | --- |
 | **[S] Scratchpad** | The working document — "what's on my mind, right now" | A single persistent Markdown document (edit + preview, share) | Anything that needs durable registration (that is Component [A]'s job) |
-| **[A] Work Organization & Registration** | The action hierarchy — "what to do" | Action constructs, dependency graph, effort estimates, logical ordering | The underlying record store (PRS owns that) |
+| **[A] Work Organization & Registration** | The action hierarchy — "what to do" | Action constructs, dependency graph, effort estimates, logical ordering | The underlying record store (PBS owns that) |
 | **[B] Work Calendarization** | Temporal coordination — "when, against the real calendar" | Scheduled blocks, recurrence expansion, conflict detection, workload | The authoritative external calendar (the platform owns that; this mirrors it) |
-| **[D] Execution & Actuals** | The actuals layer — "what really happened" | Work sessions (start/stop, actual effort, outcomes), the block↔session deviation | The durable execution *event stream* (that remains PRS-backed; AOOS holds the operational session object) |
+| **[D] Execution & Actuals** | The actuals layer — "what really happened" | Work sessions (start/stop, actual effort, outcomes), the block↔session deviation | The durable execution *event stream* (that remains PBS-backed; AOOS holds the operational session object) |
 | **[C] Platforms Integration** | The boundary with the outside world — "how it connects" | Adapters, credentials, sync model, field mapping | The semantics of action (A), time (B), or actuals (D) |
-| **[G] Goal Tracking** | The objective layer — "what I am committing to become/do" | Measurable objectives: targets, Key Results, progress, status, momentum | The *declared end as identity* (that is ASRS/PSMS's job); [G] tracks the operative objective |
+| **[G] Goal Tracking** | The objective layer — "what I am committing to become/do" | Measurable objectives: targets, Key Results, progress, status, momentum | The *declared end as identity* (that is AGS/AGS's job); [G] tracks the operative objective |
 
 > [B] and [C] together realize what the original AOOS formulation called *"Work
 > Calendarization"*: [C] brings the platform's calendar in, [B] reasons over it.
@@ -144,7 +144,7 @@ Conversely, a construct should generally not be registered when it is:
 
 > What classes of action construct should the system recognize?
 
-> Action constructs are a *subset* of PRS records: those whose `record_type` is
+> Action constructs are a *subset* of PBS records: those whose `record_type` is
 > action-bearing. AOOS does not redefine these; it manages them. The kind is
 > derived from the record's `record_type` and its `strategicMetadata`.
 
@@ -152,32 +152,32 @@ Conversely, a construct should generally not be registered when it is:
 | --- | --- | --- | --- |
 | **Routine** | `Procedure` / recurring `Task` | A repeating operational process with a cadence. | Weekly review; daily standup note; nightly backup. |
 | **Task** | `Task` | The atomic unit of actionable work — a single discrete step. | "Implement search index"; "Reply to reviewer." |
-| **Project** | `Project` | A coordinated collection of tasks with a shared outcome. | Personal Recording System; AOOS itself. |
+| **Project** | `Project` | A coordinated collection of tasks with a shared outcome. | Personal Binnacle System; AOOS itself. |
 | **Commitment** | `Commitment` | A promise or obligation to an external party — carries a deadline. | "Deliver draft by Friday." |
 | **Initiative** | `Goal` (with `strategicMetadata.initiative`) | A multi-project effort advancing an objective. | "Build the Autoregia operational core." |
 | **Objective** | `Goal` (with `strategicMetadata.objective`) | The strategic outcome the work serves. | "Achieve a viable personal operating system." |
 
 > The **action hierarchy** falls out of the existing `strategicMetadata` block
 > (Objective → Initiative → Project → Task / Routine), so AOOS renders a hierarchy
-> that PRS already stores but does not steer.
+> that PBS already stores but does not steer.
 
 ### What should be the structure of such **action construct**?
 
-> An action construct is a PRS record of an action-bearing type, *plus* a thin
-> AOOS operational extension. PRS remains the single source of truth for the
-> record's content and metadata; AOOS adds only what PRS has no reason to store:
+> An action construct is a PBS record of an action-bearing type, *plus* a thin
+> AOOS operational extension. PBS remains the single source of truth for the
+> record's content and metadata; AOOS adds only what PBS has no reason to store:
 > execution-specific structure.
 
-#### Inherited from the PRS record (owned by PRS)
+#### Inherited from the PBS record (owned by PBS)
 
 | Field | Description | Example |
 | --- | --- | --- |
-| **Record Id** | Globally unique identifier (the PRS record id). | `REC-2026-00042`. |
+| **Record Id** | Globally unique identifier (the PBS record id). | `REC-2026-00042`. |
 | **Content / Detail** | What the work is. | "Implement search index." |
 | **Record Type** | Determines the action-construct kind (see taxonomy). | `Task`, `Project`, `Commitment`. |
 | **Operational Metadata** | `status` (Draft/Active/Pending/Blocked/Completed/Archived/Scheduled/Cancelled), `priority` (Critical/High/Medium/Low), `owner`, `project`, `workflow_state` (Planned/In Progress/Under Review/Approved/Deprecated). | `status: Active`, `priority: High`. |
 | **Temporal Metadata** | `deadline`, `horizon` (Immediate/Short-term/Medium-term/Long-term), `relevance`, `recurrence` (None/Daily/Weekly/Monthly/Yearly/Custom), `validity`. | `deadline`, `recurrence: Weekly`. |
-| **Strategic Metadata** | `goal`, `objective`, `initiative`, `capability` — places the construct in the action hierarchy. | `objective: O-1`, `project: P-PRS`. |
+| **Strategic Metadata** | `goal`, `objective`, `initiative`, `capability` — places the construct in the action hierarchy. | `objective: O-1`, `project: P-PBS`. |
 | **Classification** | `domain`, `subject`, `tags`, `state_class`. | `domain: Software Engineering`. |
 | **Relational (links)** | `[{target, type}]` — general graph links to other records. | `[{REC-104, depends-on}]`. |
 | **Annotation Log** | Append-only commentary without mutating content. | Reflections, progress notes. |
@@ -193,20 +193,20 @@ Conversely, a construct should generally not be registered when it is:
 | **Scheduled Occurrences** | Expanded instances for recurring constructs (component [B] computes these). | `[{starts_at, ends_at, calendar_block_id}]`. |
 | **Capacity Profile** | The resource the construct consumes (time, focus, energy band) — used for workload checks. | `{resource: focus, band: deep}`. |
 | **External Mappings** | Links to platform objects maintained by component [C] (e.g., a Google Calendar event id). | `[{platform: google-calendar, external_id: "evt_123", sync_state: synced}]`. |
-| **Execution Log** | A stream of execution events. Each event is itself a PRS record (`Event`/`Observation`) linked back to the construct; AOOS does not duplicate it. | `→ REC-2026-00099 (started)`. |
+| **Execution Log** | A stream of execution events. Each event is itself a PBS record (`Event`/`Observation`) linked back to the construct; AOOS does not duplicate it. | `→ REC-2026-00099 (started)`. |
 
-> The execution log is *not* a AOOS-owned store. It is the set of PRS records that
+> The execution log is *not* a AOOS-owned store. It is the set of PBS records that
 > reference the action construct. AOOS reads them; Audit (S3*) reasons over them.
 > The operational object a user interacts with live — the **work session** (start/
 > stop, actual effort, outcome) — *is* a AOOS extension entity (Component [D]),
-> like a block; on completion a session may emit/link a PRS record, so the durable
-> trace remains PRS-backed for audit while the live object stays operable.
+> like a block; on completion a session may emit/link a PBS record, so the durable
+> trace remains PBS-backed for audit while the live object stays operable.
 
 ### Action Construct Link
 
 > How can the action constructs be linked?
 
-> AOOS uses the PRS link vocabulary for general relationships, and adds an
+> AOOS uses the PBS link vocabulary for general relationships, and adds an
 > execution-specific edge set for the dependency and scheduling graph.
 
 | Category | Link | Description |
@@ -220,7 +220,7 @@ Conversely, a construct should generally not be registered when it is:
 | **Dependency** | `enables` | Completing this unlocks another construct. |
 | **Capability** | `uses-capability` | Consumes a capability cataloged in **PTOCS** (→ `OBJ-*`). |
 | **Capability** | `fulfills-commitment` | Discharges a `Commitment` record. |
-| **Governance** | `governed-by` | Subject to a **PPS** policy or constraint (→ `pp-*`). |
+| **Governance** | `governed-by` | Subject to a **AGS** policy or constraint (→ `pp-*`). |
 | **Scheduling** | `scheduled-in` | Placed in a calendar block (component [B]); maps to a calendar item. |
 | **Scheduling** | `recurs-from` | This occurrence repeats according to a prior one. |
 | **Provenance** | `spawned-from` | Originated operationally from another activity (e.g., a meeting record). |
@@ -246,21 +246,21 @@ Conversely, a construct should generally not be registered when it is:
 | Dimension | Field | Allowed Value Set |
 | --- | --- | --- |
 | **Kind** | Kind | Routine, Task, Project, Commitment, Initiative, Objective |
-| **Operational** | Status *(from PRS)* | Draft, Active, Pending, Blocked, Completed, Archived, Scheduled, Cancelled |
-| | Priority *(from PRS)* | Critical, High, Medium, Low |
-| | Workflow State *(from PRS)* | Planned, In Progress, Under Review, Approved, Deprecated |
+| **Operational** | Status *(from PBS)* | Draft, Active, Pending, Blocked, Completed, Archived, Scheduled, Cancelled |
+| | Priority *(from PBS)* | Critical, High, Medium, Low |
+| | Workflow State *(from PBS)* | Planned, In Progress, Under Review, Approved, Deprecated |
 | | Scheduling State *(AOOS)* | unscheduled, scheduled, deferred, in-progress, done |
-| **Strategic** | Objective *(from PRS `strategicMetadata`)* | Objective identifier |
-| | Initiative *(from PRS `strategicMetadata`)* | Initiative identifier |
-| | Project *(from PRS)* | Project identifier |
-| **Temporal** | Horizon *(from PRS)* | Immediate, Short-term, Medium-term, Long-term |
-| | Recurrence *(from PRS)* | None, Daily, Weekly, Monthly, Yearly, Custom |
-| | Validity *(from PRS)* | Permanent, Temporary, Expired |
-| | Deadline *(from PRS)* | ISO 8601 timestamp or null |
+| **Strategic** | Objective *(from PBS `strategicMetadata`)* | Objective identifier |
+| | Initiative *(from PBS `strategicMetadata`)* | Initiative identifier |
+| | Project *(from PBS)* | Project identifier |
+| **Temporal** | Horizon *(from PBS)* | Immediate, Short-term, Medium-term, Long-term |
+| | Recurrence *(from PBS)* | None, Daily, Weekly, Monthly, Yearly, Custom |
+| | Validity *(from PBS)* | Permanent, Temporary, Expired |
+| | Deadline *(from PBS)* | ISO 8601 timestamp or null |
 | **Capacity** | Effort Estimate | `{value, unit: hours|points|sessions, confidence: Low|Medium|High}` |
 | | Capacity Profile | `{resource: time|focus|energy|attention, band: deep|shallow|low}` |
-| **Domain** | Domain *(from PRS)* | Software Engineering, Health, Finance, Research, ... |
-| | Tags *(from PRS)* | Free-form tags |
+| **Domain** | Domain *(from PBS)* | Software Engineering, Health, Finance, Research, ... |
+| | Tags *(from PBS)* | Free-form tags |
 
 ## Scratchpad (Component S — The Working Document)
 
@@ -293,7 +293,7 @@ Conversely, a construct should generally not be registered when it is:
 - **Persist** — one document, server-backed (`GET` / `PUT` on the singleton); it
   survives reloads and is carried in JSON export/import.
 
-> [S] is deliberately *not* a record store and *not* PRS-backed. It is one
+> [S] is deliberately *not* a record store and *not* PBS-backed. It is one
 > operational page the agent keeps open — like a notebook on the desk. Anything
 > that needs to be tracked, scheduled, or audited is registered as an action
 > construct (Component [A]) by hand; the Scratchpad holds no such burden.
@@ -328,8 +328,8 @@ Conversely, a construct should generally not be registered when it is:
 - **Deadline projection** — place a deadline-anchored block backwards from its
   `deadline` using its effort estimate.
 - **Conflict detection** — detect temporal overlaps between blocks and overload
-  relative to capacity (component [B] vs. measured capacity from PRS/PKTS).
-- **Policy gating** — before confirming a block, check it against applicable **PPS**
+  relative to capacity (component [B] vs. measured capacity from PBS/PKTS).
+- **Policy gating** — before confirming a block, check it against applicable **AGS**
   policies (e.g., a deep-work block scheduled at 02:00 violates a Sleep Policy).
 - **Workload view** — aggregate scheduled effort per day/week against measured
   throughput (the S1↔S3 capacity channel).
@@ -379,8 +379,8 @@ Conversely, a construct should generally not be registered when it is:
   the block's planned duration; the delta is the feedback signal.
 
 > [D] does not itself own the durable execution *event stream* — that remains
-> PRS-backed (the spec's "Execution Log"). It owns the operational session object
-> the agent starts and stops. On completion a session may link a PRS record so
+> PBS-backed (the spec's "Execution Log"). It owns the operational session object
+> the agent starts and stops. On completion a session may link a PBS record so
 > the trace is durable; a future `AdaptationEnacted`/`ExecutionFinished` event on
 > the [ISCB](../iscb/spec.md) bus will carry enactment across systems.
 
@@ -525,13 +525,13 @@ governs `progress_pct`; the other is shown as corroboration.
 | Goal Health | At-Risk / Off-Track | Goals behind pace or past deadline. |
 | Goal Completion | Achieved | Goals whose target was met within horizon. |
 
-### Relation to ASRS
+### Relation to AGS
 
 The **declared end** of a goal — the objective as an identity/direction facet —
-belongs to the Agent Self-Representation System ([PSMS](../../spec/asrs/psms/)
-*Commitment* facet, with ranking from [PPS](../../pps/)). Component [G] does not
+belongs to the Agent Self-Representation System ([AGS](../../spec/ags/ags/)
+*Commitment* facet, with ranking from [AGS](/about.html#elements)). Component [G] does not
 own the declared end; it **operationalizes** it: a measurable target, tracked
-progress, and momentum. The goal in ASRS is the *intention*; the goal in AOOS [G]
+progress, and momentum. The goal in AGS is the *intention*; the goal in AOOS [G]
 is the *measured pursuit* of it.
 
 ## Evaluation
@@ -552,7 +552,7 @@ is the *measured pursuit* of it.
 | Calendar Sync Integrity | Conflict-Free Sync | Rate of unresolved sync conflicts |
 | Conflict Detection | Collision Detection | Ability to identify temporal overlaps before they occur |
 | Coordination Coherence | Cross-Domain Harmonization | Degree to which work across domains is de-conflicted |
-| Policy Compliance | Policy Adherence | Share of scheduled blocks compliant with applicable PPS policies |
+| Policy Compliance | Policy Adherence | Share of scheduled blocks compliant with applicable AGS policies |
 | Policy Compliance | Constraint Visibility | Visibility of operational, temporal, and cognitive constraints |
 | Operational Continuity | Restart Latency | Time to resume an interrupted action using its context |
 | Resumption | Context Availability | Availability of context needed to resume a construct |
@@ -594,13 +594,13 @@ is the *measured pursuit* of it.
 - **Complementary Functionality**
   - Next-action surface (unblocked, in-horizon, capacity-available constructs).
   - Command palette (`Ctrl/Cmd+K`), quick capture.
-  - Cross-links to PRS records, PTOCS capabilities, PPS policies.
+  - Cross-links to PBS records, PTOCS capabilities, AGS policies.
 
 ### Technical Element Set
 
 | Layer | Recommendation |
 | --- | --- |
-| Storage | JSON + SQLite (records live in PRS; AOOS extension tables: dependencies, blocks, external mappings, sync state) |
+| Storage | JSON + SQLite (records live in PBS; AOOS extension tables: dependencies, blocks, external mappings, sync state) |
 | API | Simple Python Flask |
 | UI | CSS, JS, HTML (can use libraries, not frameworks) |
 | Analysis / Charts | Apache ECharts (within the design system) |
@@ -625,9 +625,9 @@ is the *measured pursuit* of it.
 
 - [Agency — Execution Architecture](https://bremontix.xyz/lab/ar/Locus-Social-Realitatis/Onto/Guide/Agency/#execution-architecture) — the originating execution-architecture reference.
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
-- [PRS — spec](../prs/spec.md) / [schema](../prs/schema.json) — sibling recording system; AOOS operates over its action-bearing records.
+- [PBS — spec](../pbs/spec.md) / [schema](../pbs/schema.json) — sibling recording system; AOOS operates over its action-bearing records.
 - [PTOCS — spec](../ptocs/spec.md) — capability catalog referenced by `uses-capability` edges.
-- [PPS — README](../../pps/README.md) — policy corpus referenced by `governed-by` edges.
+- [AGS — README](/about.html#elements) — policy corpus referenced by `governed-by` edges.
 - [Autoregia UI Specification](../ui.spec) — canonical, project-wide UI standard.
 - [Google Calendar API — Events](https://developers.google.com/calendar/api/v3/reference/events) — authoritative calendar resource model.
 - [Google OAuth 2.0 for Mobile & Desktop Apps](https://developers.google.com/identity/protocols/oauth2/native-app) — authentication protocol.

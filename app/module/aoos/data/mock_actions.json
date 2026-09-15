@@ -36,7 +36,7 @@
       "key_results": [
         {
           "id": "KR-1",
-          "description": "PRS recording system live",
+          "description": "PBS recording system live",
           "metric": "system live",
           "target": 1,
           "current": 1,
@@ -498,7 +498,7 @@
     "strategic": {
       "objective": "O-1",
       "initiative": "I-1",
-      "project": "P-PRS"
+      "project": "P-PBS"
     },
     "annotations": [],
     "created_at": "2026-06-19T03:00:00Z",
@@ -558,7 +558,7 @@
     "external_mappings": [],
     "pinned": false,
     "strategic": {
-      "project": "P-PRS"
+      "project": "P-PBS"
     },
     "annotations": [],
     "created_at": "2026-06-19T05:00:00Z",
@@ -587,7 +587,7 @@
     "external_mappings": [],
     "pinned": false,
     "strategic": {
-      "project": "P-PRS"
+      "project": "P-PBS"
     },
     "annotations": [],
     "created_at": "2026-06-19T06:00:00Z",
@@ -620,7 +620,7 @@
     "external_mappings": [],
     "pinned": false,
     "strategic": {
-      "project": "P-PRS"
+      "project": "P-PBS"
     },
     "annotations": [],
     "created_at": "2026-06-19T07:00:00Z",
@@ -744,7 +744,7 @@
     "external_mappings": [],
     "pinned": false,
     "strategic": {
-      "project": "P-PRS"
+      "project": "P-PBS"
     },
     "annotations": [],
     "created_at": "2026-06-19T11:00:00Z",

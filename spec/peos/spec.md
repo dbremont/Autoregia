@@ -1,7 +1,7 @@
-# Personal External Observation System
+# General World Observation System
 
 > This document establishes the conceptual foundations, data model, functionality,
-> and implementation of a **Personal External Observation System (PEOS)**. A PEOS
+> and implementation of a **General World Observation System (PEOS)**. A PEOS
 > is a technical object engineered to `externalize the perception of the external
 > world` — it watches what *other agents* say about the world on free public feeds,
 > persists each item as a durable observation, and projects sense-making
@@ -13,7 +13,7 @@
 > restricted to the *external* half of the `World = (External, Internal)`
 > boundary. It maps to **VSM System 4 – Intelligence**: it is the input surface
 > that scans the environment so that the rest of the system can synthesize,
-> anticipate, and adapt. Where the [PRS](../prs/) records *internal* events (what
+> anticipate, and adapt. Where the [PBS](../pbs/) records *internal* events (what
 > the agent itself does, thinks, decides), PEOS records *external* events (what
 > other agents publish about the world).
 
@@ -25,7 +25,7 @@ Fundamentally, a PEOS exists to maintain persistent representations of the
   to the outside world.
 - **Observations** — the atomic collected items: one comment, post, story, or
   article fetched from a source, normalized to a common shape, and persisted as
-  an `observational` event (the [PWMS](../asrs/pwms/) event-type defined as *"a
+  an `observational` event (the [AGS](/about.html#elements) `observational` event-type defined as *"a
   reading the agent actively takes"*).
 - **Poll Cursors** — the per-topic state (last fetched, last observed, last
   error) that makes polling resumable, idempotent, and self-backing-off.
@@ -45,7 +45,7 @@ Intelligence S4, Policy S5) a concrete object to reason over.
 > API server + a separate poller daemon).
 
 ```
-PEOS — Personal External Observation System  (VSM System 4 – Intelligence, sensing)
+PEOS — General World Observation System  (VSM System 4 – Intelligence, sensing)
  |
  +-- [S] Sources  — the feed adapters
  |     \_ One adapter per public feed (Hacker News, Lobsters, Reddit, Mastodon,
@@ -57,7 +57,7 @@ PEOS — Personal External Observation System  (VSM System 4 – Intelligence, s
  |     \_ A long-running process that sweeps the watched topics every few
  |        seconds and triggers a poll for each topic whose interval has elapsed.
  |        Pure HTTP client; it never touches the store directly — it drives the
- |        server via the API, matching the PKTS / PAIS daemon pattern.
+ |        server via the API, matching the PKTS / PWTS daemon pattern.
  |
  +-- [P] Persistence  — the observational store
  |     \_ A CouchDB database (``peos``) holding three document kinds
@@ -83,9 +83,9 @@ PEOS — Personal External Observation System  (VSM System 4 – Intelligence, s
 
 ## Formulation
 
-> How to think about a `Personal External Observation System`?
+> How to think about a `General World Observation System`?
 
-A `Personal External Observation System` is a technical object with the role of
+A `General World Observation System` is a technical object with the role of
 externalizing **the agent's perception of the external world** to scaffold
 extended agency:
 
@@ -104,7 +104,7 @@ extended agency:
 
 > An **observation** is one reading the agent actively takes of what *another
 > agent* has published about the world. It is the atomic unit carried by PEOS,
-> and it is typed as an `observational` event in the [PWMS](../asrs/pwms/) event
+> and it is typed as an `observational` event in the [AGS](/about.html#elements) event
 > taxonomy — distinct from `occurrence`, `outcome`, and `trigger`.
 
 > A PEOS should collect any external utterance whose disappearance would degrade
@@ -115,7 +115,7 @@ extended agency:
 Conversely, an item should generally *not* be collected when it is:
 
 - **Internal to the agent** — the agent's own thoughts, decisions, and actions
-  belong to the [PRS](../prs/), not PEOS.
+  belong to the [PBS](../pbs/), not PEOS.
 - **Unwatched** — PEOS only collects what a declared topic matches; it is not an
   ambient firehose.
 - **Behind a paywall or authenticated-only API** — sources must be free and
@@ -184,7 +184,7 @@ matched by two topics collapses to a single doc.
 | --- | --- | --- | --- |
 | `id` | `string` | Stable doc id (`OBS-<sha1(source:native_id)[:24]>`). | `OBS-9f3c1a...` |
 | `doc_type` | `string` | Always `"observation"`. | `"observation"` |
-| `event_type` | `string` | Always `"observational"` (PWMS event taxonomy). | `"observational"` |
+| `event_type` | `string` | Always `"observational"` (AGS event taxonomy). | `"observational"` |
 | `source` | `string` | Originating feed. | `hackernews` |
 | `source_type` | `enum` | `comment` \| `story` \| `post` \| `article`. | `comment` |
 | `native_id` | `string` | Source-native identifier. | `391` |
@@ -287,7 +287,7 @@ PEOS exposes four functional layers over its store:
 
 | Layer | Choice | Notes |
 | --- | --- | --- |
-| Storage | CouchDB | DB `peos` (shared with PRS / PKTS / PAIS); doc-type discrimination; natural dedup by doc id |
+| Storage | CouchDB | DB `peos` (shared with PBS / PKTS / PWTS); doc-type discrimination; natural dedup by doc id |
 | API | Python Flask | Mounted under `/peos/` by `app.py`; only process that touches CouchDB |
 | Collector | `peos/collector.py` | Long-running poller daemon; pure HTTP client of the API; sweep every `PEOS_SWEEP_S` seconds |
 | Sources | `peos/sources/` | One module per feed implementing the `Source` protocol; explicit registry in `sources/__init__.py` |
@@ -332,11 +332,11 @@ python3 -m pytest peos/test_peos.py -v
 
 1. **Slot.** PEOS realizes the **Perception** stage of the agent control loop on
    the *external* half of the `World` boundary, and maps to **VSM System 4 –
-   Intelligence** (the sensing / scanning input surface). The [PRS](../prs/) is
+   Intelligence** (the sensing / scanning input surface). The [PBS](../pbs/) is
    its complement on the *internal* half.
 2. **Event type.** Every observation is persisted with `event_type =
-   "observational"` — the [PWMS](../asrs/pwms/) event-type defined as *"a reading
-   the agent actively takes"*.
+   "observational"` — the [AGS](/about.html#elements) `observational` event-type
+   defined as *"a reading the agent actively takes"*.
 3. **Source policy.** Sources must be **free and no-auth**. Twitter/X is reached
    via **Nitter RSS mirrors** rather than the official API (which has no
    realistic free read tier). `xcancel.com`-class mirrors rotate; the source
@@ -383,13 +383,13 @@ python3 -m pytest peos/test_peos.py -v
 
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
 - [PVSM — Specification](../README.md) — agent control loop & VSM framing.
-- [PRS — spec](../prs/spec.md) — the *internal*-events complement; PEOS records
+- [PBS — spec](../pbs/spec.md) — the *internal*-events complement; PEOS records
   the *external* half. Same store, sibling event types.
-- [PWMS — README](../asrs/pwms/README.md) — origin of the `observational`
-  event type; the world model PEOS populates instances of.
+- [AGS](/about.html#elements) — the grounding substrate (in the model); origin of
+  the `observational` event type.
 - [PEB — spec](../iscb/spec.md) — the bus that will carry
   `ObservationIngested` reactions into the Situation Model.
-- [PTOCS — spec](../asrs/ptocs/spec.md) — sibling Intelligence sub-system
+- [PTOCS — spec](../ptocs/spec.md) — sibling Intelligence sub-system
   (catalog of capabilities); shares the analytics-overlay pattern.
 - [Autoregia UI Specification](../ui.spec) — canonical, project-wide UI standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

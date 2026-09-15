@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    LOOP Base Styles — Reset, Typography, Global
    Editorial refinement: OpenType features, measure, paper grain
-   (mirrors PRS base.css; prs-icon -> peos-icon)
+   (mirrors PBS base.css; pbs-icon -> peos-icon)
    ════════════════════════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

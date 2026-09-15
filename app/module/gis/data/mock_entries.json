@@ -2244,7 +2244,7 @@
       "install": "git clone",
       "config": null,
       "docs_url": "internal",
-      "invocation": "./run.sh deploy"
+      "invocation": "make deploy-local"
     },
     "epistemic": {
       "fit_confidence": "high",

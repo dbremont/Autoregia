@@ -21,9 +21,9 @@
   progress, enforces timeouts, and returns the result.
 - **[A] Artifact Capture** — records stdout, stderr, exit codes, produced files,
   and execution metadata. Artifacts are addressable by session and can be
-  referenced by PRS records or AOOS action sessions.
+  referenced by PBS records or AOOS action sessions.
 - **[R] Result Feed** — pushes execution results into the agent's feedback loop:
-  writes a AOOS session (actuals), creates a PRS record (durable trace), and
+  writes a AOOS session (actuals), creates a PBS record (durable trace), and
   signals PRAS (outcome for reflection).
 
 ## Spec
@@ -34,8 +34,8 @@
 
 - **Parent:** [Autoregia](../../README.md)
 - **Role:** VSM System 1 – Operations (Execution)
-- **Sibling sub-projects:** [PRS](../../spec/prs/), [PKTS](../../spec/pkts/),
-  [PTOCS](../../spec/ptocs/), [PPS](../../spec/asrs/pps/), [AOOS](../../spec/aoos/),
+- **Sibling sub-projects:** [PBS](../../spec/pbs/), [PKTS](../../spec/pkts/),
+  [PTOCS](../../spec/ptocs/), [AGS](../../spec/ags/ags/), [AOOS](../../spec/aoos/),
   [PRAS](../../spec/pras/)
 - **Shared UI standard:** [`../ui.spec`](../ui.spec)
 - **Decision log:** [`../../logos.log.md`](../../logos.log.md)

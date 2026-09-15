@@ -105,7 +105,7 @@
   <header class="masthead">
     <div class="eyebrow">User Guide</div>
     <h1 class="title">Docs</h1>
-    <p class="lede">How to use Autoregia's six tools — the Personal Recording System, Keyword Tracking System, General Index, Policy System, Agent Operation Organization System, and Reflection &amp; Adaptation System.</p>
+    <p class="lede">How to use Autoregia's six tools — the Personal Binnacle System, Keyword Tracking System, General Index, Policy System, Agent Operation Organization System, and Reflection &amp; Adaptation System.</p>
     <div class="gold-rule"></div>
   </header>
 
@@ -115,22 +115,22 @@
     <h2 class="section-title">Guides</h2>
     <p class="section-sub">Jump to a tool, or read through. Every tool shares the same calm interface and command palette.</p>
     <div class="grid">
-      <a class="jump" href="#prs"><span class="k">PRS · /prs/</span><span class="n">Recording</span><span class="d">Capture &amp; find records</span></a>
+      <a class="jump" href="#pbs"><span class="k">PBS · /pbs/</span><span class="n">Recording</span><span class="d">Capture &amp; find records</span></a>
       <a class="jump" href="#pkts"><span class="k">PKTS · /pkts/</span><span class="n">Tracking</span><span class="d">Keystroke telemetry</span></a>
-      <a class="jump" href="#pais"><span class="k">PAIS · /pais/</span><span class="n">Interaction</span><span class="d">Mouse + app-interaction analytics</span></a>
+      <a class="jump" href="#pwts"><span class="k">PWTS · /pwts/</span><span class="n">Interaction</span><span class="d">Mouse + app-interaction analytics</span></a>
       <a class="jump" href="#gis"><span class="k">GIS · /gis/</span><span class="n">General Index</span><span class="d">Your tools &amp; capabilities</span></a>
-      <a class="jump" href="#pps"><span class="k">PPS · /pps/</span><span class="n">Policy</span><span class="d">Read &amp; search policies</span></a>
+      <a class="jump" href="#ags"><span class="k">AGS · /ags/</span><span class="n">Grounding</span><span class="d">Charter &amp; policies</span></a>
       <a class="jump" href="#aoos"><span class="k">AOOS · /aoos/</span><span class="n">Work</span><span class="d">Organize &amp; schedule</span></a>
       <a class="jump" href="#pras"><span class="k">PRAS · /pras/</span><span class="n">Reflection</span><span class="d">Deliberations &amp; adaptation</span></a>
     </div>
   </section>
 
-  <!-- PRS -->
-  <article class="tool" id="prs">
+  <!-- PBS -->
+  <article class="tool" id="pbs">
     <div class="tool-head">
-      <span class="tool-code">PRS</span>
-      <span class="tool-name">Personal Recording System</span>
-      <a class="tool-open" href="http://localhost:8080/prs/">Open /prs/ →</a>
+      <span class="tool-code">PBS</span>
+      <span class="tool-name">Personal Binnacle System</span>
+      <a class="tool-open" href="http://localhost:8080/pbs/">Open /pbs/ →</a>
     </div>
     <div class="tool-body">
       <div class="tool-tag">Perception · capture &amp; retrieve</div>
@@ -205,12 +205,12 @@
     </div>
   </article>
 
-  <!-- PAIS -->
-  <article class="tool" id="pais">
+  <!-- PWTS -->
+  <article class="tool" id="pwts">
     <div class="tool-head">
-      <span class="tool-code">PAIS</span>
-      <span class="tool-name">Personal Application Interaction System</span>
-      <a class="tool-open" href="http://localhost:8080/pais/">Open /pais/ →</a>
+      <span class="tool-code">PWTS</span>
+      <span class="tool-name">Personal Workstation Tracking System</span>
+      <a class="tool-open" href="http://localhost:8080/pwts/">Open /pwts/ →</a>
     </div>
     <div class="tool-body">
       <div class="tool-tag">Audit · interaction telemetry</div>
@@ -225,7 +225,7 @@
 
       <div class="callout tip">
         <strong>Shared focus watcher</strong>
-        PAIS and PKTS share <code>shared/focus_watcher.py</code> as the single source of truth for the focused window, so every keystroke and mouse event carries identical application attribution. On stock GNOME Wayland attribution degrades to <code>unknown</code> (Introspect is restricted); capture continues regardless.
+        PWTS and PKTS share <code>shared/focus_watcher.py</code> as the single source of truth for the focused window, so every keystroke and mouse event carries identical application attribution. On stock GNOME Wayland attribution degrades to <code>unknown</code> (Introspect is restricted); capture continues regardless.
       </div>
     </div>
   </article>
@@ -274,41 +274,26 @@
     </div>
   </article>
 
-  <!-- PPS -->
-  <article class="tool" id="pps">
+  <!-- AGS -->
+  <article class="tool" id="ags">
     <div class="tool-head">
-      <span class="tool-code">PPS</span>
-      <span class="tool-name">Personal Policy System</span>
-      <a class="tool-open" href="http://localhost:8080/pps/">Open /pps/ →</a>
+      <span class="tool-code">AGS</span>
+      <span class="tool-name">Agency Grounding System</span>
+      <a class="tool-open" href="/ags/">Open /ags/ →</a>
     </div>
     <div class="tool-body">
-      <div class="tool-tag">Policy · read &amp; search</div>
-      <p class="body" style="margin:8px 0 0">Your policy corpus: a charter, principles, values, commitments, and domain policies (health, learning, conduct) — browsed and searched from one page.</p>
+      <div class="tool-tag">Grounding · policy corpus</div>
+      <p class="body" style="margin:8px 0 0">AGS grounds the agent — identity, stance, and limits — and carries the policy corpus: a <a href="/ags/policies/charter.html" style="color:var(--accent)">charter</a>, principles, values, commitments, and domain policies (health, learning, conduct). The system itself is in the model, not yet built; the policies are served and current.</p>
 
       <h3 class="mini">Read</h3>
       <ol class="steps">
-        <li>The <strong>Charter</strong> is pinned as the apex document — start there for identity and purpose.</li>
-        <li>All other policy cards are grouped by domain below it. Click any card to read it.</li>
+        <li>The <strong><a href="/ags/policies/charter.html" style="color:var(--accent)">Charter</a></strong> is pinned as the apex document — start there for identity and purpose.</li>
+        <li>Domain policies: <a href="/ags/policies/principles.html" style="color:var(--accent)">principles</a>, <a href="/ags/policies/values.html" style="color:var(--accent)">values</a>, <a href="/ags/policies/commitments.html" style="color:var(--accent)">commitments</a>, <a href="/ags/policies/health.html" style="color:var(--accent)">health</a>, <a href="/ags/policies/learning.html" style="color:var(--accent)">learning</a>, <a href="/ags/policies/conduct.html" style="color:var(--accent)">conduct</a>.</li>
       </ol>
 
-      <h3 class="mini">Search</h3>
-      <ol class="steps">
-        <li>Click the search box (or press <kbd>/</kbd>).</li>
-        <li>Type a word; matches appear with highlighted snippets. It's a simple word search — no boolean or field syntax.</li>
-      </ol>
-
-      <h3 class="mini">Shortcuts</h3>
-      <table class="t">
-        <tbody>
-          <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td></tr>
-          <tr><td class="kbd-cell"><kbd>Enter</kbd></td><td>Run search</td></tr>
-          <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Clear search</td></tr>
-        </tbody>
-      </table>
-
-      <div class="callout warn">
-        <strong>Prototype note</strong>
-        Read-only. To add a policy, drop an <code>.html</code> file into <code>pps/policies/</code> and restart the server — the index is rebuilt at startup.
+      <div class="callout">
+        <strong>Note</strong>
+        In the model, not yet built — see <a href="/about.html#elements" style="color:var(--accent)">the Element Set</a>. The policies moved here from the former AGS.
       </div>
     </div>
   </article>
@@ -396,7 +381,7 @@
       </ol>
 
       <h3 class="mini">The deliberation arc &amp; lifecycle</h3>
-      <p class="body" style="margin:6px 0">Each deliberation follows one movement: <strong>observation</strong> → <strong>deliberation</strong> → <strong>adaptation</strong>. It matures along <code>open → concluded → enacted</code> (or <code>superseded</code>). The <em>concluded → enacted</em> step is exactly where a reflection <strong>feeds the Policy System</strong> and the rest of the loop — the adaptation declares its destination (PPS, AOOS, PRS, GIS).</p>
+      <p class="body" style="margin:6px 0">Each deliberation follows one movement: <strong>observation</strong> → <strong>deliberation</strong> → <strong>adaptation</strong>. It matures along <code>open → concluded → enacted</code> (or <code>superseded</code>). The <em>concluded → enacted</em> step is exactly where a reflection <strong>feeds the Policy System</strong> and the rest of the loop — the adaptation declares its destination (AGS, AOOS, PBS, GIS).</p>
 
       <h3 class="mini">Shortcuts</h3>
       <table class="t">
@@ -409,7 +394,7 @@
 
       <div class="callout warn">
         <strong>Prototype note</strong>
-        Read / browse / search. To add a deliberation, drop an <code>.html</code> file (with <code>pra-*</code> meta tags) into <code>pras/deliberations/</code> and restart — the index rebuilds at startup. Lifecycle transitions are edits to a document's metadata; enactment into PPS / AOOS is a manual cross-link for now.
+        Read / browse / search. To add a deliberation, drop an <code>.html</code> file (with <code>pra-*</code> meta tags) into <code>pras/deliberations/</code> and restart — the index rebuilds at startup. Lifecycle transitions are edits to a document's metadata; enactment into AGS / AOOS is a manual cross-link for now.
       </div>
     </div>
   </article>
@@ -423,9 +408,9 @@
       <thead><tr><th>Shortcut</th><th>Action</th><th>Where</th></tr></thead>
       <tbody>
         <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd></td><td>Open the command palette</td><td>Every tool</td></tr>
-        <tr><td class="kbd-cell"><kbd>N</kbd></td><td>Create the primary entity (record / entry / action)</td><td>PRS · GIS · AOOS</td></tr>
-        <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture / scratchpad</td><td>PRS · PKTS</td></tr>
-        <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td><td>PPS · PRAS</td></tr>
+        <tr><td class="kbd-cell"><kbd>N</kbd></td><td>Create the primary entity (record / entry / action)</td><td>PBS · GIS · AOOS</td></tr>
+        <tr><td class="kbd-cell"><kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd></td><td>Quick capture / scratchpad</td><td>PBS · PKTS</td></tr>
+        <tr><td class="kbd-cell"><kbd>/</kbd></td><td>Focus search</td><td>AGS · PRAS</td></tr>
         <tr><td class="kbd-cell"><kbd>F1</kbd> / <kbd>?</kbd></td><td>Help</td><td>AOOS</td></tr>
         <tr><td class="kbd-cell"><kbd>Esc</kbd></td><td>Close any dialog or palette</td><td>Every tool</td></tr>
       </tbody>
@@ -447,8 +432,7 @@
     <div class="footer-links">
       <a href="index.html">Index</a>
       <a href="about.html">About</a>
-      <a href="/pwms/" title="in the model, not yet built">PWMS</a>
-      <a href="/psms/" title="in the model, not yet built">PSMS</a>
+      <a href="/ags/" title="in the model, not yet built">AGS</a>
       <a href="todo.html">Work Map</a>
     </div>
     <span class="mono">Autoregia · User Guide</span>

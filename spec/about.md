@@ -45,10 +45,10 @@
 
 ### Foundational Model Substrates
 
-The agent maintains two foundational model substrates — typed, declarative ontologies — that structure its perception, situation-assessment, and self-regulation. Both are sub-systems of the **Agent State** system and are **generative**: from their types they can derive recording templates and emit records into the PRS automatically.
+The agent's grounding substrate is the **Agency Grounding System (AGS)** (in the model, not yet built): it binds the World boundary, the Self Model, and Policy into one coherent structure — who the agent is, where it stands, and what it may commit to.
 
-- **World Model** — the typed ontology of the external environment: entity types, relation types, event types, and domains. Makes explicit the structure that Perception reads and the Situation Model instantiates. Materialized as the [Personal World Model System (PWMS)](asrs/pwms/README.md), a sub-system of Agent State.
-- **Self Model** — the typed model of the self: identity, capabilities, resources, beliefs, commitments, constraints. Makes explicit the structure of the internal world against which internal state is recorded and regulated. Materialized as the [Personal Self Model System (PSMS)](asrs/psms/README.md), a sub-system of Agent State along with the [Personal Policy System (PPS)](../pps/) that writes to it.
+- **Self Model** — the typed model of the self: identity, capabilities, resources, beliefs, commitments, constraints. Makes explicit the structure of the internal world against which internal state is recorded and regulated.
+- **Policy** — charter, principles, values, commitments, and domain policies defining direction and limits.
 
 ## Abstract Agency Framework Formulation
 
@@ -70,20 +70,15 @@ The Abstract Agency Framework is instantiated by a set of cooperating systems, e
 
 | **Element** | **System** | **Stage** | **Role** |
 | --- | --- | --- | --- |
-| **ASRS** | Agent Self-Representation System | Substrate | Binds the World boundary, the World Model (PWMS), the Self Model (PSMS), and Policy (PPS) into one coherent structure; checks over-allocation, constraint violation, and value drift. |
-| **PWMS** | Personal World Model System | Substrate · World Model | Typed ontology of the external world — entity, event, relation, and domain types. Generative: derives recording templates. |
-| **PSMS** | Personal Self Model System | Substrate · Self Model | Typed model of the self — identity, capability, resource, belief, commitment, constraint. Generative. |
-| **PPS** | Personal Policy System | Substrate · Policy | Charter, principles, values, commitments, and domain policies defining direction and limits; feeds the Decision stage. |
+| **AGS** | Agency Grounding System | Substrate · Grounding | Grounds the agent in one coherent stance — binds the World boundary, the Self Model, and Policy into a single structure: who the agent is, where it stands, and what it may commit to; checks over-allocation, constraint violation, and value drift. |
 | **PTOCS** | Personal Technical Object Catalog System | Substrate · Capability | Catalog of the technical objects the agent relies on — software, services, hardware, references, infrastructure. |
-| **PRS** | Personal Recording System | Perception | Externalizes internal & environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop. |
-| **PKTS** | Personal Keyword Tracking System | Perception · Audit | Tracks resource usage and keyword attention over time; a longitudinal signal feeding back into the loop. |
-| **PAIS** | Personal Application Interaction System | Perception | Records mouse & focus interaction; joins PKTS to surface per-application interaction analytics. |
-| **PEOS** | Personal External Observation System | Perception · External World | Collects what other agents say about the world from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and stores each item as an observational event; an analytical layer turns the stream into orientation. |
+| **PBS** | Personal Binnacle System | Perception | Externalizes internal & environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop. |
+| **GWOB** | General World Observation System | Perception · Gateway | One gateway over observation — PEOS watches the external world (free public feeds), PKTS tracks keyword attention and resource usage, PWTS records workstation interaction; an aggregate view of the state of affairs across the three. |
 | **AIAS** | Agent Intent Aid System | Intent Management | Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the **Active Intent Set** that directs planning and execution. |
-| **AOOS** | Agent Operation Organization System | Action Selection | Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan. |
+| **AOOS** | Agent Operation Organization System | Action Organization | Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan. |
 | **AWES** | Automated Work Execution System | Execution | Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop. |
 | **PRAS** | Personal Reflection & Adaptation System | Feedback | A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations. |
-| **ACSMS** | Agent Capability Self Management System | Substrate · Capability Self-Management | The agent's improvement engine — turns detected capability gaps (PTOCS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (PSMS) and the catalog (PTOCS). |
+| **ACSMS** | Agent Capability Self Management System | Substrate · Capability Self-Management | The agent's improvement engine — turns detected capability gaps (PTOCS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (AGS) and the catalog (PTOCS). |
 
 ## Scope & Limits
 

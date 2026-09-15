@@ -1,9 +1,9 @@
-"""Personal External Observation System (PEOS) — API Server.
+"""General World Observation System (PEOS) — API Server.
 
 A perception sub-system that collects what *other agents* say about the world
 from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and
 persists each item in CouchDB (db ``peos``) as an ``observational`` event —
-the PWMS event-type defined as "a reading the agent actively takes".
+the AGS `observational` event-type defined as "a reading the agent actively takes".
 
 Three document kinds live in the same store, discriminated by ``doc_type``:
 

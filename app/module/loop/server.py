@@ -2,8 +2,8 @@
 The Loop — Autoregia Control-Loop Dashboard (Mock API + static host)
 
 A read-only whole-PVSM analytical surface: it composes the substance of
-every cooperating organ (PRS records, AOOS actions/sessions, AWES
-executions, PRAS deliberations, the PEB event stream, ASRS consistency,
+every cooperating organ (PBS records, AOOS actions/sessions, AWES
+executions, PRAS deliberations, the PEB event stream, AGS consistency,
 and the agent's essential variables) into the indicators that only exist
 at the level of the *entire* control loop (cycle-time, closed-loop ratio,
 cascade traceability, coordination health, viability balance, …).

@@ -72,8 +72,8 @@
     <div class="topnav-in">
       <a class="lockup" href="/index.html">Autoregia</a>
       <div class="links">
-        <a href="/asrs/">ASRS</a>
-        <a href="/pps/">PPS</a>
+        <a href="/ags/">AGS</a>
+        <a href="/ags/">AGS</a>
         <a href="/ate/tool/awes/">AWES</a>
         <a href="/about.html">About</a>
         <a href="/docs.html">Docs</a>
@@ -90,7 +90,7 @@
   <section id="formulation">
     <div class="section-label">Formulation</div>
     <blockquote>An ACSMS is best understood by analogy to an <b>athlete's training regime</b> or an organization's <b>R&amp;D function</b>. Performance today is produced by the current capability set; the regime exists to change that set deliberately — identifying weaknesses, scheduling practice, demanding evidence, and retiring what no longer serves.</blockquote>
-    <p class="body">It does not perform the agent's work (that is <a href="/ate/tool/awes/" style="color:inherit">AWES</a>) and does not choose what the agent values (that is <a href="/pps/" style="color:inherit">PPS</a>). It maintains the <b>pipeline that converts intent into capability</b>, so that growth is a managed flow rather than an accident of whatever work happens to teach something. It keeps improvement resource-feasible, demands <em>evidence over exposure</em>, and keeps the capability set current — consolidating what is held, reviewing what decays, and culling what no longer serves.</p>
+    <p class="body">It does not perform the agent's work (that is <a href="/ate/tool/awes/" style="color:inherit">AWES</a>) and does not choose what the agent values (that is <a href="/ags/" style="color:inherit">AGS</a>). It maintains the <b>pipeline that converts intent into capability</b>, so that growth is a managed flow rather than an accident of whatever work happens to teach something. It keeps improvement resource-feasible, demands <em>evidence over exposure</em>, and keeps the capability set current — consolidating what is held, reviewing what decays, and culling what no longer serves.</p>
   </section>
 
   <section id="why">
@@ -106,21 +106,21 @@
 
   <section id="position">
     <div class="section-label">Position in the Architecture</div>
-    <p class="body">ACSMS is a <b>substrate</b> system: it sits beside ASRS and GIS in the agent's foundation, and is fed by the loop's feedback arc. In VSM terms it is <b>System 4 (Intelligence) directed inward</b> — scanning the self for gaps and planning its development.</p>
+    <p class="body">ACSMS is a <b>substrate</b> system: it sits beside AGS and GIS in the agent's foundation, and is fed by the loop's feedback arc. In VSM terms it is <b>System 4 (Intelligence) directed inward</b> — scanning the self for gaps and planning its development.</p>
     <div class="flow">
       <div class="flow-row">
         <span class="flow-node">PRAS · adaptations</span>
         <span class="flow-node">PKTS · signals</span>
         <span class="flow-node">GIS · gaps</span>
-        <span class="flow-node">PPS · values</span>
+        <span class="flow-node">AGS · values</span>
       </div>
       <div class="flow-arrow">▼</div>
       <div class="flow-row"><span class="flow-node core">ACSMS</span></div>
       <div class="flow-arrow">▼</div>
       <div class="flow-row">
         <span class="flow-node">AIAS · improvement intents</span>
-        <span class="flow-node">PSMS / GIS · capability updates</span>
-        <span class="flow-node">PPS · policy amendments</span>
+        <span class="flow-node">AGS / GIS · capability updates</span>
+        <span class="flow-node">AGS · policy amendments</span>
       </div>
       <div class="flow-caption">Inputs from the loop's feedback arc · outputs that re-enter the loop</div>
     </div>
@@ -129,12 +129,12 @@
   <section id="lifecycle">
     <div class="section-label">The Improvement Lifecycle</div>
     <div class="stages">
-      <div class="stage"><span class="s-name">Detect</span><span class="s-gloss">a gap surfaces — GIS, PRAS, PKTS, or PPS strategy</span></div>
+      <div class="stage"><span class="s-name">Detect</span><span class="s-gloss">a gap surfaces — GIS, PRAS, PKTS, or AGS strategy</span></div>
       <div class="stage"><span class="s-name">Deliberate</span><span class="s-gloss">the gap becomes a program: scope, value, cost, evidence</span></div>
       <div class="stage"><span class="s-name">Commit</span><span class="s-gloss">enters AIAS as a committed intent — real resources now</span></div>
       <div class="stage"><span class="s-name">Practice</span><span class="s-gloss">scheduled work happens: reading, building, doing, teaching</span></div>
       <div class="stage"><span class="s-name">Evidence</span><span class="s-gloss">output is produced and judged — exposure is not acquisition</span></div>
-      <div class="stage"><span class="s-name">Consolidate</span><span class="s-gloss">written back: GIS entry, PSMS tier promotion, review schedule</span></div>
+      <div class="stage"><span class="s-name">Consolidate</span><span class="s-gloss">written back: GIS entry, AGS tier promotion, review schedule</span></div>
       <div class="stage"><span class="s-name">Review</span><span class="s-gloss">held capabilities revisited on a spaced schedule</span></div>
       <div class="stage"><span class="s-name">Cull</span><span class="s-gloss">deprioritized capabilities explicitly retired — decision recorded</span></div>
     </div>
@@ -143,8 +143,8 @@
       <tbody>
         <tr><td class="code">PRAS → ACSMS</td><td>Adaptations whose proposed change is a capability change.</td></tr>
         <tr><td class="code">AIAS ← ACSMS</td><td>Improvement programs as committed, resource-feasible intents.</td></tr>
-        <tr><td class="code">PSMS / GIS ← ACSMS</td><td>New <span class="code">capability_skill</span> entries, tier promotions, retirements — each with its evidence.</td></tr>
-        <tr><td class="code">PPS ← ACSMS</td><td>Amendments to how the agent learns: criteria, cadence, culling decisions.</td></tr>
+        <tr><td class="code">AGS / GIS ← ACSMS</td><td>New <span class="code">capability_skill</span> entries, tier promotions, retirements — each with its evidence.</td></tr>
+        <tr><td class="code">AGS ← ACSMS</td><td>Amendments to how the agent learns: criteria, cadence, culling decisions.</td></tr>
       </tbody>
     </table>
   </section>
@@ -153,10 +153,10 @@
     <div class="section-label">Relations</div>
     <ul class="refs">
       <li><a href="/gis/">GIS — General Index System</a><span class="r-why">the ledger ACSMS writes into · source of gap analysis</span></li>
-      <li><a href="/asrs/">ASRS — Agent Self Representation System</a><span class="r-why">the self-model facets kept truthful by consolidation</span></li>
+      <li><a href="/ags/">AGS — Agent Self Representation System</a><span class="r-why">the self-model facets kept truthful by consolidation</span></li>
       <li><a href="/pras/">PRAS — Personal Reflection &amp; Adaptation System</a><span class="r-why">upstream source of adaptation proposals</span></li>
       <li><a href="/aias/">AIAS — Agent Intent Aid System</a><span class="r-why">where programs become committed, schedulable intents</span></li>
-      <li><a href="/pps/">PPS — Personal Policy System</a><span class="r-why">learning policy defines the tiers and promotion criteria</span></li>
+      <li><a href="/ags/">AGS — Agency Grounding System</a><span class="r-why">learning policy defines the tiers and promotion criteria</span></li>
       <li><a href="/pkts/">PKTS — Personal Keyword Tracking System</a><span class="r-why">longitudinal evidence for skill acquisition and decay</span></li>
     </ul>
   </section>

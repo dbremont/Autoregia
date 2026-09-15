@@ -68,6 +68,6 @@ awes/
 - **Parent:** [Autoregia](../README.md)
 - **Role:** VSM System 1 – Operations (Execution)
 - **Spec:** [`../spec/awes/spec.md`](../spec/awes/spec.md)
-- **Sibling sub-projects:** [PRS](../prs/), [PKTS](../pkts/),
-  [PTOCS](../ptocs/), [PPS](../pps/), [AOOS](../aoos/), [PRAS](../pras/)
+- **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/),
+  [PTOCS](../ptocs/), [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/)
 - **Decision log:** [`../logos.log.md`](../logos.log.md)

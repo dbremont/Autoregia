@@ -37,7 +37,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 # Result Feed — target URLs for sibling sub-systems (empty = disabled)
 AOOS_URL = os.environ.get("AWES_AOOS_URL", "http://localhost:5005").rstrip("/")
-PRS_URL = os.environ.get("AWES_PRS_URL", "http://localhost:5000").rstrip("/")
+PBS_URL = os.environ.get("AWES_PBS_URL", "http://localhost:5000").rstrip("/")
 
 def _load_json(filename):
     path = os.path.join(DATA_DIR, filename)
@@ -62,7 +62,7 @@ def _seed_environments():
 _seed_environments()
 
 
-# ── [R] Result Feed — push execution results into AOOS + PRS ──────────────
+# ── [R] Result Feed — push execution results into AOOS + PBS ──────────────
 
 def _post_json(url, body):
     """Fire-and-forget POST of a JSON body to *url*."""
@@ -78,7 +78,7 @@ def _post_json(url, body):
 
 
 def _feed_result(session):
-    """Feed an execution result to AOOS (work session) and PRS (durable trace).
+    """Feed an execution result to AOOS (work session) and PBS (durable trace).
 
     Runs in a background thread so the execute endpoint is not delayed.
     """
@@ -99,11 +99,11 @@ def _feed_result(session):
         }
         _post_json(f"{AOOS_URL}/api/sessions", aoos_body)
 
-    # 2. PRS — create a durable record
-    if PRS_URL:
+    # 2. PBS — create a durable record
+    if PBS_URL:
         status_map = {"completed": "Completed", "failed": "Failed",
                       "timed_out": "Failed"}
-        prs_body = {
+        pbs_body = {
             "record_type": "Observation",
             "state_class": "External World",
             "content": f"AWES execution {sid}: {session['payload'][:120]}",
@@ -119,8 +119,8 @@ def _feed_result(session):
             "links": [{"target": sid, "type": "references"}],
         }
         if aid:
-            prs_body["links"].append({"target": aid, "type": "implements"})
-        _post_json(f"{PRS_URL}/api/records", prs_body)
+            pbs_body["links"].append({"target": aid, "type": "implements"})
+        _post_json(f"{PBS_URL}/api/records", pbs_body)
 
 
 def _feed_async(session):

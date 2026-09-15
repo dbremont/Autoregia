@@ -1,7 +1,7 @@
 """Focused-window watcher for Autoregia — low-level, no daemons.
 
 Single source of truth for "what window/app was focused at time T". Consumed by
-PKTS (stamps each keystroke with its application context) and by PAIS (the focus
+PKTS (stamps each keystroke with its application context) and by PWTS (the focus
 timeline and per-event mouse attribution).
 
 A collector imports :func:`start` once; a background thread refreshes the cached
@@ -17,7 +17,7 @@ X11 session:
 
 Wayland session (compositor-native CLI / bridge, where available):
     1. GNOME (ext)  — ``org.autoregia.Focus`` session D-Bus (the
-                      ``pais@autoregia`` Shell extension; the *reliable* path
+                      ``pwts@autoregia`` Shell extension; the *reliable* path
                       on GNOME — the only one that works on GTK4, where AT-SPI
                       no longer publishes). Not a daemon: loaded into the
                       already-running gnome-shell like any extension. Install
@@ -34,7 +34,7 @@ When no backend yields data, :func:`current` returns a degraded snapshot with
 keep working — only app attribution is lost.
 
 Privacy: window titles can carry sensitive content. Set
-``PAIS_TITLE_REDACT_REGEX`` (comma-separated Python regexes) to mask matching
+``PWTS_TITLE_REDACT_REGEX`` (comma-separated Python regexes) to mask matching
 substrings in titles *before* they leave this process.
 """
 from __future__ import annotations
@@ -49,7 +49,7 @@ from dataclasses import dataclass, asdict
 
 XDG_SESSION_TYPE = os.environ.get("XDG_SESSION_TYPE", "unknown").lower()
 
-_REDACT_RAW = os.environ.get("PAIS_TITLE_REDACT_REGEX", "")
+_REDACT_RAW = os.environ.get("PWTS_TITLE_REDACT_REGEX", "")
 _REDACT_PATTERNS = [re.compile(p) for p in _REDACT_RAW.split(",") if p.strip()]
 
 
@@ -99,7 +99,7 @@ def _gdbus_session(dest, path, method, timeout=0.8):
 
 
 def _try_gnome_extension() -> FocusSnapshot | None:
-    """org.autoregia.Focus — the pais@autoregia GNOME Shell extension.
+    """org.autoregia.Focus — the pwts@autoregia GNOME Shell extension.
 
     The reliable path on GNOME Wayland (the only one that works on GTK4, where
     AT-SPI no longer publishes). The extension owns the name, so no access

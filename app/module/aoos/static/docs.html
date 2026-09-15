@@ -120,12 +120,12 @@
 
   <h2 id="overview"><span class="num">01</span>Overview</h2>
   <hr class="lead-rule">
-  <p class="lede">AOOS organizes the agent's operative action. It lifts the action-bearing states recorded elsewhere (in the PRS) into a steerable, dependency-aware, capacity-checked, and calendar-coordinated execution structure — and keeps that structure synchronized with the platforms you actually operate through.</p>
+  <p class="lede">AOOS organizes the agent's operative action. It lifts the action-bearing states recorded elsewhere (in the PBS) into a steerable, dependency-aware, capacity-checked, and calendar-coordinated execution structure — and keeps that structure synchronized with the platforms you actually operate through.</p>
   <p>Within the Autoregia <strong>Personal Viable System Model (PVSM)</strong>, AOOS is the <strong>Operations System</strong> (VSM System 1 – Operations): the layer that <em>does things</em>. By making action explicit, ordered, and accountable, it converts an implicit, scattered, anxiety-prone work life into an intelligible, navigable, and steerable operative structure.</p>
 
   <div class="callout note">
     <span class="ct-icon">i</span>
-    <div><p><strong>What AOOS is <em>not</em>.</strong> AOOS does not own the underlying record store — that role belongs to the <a href="#references">PRS</a>. AOOS operates <em>over</em> PRS records plus a thin operational extension: dependencies, effort estimates, and scheduling state.</p></div>
+    <div><p><strong>What AOOS is <em>not</em>.</strong> AOOS does not own the underlying record store — that role belongs to the <a href="#references">PBS</a>. AOOS operates <em>over</em> PBS records plus a thin operational extension: dependencies, effort estimates, and scheduling state.</p></div>
   </div>
 
   <h2 id="components"><span class="num">02</span>The three components</h2>
@@ -135,7 +135,7 @@
     <div class="comp-card" id="comp-a">
       <div class="ctag a">A</div>
       <div><div class="crole">“What to do”</div><h4>Work Organization &amp; Registration</h4>
-        <p>The action hierarchy — action constructs (tasks, projects, routines, commitments, initiatives, objectives) plus their dependency graph, effort estimates, and logical ordering. Operates <em>over</em> PRS records plus a thin operational extension.</p></div>
+        <p>The action hierarchy — action constructs (tasks, projects, routines, commitments, initiatives, objectives) plus their dependency graph, effort estimates, and logical ordering. Operates <em>over</em> PBS records plus a thin operational extension.</p></div>
     </div>
     <div class="comp-card" id="comp-b">
       <div class="ctag b">B</div>
@@ -198,7 +198,7 @@ python3 aoos/server.py
       <tr><td><code>implements-objective</code></td><td>Links a project/initiative to an objective.</td></tr>
       <tr><td><code>fulfills-commitment</code></td><td>Links work to an obligation.</td></tr>
       <tr><td><code>uses-capability</code></td><td>References a GIS capability.</td></tr>
-      <tr><td><code>governed-by</code></td><td>References a PPS policy.</td></tr>
+      <tr><td><code>governed-by</code></td><td>References a AGS policy.</td></tr>
       <tr><td><code>recurs-from</code> / <code>spawned-from</code></td><td>Links a routine instance to its origin.</td></tr>
     </tbody></table>
   </div>
@@ -242,11 +242,11 @@ python3 aoos/server.py
   <div class="callout tip"><span class="ct-icon">✦</span><div><p>Both the palette and the help modal close on <span class="kbd">Esc</span> and on outside click.</p></div></div>
 
   <h2 id="data-model"><span class="num">06</span>Data model</h2>
-  <p>Records live in the PRS (single source of truth). AOOS adds a thin operational extension persisted as JSON + SQLite: action constructs, dependency edges, calendar blocks, external mappings, and sync state. The authoritative shapes are defined in <a href="#references"><code>spec/aoos/schema.json</code></a>; the export endpoint returns data conforming to it.</p>
+  <p>Records live in the PBS (single source of truth). AOOS adds a thin operational extension persisted as JSON + SQLite: action constructs, dependency edges, calendar blocks, external mappings, and sync state. The authoritative shapes are defined in <a href="#references"><code>spec/aoos/schema.json</code></a>; the export endpoint returns data conforming to it.</p>
   <pre><code>// action construct (abridged)
 {
   "id": "act_...",
-  "record_id": "...",          // PRS record id (source of truth)
+  "record_id": "...",          // PBS record id (source of truth)
   "kind": "Task",
   "scheduling_state": "scheduled",
   "pinned": false,
@@ -330,9 +330,9 @@ python3 aoos/server.py
     <li><strong>AOOS schema</strong> — <code>spec/aoos/schema.json</code> (authoritative JSON shapes).</li>
     <li><strong>Prototype README</strong> — <code>aoos/README.md</code>.</li>
     <li><strong>Autoregia UI specification</strong> — <code>spec/ui.spec</code>.</li>
-    <li><strong>PRS</strong> — sibling recording system; AOOS operates over its action-bearing records.</li>
+    <li><strong>PBS</strong> — sibling recording system; AOOS operates over its action-bearing records.</li>
     <li><strong>GIS</strong> — capability catalog referenced by <code>uses-capability</code> edges.</li>
-    <li><strong>PPS</strong> — policy corpus referenced by <code>governed-by</code> edges.</li>
+    <li><strong>AGS</strong> — policy corpus referenced by <code>governed-by</code> edges.</li>
     <li><strong>Google Calendar API</strong> — Events reference &amp; OAuth 2.0 for desktop apps.</li>
   </ul>
 

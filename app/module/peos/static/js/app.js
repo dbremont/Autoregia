@@ -111,7 +111,7 @@ PEOS.exportData = function () {
 };
 
 PEOS.openDocs = function () {
-  document.getElementById('modalTitle').textContent = 'PEOS — Personal External Observation System';
+  document.getElementById('modalTitle').textContent = 'PEOS — General World Observation System';
   document.getElementById('modalBody').innerHTML = PEOS.docsHTML();
   document.getElementById('appModal').classList.remove('hidden');
 };

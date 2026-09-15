@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   PRS Base Styles — Reset, Typography, Global
+   PBS Base Styles — Reset, Typography, Global
    Editorial refinement: OpenType features, measure, paper grain
    ════════════════════════════════════════════════════════════ */
 
@@ -114,8 +114,8 @@ code {
 ::-webkit-scrollbar-thumb:hover { background: var(--ink-6); background-clip: padding-box; }
 
 /* ── Icon element ─────────────────────────────────────── */
-.prs-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
-prs-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+.pbs-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+pbs-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 
 /* ── Keycap styling ───────────────────────────────────── */
 .kbd, .kbd-hint {

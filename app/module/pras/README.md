@@ -6,11 +6,11 @@
 
 ## Prototype
 
-A Flask server plus a vanilla HTML/CSS/JS client that conforms to the Autoregia UI specification ([`../spec/ui.spec`](../spec/ui.spec)). It mirrors the [PPS](../pps) "documents-as-data" model: **the deliberations are the data** — a set of HTML files under [`deliberations/`](deliberations), indexed at startup to provide search and a grouped listing.
+A Flask server plus a vanilla HTML/CSS/JS client that conforms to the Autoregia UI specification ([`../spec/ui.spec`](../spec/ui.spec)). It mirrors the [AGS](../ags) "documents-as-data" model: **the deliberations are the data** — a set of HTML files under [`deliberations/`](deliberations), indexed at startup to provide search and a grouped listing.
 
 - **Atomic unit:** a *deliberation* — observation → deliberation → adaptation.
 - **Lifecycle:** `open → concluded → enacted` (or `superseded`), expressed in each document's `pra-status` meta tag.
-- **Adaptation routing:** each deliberation declares the system(s) its adaptation *feeds* — `pps`, `aoos`, `prs`, `ptocs` — via the `pra-feeds` meta tag. Enactment into PPS/AOOS is a manual cross-link in this prototype (a future `AdaptationEnacted` event on the [ISCB](../spec/iscb/spec.md) bus will automate it).
+- **Adaptation routing:** each deliberation declares the system(s) its adaptation *feeds* — `ags`, `aoos`, `pbs`, `ptocs` — via the `pra-feeds` meta tag. Enactment into AGS/AOOS is a manual cross-link in this prototype (a future `AdaptationEnacted` event on the [ISCB](../spec/iscb/spec.md) bus will automate it).
 
 ## Parts
 
@@ -18,7 +18,7 @@ A Flask server plus a vanilla HTML/CSS/JS client that conforms to the Autoregia 
 - **[`index.html`](index.html)** — landing page: search, status/type filters, and the deliberation index grouped by domain, with the **Reflection Practice** pinned as the apex.
 - **[`deliberations/`](deliberations)** — the deliberation documents (the data):
   - [`practice.html`](deliberations/practice.html) — the apex: the standing reflection method.
-  - examples spanning the lifecycle — a weekly review, an enacted deviation (feeds PPS), an open hypothesis, and a retrospective.
+  - examples spanning the lifecycle — a weekly review, an enacted deviation (feeds AGS), an open hypothesis, and a retrospective.
 - **[`static/`](static)** — `css/deliberation.css`, `js/search.js`.
 
 ## Run
@@ -38,7 +38,7 @@ python3 pras/server.py
 # open http://localhost:5006
 ```
 
-> **Note on the URL prefix.** PRAS mounts at `/pras/` — distinct from the Recording System's `/prs/`. The full names disambiguate them in the UI.
+> **Note on the URL prefix.** PRAS mounts at `/pras/` — distinct from the Recording System's `/pbs/`. The full names disambiguate them in the UI.
 
 ## To add a deliberation
 
@@ -49,6 +49,6 @@ Drop an `.html` file into `pras/deliberations/` with the `pra-*` meta tags (`tit
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Loop stage:** Feedback (outer arc).
 - **VSM level:** System 4 – Intelligence (deviation detection overlaps S3\* Audit).
-- **Reads from:** [PRS](../prs), [AOOS](../aoos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
-- **Feeds:** [PPS](../pps) (policy amendments), [AOOS](../aoos) (corrective actions), [PRS](../prs) (records), [PTOCS](../ptocs) (capability revisions).
+- **Reads from:** [PBS](../pbs), [AOOS](../aoos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
+- **Feeds:** [AGS](../ags) (policy amendments), [AOOS](../aoos) (corrective actions), [PBS](../pbs) (records), [PTOCS](../ptocs) (capability revisions).
 - **Specification:** [`../spec/pras/`](../spec/pras).

@@ -100,8 +100,8 @@ Feedback
 World: Environment | Internal Environment
       │
       ▼
-  Perception: Personal Recording System        (internal events)
-            | Personal External Observation System (external events: PEOS)
+  Perception: Personal Binnacle System        (internal events)
+            | General World Observation System (external events: PEOS)
          -> Null.
          -> Task Regitry Mechanism -> Documentation
          -> Reflection

@@ -33,7 +33,7 @@ gis/
 │   └── gen_mock.py        # deterministic generator (+ optional schema validation)
 └── static/
     ├── index.html         # app-shell: header, sidebar, views, modals, command palette
-    ├── css/               # design tokens & components (mirrors PRS, the reference impl)
+    ├── css/               # design tokens & components (mirrors PBS, the reference impl)
     ├── fonts/             # self-hosted Spectral / Inter / IBM Plex Mono (offline-first)
     └── js/
         ├── store.js       # data layer (localStorage + API)
@@ -63,7 +63,7 @@ python3 server.py
 # open http://localhost:5003
 ```
 
-The server listens on **port 5003** (PRS → 5000, PKTS → 5001/5002). The port can
+The server listens on **port 5003** (PBS → 5000, PKTS → 5001/5002). The port can
 be overridden with the `PTOCS_PORT` environment variable.
 
 To regenerate the seed catalog:
@@ -128,7 +128,7 @@ never touched.
 ### UI / UX
 
 The interface follows the **Autoregia UI specification** — warm-parchment
-Oxford aesthetic, shared design tokens (copied verbatim from the PRS reference
+Oxford aesthetic, shared design tokens (copied verbatim from the PBS reference
 implementation), the same CSS file split, the app-shell layout, self-hosted
 Lucide icons (`<pt-icon>`), a command palette (`Ctrl/Cmd+K`), keyboard
 shortcuts (`N` for new entry, `Esc` to close), reduced-motion support, and
@@ -140,7 +140,7 @@ alien theme).
 
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Role:** **Intelligence System** (VSM System 4 – Intelligence).
-- **Sibling sub-projects:** [PRS](../prs/), [PKTS](../pkts/).
+- **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/).
 - **Shared UI standard:** [`../spec/ui.spec`](../spec/ui.spec).
 - **Decision log:** [`../logos.log.md`](../logos.log.md).
 

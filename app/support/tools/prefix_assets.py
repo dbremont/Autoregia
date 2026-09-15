@@ -1,13 +1,13 @@
 """
 Prefix-rewrite the static assets of each Autoregia sub-system so they resolve
-under the unified server's path prefixes (e.g. ``/css/x`` -> ``/prs/css/x``).
+under the unified server's path prefixes (e.g. ``/css/x`` -> ``/pbs/css/x``).
 
 The sub-systems were originally standalone root apps, so their HTML/JS/CSS use
 absolute root paths (``/api/...``, ``/css/...``, ``url('/fonts/...')``) and a
 few ``href="/"`` links. Under the unified router each tool lives at
 ``/<prefix>/``, so those references are rewritten to ``/<prefix>/...``.
 
-Idempotent by construction: a path already prefixed (``"/prs/css/..."``) is not
+Idempotent by construction: a path already prefixed (``"/pbs/css/..."``) is not
 matched again, because the char preceding ``/css/`` is no longer a quote.
 Re-run after changing URL prefixes in ../app.py.
 
@@ -21,11 +21,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 # (prefix, [asset dirs/files relative to repo root]). Prefixes may be nested
 # paths — ATE's tools live at /ate/tool/<id>/ (hosted by module/ate).
 TOOLS = {
-    "prs": ["module/prs/static"],
+    "pbs": ["module/pbs/static"],
     "pkts": ["module/pkts/static"],
-    "pais": ["module/pais/static"],
+    "pwts": ["module/pwts/static"],
     "gis": ["module/gis/static"],
-    "pps": ["module/pps/static", "module/pps/index.html", "module/pps/policies"],
+    "ags": ["app/ags/policies"],
     "aoos": ["module/aoos/static"],
     "ate/tool/awes": ["module/ate/tool/awes/static"],
 }

@@ -30,7 +30,7 @@ the Todoist data is one (fake) instance of it.
    No real user data is used.
 2. **The metrics are computed, not measured.** The indicators are derived
    purely from the dataset; no measurement infrastructure (PKTS capacity
-   channels, PPS policy evaluation) is wired in. The dashboard shows *what the
+   channels, AGS policy evaluation) is wired in. The dashboard shows *what the
    shape of the real thing will be*.
 
 The objective is to fix the **information architecture** — which indicators
@@ -209,7 +209,7 @@ Overall = mean of goal progresses; a single verdict (`on-track` / `at-risk` /
 
 > The goals are configuration, not code: a clearly-editable list on the server,
 > so the agent can retune targets without touching logic. Targets are the
-> agent's self-imposed policy — a [PPS](../../pps/) concern expressed as numbers.
+> agent's self-imposed policy — a [AGS](/about.html#elements) concern expressed as numbers.
 
 ### Headline KPIs
 
@@ -391,7 +391,7 @@ in a `filter-bar` (same grammar as the Actions view).
 | Viability Contribution — Operating Stability | Current Streak; Throughput Stability |
 
 > Indicators marked *placeholder* identify criteria the prototype cannot yet
-> satisfy because their inputs come from sibling systems (PKTS, PPS). The
+> satisfy because their inputs come from sibling systems (PKTS, AGS). The
 > dashboard renders them as muted "awaiting feed" tiles so the gap is visible.
 
 ## References

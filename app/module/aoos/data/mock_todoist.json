@@ -24,7 +24,7 @@
     },
     {
       "id": "21000030",
-      "name": "PRS \u2014 Recording System",
+      "name": "PBS \u2014 Recording System",
       "color": "blue",
       "color_hex": "#3F6092",
       "is_favorite": true,
@@ -64,7 +64,7 @@
     },
     {
       "id": "21000098",
-      "name": "PPS \u2014 Policy Corpus",
+      "name": "AGS \u2014 Policy Corpus",
       "color": "grape",
       "color_hex": "#96436e",
       "is_favorite": false,
@@ -535,7 +535,7 @@
     },
     {
       "id": "990000126",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -677,7 +677,7 @@
     },
     {
       "id": "990000189",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 2,
@@ -1128,7 +1128,7 @@
     },
     {
       "id": "990000385",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 1,
@@ -1625,7 +1625,7 @@
     },
     {
       "id": "990000602",
-      "content": "Implement design tokens for PRS \u2014 Recording System",
+      "content": "Implement design tokens for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 2,
@@ -2294,7 +2294,7 @@
     },
     {
       "id": "990000889",
-      "content": "Implement registry for PRS \u2014 Recording System",
+      "content": "Implement registry for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -2361,7 +2361,7 @@
     },
     {
       "id": "990000917",
-      "content": "Plan sprint for PPS \u2014 Policy Corpus",
+      "content": "Plan sprint for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -2560,7 +2560,7 @@
     },
     {
       "id": "990001001",
-      "content": "Clean up inbox \u2014 PRS \u2014 Recording System",
+      "content": "Clean up inbox \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -2663,7 +2663,7 @@
     },
     {
       "id": "990001043",
-      "content": "Implement sync adapter for PPS \u2014 Policy Corpus",
+      "content": "Implement sync adapter for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -4290,7 +4290,7 @@
     },
     {
       "id": "990001736",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -4382,7 +4382,7 @@
     },
     {
       "id": "990001778",
-      "content": "Draft spec: internet \u2014 PRS \u2014 Recording System",
+      "content": "Draft spec: internet \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -4822,7 +4822,7 @@
     },
     {
       "id": "990001967",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -5181,7 +5181,7 @@
     },
     {
       "id": "990002121",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -6199,7 +6199,7 @@
     },
     {
       "id": "990002562",
-      "content": "Draft spec: calendar \u2014 PRS \u2014 Recording System",
+      "content": "Draft spec: calendar \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -6588,7 +6588,7 @@
     },
     {
       "id": "990002730",
-      "content": "Draft spec: calendar \u2014 PPS \u2014 Policy Corpus",
+      "content": "Draft spec: calendar \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -7033,7 +7033,7 @@
     },
     {
       "id": "990002926",
-      "content": "Clean up inbox \u2014 PPS \u2014 Policy Corpus",
+      "content": "Clean up inbox \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 1,
@@ -7134,7 +7134,7 @@
     },
     {
       "id": "990002968",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -7366,7 +7366,7 @@
     },
     {
       "id": "990003066",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 2,
@@ -7600,7 +7600,7 @@
     },
     {
       "id": "990003164",
-      "content": "Implement calendar for PRS \u2014 Recording System",
+      "content": "Implement calendar for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -7649,7 +7649,7 @@
     },
     {
       "id": "990003185",
-      "content": "Plan sprint for PPS \u2014 Policy Corpus",
+      "content": "Plan sprint for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -8576,7 +8576,7 @@
     },
     {
       "id": "990003577",
-      "content": "Draft spec: command palette \u2014 PRS \u2014 Recording System",
+      "content": "Draft spec: command palette \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -10240,7 +10240,7 @@
     },
     {
       "id": "990004291",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -10726,7 +10726,7 @@
     },
     {
       "id": "990004501",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -11314,7 +11314,7 @@
     },
     {
       "id": "990004753",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -12042,7 +12042,7 @@
     },
     {
       "id": "990005068",
-      "content": "Plan sprint for PRS \u2014 Recording System",
+      "content": "Plan sprint for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -12240,7 +12240,7 @@
     },
     {
       "id": "990005152",
-      "content": "Clean up inbox \u2014 PPS \u2014 Policy Corpus",
+      "content": "Clean up inbox \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -12288,7 +12288,7 @@
     },
     {
       "id": "990005173",
-      "content": "Implement policy gate for PPS \u2014 Policy Corpus",
+      "content": "Implement policy gate for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -12433,7 +12433,7 @@
     },
     {
       "id": "990005236",
-      "content": "Plan sprint for PRS \u2014 Recording System",
+      "content": "Plan sprint for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -12646,7 +12646,7 @@
     },
     {
       "id": "990005327",
-      "content": "Plan sprint for PRS \u2014 Recording System",
+      "content": "Plan sprint for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 2,
@@ -13891,7 +13891,7 @@
     },
     {
       "id": "990005859",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -14072,7 +14072,7 @@
     },
     {
       "id": "990005943",
-      "content": "Clean up inbox \u2014 PRS \u2014 Recording System",
+      "content": "Clean up inbox \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -14269,7 +14269,7 @@
     },
     {
       "id": "990006027",
-      "content": "Implement deploy pipeline for PPS \u2014 Policy Corpus",
+      "content": "Implement deploy pipeline for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -14318,7 +14318,7 @@
     },
     {
       "id": "990006048",
-      "content": "Clean up inbox \u2014 PRS \u2014 Recording System",
+      "content": "Clean up inbox \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -15074,7 +15074,7 @@
     },
     {
       "id": "990006370",
-      "content": "Clean up inbox \u2014 PPS \u2014 Policy Corpus",
+      "content": "Clean up inbox \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 1,
@@ -16468,7 +16468,7 @@
     },
     {
       "id": "990006965",
-      "content": "Implement effort estimate for PPS \u2014 Policy Corpus",
+      "content": "Implement effort estimate for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -17123,7 +17123,7 @@
     },
     {
       "id": "990007252",
-      "content": "Clean up inbox \u2014 PPS \u2014 Policy Corpus",
+      "content": "Clean up inbox \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -17224,7 +17224,7 @@
     },
     {
       "id": "990007294",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -19065,7 +19065,7 @@
     },
     {
       "id": "990008078",
-      "content": "Draft spec: indexer \u2014 PRS \u2014 Recording System",
+      "content": "Draft spec: indexer \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -19271,7 +19271,7 @@
     },
     {
       "id": "990008169",
-      "content": "Draft spec: sleep window \u2014 PRS \u2014 Recording System",
+      "content": "Draft spec: sleep window \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -19288,7 +19288,7 @@
     },
     {
       "id": "990008176",
-      "content": "Plan sprint for PPS \u2014 Policy Corpus",
+      "content": "Plan sprint for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -19815,7 +19815,7 @@
     },
     {
       "id": "990008400",
-      "content": "Implement sleep window for PPS \u2014 Policy Corpus",
+      "content": "Implement sleep window for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -19880,7 +19880,7 @@
     },
     {
       "id": "990008428",
-      "content": "Weekly review (PRS \u2014 Recording System)",
+      "content": "Weekly review (PBS \u2014 Recording System)",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -20126,7 +20126,7 @@
     },
     {
       "id": "990008533",
-      "content": "Implement label taxonomy for PPS \u2014 Policy Corpus",
+      "content": "Implement label taxonomy for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -20601,7 +20601,7 @@
     },
     {
       "id": "990008736",
-      "content": "Draft spec: indexer \u2014 PPS \u2014 Policy Corpus",
+      "content": "Draft spec: indexer \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 1,
@@ -21788,7 +21788,7 @@
     },
     {
       "id": "990009240",
-      "content": "Plan sprint for PPS \u2014 Policy Corpus",
+      "content": "Plan sprint for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -22404,7 +22404,7 @@
     },
     {
       "id": "990009506",
-      "content": "Draft spec: effort estimate \u2014 PPS \u2014 Policy Corpus",
+      "content": "Draft spec: effort estimate \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -22587,7 +22587,7 @@
     },
     {
       "id": "990009583",
-      "content": "Implement internet for PRS \u2014 Recording System",
+      "content": "Implement internet for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 3,
@@ -22970,7 +22970,7 @@
     },
     {
       "id": "990009744",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 2,
@@ -23035,7 +23035,7 @@
     },
     {
       "id": "990009772",
-      "content": "Clean up inbox \u2014 PRS \u2014 Recording System",
+      "content": "Clean up inbox \u2014 PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -23677,7 +23677,7 @@
     },
     {
       "id": "990010052",
-      "content": "Implement sleep window for PRS \u2014 Recording System",
+      "content": "Implement sleep window for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -23695,7 +23695,7 @@
     },
     {
       "id": "990010059",
-      "content": "Weekly review (PPS \u2014 Policy Corpus)",
+      "content": "Weekly review (AGS \u2014 Policy Corpus)",
       "project_id": "21000098",
       "section_id": null,
       "priority": 3,
@@ -24127,7 +24127,7 @@
     },
     {
       "id": "990010241",
-      "content": "Plan sprint for PRS \u2014 Recording System",
+      "content": "Plan sprint for PBS \u2014 Recording System",
       "project_id": "21000030",
       "section_id": null,
       "priority": 4,
@@ -24338,7 +24338,7 @@
     },
     {
       "id": "990010332",
-      "content": "Draft spec: Q2 close \u2014 PPS \u2014 Policy Corpus",
+      "content": "Draft spec: Q2 close \u2014 AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,
@@ -26005,7 +26005,7 @@
     },
     {
       "id": "990011046",
-      "content": "Implement registry for PPS \u2014 Policy Corpus",
+      "content": "Implement registry for AGS \u2014 Policy Corpus",
       "project_id": "21000098",
       "section_id": null,
       "priority": 4,

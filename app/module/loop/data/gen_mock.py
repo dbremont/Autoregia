@@ -3,9 +3,9 @@
 Deterministic whole-loop mock dataset generator for the Autoregia
 Control-Loop Dashboard ("The Loop").
 
-It synthesizes the cooperating organs' substance — PRS records, AOOS
+It synthesizes the cooperating organs' substance — PBS records, AOOS
 action constructs + sessions, AWES executions, PRAS deliberations, the
-PEB event stream, ASRS consistency violations, and the agent's
+PEB event stream, AGS consistency violations, and the agent's
 essential variables — woven into causally-linked chains so every
 whole-loop indicator (cycle-time, closed-loop ratio, cascade
 traceability, coordination health, viability balance, …) has
@@ -13,7 +13,7 @@ meaningful data.
 
 The shape mirrors the specs (spec/about.md control loop; spec/iscb
 event vocabulary & causal lineage; spec/pras lifecycle; spec/aoos
-action/session model; spec/asrs substrates). It is mock: the metrics
+action/session model; spec/ags substrates). It is mock: the metrics
 are computed, not measured.
 
 Run:   python3 loop/data/gen_mock.py
@@ -47,18 +47,18 @@ PEB_TYPES = ["RecordCreated", "ActionRegistered", "ActionScheduled", "ActionComp
              "ExecutionFinished", "AdaptationEnacted", "ReactionFired", "ReactionSucceeded",
              "ReactionFailed", "ReactionSuppressed", "BlockConflictDetected",
              "KeywordThresholdCrossed", "PolicyChanged"]
-ORG_ORIGIN = {"RecordCreated": "PRS", "ActionRegistered": "AOOS", "ActionScheduled": "AOOS",
+ORG_ORIGIN = {"RecordCreated": "PBS", "ActionRegistered": "AOOS", "ActionScheduled": "AOOS",
               "ActionCompleted": "AOOS", "ExecutionFinished": "AWES",
               "AdaptationEnacted": "PRAS", "ReactionFired": "PEB", "ReactionSucceeded": "PEB",
               "ReactionFailed": "PEB", "ReactionSuppressed": "PEB",
               "BlockConflictDetected": "AOOS", "KeywordThresholdCrossed": "PKTS",
-              "PolicyChanged": "PPS"}
+              "PolicyChanged": "AGS"}
 DELIB_TYPES = ["review", "deviation", "retrospective", "hypothesis", "decision-in-formation"]
 DELIB_DOMAINS = ["Method", "Work", "Health", "Learning", "Conduct", "Identity"]
-FEEDS = ["pps", "aoos", "prs", "ptocs"]
+FEEDS = ["ags", "aoos", "pbs", "ptocs"]
 
 SUBJECTS = {
-    "Software Engineering": ["PRS prototype", "AOOS calendarization", "Loop dashboard", "PEB dispatcher", "search index", "schema migration"],
+    "Software Engineering": ["PBS prototype", "AOOS calendarization", "Loop dashboard", "PEB dispatcher", "search index", "schema migration"],
     "Research": ["attention economics", "control-theory review", "embedding drift", "causal inference primer"],
     "Health": ["sleep schedule", "cardio baseline", "nutrition logging"],
     "Finance": ["monthly close", "subscription audit", "tax estimate"],
@@ -151,7 +151,7 @@ def gen():
             events.append({
                 "event_id": stable_id("EVT", evc),
                 "type": "RecordCreated",
-                "origin": "PRS",
+                "origin": "PBS",
                 "occurred_at": iso(created),
                 "causal_id": None,
                 "correlation_id": None,
@@ -290,7 +290,7 @@ def gen():
                         "correlation_id": corr,
                         "started_at": rec["created_at"],
                         "perception": {"id": rec["id"], "type": rec["record_type"],
-                                       "title": rec["content"], "organ": "PRS"},
+                                       "title": rec["content"], "organ": "PBS"},
                         "decision": {"id": act["id"], "kind": act["kind"],
                                      "title": act["project"], "organ": "AOOS"},
                         "execution": {"id": sess["id"], "duration_min": sess["duration_min"],
@@ -369,7 +369,7 @@ def gen():
     entities = gen_entities()
     env_events = gen_env_events(sessions, entities)
 
-    # ── ASRS consistency violations (substrate) ──
+    # ── AGS consistency violations (substrate) ──
     consistency = gen_consistency(records, actions, deliberations)
 
     # ── prune internal helper keys ──
@@ -500,21 +500,21 @@ def weighted_band():
 
 
 ORGS = {
-    "PRS":   {"name": "Personal Recording System",      "vsm": "S3", "stage": "Perception",       "color": "#3F6092"},
+    "PBS":   {"name": "Personal Binnacle System",      "vsm": "S3", "stage": "Perception",       "color": "#3F6092"},
     "PKTS":  {"name": "Personal Keyword Tracking",      "vsm": "S3", "stage": "Perception",       "color": "#B4742A"},
-    "ASRS":  {"name": "Agent Self-Representation",      "vsm": "S5", "stage": "Substrate",        "color": "#5C4E78"},
+    "AGS":  {"name": "Agent Self-Representation",      "vsm": "S5", "stage": "Substrate",        "color": "#5C4E78"},
     "PTOCS": {"name": "Personal Technical Object Catalog","vsm":"S4","stage": "Situation Model",  "color": "#2D6A4F"},
     "AOOS":  {"name": "Personal Work Organization",     "vsm": "S1", "stage": "Decision/Action",  "color": "#7A1A2A"},
     "AWES":  {"name": "Automated Work Execution",       "vsm": "S1", "stage": "Execution",        "color": "#A8854A"},
     "PRAS":  {"name": "Personal Reflection & Adaptation","vsm": "S4", "stage": "Feedback",         "color": "#3F6E50"},
-    "PPS":   {"name": "Personal Policy System",         "vsm": "S5", "stage": "Policy",           "color": "#641020"},
+    "AGS":   {"name": "Agency Grounding System",         "vsm": "S5", "stage": "Policy",           "color": "#641020"},
     "PEB":   {"name": "Personal Event Bus",             "vsm": "S2", "stage": "Coordination",     "color": "#C7A972"},
 }
 
 VSM_LEVELS = [
-    {"code": "S5",  "name": "Policy",        "orgs": ["PPS", "ASRS"]},
+    {"code": "S5",  "name": "Policy",        "orgs": ["AGS", "AGS"]},
     {"code": "S4",  "name": "Intelligence",  "orgs": ["PRAS", "PTOCS"]},
-    {"code": "S3",  "name": "Control / Audit","orgs": ["PRS", "PKTS"]},
+    {"code": "S3",  "name": "Control / Audit","orgs": ["PBS", "PKTS"]},
     {"code": "S2",  "name": "Coordination",  "orgs": ["PEB"]},
     {"code": "S1",  "name": "Operations",    "orgs": ["AOOS", "AWES"]},
 ]
@@ -527,7 +527,7 @@ VSM_LEVELS = [
 # trigger (time/condition-based), observational (a reading the agent takes).
 ENTITY_KINDS = ["Person", "Project", "Tool", "Place", "Organization", "Topic", "Resource"]
 ENTITY_NAMES = {
-    "Software Engineering": ["PRS repo", "AOOS repo", "Loop dashboard", "Spectral", "ECharts", "Flask", "Search Index", "CouchDB"],
+    "Software Engineering": ["PBS repo", "AOOS repo", "Loop dashboard", "Spectral", "ECharts", "Flask", "Search Index", "CouchDB"],
     "Research": ["R. Seth", "J. Pearl", "Attention Lab", "Embedding Drift", "Causal Inference"],
     "Health": ["Dr. Vega", "Cardio Plan", "Sleep Schedule", "Nutrition Log"],
     "Finance": ["Bank Stub", "Brokerage", "Tax Estimate", "Subscription Ledger"],

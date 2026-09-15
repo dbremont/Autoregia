@@ -2,7 +2,7 @@
 
 > This document establishes the conceptual foundations, architecture, and implementation of an **Agent Intent Aid System (AIAS)**. An AIAS is a technical object engineered to `carry the intent-management function` of the Personal Viable System Model (PVSM) — continuously generating, evaluating, selecting, committing, monitoring, revising, and retiring intentions, and yielding the **Active Intent Set** that directs planning and execution.
 
-Fundamentally, an AIAS is the **central coordination layer between Perception and Deliberation**. It transforms signals arriving from the environment, the agent's internal state, memory, identity, and policy into a coherent, prioritized, resource-feasible set of commitments. It does not decide what the agent should value — that belongs to Policy ([PPS](../pps/)); it turns what the agent already pursues into a maintained, revisable, schedulable set of intentions that eventually generate action.
+Fundamentally, an AIAS is the **central coordination layer between Perception and Deliberation**. It transforms signals arriving from the environment, the agent's internal state, memory, identity, and policy into a coherent, prioritized, resource-feasible set of commitments. It does not decide what the agent should value — that belongs to Policy ([AGS](/about.html#elements)); it turns what the agent already pursues into a maintained, revisable, schedulable set of intentions that eventually generate action.
 
 ## Formulation
 
@@ -353,9 +353,9 @@ Principal couplings:
 
 | Neighbor | Relation |
 | --- | --- |
-| [PRS](../prs/) | Perceived events, records, and observational state feed candidate generation. |
-| [PPS](../pps/) | Policy supplies the values, principles, and constraints against which intents are evaluated. |
-| [ASRS](../asrs/) / PSMS | Internal state, capabilities, and resources bound what is feasible. |
+| [PBS](../pbs/) | Perceived events, records, and observational state feed candidate generation. |
+| [AGS](/about.html#elements) | Policy supplies the values, principles, and constraints against which intents are evaluated. |
+| [AGS](/about.html#elements) / AGS | Internal state, capabilities, and resources bound what is feasible. |
 | [AOOS](../aoos/) | The Active Intent Set directs planning and action selection. |
 | [AWES](../awes/) | Execution outcomes return as feedback for revision. |
 | [PRAS](../pras/) | Deliberations on intention–outcome gaps mature into revisions and policy. |
@@ -398,12 +398,12 @@ An implementation should satisfy these architectural principles:
 
 ### Functionality Set
 
-- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from PRS / PEOS / PAIS events, external requests, reflective notes).
+- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from PBS / PEOS / PWTS events, external requests, reflective notes).
 - **Triage queue** — a review surface for newly generated candidates awaiting evaluation.
 - **Intent editor** — progressive disclosure over the full intent record (fields, constraints, dependencies, review schedule, termination condition).
 - **Active Intent Set view** — the authoritative current commitments, ordered by priority and deadline.
 - **Scheduling view** — the subset eligible for planning in the current horizon, handed off to AOOS.
-- **Conflict & over-commit detection** — collisions, dependency cycles, and resource over-allocation flagged against ASRS / PSMS state.
+- **Conflict & over-commit detection** — collisions, dependency cycles, and resource over-allocation flagged against AGS / AGS state.
 - **Revision log** — append-only history of reprioritization, suspension, merge/split, delegation, and retirement, with rationale.
 - **Monitoring board** — blocked work, resource changes, new obligations, and feedback awaiting revision.
 - **Retrospective** — completed, abandoned, superseded, and expired intents for review and learning.

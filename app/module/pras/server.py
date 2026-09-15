@@ -4,11 +4,11 @@ Personal Reflection & Adaptation System (PRAS) — Server.
 The deliberations *are* the data: a set of HTML files under ./deliberations/.
 This server indexes them at startup (parsing <meta name="pra-*"> tags and body
 text) to provide a scored search over the corpus, and a listing for the main
-entry. Mirrors the PPS "documents-as-data" model.
+entry. Mirrors the AGS "documents-as-data" model.
 
 Within Autoregia, PRAS is the Feedback / Intelligence (VSM S4) component: its
 deliberations mature along open -> concluded -> enacted, and at enactment they
-feed the policy system (PPS) and the other sub-systems.
+feed the policy system (AGS) and the other sub-systems.
 
 Run (standalone):  python3 pras/server.py
 Open:              http://localhost:5006

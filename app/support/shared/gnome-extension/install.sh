@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install + enable the Autoregia PAIS Focus Bridge GNOME Shell extension.
+# Install + enable the Autoregia PWTS Focus Bridge GNOME Shell extension.
 #
 # The extension exports the focused window (app + title) over the session
 # D-Bus as org.autoregia.Focus, which shared/focus_watcher.py reads. On modern
@@ -14,7 +14,7 @@
 # Run:  shared/gnome-extension/install.sh
 set -euo pipefail
 
-UUID="pais@autoregia"
+UUID="pwts@autoregia"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="$HERE/$UUID"
 EXT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions"

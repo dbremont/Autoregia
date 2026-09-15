@@ -8,11 +8,11 @@
 > in one system into the *consequence that should follow* in another, without
 > hard-coupling those systems to each other.
 
-> Where the sibling systems each externalize a **substance** — the PRS
-> externalizes records, the AOOS externalizes action, the PPS externalizes
+> Where the sibling systems each externalize a **substance** — the PBS
+> externalizes records, the AOOS externalizes action, the AGS externalizes
 > policy, the PTOCS externalizes capabilities, the PKTS externalizes attention —
 > the PEB externalizes the **control flow** *between* them. A recording in the
-> PRS is not, by itself, a task; but it may *signal* that a task should be
+> PBS is not, by itself, a task; but it may *signal* that a task should be
 > registered in the AOOS. The PEB is what turns that "may" into a declared,
 > inspectable, reversible reaction: an event crosses the bus, a rule fires, a
 > task appears.
@@ -62,7 +62,7 @@ externalizing **the cross-system control flow** to scaffold extended agency:
 Conversely, a reaction should generally *not* live on the bus when it is:
 
 - **Internal to a single system** — pure record-to-record derivation inside the
-  PRS, or pure dependency-graph computation inside the AOOS, belongs to that
+  PBS, or pure dependency-graph computation inside the AOOS, belongs to that
   system, not to the coordination layer.
 - **Trivial and local** — a UI re-render or a cache invalidation is plumbing,
   not coordination.
@@ -76,11 +76,11 @@ Conversely, a reaction should generally *not* live on the bus when it is:
 | Case | Description | Example |
 | --- | --- | --- |
 | **Consequence-Bearing** | The change creates an obligation or a new unit of work elsewhere. | A `Commitment` record is created → a AOOS action should be registered. |
-| **Constraint-Triggering** | The change may violate, or newly satisfy, a policy. | A deep-work block scheduled at 02:00 → a PPS Sleep-Policy check. |
+| **Constraint-Triggering** | The change may violate, or newly satisfy, a policy. | A deep-work block scheduled at 02:00 → a AGS Sleep-Policy check. |
 | **Status-Propagating** | A lifecycle transition in one system must be reflected in another. | A task is marked `Completed` → its deadline-linked calendar block is freed. |
 | **Conflict-Signaling** | The change may collide with another commitment. | Two blocks overlap → a conflict is raised and the agent is notified. |
 | **Drift-Signaling** | A measured signal crosses a threshold. | A PKTS keyword-intensity reading spikes → an observation is recorded / surfaced. |
-| **Identity-Relevant** | The change alters a policy, objective, or principle. | A PPS policy is revised → existing constructs are re-checked for compliance. |
+| **Identity-Relevant** | The change alters a policy, objective, or principle. | A AGS policy is revised → existing constructs are re-checked for compliance. |
 
 ---
 
@@ -94,8 +94,8 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
   |
   +-- [1] Event Log  (the substance the bus carries)
   |     \_ The append-only stream of facts: "X happened, at T, caused-by Y."
-  |        Canonical home: PRS records of type Event / Observation
-  |        (PRS remains the single source of truth).
+  |        Canonical home: PBS records of type Event / Observation
+  |        (PBS remains the single source of truth).
   |
   +-- [2] Dispatcher  (the medium)
   |     \_ Accepts an event, matches it against the route table, and delivers
@@ -129,8 +129,8 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
 
 | Field | Description | Example |
 | --- | --- | --- |
-| **Event Id** | Globally unique identifier; if events are PRS records, this is the record id. | `REC-2026-00124` |
-| **Origin** | The system and operation that produced it. | `{system: PRS, op: record.create}` |
+| **Event Id** | Globally unique identifier; if events are PBS records, this is the record id. | `REC-2026-00124` |
+| **Origin** | The system and operation that produced it. | `{system: PBS, op: record.create}` |
 | **Type** | The event kind within a typed vocabulary (see Event Taxonomy). | `RecordCreated` |
 | **Payload** | The structured detail of what changed (references, not copies, of substance). | `{record_id, record_type, ...}` |
 | **Occurred At** | When the change happened in the originating system. | ISO 8601 timestamp |
@@ -138,10 +138,10 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
 | **Correlation Id** | Groups a cascade of events into one deliberative thread. | `thr-2026-06-28-007` |
 
 > Two design notes carry over from the sibling specs. First, events **reference**
-> substance rather than embedding it (the PRS record is the source of truth; the
+> substance rather than embedding it (the PBS record is the source of truth; the
 > event points at it). Second, **causal lineage is first-class**: every effect
 > records the event that triggered it, so any cascade is an inspectable DAG —
-> the same `causes` / `spawned-from` / `historically-caused` vocabulary the PRS
+> the same `causes` / `spawned-from` / `historically-caused` vocabulary the PBS
 > already defines.
 
 ### Producer
@@ -151,9 +151,9 @@ becomes a producer by instrumenting its write paths to append an event to the lo
 
 | Producer | Emits (seed) |
 | --- | --- |
-| **PRS** | `RecordCreated`, `RecordAnnotated`, `RecordStatusChanged`, `RecordDeadlineSet`, `RecordLinked` |
+| **PBS** | `RecordCreated`, `RecordAnnotated`, `RecordStatusChanged`, `RecordDeadlineSet`, `RecordLinked` |
 | **AOOS** | `ActionRegistered`, `ActionScheduled`, `ActionCompleted`, `BlockConflictDetected`, `SyncDriftDetected` |
-| **PPS** | `PolicyChanged`, `PolicyViolated` |
+| **AGS** | `PolicyChanged`, `PolicyViolated` |
 | **PTOCS** | `CapabilityAdded`, `CapabilityDeprecated` |
 | **PKTS** | `KeywordThresholdCrossed` |
 | **Agent (human)** | `AgentActed` — the root cause for any manually-initiated cascade |
@@ -200,10 +200,10 @@ patching systems.
 > The seed scenario: **a recording triggers an entry into the task registry.**
 
 ```
-Agent captures a commitment ("Deliver draft by Friday") in the PRS.
+Agent captures a commitment ("Deliver draft by Friday") in the PBS.
    │
    ▼
-PRS appends  RecordCreated { record_id: REC-124, type: Commitment, deadline: Fri }
+PBS appends  RecordCreated { record_id: REC-124, type: Commitment, deadline: Fri }
    │
    ▼
 PEB Dispatcher matches route.commitment-to-action
@@ -252,7 +252,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 - **Reversibility** — effects carry an `inverse` where possible; irreversible
   effects default to **require-confirmation** gating.
 - **Policy gating** — before firing, a reaction is checked against applicable
-  **PPS** policies; a violation suppresses the reaction and emits
+  **AGS** policies; a violation suppresses the reaction and emits
   `ReactionSuppressed` (governance, not silent failure).
 - **Human-in-the-loop** — reactions marked `require-confirmation` surface to the
   agent rather than firing autonomously.
@@ -272,7 +272,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 | Reaction Latency | Propagation Delay | Time from an event occurring to its consequence being applied |
 | Reversibility | Undo Coverage | Share of effects with a defined, working inverse |
 | Wiring Legibility | Route Discoverability | Ease with which the agent can read and predict system behavior |
-| Policy Compliance | Gating Effectiveness | Share of reactions correctly suppressed/confirmed per PPS policy |
+| Policy Compliance | Gating Effectiveness | Share of reactions correctly suppressed/confirmed per AGS policy |
 | Resilience | Recovery After Outage | Ability to replay the log and converge to the correct state |
 | Compositionality | New-Behavior Cost | Effort to add a new cross-system behavior as a route vs. as code |
 
@@ -282,7 +282,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 | Layer | Recommendation |
 | --- | --- |
-| Event Log | PRS records of type `Event` / `Observation` (single source of truth) |
+| Event Log | PBS records of type `Event` / `Observation` (single source of truth) |
 | Dispatcher | Small Python process; matches events against the route table |
 | Route Table | Declarative (data), stored in SQLite; editable through a managed surface |
 | Reactions | Registered handlers calling each system's existing internal API |
@@ -302,10 +302,10 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 1. **Name & slot.** **PEB** — Personal Event Bus — realizing the **VSM System 2 –
    Coordination** function. The *bus* is the mechanism; *Coordination* is the role.
-2. **Event log.** **Events are PRS records of type `Event` / `Observation`.** PRS
+2. **Event log.** **Events are PBS records of type `Event` / `Observation`.** PBS
    remains the single source of truth; the PEB reuses the existing causal-link
    vocabulary (`causes`, `spawned-from`, `historically-caused`). Any cascade is an
-   inspectable subgraph of the PRS record graph.
+   inspectable subgraph of the PBS record graph.
 3. **v1 execution model.** **Asynchronous, in-process, at-least-once**, with a
    dispatcher library the systems import and a durable (SQLite-backed) queue.
    Correctness rests on reaction idempotency, not exactly-once delivery.
@@ -319,7 +319,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
    registered handlers** (inspectability first). How far to push pure-data rules
    before falling back to code?
 2. **Synchronous exceptions.** Async is the default — but are there reactions
-   that *must* be synchronous (e.g., a PPS policy gate that blocks a save before
+   that *must* be synchronous (e.g., a AGS policy gate that blocks a save before
    it commits)? If so, how is the sync/async boundary drawn?
 3. **Human-in-the-loop default.** Which classes of reaction fire autonomously,
    and which require confirmation by default? (Irreversible effects clearly do;
@@ -328,9 +328,9 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
    to the agent, or both? How are stuck reactions drained?
 5. **Back-reactions and loops.** How do we prevent / detect cycles (`A→B→A`)?
    Causal id + a visited-set per correlation id is the obvious guard — confirm.
-6. **Event schema location.** Since events are PRS records, does the event-type
-   vocabulary (`RecordCreated`, `ActionRegistered`, …) live in the PRS schema, in
-   a PEB schema, or in both? (Touches the PRS↔PEB ownership boundary.)
+6. **Event schema location.** Since events are PBS records, does the event-type
+   vocabulary (`RecordCreated`, `ActionRegistered`, …) live in the PBS schema, in
+   a PEB schema, or in both? (Touches the PBS↔PEB ownership boundary.)
 
 ---
 
@@ -338,8 +338,8 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
 - [PVSM — Specification](../README.md) — agent control loop & VSM framing.
-- [PRS — spec](../prs/spec.md) — recording system; canonical home of the event log; source of the causal-link vocabulary.
+- [PBS — spec](../pbs/spec.md) — recording system; canonical home of the event log; source of the causal-link vocabulary.
 - [AOOS — spec](../aoos/spec.md) — operations system; the primary reaction *target* (task registry) and a producer (`ActionRegistered`, …).
-- [PPS — README](../../pps/README.md) — policy corpus; source of gating rules.
+- [AGS — README](/about.html#elements) — policy corpus; source of gating rules.
 - [PTOCS — spec](../ptocs/spec.md) — capability catalog; referenced by capability-bearing reactions.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

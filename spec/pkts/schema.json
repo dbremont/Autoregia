@@ -359,7 +359,7 @@
 
         "window_title": {
           "type": "string",
-          "description": "Title of the focused window at the time of the event. May be redacted by the focus watcher (PAIS_TITLE_REDACT_REGEX)."
+          "description": "Title of the focused window at the time of the event. May be redacted by the focus watcher (PWTS_TITLE_REDACT_REGEX)."
         },
 
         "focused_window_id": {

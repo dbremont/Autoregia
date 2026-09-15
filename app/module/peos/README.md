@@ -1,18 +1,18 @@
-# PEOS — Personal External Observation System
+# PEOS — General World Observation System
 
-> PEOS is the **Personal External Observation System** — the Autoregia
+> PEOS is the **General World Observation System** — the Autoregia
 > **perception** sub-system that collects what *other agents* say about the world
 > from free, no-auth public feeds and persists each item in **CouchDB** (db
-> `peos`) as an `observational` event — the [PWMS](../spec/asrs/pwms/) event-type
+> `peos`) as an `observational` event — the [AGS](/about.html#elements) `observational` event-type
 > defined as *"a reading the agent actively takes."*
 
 > It is the **external-world sense organ** of the agent. Where the
-> [PRS](../prs/) records *internal* events (what the agent itself does, thinks,
+> [PBS](../pbs/) records *internal* events (what the agent itself does, thinks,
 > decides), PEOS records *external* events (what other agents publish about the
 > world). Together they feed the Situation Model.
 
 ```
-PRS  ←  internal events    (the agent's own states)
+PBS  ←  internal events    (the agent's own states)
 PEOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 ```
 
@@ -24,7 +24,7 @@ PEOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 - **Loop stage:** **Perception** (restricted to the *external* half of the
   `World = (External, Internal)` boundary).
 - **VSM level:** **System 4 – Intelligence** (environment scanning).
-- **Complement:** [PRS](../prs/) — the *internal*-events recording system.
+- **Complement:** [PBS](../pbs/) — the *internal*-events recording system.
 - **Specification:** see [`spec/peos/spec.md`](../spec/peos/spec.md) for the
   conceptual foundations, data model, evaluation, and decisions.
 
@@ -82,7 +82,7 @@ Three document kinds share the `peos` CouchDB database, discriminated by
 - `state` — per-topic poll cursor (`last_fetched_ms`, `last_observed_ms`, …)
 
 Only the server process touches CouchDB; the collector drives everything via
-HTTP, matching the PKTS/PAIS daemon pattern.
+HTTP, matching the PKTS/PWTS daemon pattern.
 
 ## Run
 
@@ -146,7 +146,7 @@ by mocking the HTTP helpers.
 
 - [PEOS — specification](../spec/peos/spec.md) — conceptual foundations, data model, evaluation, decisions.
 - [Autoregia](../README.md) — workspace overview & VSM mapping.
-- [PRS — spec](../spec/prs/spec.md) — the *internal*-events complement.
-- [PWMS — README](../spec/asrs/pwms/README.md) — origin of the `observational` event type.
+- [PBS — spec](../spec/pbs/spec.md) — the *internal*-events complement.
+- [AGS](/about.html#elements) — origin of the `observational` event type.
 - [Autoregia UI Specification](../spec/ui.spec) — canonical UI standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

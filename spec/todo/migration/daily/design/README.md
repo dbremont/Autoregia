@@ -1,21 +1,21 @@
-# Personal Recording System
+# Personal Binnacle System
 
-> In this design document, we develop the conceptual foundations, architecture, and implementation of a **Personal Recording System (PRS)**: a cognitive infrastructure designed to preserve continuity of state, support coherent agency across time, and enable the systematic externalization of cognition.
+> In this design document, we develop the conceptual foundations, architecture, and implementation of a **Personal Binnacle System (PBS)**: a cognitive infrastructure designed to preserve continuity of state, support coherent agency across time, and enable the systematic externalization of cognition.
 >
-> Fundamentally, a PRS exists to maintain persistent representations of the states that are relevant for effective action and orientation. These include:
+> Fundamentally, a PBS exists to maintain persistent representations of the states that are relevant for effective action and orientation. These include:
 >
 > * **External World State** — relevant aspects of the environment, events, opportunities, constraints, resources, and ongoing processes.
 > * **Internal Cognitive State** — intentions, plans, hypotheses, beliefs, decisions, reflections, mental models, and other cognitive structures that influence reasoning and action.
 > * **Social Cognitive State** — shared commitments, expectations, agreements, delegations, coordination structures, and other forms of jointly maintained social context.
 >
-> By preserving these states across time, a PRS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
+> By preserving these states across time, a PBS functions as an externalized memory and coordination substrate, reducing state loss, improving continuity, and enabling more reliable individual and collective action.
 
 
 ## Formulation
 
-> How to think about a `Personal Recording System`?
+> How to think about a `Personal Binnacle System`?
 
-A sophisticated `Personal Recording System` is fundamentally a form of cognitive infrastructure. Its role is not simply to store information, but to:
+A sophisticated `Personal Binnacle System` is fundamentally a form of cognitive infrastructure. Its role is not simply to store information, but to:
 
 - preserve temporal coherence,
 - stabilize intentional structures,
@@ -311,13 +311,13 @@ NVIM :
 
 ## Implementation
 
-- File Type: .prs
+- File Type: .pbs
 - Pluging Set: ...
 
 | Layer             | Recommendation              |
 | ----------------- | --------------------------- |
 | Storage           | Markdown + YAML frontmatter |
-| Filetype          | `prs`                       |
+| Filetype          | `pbs`                       |
 | Structure         | Treesitter                  |
 | Retrieval         | Telescope                   |
 | Metadata          | Lua parser                  |

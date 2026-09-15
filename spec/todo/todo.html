@@ -156,7 +156,7 @@
         <g transform="translate(90,170)">
           <rect x="-70" y="-30" width="140" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
           <text class="nlbl" x="0" y="-6" text-anchor="middle">Perception</text>
-          <text class="nsub" x="0" y="9" text-anchor="middle">PRS · PKTS</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">PBS · PKTS</text>
           <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
         </g>
         <!-- Situation Model (partial) -->
@@ -170,7 +170,7 @@
         <g transform="translate(440,170)">
           <rect x="-82" y="-30" width="164" height="60" rx="8" fill="#fbf1e3" stroke="#B4742A" stroke-width="1.6"/>
           <text class="nlbl" x="0" y="-6" text-anchor="middle">Decision</text>
-          <text class="nsub" x="0" y="9" text-anchor="middle">PPS · regulator?</text>
+          <text class="nsub" x="0" y="9" text-anchor="middle">AGS · regulator?</text>
           <text class="nstat" x="0" y="22" text-anchor="middle" fill="#B4742A">partial</text>
         </g>
         <!-- Action Selection (partial) -->
@@ -242,22 +242,22 @@
           <div class="work-head"><span class="work-id">A1</span><span class="pill missing">missing</span></div>
           <h3>Shared record schema</h3>
           <div class="work-exists"><strong>exists</strong>Referenced in 3 docs; <code>records_schema.json</code> file is absent. Each subsystem has its own divergent schema.</div>
-          <div class="work-needed"><strong>needed</strong>Author the unified record schema (Record id, type, content, metadata) that PRS owns and every system references by <code>$id</code>.</div>
-          <div class="work-meta"><span class="dep">blocks: B-stream</span><span class="ref">README.md:22 · spec/prs/schema.json:3</span></div>
+          <div class="work-needed"><strong>needed</strong>Author the unified record schema (Record id, type, content, metadata) that PBS owns and every system references by <code>$id</code>.</div>
+          <div class="work-meta"><span class="dep">blocks: B-stream</span><span class="ref">README.md:22 · spec/pbs/schema.json:3</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">A2</span><span class="pill missing">missing</span></div>
           <h3>PEB / ISCB event bus</h3>
           <div class="work-exists"><strong>exists</strong>Spec'd in <code>spec/iscb/spec.md</code> (draft): Dispatcher, Route Table, Producers, Reactions. No code directory exists.</div>
-          <div class="work-needed"><strong>needed</strong>Implement the in-process dispatcher as a library the systems import; append-only event log (events live as PRS records).</div>
+          <div class="work-needed"><strong>needed</strong>Implement the in-process dispatcher as a library the systems import; append-only event log (events live as PBS records).</div>
           <div class="work-meta"><span class="dep">blocks: B, C2, D</span><span class="ref">spec/iscb/spec.md:281</span></div>
         </div>
         <div class="work-card partial">
           <div class="work-head"><span class="work-id">A3</span><span class="pill partial">partial</span></div>
           <h3>Unified persistence</h3>
-          <div class="work-exists"><strong>exists</strong>JSON files across PRS, PKTS, PTOCS, AOOS. PRS spec already recommends SQLite.</div>
+          <div class="work-exists"><strong>exists</strong>JSON files across PBS, PKTS, PTOCS, AOOS. PBS spec already recommends SQLite.</div>
           <div class="work-needed"><strong>needed</strong>Migrate to SQLite; one DB (or federated) the PEB event log and record store share.</div>
-          <div class="work-meta"><span class="dep">dep: A1</span><span class="ref">spec/prs/README.md:309</span></div>
+          <div class="work-meta"><span class="dep">dep: A1</span><span class="ref">spec/pbs/README.md:309</span></div>
         </div>
       </div>
     </div>
@@ -272,10 +272,10 @@
       <div class="work-grid">
         <div class="work-card partial">
           <div class="work-head"><span class="work-id">B1</span><span class="pill partial">partial</span></div>
-          <h3>PRS — emit &amp; log</h3>
+          <h3>PBS — emit &amp; log</h3>
           <div class="work-exists"><strong>exists</strong>CRUD over Records; no <code>Event</code>/<code>Observation</code> type; silent on writes.</div>
           <div class="work-needed"><strong>needed</strong>Add Event/Observation record types; emit <code>RecordCreated/Updated</code>; serve as the PEB event log.</div>
-          <div class="work-meta"><span class="dep">dep: A1, A2</span><span class="ref">prs/server.py</span></div>
+          <div class="work-meta"><span class="dep">dep: A1, A2</span><span class="ref">pbs/server.py</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">B2</span><span class="pill missing">missing</span></div>
@@ -288,21 +288,21 @@
           <div class="work-head"><span class="work-id">B3</span><span class="pill partial">partial</span></div>
           <h3>PTOCS — ingest signals</h3>
           <div class="work-exists"><strong>exists</strong>Standalone catalog; <code>strategic.system_served</code> tag unused; ingests nothing.</div>
-          <div class="work-needed"><strong>needed</strong>Consume PRS/PKTS events to build the situation model; resolve <code>system_served</code> against the VSM map.</div>
+          <div class="work-needed"><strong>needed</strong>Consume PBS/PKTS events to build the situation model; resolve <code>system_served</code> against the VSM map.</div>
           <div class="work-meta"><span class="dep">dep: B1</span><span class="ref">ptocs/server.py:173</span></div>
         </div>
         <div class="work-card missing">
           <div class="work-head"><span class="work-id">B4</span><span class="pill missing">missing</span></div>
-          <h3>PPS — policy gating API</h3>
+          <h3>AGS — policy gating API</h3>
           <div class="work-exists"><strong>exists</strong>Static HTML corpus; search only; no enforcement; cannot create policies.</div>
           <div class="work-needed"><strong>needed</strong>Add <code>/api/evaluate</code> (does action X violate policy Y?); emit <code>PolicyChanged</code> / <code>PolicyViolated</code>.</div>
-          <div class="work-meta"><span class="dep">dep: A2</span><span class="ref">pps/server.py:76</span></div>
+          <div class="work-meta"><span class="dep">dep: A2</span><span class="ref">ags/server.py:76</span></div>
         </div>
         <div class="work-card partial">
           <div class="work-head"><span class="work-id">B5</span><span class="pill partial">partial</span></div>
           <h3>AOOS — resolve &amp; gate</h3>
-          <div class="work-exists"><strong>exists</strong>Most-built system; but <code>record_id</code> is synthetic; no PPS check on blocks.</div>
-          <div class="work-needed"><strong>needed</strong>Resolve <code>record_id</code> against real PRS records; consult PPS before confirming blocks; emit scheduling &amp; completion events.</div>
+          <div class="work-exists"><strong>exists</strong>Most-built system; but <code>record_id</code> is synthetic; no AGS check on blocks.</div>
+          <div class="work-needed"><strong>needed</strong>Resolve <code>record_id</code> against real PBS records; consult AGS before confirming blocks; emit scheduling &amp; completion events.</div>
           <div class="work-meta"><span class="dep">dep: B1, B4</span><span class="ref">aoos/server.py:107</span></div>
         </div>
       </div>
@@ -320,7 +320,7 @@
           <div class="work-head"><span class="work-id">C1</span><span class="pill missing">missing</span></div>
           <h3>Situation Model / State Estimator</h3>
           <div class="work-exists"><strong>exists</strong>Concept only (the "state estimate" stage). PTOCS is the closest artifact but is a static catalog.</div>
-          <div class="work-needed"><strong>needed</strong>A component that aggregates PRS + PKTS + AOOS signals into a live <em>current state estimate</em> — "where am I now, against where I intend to be".</div>
+          <div class="work-needed"><strong>needed</strong>A component that aggregates PBS + PKTS + AOOS signals into a live <em>current state estimate</em> — "where am I now, against where I intend to be".</div>
           <div class="work-meta"><span class="dep">dep: B1–B3</span><span class="ref">about.html · PVSM</span></div>
         </div>
         <div class="work-card missing">
@@ -359,7 +359,7 @@
           <div class="work-head"><span class="work-id">D1</span><span class="pill missing">missing</span></div>
           <h3>Commitment cascade</h3>
           <div class="work-exists"><strong>exists</strong>The ISCB worked example — but only on paper.</div>
-          <div class="work-needed"><strong>needed</strong>PRS <code>RecordCreated</code>(Commitment) → PEB → AOOS <code>registerAction</code> → PEB → <code>BlockConflictDetected</code> → Notification.</div>
+          <div class="work-needed"><strong>needed</strong>PBS <code>RecordCreated</code>(Commitment) → PEB → AOOS <code>registerAction</code> → PEB → <code>BlockConflictDetected</code> → Notification.</div>
           <div class="work-meta"><span class="dep">dep: B1, B5, A2</span><span class="ref">spec/iscb/spec.md:198</span></div>
         </div>
         <div class="work-card missing">
@@ -373,7 +373,7 @@
           <div class="work-head"><span class="work-id">D3</span><span class="pill missing">missing</span></div>
           <h3>Policy gating flow</h3>
           <div class="work-exists"><strong>exists</strong>Spec'd (<code>governed-by</code> edges) but never enforced.</div>
-          <div class="work-needed"><strong>needed</strong>AOOS block creation → PPS <code>/api/evaluate</code> → block confirmed / rejected / surfaced. Makes policy operational.</div>
+          <div class="work-needed"><strong>needed</strong>AOOS block creation → AGS <code>/api/evaluate</code> → block confirmed / rejected / surfaced. Makes policy operational.</div>
           <div class="work-meta"><span class="dep">dep: B4, B5</span><span class="ref">spec/aoos/spec.md</span></div>
         </div>
       </div>
@@ -398,7 +398,7 @@
           <div class="work-head"><span class="work-id">E2</span><span class="pill missing">missing</span></div>
           <h3>Cross-system record linking</h3>
           <div class="work-exists"><strong>exists</strong>Link vocabularies exist per-system (<code>part-of</code>, <code>governed-by</code>) but never cross a system boundary.</div>
-          <div class="work-needed"><strong>needed</strong>Trace one object across the loop: AOOS action → PRS record → PTOCS capability → PPS policy.</div>
+          <div class="work-needed"><strong>needed</strong>Trace one object across the loop: AOOS action → PBS record → PTOCS capability → AGS policy.</div>
           <div class="work-meta"><span class="dep">dep: A1, B5</span><span class="ref">spec/aoos/spec.md</span></div>
         </div>
       </div>
@@ -409,9 +409,9 @@
   <section>
     <div class="section-label">Suggested Path</div>
     <h2 class="section-title">A Pragmatic Sequence</h2>
-    <p class="body">The dependencies point one way. A minimal viable loop — the smallest thing that genuinely self-regulates — needs only: <strong>A1</strong> (schema) → <strong>A2</strong> (bus) → <strong>B1+B5</strong> (PRS emits, AOOS listens) → <strong>C2</strong> (regulator reading the existing analytics) → <strong>D2</strong> (feed deviations back into AOOS). That five-step spine closes the loop; everything else enriches it.</p>
+    <p class="body">The dependencies point one way. A minimal viable loop — the smallest thing that genuinely self-regulates — needs only: <strong>A1</strong> (schema) → <strong>A2</strong> (bus) → <strong>B1+B5</strong> (PBS emits, AOOS listens) → <strong>C2</strong> (regulator reading the existing analytics) → <strong>D2</strong> (feed deviations back into AOOS). That five-step spine closes the loop; everything else enriches it.</p>
     <div class="callout">
-      <strong>Definition of done — the loop is closed when:</strong> a commitment recorded in PRS appears as an action in AOOS without manual transfer; a deadline missed in AOOS moves the performance scorecard; and the scorecard's deviation produces a rescheduled corrective block — all through the bus, with no human copy-paste between systems.
+      <strong>Definition of done — the loop is closed when:</strong> a commitment recorded in PBS appears as an action in AOOS without manual transfer; a deadline missed in AOOS moves the performance scorecard; and the scorecard's deviation produces a rescheduled corrective block — all through the bus, with no human copy-paste between systems.
     </div>
   </section>
 
