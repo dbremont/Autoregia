@@ -1,7 +1,7 @@
 """
 Autoregia — unified application server.
 
-A single entry point that composes every sub-system (PRS, PKTS, PTOCS, PPS,
+A single entry point that composes every sub-system (PBS, PKTS, PTOCS, AGS,
 AOOS) under path prefixes on one port. Each sub-system keeps its own Flask
 app and static assets; this module loads them and mounts them via a small
 WSGI dispatcher, and serves the Autoregia landing page plus a unified API
@@ -9,17 +9,18 @@ index at the root.
 
     /            landing page (Autoregia index)
     /api/        unified index of sub-systems
-    /prs/...     Personal Recording System         (VSM System 1 — Perception)
+    /pbs/...     Personal Binnacle System         (VSM System 1 — Perception)
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
-    /pais/...   Personal Application Interaction System  (Accounting / audit)
+    /pwts/...   Personal Workstation Tracking System  (Accounting / audit)
     /peos/...   Personal External Observation System  (Perception — external world)
     /gis/...     General Index (Situation Model)
-    /pps/...     Personal Policy System            (System 5 — Policy)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
     /ate/...     Agent Toolbox Ecosystem — the tools an agent uses to get work done (/ate/tool/awes …)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
-    /asrs/...    Agent Self Representation System  (System 5 — representational substrate)
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
+    /ags/...     Agency Grounding System (in the model, not yet built — policies at /ags/policies/…)
+    /gwob/...    General World Observation System gateway (over PEOS, PKTS, PWTS)
+    /pks/...     Personal Knowledge System (conceived, not yet designed — Agent Knowledge substrate)
 
 Sub-systems are not independent apps: they are functional organs of one
 system, surfaced here through one router.
@@ -40,7 +41,7 @@ REPO = os.path.dirname(ROOT)  # repository root: docs, spec, img/ live here
 # Load repo-local defaults (.env is git-ignored). Loaded before any sub-system
 # import: storage/couchdb_store.py reads its config from the environment at
 # import time. Existing environment variables are not overridden, so real env
-# vars (and run.sh exports) still win. In the container run.sh mounts this
+# vars still win. In the container the Makefile deploy targets mount this
 # file at /srv/.env, which this path resolves to as well.
 load_dotenv(os.path.join(REPO, ".env"))
 
@@ -69,17 +70,15 @@ def _load_app(module_name, server_rel_path):
 # tool's static assets, so renaming one here requires re-running the asset
 # prefixing pass (see support/tools/prefix_assets.py).
 SUBSYSTEMS = [
-    ("prs", "Personal Recording System", "module/prs/server.py"),
+    ("pbs", "Personal Binnacle System", "module/pbs/server.py"),
     ("pkts", "Personal Keyword Tracking System", "module/pkts/server.py"),
-    ("pais", "Personal Application Interaction System", "module/pais/server.py"),
+    ("pwts", "Personal Workstation Tracking System", "module/pwts/server.py"),
     ("peos", "Personal External Observation System", "module/peos/server.py"),
     ("gis", "General Index System", "module/gis/server.py"),
-    ("pps", "Personal Policy System", "module/pps/server.py"),
     ("aias", "Agent Intent Aid System", "module/aias/server.py"),
     ("aoos", "Agent Operation Organization System", "module/aoos/server.py"),
     ("ate", "Agent Toolbox Ecosystem", "module/ate/server.py"),
     ("pras", "Personal Reflection & Adaptation System", "module/pras/server.py"),
-    ("asrs", "Agent Self Representation System", "module/asrs/server.py"),
     ("acsms", "Agent Capability Self Management System", "module/acsms/server.py"),
     ("loop", "The Loop — Control-Loop Dashboard", "module/loop/server.py"),
 ]
@@ -119,28 +118,48 @@ def about():
     return send_from_directory(ROOT, "about.html")
 
 
-@app.route("/pwms/")
-def pwms():
+@app.route("/ags/")
+def ags():
     # Landing plate for a system defined in the model but not yet built.
-    # When PWMS is implemented (module/pwms + SUBSYSTEMS), that mount
+    # When AGS is implemented (module/ags + SUBSYSTEMS), that mount
     # shadows this route.
-    return send_from_directory(ROOT, "pwms/index.html")
+    return send_from_directory(ROOT, "ags/index.html")
 
 
-@app.route("/pwms")
-def pwms_redirect():
-    return redirect("/pwms/")
+@app.route("/ags")
+def ags_redirect():
+    return redirect("/ags/")
 
 
-@app.route("/psms/")
-def psms():
-    # Landing plate for a system defined in the model but not yet built.
-    return send_from_directory(ROOT, "psms/index.html")
+@app.route("/ags/policies/<path:name>")
+def ags_policies(name):
+    # Policy corpus (charter, principles, values, commitments, domain policies)
+    # served statically under the AGS mount until AGS is a real sub-system.
+    return send_from_directory(os.path.join(ROOT, "ags", "policies"), name)
 
 
-@app.route("/psms")
-def psms_redirect():
-    return redirect("/psms/")
+@app.route("/gwob/")
+def gwob():
+    # Gateway plate over the observation sub-systems (PEOS, PKTS, PWTS).
+    return send_from_directory(ROOT, "gwob/index.html")
+
+
+@app.route("/pks/")
+def pks():
+    # Landing plate for a system conceived in the model but not yet designed.
+    # When PKS is implemented (module/pks + SUBSYSTEMS), that mount
+    # shadows this route.
+    return send_from_directory(ROOT, "pks/index.html")
+
+
+@app.route("/pks")
+def pks_redirect():
+    return redirect("/pks/")
+
+
+@app.route("/gwob")
+def gwob_redirect():
+    return redirect("/gwob/")
 
 
 @app.route("/img/<path:filename>")
@@ -157,7 +176,7 @@ def docs():
 class _SubsystemMount:
     """Mount sub-apps at path prefixes.
 
-    A bare prefix (``/prs``) is redirected to ``/prs/`` so that the sub-app's
+    A bare prefix (``/pbs``) is redirected to ``/pbs/`` so that the sub-app's
     page is served at a directory URL; this keeps any relative references
     inside the tool resolving against ``/<prefix>/``.
     """

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKS — Personal Knowledge System</title>
+<style>
+  /* Self-hosted typefaces — Spectral · Inter · IBM Plex Mono (relative copies) */
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:300;font-display:swap;src:url('/pbs/fonts/spectral-300.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/spectral-500.woff2') format('woff2')}
+  @font-face{font-family:'Spectral';font-style:italic;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400i.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/inter-400.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/inter-500.woff2') format('woff2')}
+  @font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/pbs/fonts/inter-600.woff2') format('woff2')}
+  @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/plexmono-400.woff2') format('woff2')}
+  @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/plexmono-500.woff2') format('woff2')}
+
+  :root{
+    --ink:#1c1916; --ink-soft:#4a443d; --muted:#7a736a;
+    --rule:#d8d0c4; --paper:#FAFAF6; --surface:#fffdf8;
+    --accent:#7A1A2A; --gold:#A8854A;
+    --serif:"Spectral","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono","SF Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 28px}
+  nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+  nav.topnav .topnav-in{max-width:880px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:18px}
+  nav.topnav .lockup{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  nav.topnav .links{margin-left:auto;display:flex;gap:26px}
+  nav.topnav .links a{font-family:var(--sans);font-size:13px;color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+  nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  header.masthead{padding:72px 0 0;text-align:center}
+  .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:16px}
+  h1.title{font-size:clamp(52px,8vw,84px);font-weight:300;letter-spacing:-.02em;line-height:1;margin-bottom:10px}
+  .subtitle{font-size:20px;color:var(--ink-soft);font-style:italic}
+  .gold-rule{height:1px;background:var(--gold);width:64px;margin:28px auto;opacity:.7}
+  p.lede{font-size:17.5px;color:var(--ink-soft);max-width:640px;margin:0 auto;line-height:1.65}
+  .status{margin:36px auto 0;max-width:640px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 20px;font-family:var(--sans);font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:baseline;text-align:left}
+  .status .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding:2px 7px;white-space:nowrap}
+  .status a{color:var(--accent);text-decoration:none}
+  .status a:hover{text-decoration:underline}
+  .section-eyebrow{margin:56px 0 0;font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  p.section-intro{max-width:680px;font-size:15px;color:var(--ink-soft);font-style:italic;margin-top:10px;line-height:1.65}
+  .lineage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:18px 0 0}
+  a.lineage-card{display:block;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:22px 24px;text-decoration:none;color:inherit;transition:transform .16s,box-shadow .16s,border-color .16s}
+  a.lineage-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(28,25,22,.45);border-color:var(--gold)}
+  .lc-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .lc-title{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.01em;color:var(--ink);margin-top:6px}
+  .lc-rule{height:1px;background:var(--gold);width:36px;margin:12px 0;opacity:.6}
+  .lc-desc{font-size:14.5px;color:var(--ink-soft);font-style:italic;line-height:1.6}
+  .lc-open{font-family:var(--sans);font-size:12px;color:var(--accent);margin-top:14px}
+  footer{border-top:1px solid var(--rule);margin-top:72px;padding:32px 0 56px;text-align:center}
+  footer .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-in">
+    <a class="lockup" href="/index.html">Autoregia</a>
+    <div class="links">
+      <a href="/index.html#loop">Systems</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Agent Knowledge · Substrate</div>
+    <h1 class="title">PKS</h1>
+    <div class="subtitle">Personal Knowledge System</div>
+    <div class="gold-rule"></div>
+    <p class="lede">The agent's knowledge substrate — the corpus of concepts, episteme, and technique it holds, externalized, indexed, and made retrievable for understanding and action.</p>
+    <div class="status">
+      <span class="tag">conceived — not yet designed</span>
+      <span>PKS fills the Agent Knowledge element of the loop. Its full design is not yet written — see <a href="/about.html#elements">the Element Set</a>. Its epistemic lineage lives in two sibling projects, below.</span>
+    </div>
+  </header>
+
+  <div class="section-eyebrow">The Lineage</div>
+  <p class="section-intro">PKS's epistemic foundations are being built in the open — two sibling projects carry the theory it will materialize.</p>
+  <div class="lineage-grid">
+    <a class="lineage-card" href="https://github.com/csiglab/Naturgnosis" target="_blank" rel="noopener">
+      <div class="lc-eyebrow">csiglab</div>
+      <div class="lc-title">Naturgnosis</div>
+      <div class="lc-rule"></div>
+      <div class="lc-desc">Formalizes the epistemic elements that enable an agent to navigate reality — especially social reality; an index of the world's technique and episteme.</div>
+      <div class="lc-open">Explore ↗</div>
+    </a>
+    <a class="lineage-card" href="https://github.com/dbremont/Epistecnica" target="_blank" rel="noopener">
+      <div class="lc-eyebrow">dbremont</div>
+      <div class="lc-title">Epistecnica</div>
+      <div class="lc-rule"></div>
+      <div class="lc-desc">A unified framework for the two dimensions of human agency: knowing (Epistemica) and acting (Tecnica).</div>
+      <div class="lc-open">Explore ↗</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap"><span class="mono">Autoregia · PKS — what the agent knows</span></div>
+</footer>
+
+</body>
+</html>

@@ -14,18 +14,19 @@ See `README.md` for the system map and `logos.log.md` for the decision log.
 app/                 the application
 ├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix dispatcher)
 ├── index.html       landing plate        ├── about.html   docs.html
-├── module/          the sub-systems (prs, pkts, pais, peos, gis, pps, aias,
-│                    aoos, ate, pras, asrs, acsms, loop, pwos)
+├── module/          the sub-systems (pbs, pkts, pwts, peos, gis, aias,
+│                    aoos, ate, pras, acsms, loop, pwos)
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── awes/  a tool (own Flask app, mounted at /ate/tool/awes/)
+│         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
 spec/                conceptual specs (spec/ui.spec = normative design spec)
 config/              deployed config — peos_sources.json = PEOS sources policy
                      file (spec/peos/policy.md); seeds only an empty DB
 design.md            style standard (tokens, typography, conformance)
-img/  requirements.txt  Dockerfile  run.sh  .env (git-ignored)
+img/  requirements.txt  Dockerfile  Makefile  .env (git-ignored)
 ```
 
 Root plates (`index/about/docs.html`) are served from `app/`; `/img/…` is
@@ -34,18 +35,24 @@ served from the repository root.
 ## Commands
 
 ```sh
-# run locally (8080 is often taken; the deployed container uses 8081)
-AUTOREGIA_PORT=8090 python3 app/app.py
+# run locally, no docker (8080 is often taken; the deployed container uses 8081)
+make run               # also: make run DEV_PORT=8091
 
-# deploy (build image + recreate container `autoregia`; requires CouchDB up)
-./run.sh deploy        # also: pull | logs | stop
+# deploy — two paths, one container (`autoregia`; requires CouchDB up):
+make deploy-local      # build the local image (autoregia:local) and run it — dev/testing
+make deploy-server     # pull the GHCR image CI publishes and run it — production
+# also: make build | logs | stop
 
 # tests (PEOS + GIS tests need CouchDB running on 127.0.0.1:5984)
-python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py
+make test              # = python3 -m pytest app/module/ate/tool/awes/test_awes.py \
+                       #    app/module/peos/test_peos.py app/module/gis/test_gis.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
-python3 app/support/tools/prefix_assets.py
+make prefix-assets
 ```
+
+**Agents may only deploy with `make deploy-local`.** `make deploy-server`
+pulls the production image and is reserved for the human operator.
 
 No linter is configured.
 
@@ -67,12 +74,12 @@ No linter is configured.
   intra-module imports) by walking up a fixed number of `dirname`s. If you
   move files, those depths move in lockstep — count them, don't guess.
 - **`support/shared/focus_watcher.py`** is the single source of truth for the
-  focused window, shared by PAIS and PKTS collectors. Never fork it.
+  focused window, shared by PWTS and PKTS collectors. Never fork it.
 - **Design standard:** `design.md` governs every plate and sub-system UI.
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
   (`static/fonts/`) — never add CDN links. Normative spec: `spec/ui.spec`;
-  reference implementation: `app/module/prs/static/`.
+  reference implementation: `app/module/pbs/static/`.
 - **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,
@@ -94,6 +101,11 @@ No linter is configured.
   `ptocs_activity` (activity log). Test suites use isolated prefixes
   (`peos_test_`, `gis_test_`) and never touch dev data.
 - Push to `main` → GitHub Actions builds and pushes the image to GHCR.
+- Deploy with `make deploy-server` (pull the GHCR image — production) or
+  `make deploy-local` (build `autoregia:local` from the repo — dev/testing).
+  Both recreate container `autoregia` (`--network host`, `.env` mounted
+  read-only at `/srv/.env`, port from `AUTOREGIA_PORT` in `.env`).
+  Coding agents may only run `make deploy-local` — never `make deploy-server`.
 - `app/module/pwos/` and `*.log` are git-ignored; `pwos` also has an ignore
   rule for `config/`.
 
@@ -102,50 +114,71 @@ No linter is configured.
 Git hooks are global (`core.hooksPath = ~/configs/global/git/hooks`), not
 in-repo. Commits are SSH-signed via 1Password (`op-ssh-sign`).
 
-- **Commit message:** `<type>(<optional scope>): <description>`; type is one of
-  `feat | fix | docs | style | refactor | test | chore` (see `guideline.md`).
-- **Pre-commit policies** (run in order from `pre-commit.d/`):
-  1. *Authorization* — every staged file needs xattr `user.checkin=1`;
-     mark first: `mark-for-commit <file> …`, then `git commit`.
-  2. *Annotations* — staged sources containing `@WORKING @FIXME @QUESTION
-     @VERIFY` reject the commit (`@TODO @HACK @WORKAROUND` warn; `@TECH-DEBT
-     @REFACTOR @OPTIMIZE @RATIONALE @NOTE` are informational). Applies to the
-     source patterns in `annotations.conf` (`.py`, `.js`, `.html`, `.css`, …).
-  3. *Encoding* — staged text files must be UTF-8, no BOM, LF line endings
-     (`dos2unix <file>` fixes CRLF).
-- **`prepare-commit-msg` rewrites the message** to
+### Hook anatomy
+
+- `pre-commit` runs the scripts in `pre-commit.d/` in lexical order:
+  `00-authorization-policy.sh` → `01-annotation-policy.sh` →
+  `02-encoding-policy.sh`. Any failure rejects the commit.
+- Configuration lives beside the hooks: `annotations.conf` classifies the
+  annotation tokens and lists the inspected file patterns (`FILES`).
+- `prepare-commit-msg` rewrites the message to
   `type(<branch-or-Jira>): message` — `git commit -m` is NOT exempt, and
   neither is `--amend -m` (with `-m` the hook sees `COMMIT_SOURCE=message`
   and overwrites). To set a real message: commit, then bypass the hook for
   the amend:
   `git -c core.hooksPath=/dev/null commit --amend -m "<type>(<scope>): <desc>"`.
   (History shows `type(main): message` commits from `-m`-only flows.)
-- **Post-commit** clears `user.checkin` marks from committed files.
-- **Commit workflow (step by step):**
-  1. *Inspect* — `git status`, `git diff`, `git log --oneline -5`; stage only
-     intended files (`git add <paths>`), never blanket `git add .`.
-  2. *Authorize* — `mark-for-commit <file> …` for every staged file (sets
-     xattr `user.checkin=1`; unmarked files reject the commit).
-  3. *Pre-flight* — annotation policy: sources containing `@WORKING @FIXME
-     @QUESTION @VERIFY` block the commit — fix or reword before staging.
-     Encoding: UTF-8, no BOM, LF (`dos2unix <file>` if needed).
-  4. *Commit* — `git commit -m "wip"` is acceptable at this step because the
-     hook rewrites the message anyway.
-  5. *Set the real message* — `git -c core.hooksPath=/dev/null commit
-     --amend -m "<type>(<scope>): <desc>"` (bypass the hook: a plain
-     `--amend -m` is rewritten too). Verify with `git log --oneline -1`
-     that the message survived; never leave a hook-rewritten
-     `type(main): wip` behind.
-  6. *Cleanup* — post-commit clears the xattr marks automatically; re-verify
-     the diff after any structural moves.
+- `post-commit` clears `user.checkin` marks from committed files.
+
+### Pre-commit policies
+
+1. *Authorization* — every staged **added/copied/modified** file needs xattr
+   `user.checkin=1`; mark first: `mark-for-commit <file> …`, then
+   `git commit`. Deletions and rename source paths need **no** marks —
+   `mark-for-commit` prints `✗ Not found` for them and that is harmless.
+   The one-liner for a staged set:
+   `git diff --cached --name-only | xargs mark-for-commit`.
+2. *Annotations* — staged sources containing `@WORKING @FIXME @QUESTION
+   @VERIFY` reject the commit (`@TODO @HACK @WORKAROUND` warn;
+   `@TECH-DEBT @REFACTOR @OPTIMIZE @RATIONALE @NOTE` are informational).
+   Applies only to the source patterns in `annotations.conf` (`.py`, `.js`,
+   `.html`, `.css`, `.yaml`, …) — **`.md` files are not inspected**, so docs
+   may mention the tokens verbatim. Fix or reword blockers before staging.
+3. *Encoding* — default policy: staged text files must be UTF-8, no BOM, LF
+   line endings (`dos2unix <file>` fixes CRLF). A machine-local override,
+   `~/configs/global/git/hooks/.local` (`ENCODING=<value>`, git-ignored,
+   never commit it), replaces the default **for every repo on that machine**.
+   Gotcha: if valid UTF-8 files are rejected with *"Invalid encoding
+   (expected ISO-8859-1 …)"*, the `.local` override on this machine is not
+   UTF-8 — set `ENCODING=UTF-8` in that file (manually) before committing.
+
+### Commit workflow (step by step)
+
+1. *Inspect* — `git status`, `git diff`, `git log --oneline -5`; stage only
+   intended files (`git add <paths>`), never blanket `git add .`.
+2. *Authorize* — `git diff --cached --name-only | xargs mark-for-commit`
+   (unmarked added/modified files reject the commit; deletions are exempt).
+3. *Pre-flight* — annotation blockers and encoding: fix or reword before
+   staging; UTF-8, no BOM, LF.
+4. *Commit* — `git commit -m "wip"` is acceptable at this step because the
+   hook rewrites the message anyway.
+5. *Set the real message* — `git -c core.hooksPath=/dev/null commit
+   --amend -m "<type>(<scope>): <desc>"` (bypass the hook: a plain
+   `--amend -m` is rewritten too). Verify with `git log --oneline -1`
+   that the message survived; never leave a hook-rewritten
+   `type(main): wip` behind.
+6. *Cleanup* — post-commit clears the xattr marks automatically; re-verify
+   the diff after any structural moves.
+
+- **Commit message:** `<type>(<optional scope>): <description>`; type is one of
+  `feat | fix | docs | style | refactor | test | chore` (see `guideline.md`).
 - Keep commits scoped; re-verify after structural moves (see checklist).
 
 ## Post-change checklist
 
-1. `AUTOREGIA_PORT=8090 python3 app/app.py` → all mounts return 200,
+1. `make run` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py`
-   → 62 passed.
-3. `./run.sh deploy` → curl the mount matrix on the container port; check
+2. `make test` → 76 passed.
+3. `make deploy-local` → curl the mount matrix on the container port; check
    `docker logs autoregia` for tracebacks.
 4. Update `README.md` tree/links if the layout changed.
