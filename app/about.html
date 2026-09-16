@@ -911,6 +911,16 @@
       <blockquote>The <strong>Abstract Agency Framework Formulation</strong> provides the tools, mechanisms, and
         organizational
         structure through which each agency function is realized in practice.</blockquote>
+      <blockquote>Human agents already possess the capacity to act, regulate themselves, manage resources
+        and intentions, monitor their circumstances, and adapt their behavior without a formalized
+        system; Autoregia does not automate or replace these capacities but provides the means to
+        externalize, structure, and deliberately exercise them. Yet <strong>externalizing a capacity
+          does not leave it unchanged</strong> — the structures, mechanisms, and tools of the forma alter
+        what can be represented, remembered, coordinated, monitored, and acted upon, and introduce new
+        forms of organization and feedback. In becoming part of the agent's mode of operation, the
+        forma does not merely guide existing capacities: through its use they are <strong>extended,
+          transformed, and reorganized</strong>, producing new patterns of representation, coordination,
+        regulation, deliberation, and action — and with them, the agent and its agency themselves.</blockquote>
 
       <div class="section-label" style="margin-top:40px">The Control Loop</div>
       <blockquote>The <strong>Control Loop</strong> serves as the organizing principle of the Abstract Agency Framework,
@@ -936,6 +946,9 @@
       <blockquote>The <strong>forma is composed of a set of concrete </strong> structures, mechanisms, guides,  systems, and other such means that provide the agent with
         the means to externalize, organize, coordinate, operate (task execution),  regulate, and augment its exercise of agency. Some of these
         include:</blockquote>
+      <blockquote>The <strong>Control Loop Mapping</strong> column names the stages of the Control Loop — as laid out in
+        the diagram above — that each element realizes. One element may serve several stages; some stages are served by
+        the agent directly and remain unexternalized.</blockquote>
       <table class="t">
         <thead>
           <tr>
@@ -952,14 +965,14 @@
             <td>Grounds the agent in one coherent stance — binds the World boundary, the Self Model, and Policy into a
               single structure: who the agent is, where it stands, and what it may commit to; checks over-allocation,
               constraint violation, and value drift.</td>
-            <td>Substrate · Grounding</td>
+            <td>Agent State · Configuration &amp; Meta-Cognitive</td>
           </tr>
           <tr>
             <td class="code"><a href="/gis/">GIS</a></td>
             <td>General Index System</td>
             <td>The general index of everything the agent knows and uses — each entry a point → element pair pointing
               into the systems or out to the world (GitHub projects, documents, services).</td>
-            <td>Substrate · Capability</td>
+            <td>Memory · Semantic (Index) · Capability Registry</td>
           </tr>
           <tr>
             <td class="code"><a href="/pks/">PKS</a></td>
@@ -967,14 +980,14 @@
             <td>The agent's knowledge substrate — the corpus of concepts, episteme, and technique it holds,
               externalized,
               indexed, and made retrievable for understanding and action.</td>
-            <td>Agent Knowledge · Substrate</td>
+            <td>Memory · Semantic &amp; Procedural</td>
           </tr>
           <tr>
             <td class="code"><a href="/pbs/">PBS</a></td>
             <td>Personal Binnacle System</td>
             <td>Maintains an ongoing operational record — the ship's log — of internal &amp; environmental state,
               for persistent capture, discovery, and retrieval; the sense organs of the loop.</td>
-            <td>Perception</td>
+            <td>Perception (Signal Acquisition) · Memory (Episodic)</td>
           </tr>
           <tr>
             <td class="code"><a href="/gwob/">GWOB</a></td>
@@ -982,7 +995,7 @@
             <td>One gateway over observation — PEOS watches the external world (free public feeds), PKTS tracks
               keyword attention and resource usage, PWTS records workstation interaction; an aggregate view of the
               state of affairs across the three.</td>
-            <td>Perception · Gateway</td>
+            <td>Perception → Situation Model (State Estimation)</td>
           </tr>
           <tr>
             <td class="code"><a href="/aias/">AIAS</a></td>
@@ -990,28 +1003,28 @@
             <td>Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates,
               evaluates, commits, monitors, and revises intentions, yielding the <b>Active Intent Set</b> that directs
               planning and execution.</td>
-            <td>Intent Management</td>
+            <td>Intent &amp; Commitment Management → Active Commitment Set</td>
           </tr>
           <tr>
             <td class="code"><a href="/aoos/">AOOS</a></td>
             <td>Agent Operation Organization System</td>
             <td>Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated
               plan.</td>
-            <td>Action Organization</td>
+            <td>Operation Control (Executive Control) · Plan Management · Tasking &amp; Scheduling · Resource Allocation</td>
           </tr>
           <tr>
             <td class="code"><a href="/ate/">ATE</a></td>
             <td>Agent Toolbox Ecosystem</td>
             <td>The toolbox the agent opens when work must be done — hosts its tools: AOOS organizes the work, AWES
               executes it, GIAL connects external systems, SARL reviews the texts.</td>
-            <td>Action Organization · Execution</td>
+            <td>Execution (Actuation) · Perform Tasks · Interact with Environment</td>
           </tr>
           <tr>
             <td class="code"><a href="/pras/">PRAS</a></td>
             <td>Personal Reflection &amp; Adaptation System</td>
             <td>A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into
               adaptations.</td>
-            <td>Feedback</td>
+            <td>Self-Audit (Meta-Control) · Outcome Audit → Synthesis &amp; Learning</td>
           </tr>
           <tr>
             <td class="code"><a href="/acsms/">ACSMS</a></td>
@@ -1019,7 +1032,7 @@
             <td>The agent's improvement engine — turns detected capability gaps (GIS, PKTS) and feedback adaptations
               (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self
               Model (AGS) and the index (GIS).</td>
-            <td>Substrate · Capability Self-Management</td>
+            <td>Self-Audit · Synthesis &amp; Learning → State Update (Capability → Procedural Memory)</td>
           </tr>
 
 
@@ -1057,19 +1070,19 @@
             <td class="code"><a href="/ate/tool/awes/">AWES</a></td>
             <td>Provisions computational environments, dispatches work units, captures artifacts, and feeds results back
               into the loop.</td>
-            <td>Execution</td>
+            <td>Execution (Actuation) · Execute Plans</td>
           </tr>
           <tr>
             <td class="code"><a href="/ate/tool/gial/">GIAL</a></td>
             <td>One abstraction for connections to external systems — integrations, connections, actions, and logged
               executions, in the n8n / Zapier tradition.</td>
-            <td>Integration · designed</td>
+            <td>Execution · Interact with Environment · designed</td>
           </tr>
           <tr>
             <td class="code"><a href="/ate/tool/sarl/">SARL</a></td>
             <td>Verifies and corrects the linguistic, stylistic, terminological, and orthotypographic aspects of a text
               — evidence-cited findings, explicit dispositions, and a corrected text with a change log.</td>
-            <td>Language Review · designed</td>
+            <td>Execution · Language Review · designed</td>
           </tr>
         </tbody>
       </table>
@@ -1095,18 +1108,18 @@
             <td class="code"><a href="/peos/">PEOS</a></td>
             <td>Observes the external world — free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT);
               analytics turn the stream into orientation.</td>
-            <td>Perception · External World</td>
+            <td>Perception · External World (Signal Acquisition)</td>
           </tr>
           <tr>
             <td class="code"><a href="/pkts/">PKTS</a></td>
             <td>Tracks resource usage and keyword attention over time — a longitudinal signal feeding back into the
               loop.</td>
-            <td>Perception · Audit</td>
+            <td>Perception · Self — Dynamic &amp; Resource State</td>
           </tr>
           <tr>
             <td class="code"><a href="/pwts/">PWTS</a></td>
             <td>Records workstation interaction; joins PKTS to surface per-application analytics.</td>
-            <td>Perception</td>
+            <td>Perception · Self — Workstation Interaction</td>
           </tr>
         </tbody>
       </table>
