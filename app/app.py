@@ -19,7 +19,7 @@ index at the root.
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
     /ags/...     Agency Grounding System (in the model, not yet built — policies at /ags/policies/…)
-    /gwob/...    General World Observation System gateway (over PEOS, PKTS, PWTS)
+    /gwob/...    General World and Self Observation System gateway (over PEOS, PKTS, PWTS)
     /pks/...     Personal Knowledge System (conceived, not yet designed — Agent Knowledge substrate)
 
 Sub-systems are not independent apps: they are functional organs of one
@@ -123,7 +123,7 @@ def ags():
     # Landing plate for a system defined in the model but not yet built.
     # When AGS is implemented (module/ags + SUBSYSTEMS), that mount
     # shadows this route.
-    return send_from_directory(ROOT, "ags/index.html")
+    return send_from_directory(ROOT, "module/ags/index.html")
 
 
 @app.route("/ags")
@@ -135,13 +135,13 @@ def ags_redirect():
 def ags_policies(name):
     # Policy corpus (charter, principles, values, commitments, domain policies)
     # served statically under the AGS mount until AGS is a real sub-system.
-    return send_from_directory(os.path.join(ROOT, "ags", "policies"), name)
+    return send_from_directory(os.path.join(ROOT, "module", "ags", "policies"), name)
 
 
 @app.route("/gwob/")
 def gwob():
     # Gateway plate over the observation sub-systems (PEOS, PKTS, PWTS).
-    return send_from_directory(ROOT, "gwob/index.html")
+    return send_from_directory(ROOT, "module/gwob/index.html")
 
 
 @app.route("/pks/")
@@ -149,7 +149,7 @@ def pks():
     # Landing plate for a system conceived in the model but not yet designed.
     # When PKS is implemented (module/pks + SUBSYSTEMS), that mount
     # shadows this route.
-    return send_from_directory(ROOT, "pks/index.html")
+    return send_from_directory(ROOT, "module/pks/index.html")
 
 
 @app.route("/pks")
