@@ -4,7 +4,7 @@
 
 > Autoregia is not a manager of the agent; it is an enabling infrastructure for agency.
 
-> Agents naturally act and manage themselves even without a formalized system. Autoregia proposes an abstract agency framework that provides an abstract organizational skeleton for the essential functions of agency. Rather than automating or replacing agency, it augments the agent with structures and mechanisms for deliberate self-regulation, resource management, intention management, monitoring, and adaptation, enabling more capable, resilient, and sustained autonomous behavior.
+> Agents naturally act and manage themselves even without a formalized system. Autoregia proposes an abstract agency framework that provides a forma for agency — a channel that shapes the flow without flowing, which the agent may enter, leave, or ignore. Rather than automating or replacing agency, it augments the agent with structures and mechanisms for deliberate self-regulation, resource management, intention management, monitoring, and adaptation, enabling more capable, resilient, and sustained autonomous behavior.
 
 > Autoregia integrates a diverse set of tools and ideas into a coherent agency abstract framework that supports the essential functions of personal agency, including task prioritization, planning, scheduling, resource management, self-regulation, and more.
 
@@ -73,7 +73,7 @@ The Abstract Agency Framework is instantiated by a set of cooperating systems, e
 | **AGS** | Agency Grounding System | Substrate · Grounding | Grounds the agent in one coherent stance — binds the World boundary, the Self Model, and Policy into a single structure: who the agent is, where it stands, and what it may commit to; checks over-allocation, constraint violation, and value drift. |
 | **PTOCS** | Personal Technical Object Catalog System | Substrate · Capability | Catalog of the technical objects the agent relies on — software, services, hardware, references, infrastructure. |
 | **PBS** | Personal Binnacle System | Perception | Externalizes internal & environmental state for persistent recording, discovery, and retrieval — the sense organs of the loop. |
-| **GWOB** | General World Observation System | Perception · Gateway | One gateway over observation — PEOS watches the external world (free public feeds), PKTS tracks keyword attention and resource usage, PWTS records workstation interaction; an aggregate view of the state of affairs across the three. |
+| **GWOB** | General World and Self Observation System | Perception · Gateway | One gateway over observation — PEOS watches the external world (free public feeds), PKTS tracks keyword attention and resource usage, PWTS records workstation interaction; an aggregate view of the state of affairs across the three. |
 | **AIAS** | Agent Intent Aid System | Intent Management | Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the **Active Intent Set** that directs planning and execution. |
 | **AOOS** | Agent Operation Organization System | Action Organization | Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan. |
 | **AWES** | Automated Work Execution System | Execution | Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop. |
@@ -149,7 +149,7 @@ Four properties define a framework for agency:
 - **Separation of concerns** — it distinguishes perception from decision, decision from execution, execution from regulation, so each function can be examined and improved independently.
 - **Generative** — it can be instantiated by concrete tools and practices, and reused to analyze, engineer, and improve any agent's capacity for self-regulated, goal-directed behavior.
 
-Autoregia is such a framework: it provides the abstract organizational skeleton for the essential functions of agency, which the Abstract Agency Framework Formulation (the Personal Viable System Model) then instantiates with concrete personal systems.
+Autoregia is such a framework: it provides a forma for the essential functions of agency — a channel that shapes the flow without flowing, which the agent may enter, leave, or ignore — which the Abstract Agency Framework Formulation (the Personal Viable System Model) then instantiates with concrete personal systems.
 
 ## References
 
