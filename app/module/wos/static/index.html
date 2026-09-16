@@ -27,12 +27,6 @@
       <span class="search-icon"><wos-icon name="search" size="16"></wos-icon></span>
       <input type="search" id="globalSearch" placeholder="Search the global stream…  ( Ctrl K )" autocomplete="off">
     </div>
-    <div class="header-actions">
-      <button class="btn-icon" id="btnBack" title="Back" aria-label="Back"><wos-icon name="arrow-left" size="16"></wos-icon></button>
-      <button class="btn btn-ghost btn-sm" id="btnDocs" title="Documentation"><wos-icon name="clipboard-list" size="15"></wos-icon> Docs</button>
-      <button class="btn-icon" id="btnSettings" title="Settings" aria-label="Settings"><wos-icon name="settings" size="16"></wos-icon></button>
-      <button class="btn btn-primary btn-sm" id="btnExport" title="Export"><wos-icon name="download" size="15"></wos-icon> Export</button>
-    </div>
   </header>
 
   <!-- ═══ Sidebar ═══ -->
@@ -40,8 +34,8 @@
     <nav class="sidebar-nav" id="sidebarNav"></nav>
     <div class="sidebar-colophon">
       <div class="colophon-rule"></div>
-      <div class="colophon-title">“Information is a compass, not a destination.”</div>
-      <div class="colophon-meta">— Autoregia Eternal · v0.3.0</div>
+      <div class="colophon-title">“Observations that drive intelligibility.”</div>
+      <div class="colophon-meta">— WOS · Autoregia </div>
     </div>
   </aside>
 
@@ -78,25 +72,11 @@
       <button class="btn-icon" onclick="WOS.scratchpad.close()"><wos-icon name="x" size="17"></wos-icon></button>
     </div>
     <div class="scratchpad-body">
-      <textarea id="scratchpadText" placeholder="Type a phrase to filter the signal stream…"></textarea>
+      <textarea id="scratchpadText" placeholder="Type a phrase to filter the observation stream…"></textarea>
       <div style="display:flex;gap:var(--space-2);margin-top:var(--space-3);justify-content:flex-end;">
         <button class="btn btn-secondary btn-sm" onclick="WOS.scratchpad.close()">Cancel</button>
         <button class="btn btn-primary btn-sm" onclick="WOS.scratchpad.save()">Filter</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ App Modal (Docs) ═══ -->
-<div class="modal-overlay hidden" id="appModal">
-  <div class="modal" style="max-width:680px;">
-    <div class="modal-header">
-      <h2 id="modalTitle">Documentation</h2>
-      <button class="btn-icon" onclick="WOS.closeModal()"><wos-icon name="x" size="17"></wos-icon></button>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary btn-sm" onclick="WOS.closeModal()">Close</button>
     </div>
   </div>
 </div>

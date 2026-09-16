@@ -16,7 +16,7 @@ WOS.Landscape = (() => {
   }
   function render(){
     return `
-      ${v.header('lexicon','Landscape', `<div class="seg" id="landMode">
+      ${v.header('Landscape', `<div class="seg" id="landMode">
         <button class="seg-btn ${mode==='cloud'?'active':''}" data-m="cloud">word cloud</button>
         <button class="seg-btn ${mode==='treemap'?'active':''}" data-m="treemap">treemap</button>
       </div><div class="seg" id="landGrams">

@@ -8,7 +8,7 @@ WOS.Composition = (() => {
   const v = WOS.view;
   function render(){
     return `
-      ${v.header('make-up','Composition', v.windowSeg())}
+      ${v.header('Composition', v.windowSeg())}
       <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">Where the signal comes from and how it groups — the donut splits by source, the bars by semantic cluster.</p>
       <div class="chart-grid-2">
         ${v.chartCard('chartDonut','share','By source','click a slice')}

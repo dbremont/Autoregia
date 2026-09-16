@@ -3,8 +3,10 @@
    ════════════════════════════════════════════════════════════ */
 window.WOS = window.WOS || {};
 WOS.view = {
-  header(eyebrow, title, actionsHtml='') {
-    return `<div class="content-header"><div><span class="eyebrow">${eyebrow}</span><h1>${title}</h1></div><div class="actions">${actionsHtml}</div></div>`;
+  // No eyebrow above the H1: the section name already lives in the
+  // sidebar; repeating it in appContent is noise (design decision).
+  header(title, actionsHtml='') {
+    return `<div class="content-header"><div><h1>${title}</h1></div><div class="actions">${actionsHtml}</div></div>`;
   },
   chartCard(id, eyebrow, title, sub='') {
     return `<div class="chart-card animate-in">

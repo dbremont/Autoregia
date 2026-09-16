@@ -89,7 +89,7 @@ WOS.Search = (() => {
       </div>`;
     const srcChips = Object.entries(f.src).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<span class="facet-chip" data-source="${k}">${k} <span class="text-faint">${n}</span></span>`).join('');
     return `
-      ${v.header('ground truth','Search')}
+      ${v.header('Search')}
       <form class="search-bar animate-in" id="searchForm">
         <div class="search-input-wrap">
           <span class="search-icon">${WOS.icon('search',16)}</span>

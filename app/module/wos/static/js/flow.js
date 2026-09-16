@@ -20,7 +20,7 @@ WOS.Flow = (() => {
   }
   function render(){
     return `
-      ${v.header('temporal','Flow', v.windowSeg())}
+      ${v.header('Flow', v.windowSeg())}
       <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">A stream graph of the signal over time — ribbon thickness is volume. Read it left to right to see when and where the conversation swells.</p>
       <div class="chart-card animate-in">
         <div class="chart-head"><div><span class="eyebrow">stream graph</span><h3>Volume by source</h3></div></div>
