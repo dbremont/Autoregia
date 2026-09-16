@@ -191,6 +191,88 @@ def get_sources():
     return jsonify(specs)
 
 
+@app.route("/api/sources/status", methods=["GET"])
+def sources_status():
+    """Per-spec status: poll cursors + health, and observation counts per
+    adapter type.
+
+    One pass over the store joins the seed specs with their ``state`` cursor
+    docs; per-spec observation counts are not derivable (docs carry only the
+    adapter name), so counts are reported per type in ``per_type``. Health
+    derives from the cursor alone:
+
+    * ``failing``  — the last poll errored (``last_error``/``error_count``)
+    * ``pending``  — never fetched (no cursor yet)
+    * ``degraded`` — fetched, but the last fetch is older than 24h
+    * ``healthy``  — otherwise
+    """
+    specs = _specs()
+    counts: dict[str, int] = {}
+    counts_24h: dict[str, int] = {}
+    total_obs = 0
+    total_obs_24h = 0
+    states: dict[str, dict] = {}
+    cut_24h = now_ms() - 24 * 3_600_000
+    for d in store.all():
+        if d.get("doc_type") == "observation":
+            src = d.get("source", "?")
+            counts[src] = counts.get(src, 0) + 1
+            total_obs += 1
+            if (d.get("observed_at_ms") or 0) >= cut_24h:
+                counts_24h[src] = counts_24h.get(src, 0) + 1
+                total_obs_24h += 1
+        elif d.get("doc_type") == "state" and d.get("source_id"):
+            states[d["source_id"]] = d
+
+    now = now_ms()
+    stale_ms = 24 * 3_600_000
+    tallies = {"healthy": 0, "degraded": 0, "failing": 0, "pending": 0}
+    out = []
+    for s in specs:
+        st = states.get(s.get("id", "")) or {}
+        errored = bool(st.get("last_error")) or (st.get("error_count") or 0) > 0
+        last_fetched = st.get("last_fetched_ms") or 0
+        if errored:
+            health = "failing"
+        elif not last_fetched:
+            health = "pending"
+        elif now - last_fetched > stale_ms:
+            health = "degraded"
+        else:
+            health = "healthy"
+        tallies[health] += 1
+        out.append({
+            "id": s.get("id"),
+            "source": s.get("source"),
+            "query": s.get("query"),
+            "enabled": s.get("enabled", True),
+            "interval_s": s.get("interval_s", 0),
+            "last_fetched_ms": last_fetched or None,
+            "last_observed_ms": st.get("last_observed_ms"),
+            "last_error": st.get("last_error"),
+            "error_count": st.get("error_count", 0),
+            "health": health,
+        })
+
+    per_type = [
+        {"type": t,
+         "specs": sum(1 for s in specs if s.get("source") == t),
+         "observations": counts.get(t, 0),
+         "observations_24h": counts_24h.get(t, 0)}
+        for t in sorted({s.get("source", "?") for s in specs})
+    ]
+    return jsonify({
+        "generated_at": now_iso(),
+        "totals": {"specs": len(specs),
+                   "enabled": sum(1 for s in specs if s.get("enabled", True)),
+                   "observations": total_obs,
+                   "observations_24h": total_obs_24h,
+                   **tallies},
+        "per_type": per_type,
+        "sources": out,
+    })
+
+
 # ── observations: read ───────────────────────────────────────────────────────
 @app.route("/api/observations", methods=["GET"])
 def get_observations():

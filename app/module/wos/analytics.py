@@ -327,4 +327,5 @@ def compute(obs: list[dict], lexicon: dict, cluster_assignments: Optional[dict] 
         "tone": tone_aggregates(obs, lexicon),
         "clusters": cluster_summary(obs, cluster_assignments or {}),
         "sources": dict(Counter(o.get("source", "?") for o in obs)),
+        "regions": dict(Counter(o.get("region") or "Unknown" for o in obs)),
     }

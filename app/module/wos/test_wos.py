@@ -111,13 +111,23 @@ def test_reddit_parse(monkeypatch):
 def test_gdelt_parse(monkeypatch):
     monkeypatch.setattr(gdelt, "get_json", lambda *a, **k: {"articles": [
         {"url": "https://news.example/a", "title": "AI boom", "domain": "news.example",
-         "seendate": "20250706T120000Z", "language": "eng"},
+         "seendate": "20250706T120000Z", "language": "eng",
+         "sourcecountry": "United States (US)"},
     ]})
     obs = gdelt.GDELTSource().poll("artificial intelligence", since_ms=None)
     assert len(obs) == 1
     o = obs[0]
     assert o.source_type == "article" and o.author == "news.example"
     assert o.observed_at_ms > 0 and o.language == "eng"
+    assert o.region == "North America"            # parenthetical stripped, mapped
+
+
+def test_geo_region_tld_fallback():
+    from wos.sources import geo
+    assert geo.region_for(None, "https://www.bbc.co.uk/news/x") == "Europe"
+    assert geo.region_for("India") == "Asia"
+    assert geo.region_for(None, "https://nitter.net/x") is None   # gTLD: no guess
+    assert geo.region_for(None, None) is None
 
 
 def test_mastodon_strips_html_and_multi_instance(monkeypatch):
@@ -265,6 +275,53 @@ def test_source_types_endpoint(client):
     names = {k["name"] for k in kinds}
     assert {"nitter", "hackernews", "rss"} <= names
     assert all("default_interval_s" in k for k in kinds)
+
+
+def test_sources_status_shape_and_health(client, monkeypatch):
+    fake = [{"id": "nitter-a", "source": "nitter", "query": "a", "enabled": True},
+            {"id": "rss-b", "source": "rss", "query": "https://x/feed",
+             "enabled": False}]
+    monkeypatch.setattr(srv, "_specs", lambda: fake)
+    # no cursors yet → both pending; counts reported per adapter type
+    j = client.get("/api/sources/status").get_json()
+    assert j["totals"]["specs"] == 2 and j["totals"]["enabled"] == 1
+    assert "observations" in j["totals"] and "generated_at" in j
+    assert "observations_24h" in j["totals"]
+    assert {s["health"] for s in j["sources"]} == {"pending"}
+    assert any(t["type"] == "nitter" and t["specs"] == 1 for t in j["per_type"])
+    assert all({"observations", "observations_24h"} <= set(t) for t in j["per_type"])
+    assert all({"id", "source", "query", "health", "last_fetched_ms"} <= set(s)
+               for s in j["sources"])
+
+    # a fresh observation shows up in the per-type 24h window
+    client.post("/api/ingest", json={"observations": [{
+        "source": "nitter", "source_type": "post", "native_id": "z1",
+        "native_url": "u", "observed_at_ms": srv.now_ms(), "author": "a"}]})
+    j = client.get("/api/sources/status").get_json()
+    nt = next(t for t in j["per_type"] if t["type"] == "nitter")
+    assert nt["observations"] == 1 and nt["observations_24h"] == 1
+    assert j["totals"]["observations_24h"] == 1
+
+    # recent clean fetch → healthy; stale fetch (>24h) → degraded
+    now = srv.now_ms()
+    client.post("/api/state", json={"source_id": "nitter-a",
+                                    "last_fetched_ms": now, "error_count": 0})
+    client.post("/api/state", json={"source_id": "rss-b",
+                                    "last_fetched_ms": now - 48 * 3600_000})
+    by_id = {s["id"]: s for s in
+             client.get("/api/sources/status").get_json()["sources"]}
+    assert by_id["nitter-a"]["health"] == "healthy"
+    assert by_id["rss-b"]["health"] == "degraded"
+
+    # an errored cursor wins → failing
+    client.post("/api/state", json={"source_id": "nitter-a",
+                                    "last_fetched_ms": now,
+                                    "last_error": "boom", "error_count": 2})
+    j = client.get("/api/sources/status").get_json()
+    by_id = {s["id"]: s for s in j["sources"]}
+    assert by_id["nitter-a"]["health"] == "failing"
+    assert by_id["nitter-a"]["error_count"] == 2
+    assert j["totals"]["failing"] == 1 and j["totals"]["degraded"] == 1
 
 
 def test_ingest_and_merge(client):
@@ -441,6 +498,18 @@ def test_compute_blob_shape():
               "cooccurrence", "top_terms", "top_bigrams", "tone", "clusters", "sources"):
         assert k in blob
     assert "sankey" not in blob                     # topic composition removed
+    assert blob["regions"] == {"Unknown": len(_obs_list())}   # docs carry no region
+
+
+def test_regions_aggregate():
+    obs = _obs_list()[:4] + [{"id": "r1", "title": "x", "body": "", "source": "gdelt",
+                              "region": "Europe", "observed_at_ms": 1750000000000},
+                             {"id": "r2", "title": "y", "body": "", "source": "gdelt",
+                              "region": "Asia", "observed_at_ms": 1750000000000}]
+    blob = A.compute(obs, {})
+    assert blob["regions"]["Europe"] == 1
+    assert blob["regions"]["Asia"] == 1
+    assert blob["regions"]["Unknown"] == 4
 
 
 # ── clustering module ─────────────────────────────────────────────────────────

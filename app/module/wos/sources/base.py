@@ -41,7 +41,8 @@ class Observation:
     body: str = ""
     score: int | None = None
     language: str | None = None
-    captured_at_ms: int = 0     # when WE fetched it (set on construction)
+    region: str | None = None     # coarse origin region, when the feed ships one (see geo.py)
+    captured_at_ms: int = 0       # when WE fetched it (set on construction)
     raw: dict = field(default_factory=dict)
 
     def __post_init__(self):

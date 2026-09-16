@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 
 from .base import Observation, Source, now_ms
+from .geo import region_for
 from .http_util import fmt_gdelt, get_json, parse_gdelt_seen
 
 
@@ -47,6 +48,7 @@ class GDELTSource:
                 title=art.get("title", "") or "",
                 body="",
                 language=art.get("language"),
+                region=region_for(art.get("sourcecountry"), url_),
                 raw=art,
             ))
         return out
