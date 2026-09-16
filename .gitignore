@@ -29,4 +29,6 @@ logs/
 
 # OS files
 Thumbs.db
-app/module/pwos/config/
+
+.opencode
+
