@@ -1,4 +1,4 @@
-"""General World Observation System (PEOS) — API Server.
+"""Personal External Observation System (PEOS) — API Server.
 
 A perception sub-system that collects what *other agents* say about the world
 from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and

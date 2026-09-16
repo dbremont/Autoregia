@@ -1,6 +1,6 @@
-# PEOS — General World Observation System
+# PEOS — Personal External Observation System
 
-> PEOS is the **General World Observation System** — the Autoregia
+> PEOS is the **Personal External Observation System** — the Autoregia
 > **perception** sub-system that collects what *other agents* say about the world
 > from free, no-auth public feeds and persists each item in **CouchDB** (db
 > `peos`) as an `observational` event — the [AGS](/about.html#elements) `observational` event-type

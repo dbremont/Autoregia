@@ -1,4 +1,4 @@
-"""General World Observation System (PEOS) — poller daemon.
+"""Personal External Observation System (PEOS) — poller daemon.
 
 A long-running process that sweeps the watched topics (via the PEOS HTTP API)
 every ``SWEEP_INTERVAL`` seconds and triggers a poll for each topic whose

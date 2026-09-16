@@ -1,7 +1,7 @@
-# General World Observation System
+# Personal External Observation System
 
 > This document establishes the conceptual foundations, data model, functionality,
-> and implementation of a **General World Observation System (PEOS)**. A PEOS
+> and implementation of a **Personal External Observation System (PEOS)**. A PEOS
 > is a technical object engineered to `externalize the perception of the external
 > world` — it watches what *other agents* say about the world on free public feeds,
 > persists each item as a durable observation, and projects sense-making
@@ -45,7 +45,7 @@ Intelligence S4, Policy S5) a concrete object to reason over.
 > API server + a separate poller daemon).
 
 ```
-PEOS — General World Observation System  (VSM System 4 – Intelligence, sensing)
+PEOS — Personal External Observation System  (VSM System 4 – Intelligence, sensing)
  |
  +-- [S] Sources  — the feed adapters
  |     \_ One adapter per public feed (Hacker News, Lobsters, Reddit, Mastodon,
@@ -83,9 +83,9 @@ PEOS — General World Observation System  (VSM System 4 – Intelligence, sensi
 
 ## Formulation
 
-> How to think about a `General World Observation System`?
+> How to think about a `Personal External Observation System`?
 
-A `General World Observation System` is a technical object with the role of
+A `Personal External Observation System` is a technical object with the role of
 externalizing **the agent's perception of the external world** to scaffold
 extended agency:
 
