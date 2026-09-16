@@ -20,6 +20,7 @@ app/                 the application
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── awes/  a tool (own Flask app, mounted at /ate/tool/awes/)
 │         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
+│         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
 spec/                conceptual specs (spec/ui.spec = normative design spec)

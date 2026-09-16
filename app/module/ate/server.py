@@ -64,6 +64,16 @@ TOOLS = [
         "vsm": "Toolbox — Integration",
         "href": "/ate/tool/gial/",
     },
+    {
+        "id": "sarl",
+        "name": "Sistema Asistencia de Revisión Lingüística",
+        "summary": ("Verifies and corrects the linguistic, stylistic, "
+                    "terminological, and orthotypographic aspects of a text — "
+                    "evidence-cited findings, explicit dispositions, and a "
+                    "corrected text with a change log. Designed; plate only."),
+        "vsm": "Toolbox — Language Review",
+        "href": "/ate/tool/sarl/",
+    },
 ]
 
 app = Flask(__name__, static_folder=None)

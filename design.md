@@ -148,6 +148,8 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `acsms` — landing                  | standalone | ✅ conforms |
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `ate` — toolbox index               | standalone | ✅ conforms |
+| `gial` — design plate (`/ate/tool/gial/`) | standalone | ✅ conforms |
+| `sarl` — design plate (`/ate/tool/sarl/`) | standalone | ✅ conforms |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (tokens aligned 2026-09) |
 
 **Residual convergence items** (tracked, non-blocking):
