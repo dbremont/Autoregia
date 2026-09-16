@@ -8,13 +8,13 @@ window.PEOS = window.PEOS || {};
 const PEOS = window.PEOS;
 
 PEOS.VIEWS = [
-  { id:'dashboard',   label:'Dashboard',   icon:'activity',   group:'Analysis', desc:'volume, spikes, what is hot now' },
-  { id:'flow',        label:'Flow',        icon:'waves',      group:'Analysis', desc:'stream graph over time' },
-  { id:'composition', label:'Composition', icon:'git-branch', group:'Analysis', desc:'topic → source make-up' },
-  { id:'landscape',   label:'Landscape',   icon:'network',    group:'Analysis', desc:'words & co-occurrence' },
-  { id:'clusters',    label:'Clusters',    icon:'layers',     group:'Analysis', desc:'semantic topic clusters' },
-  { id:'search',      label:'Search',      icon:'list',       group:'Signal',   desc:'the observation stream' },
-  { id:'sources',     label:'Sources',     icon:'tag',        group:'Sources',  desc:'watched feeds' },
+  { id:'dashboard',   label:'Dashboard',   icon:'activity',   group:'',        desc:'volume, spikes, what is hot now' },
+  { id:'flow',        label:'Flow',        icon:'waves',      group:'',        desc:'stream graph over time' },
+  { id:'composition', label:'Composition', icon:'git-branch', group:'',        desc:'topic → source make-up' },
+  { id:'landscape',   label:'Landscape',   icon:'network',    group:'',        desc:'words & co-occurrence' },
+  { id:'clusters',    label:'Clusters',    icon:'layers',     group:'',        desc:'semantic topic clusters' },
+  { id:'search',      label:'Search',      icon:'search',     group:'Signal',  desc:'the observation stream' },
+  { id:'sources',     label:'Sources',     icon:'rss',        group:'Sources', desc:'watched feeds' },
 ];
 
 // Pre-rename hashes, kept as aliases so old bookmarks keep working.
@@ -34,7 +34,7 @@ PEOS.init = async function () {
 PEOS.renderSidebar = function () {
   const nav = document.getElementById('sidebarNav');
   const a = PEOS.Store.analytics() || {};
-  const counts = { dashboard:'', flow:'', composition:'', landscape:'', clusters: (a.clusters&&a.clusters.k)||'', search: PEOS.Store.observations().length, sources: PEOS.Store.topics().length };
+  const counts = { dashboard:'', flow:'', composition:'', landscape:'', clusters: (a.clusters&&a.clusters.k)||'', search:'⌘K', sources: PEOS.Store.topics().length };
   const groups = [];
   PEOS.VIEWS.forEach(v => {
     let g = groups[groups.length-1];
@@ -42,7 +42,7 @@ PEOS.renderSidebar = function () {
     g.views.push(v);
   });
   nav.innerHTML = groups.map(g =>
-    `<div class="sidebar-label">${g.name}</div>` + g.views.map(v =>
+    (g.name ? `<div class="sidebar-label">${g.name}</div>` : '') + g.views.map(v =>
       `<a href="#${v.id}" data-view="${v.id}"><span class="nav-icon">${PEOS.icon(v.icon,16)}</span><span>${v.label}</span>${counts[v.id]!==''?`<span class="nav-count">${counts[v.id]}</span>`:''}</a>`
     ).join('')
   ).join('');
