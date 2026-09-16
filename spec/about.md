@@ -31,6 +31,7 @@
 | **Agency Aspect**        | **Agency Problem Addressed**                                                                                  |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | **Identity**             | **Identity Maintenance** — What makes the agent the same entity over time?                                    |
+| **Coherence**            | **Internal Consistency** — How are the agent's models, beliefs, commitments, and policies kept mutually consistent over time? |
 | **Intent Management**    | **Intent Management** — Which intentions should be generated, evaluated, committed to, revised, or abandoned? |
 | **External World Model** | **Situation Understanding** — What is the current state of the external world?                                |
 | **Agent State**          | **Self-State Maintenance** — What is the current condition, capabilities, and resources of the agent?         |

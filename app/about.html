@@ -649,9 +649,16 @@
     <!-- The Agent -->
     <section id="agent">
       <div class="section-label">The Agent</div>
-      <blockquote> An <strong> human agent </strong> is a stateful autonomous system that maintains its viability and
-        pursues objectives through regulated interaction with its environment, using feedback to update its internal
-        state, formulate intentions, select and execute actions, and adapt its behavior. </blockquote>
+      <blockquote> A <strong> human agent </strong> is a stateful autonomous system that maintains its viability and
+        pursues objectives through regulated interaction with its environment, recursively integrating perception,
+        deliberation, intention, action, and feedback while continuously updating its state and adapting its behavior.
+        Effective agency requires sufficient continuity of state, identity, and relational coherence across time for
+        perception, deliberation, intention, action, and feedback to form a unified and persistent process.
+      </blockquote>
+      <blockquote> <strong>Note</strong> — When multiple agents establish sufficiently coupled states, intentions,
+        actions, and feedback processes, they can constitute <strong>joint agency</strong>: a temporally coherent
+        process of coordinated agency that extends beyond the activity of any individual agent.
+      </blockquote>
       <div class="diagram">
         <img src="img/self-model.png"
           alt="Self model: the agent maintains an internal representation of itself and its environment"
@@ -721,6 +728,12 @@
             <td><b>Normative Regulation</b> — What principles, values, constraints, and enduring commitments determine
               what the
               agent may, should, or must pursue?</td>
+          </tr>
+          <tr>
+            <td class="code">Foundational</td>
+            <td class="code">Coherence</td>
+            <td><b>Internal Consistency</b> — How are the agent's models, beliefs, commitments, and policies kept
+              mutually consistent, free of contradiction, over time?</td>
           </tr>
 
           <!-- Perception / Assessment -->
@@ -878,22 +891,22 @@
               experience reveals their inadequacy?</td>
           </tr>
 
-          <!-- Relational -->
+          <!-- Joint Agency -->
           <tr>
-            <td class="code">Relational</td>
+            <td class="code">Joint Agency</td>
             <td class="code">Communication</td>
             <td><b>Information Exchange</b> — How should information, intentions, requests, commitments, and outcomes be
               communicated to and received from other agents?</td>
           </tr>
           <tr>
-            <td class="code">Relational</td>
+            <td class="code">Joint Agency</td>
             <td class="code">Social Coordination</td>
             <td><b>Inter-Agent Coordination</b> — How should the agent coordinate actions, dependencies, expectations,
               and
               commitments with other agents?</td>
           </tr>
           <tr>
-            <td class="code">Relational</td>
+            <td class="code">Joint Agency</td>
             <td class="code">Delegation &amp; Negotiation</td>
             <td><b>Distributed Agency</b> — How should responsibilities, resources, authority, and commitments be
               negotiated or
@@ -965,7 +978,7 @@
             <td>Grounds the agent in one coherent stance — binds the World boundary, the Self Model, and Policy into a
               single structure: who the agent is, where it stands, and what it may commit to; checks over-allocation,
               constraint violation, and value drift.</td>
-            <td>Agent State · Configuration &amp; Meta-Cognitive</td>
+            <td>Agent State · Coherence (Internal Consistency) · Configuration &amp; Meta-Cognitive</td>
           </tr>
           <tr>
             <td class="code"><a href="/gis/">GIS</a></td>
@@ -1211,8 +1224,8 @@
       <h2 class="section-title">Questions &amp; Answers</h2>
       <p class="body">Conceptual questions about the model, with working answers. Tap a question to expand.</p>
       <div class="qa" data-accordion>
-        <div class="qa-item open">
-          <button class="qa-q" aria-expanded="true" aria-controls="qa-a1" id="qa-q1">
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a1" id="qa-q1">
             <span class="qmark">Q</span>
             <span class="qa-qtext">How should the external environment (the world) be conceptualized? As a sequence of
               events? What types of events constitute such a sequence?</span>
@@ -1390,6 +1403,372 @@
                   <em>Committed</em> lifecycle state of the Intent Store and the <em>Active Intent Set</em> emitted by
                   the Intent Scheduler — commitment is not an event but a maintained, revisable condition of the
                   flow.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a8" id="qa-q8">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">Which are the types of Intentional Structures?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a8" role="region" aria-labelledby="qa-q8">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">An <b>intentional structure</b> is a structured representation of a desired state
+                  — of the self or of the world — that orients, motivates, and regulates the agent's cognition and
+                  action: the form the agent gives to <em>what ought to be</em>. It persists across moments, can be
+                  ranked and revised against others, and serves as the reference against which perception,
+                  deliberation, and feedback are interpreted. Its types differ not in kind but in <b>scope, horizon,
+                    and binding force</b>, cascading from identity to execution:<br><br>· <b>Vision</b> — the enduring,
+                  identity-level image of a desired future; maximally abstract, unbounded in horizon; it orients rather
+                  than directs. <em>Ex: a life of disciplined, self-directed work sustained into old age.</em><br>·
+                  <b>Mission</b> — the vision translated into a domain of endeavor: what the agent is about, for whom,
+                  and to what end; it bounds the space of strategies. <em>Ex: build cognitive infrastructure for
+                    engineering work.</em><br>· <b>Strategy</b> — a theory of advantage mediating mission and goals:
+                  where to concentrate resources, which paths to abandon. <em>Ex: externalize everything; automate the
+                    repeatable; buy the commodity.</em><br>· <b>Policy</b> — a standing rule that pre-decides classes
+                  of future decisions; it permits, requires, or forbids — governance converted into habit. <em>Ex:
+                    coherence over volume.</em><br>· <b>Goal</b> — a chosen end-state within the strategy's frame;
+                  directional and deliberate, but not yet a measurable commitment. <em>Ex: ship v1 of the
+                    binnacle.</em><br>· <b>Objective</b> — a goal made operational: specific, measurable, time-bound;
+                  the unit against which progress is audited. <em>Ex: twenty deep-work hours a week by end of
+                    quarter.</em><br>· <b>Target</b> — a quantified checkpoint on an objective; the finest measurable
+                  grain of intention. <em>Ex: five PRs merged per week.</em><br>· <b>Desired State</b> — the atomic
+                  structure: a concrete condition of self or world to be brought about or maintained; the direct input
+                  to intent generation. <em>Ex: inbox empty; all tests green.</em><br><br>The cascade <b>Vision →
+                    Mission → Strategy → Policy → Goal → Objective → Target → Desired State</b> runs from identity to
+                  execution: each level lends the next its justification, and the next lends the former its
+                  realization. In the framework these structures live in Policy (AGS) and feed Intent Management
+                  (AIAS).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a9" id="qa-q9">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">Which are the types of Work Structures?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a9" role="region" aria-labelledby="qa-q9">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">A <b>work structure</b> is a structured unit through which intentional
+                  structures are realized in action: a bounded, schedulable, and trackable parcel of organized effort,
+                  with its own scope, lifecycle, and place in a decomposition of what is to be done. Work structures
+                  answer not <em>why</em> — that is the question intentional structures answer — but <em>what, in what
+                    form, and in what order</em>. Their types differ in scale, duration, and degree of
+                  decomposition:<br><br>· <b>Initiative</b> — a named, sustained mobilization of resources toward
+                  strategic ends; it spans quarters or years and groups the projects that serve it. <em>Ex: Autoregia
+                    itself.</em><br>· <b>Program</b> — a coordinated set of related projects managed as one because
+                  they share outcomes, timing, or resources; value is realized by the set, not the parts. <em>Ex: the
+                    observation layer (PEOS + PKTS + PWTS).</em><br>· <b>Project</b> — a bounded body of work with a
+                  defined deliverable, start, and end; the primary unit of planning. <em>Ex: migrate the binnacle
+                    records to CouchDB.</em><br>· <b>Task</b> — the fundamental operational unit of execution: a
+                  bounded specification of an intended intervention (see the earlier question on tasks). <em>Ex: write
+                    the loop panel spec.</em><br>· <b>Subtask</b> — a decomposition of a task that retains its intent
+                  while being completable in one sitting. <em>Ex: draft the gap formula section.</em><br>·
+                  <b>Activity</b> — the observed doing itself: executed, time-actual work, as distinct from the
+                  specification of work — what PWTS records. <em>Ex: the forty minutes spent editing deploy.sh this
+                    morning.</em><br><br>The hierarchy <b>Initiative → Program → Project → Task → Subtask</b> descends
+                  from investment to action, and <b>Activity</b> closes the loop as the work as it actually happens.
+                  In the framework these are realized in AOOS's action constructs (Objective, Initiative, Project,
+                  Task, Routine, Commitment) and executed through ATE.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a10" id="qa-q10">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What is Joint Agency?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a10" role="region" aria-labelledby="qa-q10">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext"><b>Joint agency</b> is a temporally coherent process of coordinated agency that
+                  arises when multiple agents establish sufficiently coupled states, intentions, actions, and feedback
+                  processes — a <em>we</em> that acts beyond what any individual agent does alone. The coupling is the
+                  essential ingredient: each agent's state updates and feedback become part of the others' control
+                  loops, so the resulting process acquires continuity and coherence of its own. It is therefore neither
+                  the sum of individual agencies nor their mere overlap. In the framework's aspects table it appears as
+                  the <b>Joint Agency</b> category, whose functional faces are <b>Communication</b> (Information
+                  Exchange), <b>Social Coordination</b> (Inter-Agent Coordination), and <b>Delegation &amp;
+                    Negotiation</b> (Distributed Agency).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a11" id="qa-q11">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What are the fundamental properties of agency?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a11" role="region" aria-labelledby="qa-q11">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Four properties are fundamental — they are what the definition of the human
+                  agent commits to:<br><br>· <b>Statefulness</b> — the agent maintains an internal state: models,
+                  resources, commitments, and capabilities that persist and inform action.<br>· <b>Autonomy</b> — it
+                  selects and executes actions from internal objectives and policies, not merely in response to
+                  external drive.<br>· <b>Regulated interaction</b> — perception, deliberation, intention, action, and
+                  feedback are recursively integrated through a control loop that corrects deviations.<br>·
+                  <b>Temporal persistence</b> — sufficient continuity and coherence across time make these stages one
+                  unified process rather than disconnected episodes.<br><br>The first three make an agent; the fourth
+                  makes it <em>the same</em> agent across time.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a12" id="qa-q12">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What makes agency effective?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a12" role="region" aria-labelledby="qa-q12">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Effectiveness is the joint product of the loop's stages, each with its own
+                  failure mode:<br><br>· <b>Situational accuracy</b> — the Situation Model approximates the relevant
+                  state of self and world well enough to act on.<br>· <b>Deliberative quality</b> — options are
+                  evaluated against values, constraints, risks, and costs, not impulse.<br>· <b>Commitment
+                    discipline</b> — the Active Intent Set is feasible; over-commitment is surfaced and corrected, not
+                  suffered.<br>· <b>Execution capability</b> — chosen actions can actually be carried out with the
+                  resources and capabilities at hand.<br>· <b>Feedback closure</b> — outcomes are observed and compared
+                  against intentions, so error is visible.<br>· <b>Adaptation</b> — the error changes future behavior,
+                  models, and policies.<br><br>None of these stages can be effective if the state they depend on does
+                  not persist (continuity) or contradicts itself (coherence) — which is why effective agency depends on
+                  both.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a13" id="qa-q13">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">Why does effective agency depend on continuity and coherence?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a13" role="region" aria-labelledby="qa-q13">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Because the control loop's stages are separated in time. The perception that
+                  informs a decision, the intention formed in response, and the feedback that evaluates the outcome
+                  arrive at different moments; between them stand every other demand on the agent. <b>Continuity</b> is
+                  what lets the process span those gaps — the state that perceived is still available to the state that
+                  evaluates. <b>Coherence</b> is what keeps what spans the gaps mutually consistent — the evaluation is
+                  made against the same values and commitments that formed the intention. Without continuity the loop
+                  cannot close across time; without coherence it closes on contradictions — and a loop closed on
+                  contradictions still drives behavior, just not behavior the agent can recognize as its own.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a14" id="qa-q14">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What is continuity?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a14" role="region" aria-labelledby="qa-q14">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext"><b>Continuity</b> is the sufficient persistence and retrievability of state
+                  across time: the property that the agent confronting the present is the same state-generating process
+                  that confronted the past — its memory, identity, commitments, and working models remain available to
+                  it. It is the problem the <b>Memory</b> aspect addresses (<em>State Continuity</em>). Continuity is
+                  not immutability: state must change for the agent to learn and adapt. The requirement is
+                  <em>sufficient</em> persistence — enough for perception, deliberation, intention, action, and
+                  feedback to form one process, not so much that the past forecloses the future.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a15" id="qa-q15">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What is coherence?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a15" role="region" aria-labelledby="qa-q15">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext"><b>Coherence</b> is the mutual consistency of the agent's representations,
+                  commitments, and policies: beliefs that do not contradict one another, commitments that fit within
+                  capacity and do not violate declared values, actions that do not undermine the ends the agent says it
+                  pursues. It is the problem the <b>Coherence</b> aspect addresses (<em>Internal Consistency</em>), and
+                  in the framework the <b>AGS</b> checks it — over-allocation, constraint violation, and value drift.
+                  Where continuity is a relation across <em>moments</em>, coherence is a relation among <em>parts</em>
+                  at whatever moment they coexist.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a16" id="qa-q16">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What is the relationship between continuity and coherence?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a16" role="region" aria-labelledby="qa-q16">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Continuity is the precondition; coherence is the constraint on what persists.
+                  <b>Continuity without coherence</b> preserves contradictions — the agent remembers everything and
+                  agrees with none of itself. <b>Coherence without continuity</b> cannot be maintained at all — a
+                  consistency check needs something that persists to check against. Together they state the minimal
+                  identity condition of a unified agent-process across time: what persists (continuity) and what may
+                  coexist without contradiction (coherence).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a17" id="qa-q17">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">How do continuity and coherence relate to memory as fundamental aspects of human
+              agency?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a17" role="region" aria-labelledby="qa-q17">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Memory is the substrate of both. It <b>realizes continuity</b>: what persists
+                  and remains retrievable is remembered state. It <b>practicizes coherence</b>: commitments, policies,
+                  and models can be checked against each other only if they are remembered — an agent that forgets its
+                  commitments can neither violate nor honor them. The aspects table keeps the problems distinct —
+                  <b>Memory → State Continuity</b>, <b>Coherence → Internal Consistency</b> — on a shared substrate:
+                  semantic memory (GIS, PKS), episodic records (PBS), and the policy corpus (AGS) each carry a
+                  different part of what must persist and what must agree.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a18" id="qa-q18">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">How does continuity constrain or enable adaptive change in an agent?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a18" role="region" aria-labelledby="qa-q18">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Continuity is the axis on which adaptive change is regulated, and both extremes
+                  fail:<br><br>· <b>Too little continuity</b> → the agent becomes incoherent or reactive: each episode
+                  starts from scratch, accumulated meaning cannot accrue, and there is no stable identity for
+                  adaptation to serve.<br>· <b>Too much continuity</b> → the agent becomes rigid: past state
+                  over-determines the present, models stop revising, and adaptation becomes nominal.<br><br>Adaptation
+                  is therefore defined against continuity: change that updates behavior, strategies, and models
+                  <em>while</em> identity, commitments, and narrative remain intact. The requirement is not maximal
+                  persistence but <em>sufficient</em> persistence — continuity must absorb the lessons of feedback
+                  without dissolving the agent that learned them.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a19" id="qa-q19">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What forms can agency coherence take?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a19" role="region" aria-labelledby="qa-q19">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Two forms, distinguished by the boundary within which consistency is
+                  required:<br><br>· <b>Self-coherence across time</b> — consistency within one agent's own states,
+                  representations, commitments, and policies as they persist through time: the agent does not
+                  contradict itself.<br>· <b>Joint coherence across time</b> — sustained mutual consistency among
+                  coupled agents: shared intentions do not conflict, interlocking commitments remain within each
+                  party's capacity, and feedback about the joint outcome reaches everyone whose intentions depend on
+                  it.<br><br>They are the same structural property — mutual non-contradiction sustained across time —
+                  drawn around different boundaries: the individual and the <em>we</em>.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a20" id="qa-q20">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">What is the relationship between individual and joint coherence?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a20" role="region" aria-labelledby="qa-q20">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Joint coherence presupposes individual coherence but is not reducible to it.
+                  Each agent can be perfectly internally consistent while the pair remains incoherent —
+                  consistent-but-incompatible commitments, aligned beliefs about different worlds. Individual coherence
+                  is necessary: an incoherent agent cannot be a stable partner. It is not sufficient: joint coherence
+                  is a property of the <em>coupled process</em>, and it fails in two ways — from within, when any
+                  member's own state is inconsistent, and from without, when the coupling (communication, coordination,
+                  negotiation) is too weak to sustain mutual consistency.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a21" id="qa-q21">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">Is commitment part of joint intentionality, or is it better treated as a separate
+              concept?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a21" role="region" aria-labelledby="qa-q21">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Separate, but coupled. <b>Commitment</b> is the general operation by which an
+                  intention stops being a candidate and becomes authoritative — resource-consuming, plan-directing,
+                  revision-tracking (see the earlier question on commitment in intent management). It exists wherever
+                  there is intention, individual or shared. <b>Joint intentionality</b> is one theater in which
+                  commitment operates, and it demands a specialized form: the <em>joint commitment</em> — conditional
+                  on mutuality (it binds only while the parties sustain it together), jointly addressable (each party
+                  can call the other to account), and rescindable by consent of both. Treating commitment as a separate
+                  concept lets one machinery — lifecycle states, feasibility checks, the Active Intent Set — serve both
+                  individual and joint cases, with jointness as a further constraint rather than a different
+                  mechanism.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-q" aria-expanded="false" aria-controls="qa-a22" id="qa-q22">
+            <span class="qmark">Q</span>
+            <span class="qa-qtext">Is coherence a fundamental organizing property of human cognition, or one property
+              among several?</span>
+            <span class="qa-chev" aria-hidden="true"></span>
+          </button>
+          <div class="qa-a" id="qa-a22" role="region" aria-labelledby="qa-q22">
+            <div class="qa-a-wrap">
+              <div class="qa-a-inner">
+                <span class="amark">A</span>
+                <span class="qa-atext">Both readings have standing. The <b>strong reading</b> treats coherence as
+                  cognition's organizing principle: dissonance reduction, narrative identity, and prediction-error
+                  minimization all describe a mind maintaining consistency across self and world. The <b>modest
+                    reading</b> treats it as one property among several — beside continuity, regulation, and
+                  adaptation. The framework takes the structural position: coherence is <em>fundamental to agency as
+                    defined here</em> — a definitional requirement of a unified, persistent process — while remaining
+                  agnostic on whether it is <em>the</em> organizing principle of cognition. That question concerns the
+                  substrate of mind, and the substrate is deliberately out of scope.</span>
               </div>
             </div>
           </div>
