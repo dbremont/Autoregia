@@ -38,7 +38,7 @@ PRAS (adaptations) ──► ACSMS ──► AIAS  (improvement intents)
        AGS  (values)             ► AGS  (policy amendments, e.g. learning policy)
 ```
 
-In VSM terms, ACSMS is **System 4 (Intelligence) directed inward**: where PEOS and PTOCS point System 4 at the external environment and the toolset, ACSMS points it at the agent itself — scanning the self for gaps and planning its development.
+In VSM terms, ACSMS is **System 4 (Intelligence) directed inward**: where WOS and PTOCS point System 4 at the external environment and the toolset, ACSMS points it at the agent itself — scanning the self for gaps and planning its development.
 
 ## Inputs
 

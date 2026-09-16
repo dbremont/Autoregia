@@ -80,7 +80,7 @@
   },
   {
     "id": "INT-2026-0005",
-    "description": "Investigate semantic clustering for PEOS feed orientation",
+    "description": "Investigate semantic clustering for WOS feed orientation",
     "source": "Curiosity",
     "priority": "Low",
     "status": "Generated",
@@ -197,13 +197,13 @@
     "deadline": null,
     "owner": "Self",
     "constraints": [],
-    "dependencies": ["PEOS adapter spec"],
+    "dependencies": ["WOS adapter spec"],
     "review_schedule": "monthly",
     "termination_condition": "GDELT events persisting as observational events",
     "created_at": "2026-06-10T12:00:00Z",
     "updated_at": "2026-06-22T09:00:00Z",
     "notes": [
-      { "id": "n1", "at": "2026-06-22T09:00:00Z", "author": "Self", "kind": "paused", "text": "Paused pending PEOS adapter spec." }
+      { "id": "n1", "at": "2026-06-22T09:00:00Z", "author": "Self", "kind": "paused", "text": "Paused pending WOS adapter spec." }
     ]
   },
   {

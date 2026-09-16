@@ -77,17 +77,17 @@
       surface is doing, gathered into a single view of the state of affairs.</p>
     <div class="status">
       <span class="tag">gateway</span>
-      <span>PEOS, PKTS and PWTS are running sub-systems — GWOB aggregates their state of affairs. Counts are live.</span>
+      <span>WOS, PKTS and PWTS are running sub-systems — GWOB aggregates their state of affairs. Counts are live.</span>
     </div>
   </header>
 
   <div class="sub-grid">
-    <a class="sub-card" href="/peos/">
-      <div class="sc-code">PEOS</div>
-      <div class="sc-name">Personal External Observation System</div>
+    <a class="sub-card" href="/wos/">
+      <div class="sc-code">WOS</div>
+      <div class="sc-name">World Observation System</div>
       <div class="sc-desc">What other agents say about the world — free public feeds, turned into orientation.</div>
-      <div class="sc-stat" id="stat-peos">—</div>
-      <div class="sc-open">Open /peos/ →</div>
+      <div class="sc-stat" id="stat-wos">—</div>
+      <div class="sc-open">Open /wos/ →</div>
     </a>
     <a class="sub-card" href="/pkts/">
       <div class="sc-code">PKTS</div>
@@ -118,10 +118,10 @@
       put(id, j ? fmt(j) : '—');
     }).catch(function(){ put(id, '—'); });
   }
-  get('/peos/api/observations?limit=1000', function(j){
+  get('/wos/api/observations?limit=1000', function(j){
     var n = Array.isArray(j) ? j.length : 0;
     return (n >= 1000 ? '1000+' : n) + ' observations';
-  }, 'stat-peos');
+  }, 'stat-wos');
   get('/pkts/api/dashboard/stats', function(j){
     return j.total_keystrokes + ' keystrokes · ' + j.session_count + ' sessions';
   }, 'stat-pkts');

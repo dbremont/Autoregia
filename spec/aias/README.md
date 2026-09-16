@@ -398,7 +398,7 @@ An implementation should satisfy these architectural principles:
 
 ### Functionality Set
 
-- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from PBS / PEOS / PWTS events, external requests, reflective notes).
+- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from PBS / WOS / PWTS events, external requests, reflective notes).
 - **Triage queue** — a review surface for newly generated candidates awaiting evaluation.
 - **Intent editor** — progressive disclosure over the full intent record (fields, constraints, dependencies, review schedule, termination condition).
 - **Active Intent Set view** — the authoritative current commitments, ordered by priority and deadline.

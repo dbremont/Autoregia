@@ -92,7 +92,7 @@ views.css       # view-specific styles
 command-palette.css
 ```
 
-Users of this archetype: `pbs`, `pkts`, `pwts`, `peos`, `gis`, `aias`,
+Users of this archetype: `pbs`, `pkts`, `pwts`, `wos`, `gis`, `aias`,
 `aoos`, `loop`.
 
 The shell's sticky header and sidebar — closed by the `.sidebar-colophon` —
@@ -141,7 +141,7 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `pbs`, `pkts`, `pwts`, `peos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
+| `pbs`, `pkts`, `pwts`, `wos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
 | `ags`                             | standalone | ✅ conforms |

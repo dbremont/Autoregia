@@ -12,14 +12,14 @@ index at the root.
     /pbs/...     Personal Binnacle System         (VSM System 1 — Perception)
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
     /pwts/...   Personal Workstation Tracking System  (Accounting / audit)
-    /peos/...   Personal External Observation System  (Perception — external world)
+    /wos/...   World Observation System  (Perception — external world)
     /gis/...     General Index (Situation Model)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
     /ate/...     Agent Toolbox Ecosystem — the tools an agent uses to get work done (/ate/tool/awes …)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
     /ags/...     Agency Grounding System (in the model, not yet built — policies at /ags/policies/…)
-    /gwob/...    General World and Self Observation System gateway (over PEOS, PKTS, PWTS)
+    /gwob/...    General World and Self Observation System gateway (over WOS, PKTS, PWTS)
     /pks/...     Personal Knowledge System (conceived, not yet designed — Agent Knowledge substrate)
 
 Sub-systems are not independent apps: they are functional organs of one
@@ -73,7 +73,7 @@ SUBSYSTEMS = [
     ("pbs", "Personal Binnacle System", "module/pbs/server.py"),
     ("pkts", "Personal Keyword Tracking System", "module/pkts/server.py"),
     ("pwts", "Personal Workstation Tracking System", "module/pwts/server.py"),
-    ("peos", "Personal External Observation System", "module/peos/server.py"),
+    ("wos", "World Observation System", "module/wos/server.py"),
     ("gis", "General Index System", "module/gis/server.py"),
     ("aias", "Agent Intent Aid System", "module/aias/server.py"),
     ("aoos", "Agent Operation Organization System", "module/aoos/server.py"),
@@ -140,7 +140,7 @@ def ags_policies(name):
 
 @app.route("/gwob/")
 def gwob():
-    # Gateway plate over the observation sub-systems (PEOS, PKTS, PWTS).
+    # Gateway plate over the observation sub-systems (WOS, PKTS, PWTS).
     return send_from_directory(ROOT, "module/gwob/index.html")
 
 

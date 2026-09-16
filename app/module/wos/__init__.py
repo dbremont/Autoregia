@@ -1,0 +1,10 @@
+"""World Observation System (WOS).
+
+A perception sub-system that collects what *other agents* say about the world
+from free public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and
+persists each item in CouchDB (db ``wos``) as an ``observational`` event — the
+AGS `observational` event-type defined as "a reading the agent actively takes".
+
+See ``wos/server.py`` (Flask API + persistence) and ``wos/collector.py``
+(scheduled poller daemon).
+"""

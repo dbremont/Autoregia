@@ -14,7 +14,7 @@ See `README.md` for the system map and `logos.log.md` for the decision log.
 app/                 the application
 ├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix dispatcher)
 ├── index.html       landing plate        ├── about.html   docs.html
-├── module/          the sub-systems (pbs, pkts, pwts, peos, gis, aias,
+├── module/          the sub-systems (pbs, pkts, pwts, wos, gis, aias,
 │                    aoos, ate, pras, acsms, loop, pwos)
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
@@ -24,8 +24,8 @@ app/                 the application
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
 spec/                conceptual specs (spec/ui.spec = normative design spec)
-config/              deployed config — peos_sources.json = PEOS sources policy
-                     file (spec/peos/policy.md); seeds only an empty DB
+app/module/wos/config/seed.json   WOS poll specs (the watched sources;
+                     spec/wos/policy.md); read directly by the server
 design.md            style standard (tokens, typography, conformance)
 img/  requirements.txt  Dockerfile  Makefile  .env (git-ignored)
 ```
@@ -44,9 +44,9 @@ make deploy-local      # build the local image (autoregia:local) and run it — 
 make deploy-server     # pull the GHCR image CI publishes and run it — production
 # also: make build | logs | stop
 
-# tests (PEOS + GIS tests need CouchDB running on 127.0.0.1:5984)
+# tests (WOS + GIS tests need CouchDB running on 127.0.0.1:5984)
 make test              # = python3 -m pytest app/module/ate/tool/awes/test_awes.py \
-                       #    app/module/peos/test_peos.py app/module/gis/test_gis.py
+                       #    app/module/wos/test_wos.py app/module/gis/test_gis.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
 make prefix-assets
@@ -100,7 +100,7 @@ No linter is configured.
   `curl -X DELETE http://admin:<password>@127.0.0.1:5984/<db>` (check the
   DB for non-seed entries first). GIS owns two DBs: `ptocs` (entries) and
   `ptocs_activity` (activity log). Test suites use isolated prefixes
-  (`peos_test_`, `gis_test_`) and never touch dev data.
+  (`wos_test_`, `gis_test_`) and never touch dev data.
 - Push to `main` → GitHub Actions builds and pushes the image to GHCR.
 - Deploy with `make deploy-server` (pull the GHCR image — production) or
   `make deploy-local` (build `autoregia:local` from the repo — dev/testing).

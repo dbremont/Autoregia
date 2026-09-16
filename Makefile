@@ -31,8 +31,8 @@ help: ## list targets
 run: ## local dev server, no docker (port DEV_PORT, default 8090)
 	AUTOREGIA_PORT=$(DEV_PORT) python3 app/app.py
 
-test: ## pytest awes + peos + gis suites (needs CouchDB on 127.0.0.1:5984)
-	python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/peos/test_peos.py app/module/gis/test_gis.py
+test: ## pytest awes + wos + gis suites (needs CouchDB on 127.0.0.1:5984)
+	python3 -m pytest app/module/ate/tool/awes/test_awes.py app/module/wos/test_wos.py app/module/gis/test_gis.py
 
 build: ## docker build the local image (autoregia:local)
 	docker build -t $(LOCAL_IMAGE) .

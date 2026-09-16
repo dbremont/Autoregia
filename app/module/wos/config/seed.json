@@ -1,0 +1,910 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-16T00:00:00Z",
+  "description": "WOS seed — plain poll specs (source + query). Topic assignment happens downstream in the processing pipeline, not at collection time. Resolution: WOS_SOURCES_FILE env > this file.",
+  "settings": {
+    "nitter_instances": [
+      "nitter.net",
+      "nitter.click",
+      "xcancel.com"
+    ]
+  },
+  "sources": [
+    {
+      "id": "nitter-teortaxesTex",
+      "source": "nitter",
+      "query": "teortaxesTex",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-tphuang",
+      "source": "nitter",
+      "query": "tphuang",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-JustinLin610",
+      "source": "nitter",
+      "query": "JustinLin610",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-nanbeige",
+      "source": "nitter",
+      "query": "nanbeige",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-kamilkazani",
+      "source": "nitter",
+      "query": "kamilkazani",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-xeophon",
+      "source": "nitter",
+      "query": "xeophon",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-victormustar",
+      "source": "nitter",
+      "query": "victormustar",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-zephyr_z9",
+      "source": "nitter",
+      "query": "zephyr_z9",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-jukan05",
+      "source": "nitter",
+      "query": "jukan05",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-pstAsiatech",
+      "source": "nitter",
+      "query": "pstAsiatech",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-poezhao0605",
+      "source": "nitter",
+      "query": "poezhao0605",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-pati_marins64",
+      "source": "nitter",
+      "query": "pati_marins64",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-DivaJain2",
+      "source": "nitter",
+      "query": "DivaJain2",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-GlennLuk",
+      "source": "nitter",
+      "query": "GlennLuk",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-hsu_steve",
+      "source": "nitter",
+      "query": "hsu_steve",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-dair_ai",
+      "source": "nitter",
+      "query": "dair_ai",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-karpathy",
+      "source": "nitter",
+      "query": "karpathy",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-policytensor",
+      "source": "nitter",
+      "query": "policytensor",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-_LuoFuli",
+      "source": "nitter",
+      "query": "_LuoFuli",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-citrinowicz",
+      "source": "nitter",
+      "query": "citrinowicz",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-vali_nasr",
+      "source": "nitter",
+      "query": "vali_nasr",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-sheriyuo",
+      "source": "nitter",
+      "query": "sheriyuo",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-iScienceLuvr",
+      "source": "nitter",
+      "query": "iScienceLuvr",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-arjunkocher",
+      "source": "nitter",
+      "query": "arjunkocher",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-kejimao",
+      "source": "nitter",
+      "query": "kejimao",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-rasbt",
+      "source": "nitter",
+      "query": "rasbt",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-paperpaper886",
+      "source": "nitter",
+      "query": "paperpaper886",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-Grady_Booch",
+      "source": "nitter",
+      "query": "Grady_Booch",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-jeremyphoward",
+      "source": "nitter",
+      "query": "jeremyphoward",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-DoctorDuggar",
+      "source": "nitter",
+      "query": "DoctorDuggar",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ecsquendor",
+      "source": "nitter",
+      "query": "ecsquendor",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ID_AA_Carmack",
+      "source": "nitter",
+      "query": "ID_AA_Carmack",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-MLStreetTalk",
+      "source": "nitter",
+      "query": "MLStreetTalk",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-JFPuget",
+      "source": "nitter",
+      "query": "JFPuget",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-francoisfleuret",
+      "source": "nitter",
+      "query": "francoisfleuret",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-fchollet",
+      "source": "nitter",
+      "query": "fchollet",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-askalphaxiv",
+      "source": "nitter",
+      "query": "askalphaxiv",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-oliverwkim",
+      "source": "nitter",
+      "query": "oliverwkim",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ChrSzegedy",
+      "source": "nitter",
+      "query": "ChrSzegedy",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-mafernando",
+      "source": "nitter",
+      "query": "mafernando",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-Dan_Jeffries1",
+      "source": "nitter",
+      "query": "Dan_Jeffries1",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-jiqizhixin",
+      "source": "nitter",
+      "query": "jiqizhixin",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-JesusFerna7026",
+      "source": "nitter",
+      "query": "JesusFerna7026",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-HongshenZhu",
+      "source": "nitter",
+      "query": "HongshenZhu",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-IvanWerning",
+      "source": "nitter",
+      "query": "IvanWerning",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-juancahallak",
+      "source": "nitter",
+      "query": "juancahallak",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-eduardoyeyati",
+      "source": "nitter",
+      "query": "eduardoyeyati",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-alfiemart",
+      "source": "nitter",
+      "query": "alfiemart",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-sean_a_mcclure",
+      "source": "nitter",
+      "query": "sean_a_mcclure",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-lugaricano",
+      "source": "nitter",
+      "query": "lugaricano",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-MacaesBruno",
+      "source": "nitter",
+      "query": "MacaesBruno",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-probnstat",
+      "source": "nitter",
+      "query": "probnstat",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-IntuitMachine",
+      "source": "nitter",
+      "query": "IntuitMachine",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-michaeljburry",
+      "source": "nitter",
+      "query": "michaeljburry",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-__tinygrad__",
+      "source": "nitter",
+      "query": "__tinygrad__",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-gneubig",
+      "source": "nitter",
+      "query": "gneubig",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-nrehiew_",
+      "source": "nitter",
+      "query": "nrehiew_",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-yacineMTB",
+      "source": "nitter",
+      "query": "yacineMTB",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-antirez",
+      "source": "nitter",
+      "query": "antirez",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-mitsuhiko",
+      "source": "nitter",
+      "query": "mitsuhiko",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-omarsar0",
+      "source": "nitter",
+      "query": "omarsar0",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-synthwavedd",
+      "source": "nitter",
+      "query": "synthwavedd",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-EHWpolisci",
+      "source": "nitter",
+      "query": "EHWpolisci",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-JonathonPSine",
+      "source": "nitter",
+      "query": "JonathonPSine",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-AravSrinivas",
+      "source": "nitter",
+      "query": "AravSrinivas",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-KimiDevs",
+      "source": "nitter",
+      "query": "KimiDevs",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-willdepue",
+      "source": "nitter",
+      "query": "willdepue",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-MartinShkreli",
+      "source": "nitter",
+      "query": "MartinShkreli",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-andrewho03",
+      "source": "nitter",
+      "query": "andrewho03",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-OpenHandsDev",
+      "source": "nitter",
+      "query": "OpenHandsDev",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-bookwormengr",
+      "source": "nitter",
+      "query": "bookwormengr",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-classiclarryd",
+      "source": "nitter",
+      "query": "classiclarryd",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-HuggingPapers",
+      "source": "nitter",
+      "query": "HuggingPapers",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-alexxubyte",
+      "source": "nitter",
+      "query": "alexxubyte",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-lithos_graphein",
+      "source": "nitter",
+      "query": "lithos_graphein",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-Grad62304977",
+      "source": "nitter",
+      "query": "Grad62304977",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-norpadon",
+      "source": "nitter",
+      "query": "norpadon",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-dunne_insights",
+      "source": "nitter",
+      "query": "dunne_insights",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-PhotonBull",
+      "source": "nitter",
+      "query": "PhotonBull",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-aleabitoreddit",
+      "source": "nitter",
+      "query": "aleabitoreddit",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-TeCLaro",
+      "source": "nitter",
+      "query": "TeCLaro",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-insane_analyst",
+      "source": "nitter",
+      "query": "insane_analyst",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-DratchCap",
+      "source": "nitter",
+      "query": "DratchCap",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-kakashiii111",
+      "source": "nitter",
+      "query": "kakashiii111",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-pandawatch88",
+      "source": "nitter",
+      "query": "pandawatch88",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-firstadopter",
+      "source": "nitter",
+      "query": "firstadopter",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-chamath",
+      "source": "nitter",
+      "query": "chamath",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ValsAI",
+      "source": "nitter",
+      "query": "ValsAI",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-yacinelearning",
+      "source": "nitter",
+      "query": "yacinelearning",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-LuisDaSerrano",
+      "source": "nitter",
+      "query": "LuisDaSerrano",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-GuthmannR",
+      "source": "nitter",
+      "query": "GuthmannR",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-danyscht",
+      "source": "nitter",
+      "query": "danyscht",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-cliff_click",
+      "source": "nitter",
+      "query": "cliff_click",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-mmjukic",
+      "source": "nitter",
+      "query": "mmjukic",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ProbFact",
+      "source": "nitter",
+      "query": "ProbFact",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-otrasenda_AC",
+      "source": "nitter",
+      "query": "otrasenda_AC",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-unclebobmartin",
+      "source": "nitter",
+      "query": "unclebobmartin",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-kareem_carr",
+      "source": "nitter",
+      "query": "kareem_carr",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-simonmaechling",
+      "source": "nitter",
+      "query": "simonmaechling",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-lemire",
+      "source": "nitter",
+      "query": "lemire",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-balajis",
+      "source": "nitter",
+      "query": "balajis",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-thehiphopswami",
+      "source": "nitter",
+      "query": "thehiphopswami",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-NandoDF",
+      "source": "nitter",
+      "query": "NandoDF",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-ylecun",
+      "source": "nitter",
+      "query": "ylecun",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-RichardSSutton",
+      "source": "nitter",
+      "query": "RichardSSutton",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-getjonwithit",
+      "source": "nitter",
+      "query": "getjonwithit",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-yifanzhang_",
+      "source": "nitter",
+      "query": "yifanzhang_",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-techNmak",
+      "source": "nitter",
+      "query": "techNmak",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "nitter-natolambert",
+      "source": "nitter",
+      "query": "natolambert",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "arxiv-cat-cs-ai",
+      "source": "arxiv",
+      "query": "cat:cs.AI",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "arxiv-cat-cs-cl",
+      "source": "arxiv",
+      "query": "cat:cs.CL",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "arxiv-cat-cs-lg",
+      "source": "arxiv",
+      "query": "cat:cs.LG",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "arxiv-cat-econ-gn",
+      "source": "arxiv",
+      "query": "cat:econ.GN",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "biorxiv-all",
+      "source": "biorxiv",
+      "query": "all",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "crossref-economics-machine-learning",
+      "source": "crossref",
+      "query": "economics machine learning",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "openalex-large-language-models",
+      "source": "openalex",
+      "query": "large language models",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "openalex-reinforcement-learning",
+      "source": "openalex",
+      "query": "reinforcement learning",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-bbc-news",
+      "source": "rss",
+      "query": "https://feeds.bbci.co.uk/news/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-coindesk",
+      "source": "rss",
+      "query": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-economist-finance",
+      "source": "rss",
+      "query": "https://www.economist.com/finance-and-economics/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-economist-science",
+      "source": "rss",
+      "query": "https://www.economist.com/science-and-technology/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-guardian-world",
+      "source": "rss",
+      "query": "https://www.theguardian.com/world/rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-mediagazer",
+      "source": "rss",
+      "query": "https://www.mediagazer.com/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-memeorandum",
+      "source": "rss",
+      "query": "https://www.memeorandum.com/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-nature",
+      "source": "rss",
+      "query": "https://www.nature.com/nature.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-nber-working-papers",
+      "source": "rss",
+      "query": "https://www.nber.org/rss/working-papers.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-slashdot",
+      "source": "rss",
+      "query": "https://slashdot.org/index.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-techmeme",
+      "source": "rss",
+      "query": "https://www.techmeme.com/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    }
+  ]
+}

@@ -20,7 +20,6 @@ Autoregia/
 ├── design.md            # style standard for every plate and module UI
 ├── logos.log.md         # decision & design log
 ├── spec/                # conceptual specifications of every sub-system
-├── config/              # deployed configuration — peos_sources.json (PEOS tracked sources, spec/peos/policy.md)
 ├── img/                 # images (control-loop diagrams, …)
 ├── requirements.txt     # root application dependencies
 ├── Dockerfile, Makefile  # deployment (build + run the unified container)
@@ -40,16 +39,17 @@ Autoregia/
     │   │   └── static/
     │   ├── pkts/        # Personal Keyword Tracking System
     │   ├── pwts/        # Personal Workstation Tracking System
-    │   ├── peos/        # Personal External Observation System
+    │   ├── wos/        # World Observation System
     │   │   ├── README.md
     │   │   ├── server.py    # Flask API + CouchDB persistence
     │   │   ├── collector.py # poller daemon
     │   │   ├── analytics.py # sense-making aggregations
-    │   │   ├── clustering.py# topic clustering (embeddings / lexical)
-    │   │   ├── sources/     # Hacker News, Lobsters, Reddit, Mastodon, GDELT
+    │   │   ├── clustering.py# semantic clustering (embeddings / lexical)
+    │   │   ├── config/seed.json  # the watched sources (poll specs)
+    │   │   ├── sources/     # Nitter/X, Hacker News, Lobsters, Reddit, Mastodon, GDELT, papers
     │   │   ├── data/
     │   │   ├── static/
-    │   │   └── test_peos.py
+    │   │   └── test_wos.py
     │   ├── ate/         # Agent Toolbox Ecosystem — hosts tools under tool/
     │   │   ├── server.py    # toolbox registry + /ate/tool/<id>/ mounting
     │   │   └── tool/       # tools mounted at /ate/tool/<id>/
@@ -96,7 +96,7 @@ The sub-systems developed within this workspace:
 - **[Personal Binnacle System (PBS)](app/module/pbs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PBS [specification](app/module/pbs/spec.md) and [implementation](app/module/pbs/README.md#prototype).
 - **[Personal Keyword Tracking System (PKTS)](app/module/pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
 - **[Personal Workstation Tracking System (PWTS)](app/module/pwts/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`app/support/shared/focus_watcher.py`](app/support/shared/) as the single source of truth for the focused window with PKTS.
-- **[Personal External Observation System (PEOS)](app/module/peos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): collects what *other agents* say about the world from free, no-auth public feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT) and persists each item as an `observational` event in CouchDB, with batch topic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PBS. Aggregated, with PKTS and PWTS, under the **[General World and Self Observation System (GWOB)](/gwob/)** gateway. See the PEOS [specification](spec/peos/spec.md) and [implementation](app/module/peos/README.md#run).
+- **[World Observation System (WOS)](app/module/wos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): polls a configured set of free, no-auth public feeds (Nitter/X, Hacker News, Lobsters, Reddit, Mastodon, GDELT, paper feeds) and persists each item as an unclassified `observational` event in CouchDB (topic assignment happens downstream), with batch semantic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PBS. Aggregated, with PKTS and PWTS, under the **[General World and Self Observation System (GWOB)](/gwob/)** gateway. See the WOS [specification](spec/wos/spec.md) and [implementation](app/module/wos/README.md#run).
 - **[General Index System (GIS)](app/module/gis/README.md)** — the Intelligence System component; a general index of everything the agent knows and uses — each entry a point → element pair pointing into the systems or out to the world (GitHub projects, documents, services). The entry point to everything.
 - **[Agency Grounding System (AGS)](app/ags/index.html)** — the grounding substrate (in the model, not yet built): binds the World boundary, the Self Model, and Policy into one coherent stance. Its **policy corpus** is live — [charter](app/ags/policies/charter.html), principles, values, commitments, and domain policies (health, learning, conduct) under `app/ags/policies/`, served at `/ags/policies/…`.
 - **[Agent Operation Organization System (AOOS)](app/module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PBS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
