@@ -8,7 +8,7 @@ window.ACSMS = window.ACSMS || {};
 ACSMS.Store = (() => {
   const API = '.'; // mounted under /acsms/, so relative "." resolves to /acsms/
 
-  let _skills = [], _practices = [], _stats = null;
+  let _skills = [], _practices = [], _stats = null, _paths = [], _activity = [];
   // practice-log filter state — the header search and skill pills write this
   const state = { skill: null, q: '' };
   const PAGE_SIZE = 50;
@@ -32,8 +32,9 @@ ACSMS.Store = (() => {
 
   async function load() {
     // resilient boot: one failing fetch must never leave the store half-empty
-    const names = ['skills', 'practices', 'stats'];
-    const results = await Promise.allSettled([loadSkills(), loadPractices(), loadStats()]);
+    const names = ['skills', 'practices', 'stats', 'paths', 'activity'];
+    const results = await Promise.allSettled(
+      [loadSkills(), loadPractices(), loadStats(), loadPaths(), loadActivity()]);
     results.forEach((r, i) => { if (r.status === 'rejected') console.error('acsms: ' + names[i] + ' load failed', r.reason); });
   }
 
@@ -53,6 +54,13 @@ ACSMS.Store = (() => {
   }
 
   async function loadStats() { _stats = await _j(`${API}/api/dashboard/stats`); return _stats; }
+  async function loadPaths() { _paths = await _j(`${API}/api/paths`); return _paths; }
+  async function loadActivity() { _activity = await _j(`${API}/api/activity`, { limit: 30 }); return _activity; }
+  // full history for one skill (detail view statistics + feed)
+  async function loadSkillPractices(id) {
+    const res = await _j(`${API}/api/practices`, { skill_id: id, limit: 1000 });
+    return res.items || [];
+  }
 
   // ── paging ──
   function getPaging() { return Object.assign({ offset: _offset }, _paging); }
@@ -80,8 +88,11 @@ ACSMS.Store = (() => {
   const skills = () => _skills;
   const practices = () => _practices;
   const stats = () => _stats;
+  const paths = () => _paths;
+  const activity = () => _activity;
   const activeSkills = () => _skills.filter(s => (s.status || 'active') === 'active');
   function skillById(id) { return _skills.find(s => s.id === id) || null; }
+  function pathById(id) { return _paths.find(p => p.id === id) || null; }
 
   // ── writes ──
   function createSkill(body) { return _j(`${API}/api/skills`, null, { method: 'POST', body }); }
@@ -89,17 +100,22 @@ ACSMS.Store = (() => {
   function deleteSkill(id) { return _j(`${API}/api/skills/${encodeURIComponent(id)}`, null, { method: 'DELETE' }); }
   function createPractice(body) { return _j(`${API}/api/practices`, null, { method: 'POST', body }); }
   function deletePractice(id) { return _j(`${API}/api/practices/${encodeURIComponent(id)}`, null, { method: 'DELETE' }); }
+  function createPath(body) { return _j(`${API}/api/paths`, null, { method: 'POST', body }); }
+  function updatePath(id, body) { return _j(`${API}/api/paths/${encodeURIComponent(id)}`, null, { method: 'PUT', body }); }
+  function deletePath(id) { return _j(`${API}/api/paths/${encodeURIComponent(id)}`, null, { method: 'DELETE' }); }
 
   // refresh everything a view needs after a write
   async function refresh() {
-    await Promise.allSettled([loadSkills(), loadPractices(), loadStats()]);
+    await Promise.allSettled([loadSkills(), loadPractices(), loadStats(), loadPaths(), loadActivity()]);
   }
 
   return {
-    load, refresh, loadSkills, loadPractices, loadStats,
+    load, refresh, loadSkills, loadPractices, loadStats, loadPaths, loadActivity,
+    loadSkillPractices,
     applyFilter, resetFilter, getState, filterSummary,
     getPaging, resetOffset, nextPage, prevPage,
-    skills, practices, stats, activeSkills, skillById,
+    skills, practices, stats, paths, activity, activeSkills, skillById, pathById,
     createSkill, updateSkill, deleteSkill, createPractice, deletePractice,
+    createPath, updatePath, deletePath,
   };
 })();

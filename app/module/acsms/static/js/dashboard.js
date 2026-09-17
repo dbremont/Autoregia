@@ -41,16 +41,15 @@ ACSMS.Dashboard = {
         const sub = neglected
           ? `neglected — last practiced ${ACSMS.fmtAgo(a.last_practiced_ms)}${tgt}`
           : `never practiced — defined ${ACSMS.fmtAgo(a.created_at_ms)}${tgt}`;
-        return `<a class="queue-item q-${a.state}" href="#practice" data-skill="${a.id}">
+        return `<a class="queue-item q-${a.state}" href="#skills/${a.id}" data-skill="${a.id}">
           <span class="q-icon">${ACSMS.icon(neglected ? 'alert-triangle' : 'clock', 16)}</span>
           <span class="q-body"><span class="q-title">${ACSMS.esc(a.name)}</span><span class="q-sub">${sub}</span></span>
-          <span class="q-act">log practice ${ACSMS.icon('arrow-right', 13)}</span>
+          <span class="q-act">view skill ${ACSMS.icon('arrow-right', 13)}</span>
         </a>`;
       }).join('');
-      q.querySelectorAll('[data-skill]').forEach(a => a.addEventListener('click', async (e) => {
+      q.querySelectorAll('[data-skill]').forEach(a => a.addEventListener('click', (e) => {
         e.preventDefault();
-        await ACSMS.Store.applyFilter({ skill: a.dataset.skill });
-        ACSMS.navigate('practice');
+        ACSMS.navigate('skills/' + a.dataset.skill);
       }));
     } else {
       q.innerHTML = `<div class="empty-state" style="padding:var(--space-8) var(--space-4)"><h3>Nothing flagged</h3><p>Every active skill has fresh practice — the tracking layer is quiet.</p></div>`;

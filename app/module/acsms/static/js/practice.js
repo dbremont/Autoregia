@@ -85,6 +85,10 @@ ACSMS.Practice = (() => {
       await ACSMS.Store.refresh();
       ACSMS.resetForm(p);
       ACSMS.toast('Practice recorded — ' + doc.skill_name);
+      // a skill-detail view shows this skill's stats — re-render it
+      if (ACSMS.currentBase === 'skills' && (ACSMS.current || '').indexOf('/') > 0) {
+        ACSMS.navigate(ACSMS.current);
+      }
       return doc;
     } catch (e) {
       ACSMS.toast('Could not record practice: ' + e.message);

@@ -12,6 +12,7 @@ ACSMS.VIEWS = [
   { id: 'practice', label: 'Practice Log', icon: 'activity', group: 'Practice', desc: 'the self-reported practice stream' },
 
   { id: 'skills', label: 'Skills', icon: 'layers', group: 'Catalog', desc: 'the skill catalog — define, edit, retire' },
+  { id: 'paths', label: 'Skill Paths', icon: 'route', group: 'Catalog', desc: 'ordered curricula that sequence skills into programs' },
 
   { id: 'documentation', label: 'Documentation', icon: 'book-open', group: 'System', desc: 'about this dashboard' },
   { id: 'about', label: 'About', icon: 'info', group: 'System', desc: 'what ACSMS is' },
@@ -54,12 +55,16 @@ ACSMS.setupRouter = function () {
 ACSMS.getHash = () => location.hash.slice(1);
 
 ACSMS.navigate = function (view) {
-  this.current = view; location.hash = '#' + view;
-  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.view === view));
+  // base/sub hash routes (wos pattern): #skills/<id> renders the skill detail
+  const slash = view.indexOf('/');
+  const sub = slash >= 0 ? view.slice(slash + 1) : '';
+  const base = slash >= 0 ? view.slice(0, slash) : view;
+  this.current = view; this.currentBase = base; location.hash = '#' + view;
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.view === base));
   const c = document.getElementById('appContent');
-  const cap = view.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
-  c.innerHTML = (ACSMS[cap] && ACSMS[cap].render) ? ACSMS[cap].render() : `<div class="empty-state"><h3>Unknown view</h3></div>`;
-  setTimeout(() => { if (ACSMS[cap] && ACSMS[cap].afterRender) ACSMS[cap].afterRender(); this.updateFooter(); }, 40);
+  const cap = base.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
+  c.innerHTML = (ACSMS[cap] && ACSMS[cap].render) ? ACSMS[cap].render(sub) : `<div class="empty-state"><h3>Unknown view</h3></div>`;
+  setTimeout(() => { if (ACSMS[cap] && ACSMS[cap].afterRender) ACSMS[cap].afterRender(sub); this.updateFooter(); }, 40);
 };
 
 ACSMS.updateFooter = function () {

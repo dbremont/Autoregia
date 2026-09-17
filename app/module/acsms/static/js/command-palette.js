@@ -37,14 +37,13 @@ ACSMS.CommandPalette = {
       if (skills.length) {
         html += '<div class="cmd-group-label">Skills</div>';
         skills.forEach(s => {
-          html += `<div class="cmd-result-item"><span class="cmd-result-icon" style="color:var(--oxford)">${ACSMS.icon('layers', 16)}</span><div class="cmd-result-text"><div class="cmd-result-title">${ACSMS.esc(s.name)}</div><div class="cmd-result-subtitle">${s.practice_state} · ${s.practice_count} report${s.practice_count === 1 ? '' : 's'}</div></div></div>`;
+          html += `<div class="cmd-result-item"><span class="cmd-result-icon" style="color:var(--oxford)">${ACSMS.icon('layers', 16)}</span><div class="cmd-result-text"><div class="cmd-result-title">${ACSMS.esc(s.name)}</div><div class="cmd-result-subtitle">${s.practice_state} · level ${s.level || 0}/5 · ${s.practice_count} report${s.practice_count === 1 ? '' : 's'}</div></div></div>`;
         });
         const offset = filtered.length;
         el.querySelectorAll('.cmd-result-item').forEach((item, i) => {
-          if (i >= offset) item.addEventListener('click', async () => {
+          if (i >= offset) item.addEventListener('click', () => {
             this.close();
-            await ACSMS.Store.applyFilter({ skill: skills[i - offset].id });
-            ACSMS.navigate('practice');
+            ACSMS.navigate('skills/' + skills[i - offset].id);
           });
         });
       }
