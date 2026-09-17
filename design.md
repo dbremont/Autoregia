@@ -83,20 +83,25 @@ Type scale is modular (1.250, major third) — see `spec/ui.spec` §4.2.
 
 ### 3.1 App shell (interactive sub-system UIs)
 
-Mirror the PBS structure — `static/css/`:
+Link the shared layer, then the tool's own files:
 
-```
-variables.css   # tokens — single source of truth
-fonts.css       # @font-face, self-hosted
-base.css        # reset, globals, eyebrow, kbd
-layout.css      # app-shell, header, sidebar, grids
-components.css  # component catalog
-views.css       # view-specific styles
-command-palette.css
+```html
+<link rel="stylesheet" href="/ui/css/tokens.css">   <!-- §2.1 tokens -->
+<link rel="stylesheet" href="/ui/css/fonts.css">    <!-- self-hosted -->
+<link rel="stylesheet" href="/ui/css/base.css">
+<link rel="stylesheet" href="/<tool>/css/layout.css">
+<link rel="stylesheet" href="/<tool>/css/components.css">
+<link rel="stylesheet" href="/<tool>/css/views.css">
+<link rel="stylesheet" href="/<tool>/css/command-palette.css">
 ```
 
-Users of this archetype: `pbs`, `pkts`, `pwts`, `wos`, `gis`, `aias`,
-`aoos`, `loop`.
+The shared layer lives in `app/support/ui/`, served at `/ui/` — there are
+no per-module copies of tokens or fonts (ui.spec §11.2). The tool's
+`layout.css` carries the app shell (header, sidebar, grids) and its own
+`<x-icon>` element rule; `views.css` is view-specific.
+
+Users of this archetype: `pbs`, `pkts`, `pwts` (shares pkts's shell +
+`pwts.css`), `wos` (+`wos.css`), `gis`, `aias`, `aoos`, `loop`.
 
 The shell's sticky header and sidebar — closed by the `.sidebar-colophon` —
 satisfy the context-chrome rule (Rule 7): no additional navbar/footer is
@@ -104,11 +109,18 @@ required on these surfaces.
 
 ### 3.2 Standalone document page (landings, policies, deliberations)
 
-Self-contained HTML with the token block inlined in `<style>` (copy §2.1–2.2
-exactly — do not invent values), parchment background, centered column
-(`max-width: ~880px`), breadcrumb `← Index`, masthead (eyebrow · title ·
-gold rule · lede), sections with `.section-label`, editorial tables, footer
-colophon.
+Self-contained HTML: link the shared layer, then one page `<style>` block
+for **page rules only** — never re-declare tokens or fonts:
+
+```html
+<link rel="stylesheet" href="/ui/css/tokens.css">
+<link rel="stylesheet" href="/ui/css/fonts.css">
+<link rel="stylesheet" href="/ui/css/standalone.css">  <!-- --ink, --accent, … aliases -->
+```
+
+Parchment background, centered column (`max-width: ~880px`), breadcrumb
+`← Index`, masthead (eyebrow · title · gold rule · lede), sections with
+`.section-label`, editorial tables, footer colophon.
 
 Every standalone page must contain its own `<nav>` navbar and `<footer>`
 (Rule 7, context chrome) — self-contained markup, no shared include. The

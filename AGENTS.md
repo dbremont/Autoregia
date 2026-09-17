@@ -27,7 +27,8 @@ app/                 the application
 │         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
-                     (focus_watcher), tools/ (prefix_assets.py), bin/
+                     (focus_watcher), tools/ (prefix_assets.py), bin/,
+                     ui/ (the shared design-system layer served at /ui/)
 spec/                conceptual specs (spec/ui.spec = normative design spec;
                      spec/todo/ = personal notes, not system docs)
 app/module/wos/config/seed.json   WOS poll specs (the watched sources;
@@ -162,8 +163,16 @@ everything else runs out-of-band:
 - **Design standard:** `design.md` governs every plate and sub-system UI.
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
-  (`static/fonts/`) — never add CDN links. Normative spec: `spec/ui.spec`;
+  (`/ui/fonts/`) — never add CDN links. Normative spec: `spec/ui.spec`;
   reference implementation: `app/module/pbs/static/`.
+- **Shared design-system layer:** tokens, fonts, base (and the standalone
+  alias layer) live ONLY in `app/support/ui/`, served by the `/ui/` route
+  in `app/app.py`. Never re-declare tokens/fonts per surface — link
+  `/ui/css/{tokens,fonts,base,standalone}.css` (with `?v=YYYYMMDD`
+  cache-busters; bump `v` when editing the layer). `ui` must never be
+  added to `prefix_assets.py` SEGMENTS — `/ui/` is global, not per-tool.
+  Per-tool css keeps only `layout/components/views/command-palette`
+  (+ additive files).
 - **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,

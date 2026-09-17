@@ -458,20 +458,37 @@ Exceptions for data-rich visualization surfaces (e.g., PKTS) may adopt a chartin
 
 ### 11.2 CSS File Split (normative)
 
-Each project's `static/css/` must mirror the PBS structure:
+The design system has a **shared layer** and a **per-tool layer**.
+
+**Shared layer — one copy, served globally** from `app/support/ui/` at
+`/ui/` (route in `app/app.py`; `ui` must never be added to
+`prefix_assets.py` SEGMENTS — it is global, not per-tool):
+
+```
+/ui/css/tokens.css        # §3 tokens — the single source of truth
+/ui/css/fonts.css         # @font-face, self-hosted (/ui/fonts/*.woff2)
+/ui/css/base.css          # reset, typography, grain, eyebrow, kbd
+/ui/css/standalone.css    # alias layer for document plates (--ink, --accent, …)
+```
+
+Every surface — app shell or standalone plate — links these instead of
+defining its own tokens or font faces. There are **no per-module copies**
+of the token set; changing a token is a one-file edit.
+
+**Per-tool layer** — each app shell's `static/css/` keeps only what is
+genuinely its own, mirroring the PBS structure:
 
 ```
 css/
-├── variables.css        # §3 tokens (single source of truth)
-├── fonts.css            # @font-face, self-hosted, offline-first
-├── base.css             # reset, typography globals, utilities, eyebrow, kbd
-├── layout.css           # app-shell, header, sidebar, grids, breakpoints
-├── components.css       # §7 component catalog
-├── views.css            # view/route-specific styles
-└── command-palette.css  # palette + scratchpad overlays
+├── layout.css            # app-shell, header, sidebar, grids + the tool's <x-icon> rule
+├── components.css        # §7 component catalog (tool-specific additions)
+├── views.css             # view/route-specific styles
+└── command-palette.css   # palette + scratchpad overlays
 ```
 
-Stylesheets are linked in this order so tokens always precede consumers.
+plus optional additive files (e.g. `wos.css`, `pwts.css`). Standalone
+document plates keep one self-contained `<style>` block for page rules
+only — tokens and fonts come from the shared layer.
 
 ### 11.3 Naming
 
@@ -481,7 +498,7 @@ Stylesheets are linked in this order so tokens always precede consumers.
 
 ### 11.4 Per-Project Deviation Policy
 
-A sub-project may **extend** the token set or component catalog (new views, domain-specific visualizations) but may **not contradict** it. Divergent themes (dark neon, saturated marketing, generic dashboard chrome) are out of scope and must be refactored to converge on this standard. The current PKTS dark/cyan/Tailwind prototype is the canonical example of divergence to be reconciled: when implemented against this spec it must adopt the warm parchment palette, Spectral/Inter/IBM Plex Mono typography, the app-shell layout, and the Lucide icon set.
+A sub-project may **extend** the token set or component catalog (new views, domain-specific visualizations) but may **not contradict** it. Divergent themes (dark neon, saturated marketing, generic dashboard chrome) are out of scope and must be refactored to converge on this standard. (The former PKTS dark/cyan prototype was the motivating example; it was reconciled onto the canonical palette and shell.)
 
 ### 11.5 Reference Implementation
 
@@ -492,9 +509,10 @@ The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS imple
 ## 12. Context Chrome
 
 > Every Autoregia page must have a **navbar** and a **footer** — both provide
-> context. Each page implements its own markup; there is **no shared
-> include** — no injected script, no served fragment; a page owns its chrome
-> outright.
+> context. What may never be shared is **markup**: each page implements its
+> own chrome outright — no injected script, no served fragment. (Stylesheets
+> are the opposite: tokens, fonts, and base styles are shared via `/ui/css/`
+> per §11.2.)
 
 - **Landmarks:** the navbar is a `<nav>` element; the footer is a `<footer>`
   element.
@@ -505,8 +523,9 @@ The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS imple
   siblings, and parents, plus the About/Docs plates. A navbar that is a bare
   list of all systems does **not** satisfy this rule.
 - **Standalone pages** (design.md §3.2): self-contained inline `<nav>` +
-  `<footer>` in the page's own HTML/CSS. A bare back-link breadcrumb alone
-  does not satisfy the navbar requirement.
+  `<footer>` in the page's own HTML/CSS (page rules only — tokens and fonts
+  come from `/ui/css/`). A bare back-link breadcrumb alone does not satisfy
+  the navbar requirement.
 - **App-shell surfaces** (§5.2): the sticky header and warm sidebar — closed
   by the `.sidebar-colophon` (§7.10) — satisfy both requirements; no
   additional chrome is required.
