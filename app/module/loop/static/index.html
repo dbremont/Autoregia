@@ -24,7 +24,7 @@
     </div>
     <div class="header-search">
       <span class="search-icon"><loop-icon name="search" size="16"></loop-icon></span>
-      <input type="search" id="globalSearch" placeholder="Search the control loop…  ( Ctrl K )" autocomplete="off">
+      <input type="search" id="globalSearch" placeholder="Search the control loop…  ( Ctrl K )" aria-label="Search the control loop" autocomplete="off">
     </div>
     <div class="header-actions">
       <button class="btn btn-ghost btn-sm" id="btnDocs" title="Documentation"><loop-icon name="clipboard-list" size="15"></loop-icon> Docs</button>
@@ -74,7 +74,7 @@
   <div class="scratchpad">
     <div class="scratchpad-header">
       <h3 style="margin:0;font-size:var(--text-base);">Quick Capture</h3>
-      <button class="btn-icon" onclick="LOOP.scratchpad.close()"><loop-icon name="x" size="17"></loop-icon></button>
+      <button class="btn-icon" aria-label="Close scratchpad" onclick="LOOP.scratchpad.close()"><loop-icon name="x" size="17"></loop-icon></button>
     </div>
     <div class="scratchpad-body">
       <textarea id="scratchpadText" placeholder="Capture an observation, deviation, or hypothesis…"></textarea>
@@ -91,7 +91,7 @@
   <div class="modal" style="max-width:680px;">
     <div class="modal-header">
       <h2 id="modalTitle">Documentation</h2>
-      <button class="btn-icon" onclick="LOOP.closeModal()"><loop-icon name="x" size="17"></loop-icon></button>
+      <button class="btn-icon" aria-label="Close" onclick="LOOP.closeModal()"><loop-icon name="x" size="17"></loop-icon></button>
     </div>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-footer">

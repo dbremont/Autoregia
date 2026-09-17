@@ -34,6 +34,14 @@
     .toc ol ol a::before{content:"\203A  ";color:var(--faint)}
     .toc .back-link{margin-top:28px;font-size:12.5px}
     .toc .back-link a{color:var(--muted)}
+    nav.site-chrome{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 28px;height:52px;background:var(--paper);border-bottom:1px solid var(--rule)}
+    nav.site-chrome .brand{font-family:inherit;font-size:17px;color:var(--ink-0);text-decoration:none}
+    nav.site-chrome .brand em{color:var(--faint);font-style:italic}
+    nav.site-chrome .links{margin-left:auto;display:flex;gap:22px}
+    nav.site-chrome .links a{font-family:"Inter","Segoe UI",system-ui,sans-serif;font-size:12.5px;color:var(--muted);text-decoration:none}
+    nav.site-chrome .links a:hover{color:var(--oxford)}
+    footer.site-colophon{max-width:860px;margin:0 auto;padding:26px 56px 60px;font-family:"SF Mono","IBM Plex Mono",monospace;font-size:11px;color:var(--faint);border-top:1px solid var(--rule)}
+    @media(max-width:900px){footer.site-colophon{padding:22px 24px 48px}}
     h1,h2,h3,h4{font-family:"Iowan Old Style",Palatino,Georgia,serif;color:var(--ink-0);line-height:1.2;font-weight:600}
     h1{font-size:2.5rem;letter-spacing:-.01em;margin:0 0 8px}
     h2{font-size:1.65rem;margin:56px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
@@ -114,6 +122,11 @@
     <li><a href="#references">References</a></li>
   </ol>
   <div class="back-link"><a href="/aoos/">&larr; Back to AOOS app</a></div>
+</nav>
+
+<nav class="site-chrome">
+  <a class="brand" href="/aoos/">AOOS <em>· docs</em></a>
+  <div class="links"><a href="/">Index</a><a href="/about.html">About</a><a href="/docs.html">Docs</a></div>
 </nav>
 
 <main>
@@ -374,6 +387,7 @@ python3 aoos/server.py
     });
   })();
 </script>
+<footer class="site-colophon">Autoregia · AOOS documentation · Agent Operation Organization System</footer>
 
 </body>
 </html>

@@ -149,44 +149,33 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
 | `pbs`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `gial`, `sarl` | app shell / standalone | ✅ conforms (token set) |
-| `wos`, `gis`, `aoos`, `loop` | app shell | ⚠ conforms, raw `#FAF1E6` + glyph icons tracked below |
+| `wos`, `gis`, `aoos`, `loop` | app shell | ✅ conforms (paper-on-accent token, Lucide icons, contrast — 2026-09) |
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
-| `ags`, `gwob`, `pks` — landing plates | standalone | ⚠ legacy token block (§6 migration) |
-| `acsms` — landing                  | standalone | ⚠ legacy token block + glyph icons |
+| `ags`, `gwob`, `pks` — landing plates | standalone | ✅ conforms (canonical tokens 2026-09) |
+| `acsms` — landing                  | standalone | ✅ conforms (canonical tokens 2026-09) |
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
-| `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts added 2026-09) |
+| `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts, canonical tokens 2026-09) |
 
-**Tracked non-conformances** (audit 2026-09, against `spec/ui.spec` §10 —
-fix or accept per §11.4):
+**Tracked non-conformances** (audit 2026-09; most items resolved in the
+2026-09 remediation pass — remaining debt):
 
-- **Legacy token blocks** — `ags`, `gwob`, `pks`, `acsms`, `about.html`,
-  `docs.html` inline `#1c1916/#4a443d/#7a736a/#d8d0c4/#fffdf8` instead of
-  the §2.1 neutrals (§6 migration rows exist).
-- **Unnamed on-accent tint** — raw `#FAF1E6` as text-on-accent in
-  `wos`/`gis`/`aoos`/`loop` CSS+JS (~29 uses); tokenize as
-  `--paper-on-accent` (§10.1).
-- **Glyph icons** — unicode characters doing icon work: `aoos` (`⚠`,
-  `▲▶▼`), `wos` (`✕`, `★`), `awes` (`▶`, `✓`, `✗`), `acsms` (`▼`),
-  `pras` (`★`), landing (`↗`, `❯`) — replace with Lucide SVGs (§6
-  iconography).
-- **Contrast outliers** — landing maps `--muted` to `#8C877B` at
-  9.5–10.5px; gold `#A8854A` body-size text on `about`/`docs`;
-  `#8A6A34` (`wos` crossref pill) — §10.1.
-- **Destructive flows use native `confirm()`** — `aoos` (×4), `aias`,
-  `gis` — replace with the in-app modal (§10.6).
-- **Missing accessible names** — icon-only modal close buttons and
-  unlabeled search inputs across app shells (§10.5).
-- **Keyboard baseline gaps** — `/` search shortcut missing on
-  `wos`/`gis`/`aoos`/`loop` (§8.1).
-- **Sub-10px micro-labels** — `aoos` (8px), `wos` (9px), `loop` (8px SVG
-  arc labels) (§4.2 floor).
-- **Landing finder** — search hits link to module roots, not the matched
-  record.
-- **Standalone-page hygiene** — `about`/`docs` missing `← Index`
-  breadcrumb; `about` duplicated blockquote + placeholder table row;
-  `aoos` `docs.html`/`share.html` lack context chrome; dead 0-byte
-  `aoos/static/about.html`.
+- **Finder deep-links** — the landing search links GIS hits to
+  `/gis/#entry=<id>`; AIAS and PBS hits still land on the module root
+  (their UIs lack per-record deep-links).
+- **AOOS `docs.html` legacy palette** — its self-contained theme
+  (`--paper:#F7F1E6`, gold mapped to the warning hex) predates §2.1 and
+  should converge; the page now carries context chrome and is served.
+
+Resolved in the 2026-09 pass: legacy token blocks on standalone plates;
+raw `#FAF1E6` → `--paper-on-accent`; unicode glyph icons → Lucide SVGs;
+small-size gold text and off-ramp contrast outliers; native `confirm()`
+replaced by an in-app dialog (aoos ×4, aias, gis); missing aria-labels on
+icon-only controls and search inputs; `/` search shortcut on all app
+shells; sub-10px micro-labels; root-plate self-hosted fonts; dead links
+(`docs.html`, aoos, aias); missing `← Index` breadcrumbs; duplicated
+blockquote and placeholder row on `about.html`; missing context chrome on
+`aoos` docs/share; dead 0-byte `aoos/static/about.html`.
 
 Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
 `#e0d2b0`, `#f4ecda`, …) predate the token set; they sit inside the family

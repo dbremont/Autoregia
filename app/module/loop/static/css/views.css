@@ -158,9 +158,9 @@
 .loop-svg .arc.flow { stroke: var(--rule-gold); stroke-dasharray: 4 4; }
 .loop-svg text { font-family: var(--font-body); }
 .loop-svg .stage-label { font-size: 11px; fill: var(--ink-1); font-weight: 600; }
-.loop-svg .stage-sub { font-size: 8.5px; fill: var(--color-text-muted); font-variant: small-caps; letter-spacing: 0.06em; }
-.loop-svg .stage-count { font-family: var(--font-mono); font-size: 9px; fill: var(--oxford); font-variant-numeric: tabular-nums; }
-.loop-svg .arc-label { font-size: 8px; fill: var(--color-text-faint); font-variant: small-caps; letter-spacing: 0.06em; }
+.loop-svg .stage-sub { font-size:10px; fill: var(--color-text-muted); font-variant: small-caps; letter-spacing: 0.06em; }
+.loop-svg .stage-count { font-family: var(--font-mono); font-size:10px; fill: var(--oxford); font-variant-numeric: tabular-nums; }
+.loop-svg .arc-label { font-size:10px; fill: var(--color-text-faint); font-variant: small-caps; letter-spacing: 0.06em; }
 .loop-svg .health-dot { stroke: var(--color-surface); stroke-width: 1.5; }
 .stage-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-4); font-size: var(--text-2xs); color: var(--color-text-muted); }
 .stage-legend .leg { display: inline-flex; align-items: center; gap: 6px; }

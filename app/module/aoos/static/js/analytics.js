@@ -452,7 +452,7 @@ AO.Analytics._chartMarkovMatrix = function (data) {
     series: [{
       type: 'heatmap', data: heatData,
       label: { show: true, formatter: p => p.value[2] >= 0.005 ? (p.value[2] * 100).toFixed(0) + (p.value[2] >= 0.1 ? '%' : '') : '',
-        color: p => p.value[2] > maxV * 0.55 ? t.paperOnAccent : t.ink, fontSize: 9, fontFamily: t.mono },
+        color: p => p.value[2] > maxV * 0.55 ? t.paperOnAccent : t.ink, fontSize: 10, fontFamily: t.mono },
       itemStyle: { borderRadius: 3, borderColor: t.surface, borderWidth: 2 },
       emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(122,26,42,0.3)' } },
     }],
@@ -489,7 +489,7 @@ AO.Analytics._chartMarkovGraph = function (data) {
         formatter: '{name|' + s.label + '}\n{dwell|' + (dwell >= 0.005 ? '↻ ' + Math.round(dwell * 100) + '%' : '') + '}',
         rich: {
           name: { fontSize: 11, fontWeight: 600, color: AO._contrastText(s.color), fontFamily: t.body, lineHeight: 13 },
-          dwell: { fontSize: 9, color: AO._contrastText(s.color), opacity: 0.85, fontFamily: t.mono, lineHeight: 11 },
+          dwell: { fontSize: 10, color: AO._contrastText(s.color), opacity: 0.85, fontFamily: t.mono, lineHeight: 11 },
         },
       },
     };
@@ -792,7 +792,7 @@ AO.Analytics._chartHourly = function (data) {
     grid: { left: 40, right: 12, top: 8, bottom: 24, containLabel: true },
     xAxis: { type: 'category', data: hours.map(AO._fmtHr), splitArea: { show: false },
       axisLine: { show: false }, axisTick: { show: false },
-      axisLabel: { color: t.faint, fontSize: 9, fontFamily: t.mono, interval: 2 } },
+      axisLabel: { color: t.faint, fontSize: 10, fontFamily: t.mono, interval: 2 } },
     yAxis: { type: 'category', data: dows, splitArea: { show: false },
       axisLine: { show: false }, axisTick: { show: false },
       axisLabel: { color: t.ink, fontSize: 10, fontFamily: t.mono } },
@@ -826,7 +826,7 @@ AO.Analytics._chartMonthly = function (data) {
         itemStyle: { color: t.surface2, borderRadius: [2, 2, 0, 0] } },
       { name: 'Completed', type: 'bar', data: ms.map(m => m.completed),
         itemStyle: { color: t.oxford, borderRadius: [2, 2, 0, 0] },
-        label: { show: true, position: 'top', color: t.muted, fontSize: 9, fontFamily: t.mono,
+        label: { show: true, position: 'top', color: t.muted, fontSize: 10, fontFamily: t.mono,
           formatter: p => {
             const m = ms[p.dataIndex]; const tr = m.trajectory;
             if (!tr) return ''; const icon = tr === 'improving' ? '↗' : (tr === 'declining' ? '↘' : '→');

@@ -26,7 +26,7 @@
       </div>
       <div class="header-search">
         <span class="search-icon"><ao-icon name="search" size="16"></ao-icon></span>
-        <input type="search" id="globalSearch" placeholder="Search actions…" autocomplete="off">
+        <input type="search" id="globalSearch" placeholder="Search actions…" aria-label="Search actions" autocomplete="off">
       </div>
       <div class="header-actions">
         <div class="timer" id="timer" title="Time tracking"></div>
@@ -103,7 +103,7 @@
   <div class="modal" style="max-width:860px;">
     <div class="modal-header">
       <h2 id="actionModalTitle">New Action</h2>
-      <button class="btn-icon" onclick="AO.Action.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
+      <button class="btn-icon" aria-label="Close editor" onclick="AO.Action.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
     </div>
     <div class="modal-body" id="actionModalBody"></div>
     <div class="modal-footer">
@@ -118,7 +118,7 @@
   <div class="modal" style="max-width:880px;">
     <div class="modal-header">
       <h2 id="detailTitle">Action Detail</h2>
-      <button class="btn-icon" onclick="AO.Action.closeDetail()"><ao-icon name="x" size="17"></ao-icon></button>
+      <button class="btn-icon" aria-label="Close details" onclick="AO.Action.closeDetail()"><ao-icon name="x" size="17"></ao-icon></button>
     </div>
     <div class="modal-body" id="detailBody"></div>
   </div>
@@ -135,7 +135,7 @@
   <div class="modal" style="max-width:640px;">
     <div class="modal-header">
       <h2 id="sessionModalTitle">New Session</h2>
-      <button class="btn-icon" onclick="AO.Session.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
+      <button class="btn-icon" aria-label="Close session editor" onclick="AO.Session.closeEditor()"><ao-icon name="x" size="17"></ao-icon></button>
     </div>
     <div class="modal-body" id="sessionModalBody"></div>
     <div class="modal-footer">
@@ -150,7 +150,7 @@
   <div class="modal" style="max-width:680px;">
     <div class="modal-header">
       <h2><span class="help-title-icon"><ao-icon name="help-circle" size="20"></ao-icon></span> Help &amp; Keyboard Shortcuts</h2>
-      <button class="btn-icon" onclick="AO.Help.close()"><ao-icon name="x" size="17"></ao-icon></button>
+      <button class="btn-icon" aria-label="Close help" onclick="AO.Help.close()"><ao-icon name="x" size="17"></ao-icon></button>
     </div>
     <div class="modal-body help-body">
       <p class="help-lede">AOOS — the <strong>Agent Operation Organization System</strong> — organizes your action constructs (tasks, projects, routines, commitments, initiatives, objectives), resolves them against the real calendar, and syncs with Google Calendar.</p>

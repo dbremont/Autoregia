@@ -131,5 +131,7 @@ AO.Action.closeDetail = function () { document.getElementById('detailModal').cla
 AO.Action.edit = function (id) { AO.Action.closeDetail(); AO.Action.openEditor(AO.Store.getById(id)); };
 
 AO.confirmDelete = async function (id) {
-  if (confirm('Delete this action?')) { await AO.Store.removeAction(id); AO.Action.closeDetail(); AO.toast('Action deleted'); }
+  if (await AO.confirmDialog({ title: 'Delete action', message: 'Delete this action? This cannot be undone.', confirmText: 'Delete' })) {
+    await AO.Store.removeAction(id); AO.Action.closeDetail(); AO.toast('Action deleted');
+  }
 };

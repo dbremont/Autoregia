@@ -94,8 +94,11 @@ WOS.applyFilter = async function (patch) {
 
 WOS.setupKeyboard = function () {
   document.addEventListener('keydown', (e) => {
+    const el = document.activeElement;
+    const typing = !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
     if ((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); WOS.CommandPalette.open(''); }
     if ((e.metaKey||e.ctrlKey) && e.shiftKey && (e.key==='N'||e.key==='n')){ e.preventDefault(); WOS.scratchpad.open(); }
+    if (e.key==='/' && !typing){ e.preventDefault(); document.getElementById('globalSearch')?.focus(); }
     if (e.key==='Escape'){ WOS.CommandPalette.close(); WOS.scratchpad.close(); }
   });
 };

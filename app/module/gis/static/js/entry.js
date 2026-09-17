@@ -231,11 +231,12 @@ PT.togglePin = async function (id) {
 };
 PT.confirmDelete = function (id) {
   const e = PT.Store.getById(id); if (!e) return;
-  if (confirm('Delete entry "' + e.name + '"? This cannot be undone.')) {
+  PT.confirmDialog({ title: 'Delete entry', message: 'Delete entry "' + e.name + '"? This cannot be undone.', confirmText: 'Delete' }).then(function (ok) {
+    if (!ok) return;
     PT.Store.remove(id).then(function () {
       PT.toast('Entry deleted'); PT.Entry.closeDetail();
       if (PT.currentView === 'dashboard') PT.navigate('dashboard');
       if (PT.currentView === 'index') PT.navigate('index');
     });
-  }
+  });
 };

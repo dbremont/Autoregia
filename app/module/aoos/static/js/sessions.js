@@ -171,7 +171,7 @@ AO.Session.saveRunning = async function () {
 /* ── Start / stop ────────────────────────────────────────── */
 AO.Session.start = async function (description, actionId, blockId) {
   const active = AO.Store.getActiveSession();
-  if (active && !confirm('Stop the running session and start a new one?')) return;
+  if (active && !(await AO.confirmDialog({ title: 'Stop running session', message: 'Stop the running session and start a new one?', confirmText: 'Stop & start' }))) return;
   await AO.Store.startSession({ description: description || '', action_id: actionId || null, block_id: blockId || null });
   AO.Session.closeStart();
   AO.Session.renderTimer();
@@ -346,5 +346,7 @@ AO.Session.saveEditor = async function () {
   AO.renderSessions();
 };
 AO.Session.confirmDelete = async function (id) {
-  if (confirm('Delete this session?')) { await AO.Store.removeSession(id); AO.renderSessions(); AO.toast('Session deleted'); }
+  if (await AO.confirmDialog({ title: 'Delete session', message: 'Delete this session? This cannot be undone.', confirmText: 'Delete' })) {
+    await AO.Store.removeSession(id); AO.renderSessions(); AO.toast('Session deleted');
+  }
 };

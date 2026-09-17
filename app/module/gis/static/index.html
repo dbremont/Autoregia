@@ -24,7 +24,7 @@
     </div>
     <div class="header-search">
       <span class="search-glyph"><pt-icon name="search" size="13"></pt-icon></span>
-      <input type="search" id="globalSearch" placeholder='Search the index… (e.g. "python", "database", "DR")' autocomplete="off">
+      <input type="search" id="globalSearch" aria-label="Search the index" placeholder='Search the index… (e.g. "python", "database", "DR")' autocomplete="off">
     </div>
     <div class="header-actions">
       <button class="btn btn-ghost btn-sm" id="btnImport" title="Import (JSON)"><pt-icon name="upload" size="15"></pt-icon> Import</button>
@@ -88,7 +88,7 @@
   <div class="modal" style="max-width:860px;">
     <div class="modal-header">
       <h2 id="entryModalTitle">New Entry</h2>
-      <button class="btn-icon" onclick="PT.Entry.closeEditor()"><pt-icon name="x" size="17"></pt-icon></button>
+      <button class="btn-icon" aria-label="Close editor" onclick="PT.Entry.closeEditor()"><pt-icon name="x" size="17"></pt-icon></button>
     </div>
     <div class="modal-body" id="entryModalBody"></div>
     <div class="modal-footer">
@@ -103,7 +103,7 @@
   <div class="modal" style="max-width:880px;">
     <div class="modal-header">
       <h2 id="detailTitle">Entry Detail</h2>
-      <button class="btn-icon" onclick="PT.Entry.closeDetail()"><pt-icon name="x" size="17"></pt-icon></button>
+      <button class="btn-icon" aria-label="Close details" onclick="PT.Entry.closeDetail()"><pt-icon name="x" size="17"></pt-icon></button>
     </div>
     <div class="modal-body" id="detailBody"></div>
   </div>

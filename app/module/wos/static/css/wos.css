@@ -228,7 +228,7 @@
 .ov-donut-wrap{position:relative;width:150px}
 .ov-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .ov-donut-n{font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--ink-0);line-height:1}
-.ov-donut-cap{font-family:var(--font-mono);font-size:9px;color:var(--color-text-muted);margin-top:2px}
+.ov-donut-cap{font-family:var(--font-mono);font-size:10px;color:var(--color-text-muted);margin-top:2px}
 .ov-comp-body .src-legend{gap:8px}
 
 .ov-flow-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
@@ -262,7 +262,7 @@
 .ov-feed-item{display:grid;grid-template-columns:8px 30px 1fr auto;align-items:start;gap:8px;padding:9px 0;border-bottom:var(--hairline) solid var(--color-border-light)}
 .ov-feed-item:last-child{border-bottom:none}
 .ov-feed-x{font-size:var(--text-xs);line-height:var(--leading-snug);color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ov-feed-item .src-pill{font-size:9px}
+.ov-feed-item .src-pill{font-size:10px}
 
 .empty-inline{font-family:var(--font-body);font-size:var(--text-xs);color:var(--color-text-faint);padding:6px 0}
 
@@ -279,7 +279,7 @@
 
 /* ── sidebar: section pills ─────────────────────────────────── */
 .sidebar-nav a.active{border-radius:8px;background:rgba(122,26,42,0.07);border-left-color:transparent}
-.nav-kbd{font-family:var(--mono);font-size:9px;color:var(--ink4);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.nav-kbd{font-family:var(--mono);font-size:10px;color:var(--ink4);border:1px solid var(--line);border-radius:3px;padding:0 4px}
 
 /* ════════════════════════════════════════════════════════════
    Sources — the Sources plate (wos.png replica).
@@ -317,7 +317,7 @@
 .src-donut-box{width:124px;height:124px;min-height:0}
 .src-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .src-donut-n{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ink-0);line-height:1}
-.src-donut-cap{font-family:var(--font-mono);font-size:9px;color:var(--color-text-muted);margin-top:2px}
+.src-donut-cap{font-family:var(--font-mono);font-size:10px;color:var(--color-text-muted);margin-top:2px}
 .src-legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;min-width:0}
 .src-legend li{display:grid;grid-template-columns:10px 1fr auto auto;align-items:center;gap:7px;font-family:var(--font-mono);font-size:var(--text-2xs);color:var(--ink-2)}
 .src-legend b{font-weight:500;font-variant-numeric:tabular-nums}
@@ -359,12 +359,12 @@
 .src-tile.t-openalex{background:var(--color-surface-2);color:var(--ink-3)}
 .src-src-names{min-width:0}
 .src-name{font-size:var(--text-sm);font-weight:500;color:var(--ink-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.src-id{font-family:var(--font-mono);font-size:9.5px;color:var(--color-text-faint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.src-id{font-family:var(--font-mono);font-size:10px;color:var(--color-text-faint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .src-pill{display:inline-block;font-family:var(--font-mono);font-size:var(--text-2xs);text-transform:uppercase;letter-spacing:var(--tracking-wide);padding:2px 9px;border-radius:var(--radius-pill)}
 .src-pill.p-arxiv{background:var(--oxford-tint);color:var(--oxford)}
 .src-pill.p-rss{background:var(--color-success-light);color:var(--color-success)}
 .src-pill.p-nitter{background:var(--color-info-light);color:var(--color-info)}
-.src-pill.p-crossref{background:var(--gold-tint);color:#8A6A34}
+.src-pill.p-crossref{background:var(--gold-tint);color:var(--ink-soft)}
 .src-pill.p-biorxiv{background:rgba(92,78,120,0.12);color:#5C4E78}
 .src-pill.p-openalex{background:var(--color-surface-2);color:var(--ink-3)}
 .src-num{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--ink-1);font-variant-numeric:tabular-nums}

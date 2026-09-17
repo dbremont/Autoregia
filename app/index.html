@@ -25,7 +25,7 @@
     --ink-4:#6B665B; --ink-5:#8C877B; --ink-6:#A7A296; --ink-7:#C9C4B8;
     --ink-8:#E2DED4; --ink-9:#EEEAE0; --ink-10:#F4F1EA;
     --paper:#FAFAF6;
-    --ink:var(--ink-1); --ink-soft:var(--ink-3); --muted:var(--ink-5);
+    --ink:var(--ink-1); --ink-soft:var(--ink-3); --muted:var(--ink-4);
     --rule:var(--ink-8); --rule-soft:var(--ink-9);
     --surface:#FFFFFF;
     --accent:#7A1A2A; --accent-deep:#641020;
@@ -469,7 +469,7 @@
 <div class="finder" id="finder">
   <div class="bar">
     <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A8854A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="search" id="q" placeholder="find across records · policies · deliberations · catalog" autocomplete="off">
+    <input type="search" id="q" placeholder="find across records · policies · deliberations · catalog" aria-label="Search across systems" autocomplete="off">
     <span class="esc">esc</span>
   </div>
   <div class="res" id="res"><div class="empty">type to search the running systems…</div></div>
@@ -531,7 +531,7 @@
   var SOURCES=[
     {prefix:'pras',label:'PRAS',wrap:true,map:function(r){return{title:r.title,snippet:r.snippet,href:'/pras'+r.path}}},
     {prefix:'aias',label:'AIAS',wrap:false,map:function(i){return{title:i.description||i.id,snippet:i.expected_value||('intent · '+(i.status||'')),href:'/aias/'}}},
-    {prefix:'gis',label:'GIS',wrap:false,map:function(e){return{title:e.name||e.title||e.id,snippet:e.summary||e.description||'',href:'/gis/'}}},
+    {prefix:'gis',label:'GIS',wrap:false,map:function(e){return{title:e.name||e.title||e.id,snippet:e.summary||e.description||'',href:'/gis/#entry='+encodeURIComponent(e.id)}}},
     {prefix:'pbs',label:'PBS',wrap:false,map:function(r){return{title:(r.content||r.id||'').slice(0,90),snippet:r.detail||'',href:'/pbs/'}}}
   ];
   function rows(j,w){return w?(j&&j.results)||[]:(Array.isArray(j)?j:[])}

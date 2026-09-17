@@ -30,9 +30,20 @@
     .share-msg{text-align:center;padding:var(--space-16) var(--space-4);color:var(--color-text-muted)}
     .share-msg h2{font-family:var(--font-display);color:var(--ink-1);margin-bottom:var(--space-2)}
     @media(max-width:680px){.share-shell{padding:var(--space-5) var(--space-4)}}
+    .site-chrome{display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:820px;margin:0 auto;padding:0 var(--space-5);height:52px;border-bottom:1px solid var(--color-border-light)}
+    .site-chrome .brand{font-family:var(--font-display);font-size:16px;color:var(--ink-1);text-decoration:none}
+    .site-chrome .brand .mono{color:var(--oxford);font-weight:600}
+    .site-chrome .links{margin-left:auto;display:flex;gap:20px}
+    .site-chrome .links a{font-family:var(--font-sans,"Inter",sans-serif);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);text-decoration:none}
+    .site-chrome .links a:hover{color:var(--oxford)}
+    .site-colophon{max-width:820px;margin:0 auto;padding:18px var(--space-5) 40px;font-family:var(--font-mono);font-size:11px;color:var(--color-text-muted)}
   </style>
 </head>
 <body>
+  <nav class="site-chrome">
+    <a class="brand" href="/aoos/"><span class="mono">AOOS</span> · shared scratchpad</a>
+    <div class="links"><a href="/aoos/">App</a><a href="/aoos/docs">Docs</a><a href="/about.html">About</a></div>
+  </nav>
   <div class="share-shell">
     <div class="share-top">
       <div class="share-brand"><ao-icon name="file-text" size="20"></ao-icon> <span class="mono">AOOS</span> &middot; shared Scratchpad</div>
@@ -42,6 +53,8 @@
     <div class="share-status" id="shareStatus"></div>
     <div id="shareBody"></div>
   </div>
+
+  <footer class="site-colophon">Autoregia · Agent Operation Organization System — shared view; edits require an edit link.</footer>
 
   <div class="toast" id="toast"></div>
   <script src="/aoos/js/icons.js"></script>

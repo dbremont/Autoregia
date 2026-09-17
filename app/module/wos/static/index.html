@@ -25,7 +25,7 @@
     </div>
     <div class="header-search">
       <span class="search-icon"><wos-icon name="search" size="16"></wos-icon></span>
-      <input type="search" id="globalSearch" placeholder="Search the global stream…  ( Ctrl K )" autocomplete="off">
+      <input type="search" id="globalSearch" placeholder="Search the global stream…  ( Ctrl K )" aria-label="Search the global stream" autocomplete="off">
     </div>
   </header>
 
@@ -69,7 +69,7 @@
   <div class="scratchpad">
     <div class="scratchpad-header">
       <h3 style="margin:0;font-size:var(--text-base);">Quick Filter</h3>
-      <button class="btn-icon" onclick="WOS.scratchpad.close()"><wos-icon name="x" size="17"></wos-icon></button>
+      <button class="btn-icon" aria-label="Close scratchpad" onclick="WOS.scratchpad.close()"><wos-icon name="x" size="17"></wos-icon></button>
     </div>
     <div class="scratchpad-body">
       <textarea id="scratchpadText" placeholder="Type a phrase to filter the observation stream…"></textarea>

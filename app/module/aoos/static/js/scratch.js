@@ -121,7 +121,7 @@ AO.Scratch.createShare = async function (permission) {
 };
 
 AO.Scratch.revokeShare = async function (token) {
-  if (!confirm('Revoke this share link?')) return;
+  if (!(await AO.confirmDialog({ title: 'Revoke share link', message: 'Revoke this share link? Anyone holding it loses access.', confirmText: 'Revoke' }))) return;
   await AO.Store.revokeScratchShare(token);
   AO.toast('Link revoked');
   AO.Scratch._renderShare();
