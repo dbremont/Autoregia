@@ -157,25 +157,17 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts, canonical tokens 2026-09) |
 
-**Tracked non-conformances** (audit 2026-09; most items resolved in the
-2026-09 remediation pass — remaining debt):
-
-- **Finder deep-links** — the landing search links GIS hits to
-  `/gis/#entry=<id>`; AIAS and PBS hits still land on the module root
-  (their UIs lack per-record deep-links).
-- **AOOS `docs.html` legacy palette** — its self-contained theme
-  (`--paper:#F7F1E6`, gold mapped to the warning hex) predates §2.1 and
-  should converge; the page now carries context chrome and is served.
-
-Resolved in the 2026-09 pass: legacy token blocks on standalone plates;
-raw `#FAF1E6` → `--paper-on-accent`; unicode glyph icons → Lucide SVGs;
-small-size gold text and off-ramp contrast outliers; native `confirm()`
-replaced by an in-app dialog (aoos ×4, aias, gis); missing aria-labels on
-icon-only controls and search inputs; `/` search shortcut on all app
-shells; sub-10px micro-labels; root-plate self-hosted fonts; dead links
-(`docs.html`, aoos, aias); missing `← Index` breadcrumbs; duplicated
-blockquote and placeholder row on `about.html`; missing context chrome on
-`aoos` docs/share; dead 0-byte `aoos/static/about.html`.
+**Tracked non-conformances** (audit 2026-09): none outstanding. The
+2026-09 audit items are all resolved — legacy token blocks, raw
+`#FAF1E6` (now `--paper-on-accent`), unicode glyph icons, small-size
+contrast outliers, native `confirm()` (replaced by in-app dialogs),
+missing aria-labels, `/` search shortcuts, sub-10px micro-labels,
+root-plate self-hosted fonts, dead links, missing breadcrumbs and
+context chrome, and landing-finder deep-links (GIS `#entry=`, AIAS
+`#intent=`, PBS `#record=`, PRAS document paths). The AOOS `docs.html`
+self-contained theme was converged onto the canonical palette; its dark
+code-block pair (`--code-bg` `#2A2620` / `#E8E2D4`) remains as a
+sanctioned domain surface (§11.4).
 
 Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
 `#e0d2b0`, `#f4ecda`, …) predate the token set; they sit inside the family

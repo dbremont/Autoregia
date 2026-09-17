@@ -530,9 +530,9 @@
     return esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+query.length))+'</mark>'+esc(t.slice(i+query.length))}
   var SOURCES=[
     {prefix:'pras',label:'PRAS',wrap:true,map:function(r){return{title:r.title,snippet:r.snippet,href:'/pras'+r.path}}},
-    {prefix:'aias',label:'AIAS',wrap:false,map:function(i){return{title:i.description||i.id,snippet:i.expected_value||('intent · '+(i.status||'')),href:'/aias/'}}},
+    {prefix:'aias',label:'AIAS',wrap:false,map:function(i){return{title:i.description||i.id,snippet:i.expected_value||('intent · '+(i.status||'')),href:'/aias/#intent='+encodeURIComponent(i.id)}}},
     {prefix:'gis',label:'GIS',wrap:false,map:function(e){return{title:e.name||e.title||e.id,snippet:e.summary||e.description||'',href:'/gis/#entry='+encodeURIComponent(e.id)}}},
-    {prefix:'pbs',label:'PBS',wrap:false,map:function(r){return{title:(r.content||r.id||'').slice(0,90),snippet:r.detail||'',href:'/pbs/'}}}
+    {prefix:'pbs',label:'PBS',wrap:false,map:function(r){return{title:(r.content||r.id||'').slice(0,90),snippet:r.detail||'',href:'/pbs/#record='+encodeURIComponent(r.id)}}}
   ];
   function rows(j,w){return w?(j&&j.results)||[]:(Array.isArray(j)?j:[])}
   function src(s,query){return fetch('/'+s.prefix+'/api/search?q='+encodeURIComponent(query))

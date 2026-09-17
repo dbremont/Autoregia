@@ -41,10 +41,19 @@ AI.app = (() => {
 
     AI.Store.subscribe(() => render());
     AI.Store.load().then(() => {
+      const m = location.hash.match(/^#intent=(.+)$/);
+      if (m) {
+        setView('board');
+        history.replaceState(null, '', '#intent=' + m[1]);
+        AI.Editor.openDetail(decodeURIComponent(m[1]));
+        return;
+      }
       const h = location.hash.replace('#', '');
       setView(VIEWS.some(v => v.id === h) ? h : 'board');
     });
     window.addEventListener('hashchange', () => {
+      const m = location.hash.match(/^#intent=(.+)$/);
+      if (m) { AI.Editor.openDetail(decodeURIComponent(m[1])); return; }
       const h = location.hash.replace('#', '');
       if (VIEWS.some(v => v.id === h)) setView(h);
     });

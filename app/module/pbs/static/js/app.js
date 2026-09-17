@@ -10,11 +10,18 @@ PBS.init = async function() {
   this.setupHeaderButtons();
   this.renderTypeNav();
   PBS.Store.subscribe(() => { this.renderTypeNav(); });
-  this.navigate(this.getHashView() || 'dashboard');
+  const rm = location.hash.match(/^#record=(.+)$/);
+  this.navigate(rm ? 'records' : (this.getHashView() || 'dashboard'));
+  if (rm) {
+    history.replaceState(null, '', '#record=' + rm[1]);
+    PBS.record.showDetail(decodeURIComponent(rm[1]));
+  }
 };
 
 PBS.setupRouter = function() {
   window.addEventListener('hashchange', () => {
+    const rm = location.hash.match(/^#record=(.+)$/);
+    if (rm) { PBS.record.showDetail(decodeURIComponent(rm[1])); return; }
     const v = this.getHashView(); if (v) this.navigate(v);
   });
 };
