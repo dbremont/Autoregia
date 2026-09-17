@@ -1,15 +1,17 @@
 # Autoregia Dependability — Fault Tolerance & Continuity
 
 > **Status:** adopted (2026-09). **Scope:** the whole system — all sub-systems,
-> their collectors, CouchDB, and the container/deployment layer.
+> their background services, the persistence layer, and the deployment layer.
 >
 > This document states the **dependability guarantees of the system**: which
 > failures it tolerates, how it preserves **continuity** (recoverability), and
 > where continuity is still broken. It applies the *Self-Continuation /
 > Joint-Continuation* formulation — the ability of a computational system to
 > **maintain, recover, and continue its own ongoing computational process
-> across time, interruptions, or failures** — to Autoregia's concrete
-> mechanisms. Every guarantee below is classified honestly:
+> across time, interruptions, or failures**. It is a spec of guarantees and
+> obligations only: how each guarantee is realized — the mechanisms and their
+> configuration — is documented in each sub-system's own implementation
+> documentation. Every guarantee below is classified honestly:
 > **guaranteed / best-effort / absent**.
 
 ## Formulation
@@ -32,49 +34,48 @@
 
 ## Failure model
 
-The failure classes the system actually faces, with their concrete instances
-here:
+The failure classes the system faces:
 
-| Failure type | Instances in Autoregia |
+| Failure type | Description |
 | --- | --- |
-| **Node failure** | host reboot; `autoregia` / `couchdb` container crash; desktop sleep kills the PKTS/PWTS/WOS collectors |
-| **Process crash** | Flask server exception; RQ worker death mid-batch; collector daemon killed |
-| **Network partition** | CouchDB unreachable from the server; nitter mirror down; an external feed timing out; Redis down |
-| **Message loss / delay** | fire-and-forget result POSTs (CES → AOOS/PBS); ingest POST from a desktop collector while the server is down |
-| **Performance degradation** | feed polls stacking behind a slow mirror; embedding model load on first Recompute; disk pressure on the CouchDB volume |
-| **Data corruption / inconsistency** | a bad batch written by a worker; a partially updated view; stale seed assumptions after manual DB edits |
+| **Node failure** | a machine or service host becomes unavailable — reboot, crash, or sleep — silencing the services it hosts |
+| **Process crash** | a service or background worker terminates unexpectedly, possibly mid-unit-of-work |
+| **Network partition** | the persistence layer or an external dependency becomes unreachable, isolating services from state or from the world |
+| **Message loss / delay** | notifications or results sent between services are lost, delayed, or delivered while the receiver is down |
+| **Performance degradation** | load, slow external dependencies, or resource pressure stretch execution beyond expected times |
+| **Data corruption / inconsistency** | partial writes, buggy processing, or out-of-band edits leave stored state inconsistent |
 
 ## Guarantees held today
 
-| Guarantee | Status | Mechanism | Where |
-| --- | --- | --- | --- |
-| **Checkpoint / resume** (polling continues from the last known point) | guaranteed | per-source poll cursors persist `last_fetched_ms`, `last_observed_ms`, `last_error`, `error_count` as `STATE-<id>` docs; each sweep resumes from them | `wos` collector + `wos/server.py` |
-| **Progress continuity** (completed work is not redone) | guaranteed | cursors advance only on success; `since_ms` filters re-delivery | `wos/sources/*.py` |
-| **Execution-identity continuity** (a spec is recognized across restarts) | guaranteed | stable spec `id` keys the cursor; observations key on `obs_id` | `config/seed.json`, `wos/sources/base.py` |
-| **Deduplication → exactly-once store effects** | guaranteed | `obs_id = sha1(source:native_id)`; `Store.put` upserts by application id — replays collapse into one durable document | `wos/sources/base.py`, `support/storage/` |
-| **At-least-once processing + reconciliation** (PKTS/PWTS) | guaranteed | ingest persists the raw batch to CouchDB **first**, enqueue second; a Redis outage loses nothing — the worker drains *every* unprocessed batch, not just the notified one | `pkts/server.py` (`ingest`), `pkts/worker.py` |
-| **Durable queue** | guaranteed (CouchDB as the queue) | unprocessed batches live as documents until a worker marks them processed | `pkts_raw` / `pwts_raw` |
-| **Failure detection / health checking** | guaranteed | cursor-derived per-source health (`healthy / degraded / failing / pending`) surfaced on the Sources plate | `wos/server.py` (`/api/sources/status`) |
-| **Graceful degradation** (partial continuity) | guaranteed | AOOS falls back to `data/*.json` fixtures when CouchDB is down; analytics degrade to empty states instead of erroring | `aoos`, `wos/static/js/*` |
-| **Resource reacquisition / process continuation** | guaranteed | the server is stateless: on restart it rehydrates from CouchDB + `seed.json`; containers run `--restart unless-stopped` | `app/app.py`, `Makefile`, Dockerfile |
-| **Configuration continuity** (desired state survives restarts and DB loss) | guaranteed | `config/seed.json` is committed, read directly on every `/api/sources` — the watched set is not DB state | `wos/config/seed.json`, `spec/wos/policy.md` |
-| **Codebase identity continuity** | guaranteed | git history + GHCR image tags; every deploy is a named, recoverable artifact | CI (GitHub Actions) |
-| **Retry of failed feeds** | best-effort | `error_count`/`last_error` recorded per spec; the sweep retries next interval — but there is no exponential backoff or dead-letter | `wos` collector |
-| **Joint work tracking (RQ)** | best-effort | Redis queues `pkts`/`pwts` are ephemeral; correctness relies on the CouchDB reconciliation above, not on Redis durability | `pkts/tasks.py`, `pkts/worker.py` |
-| **Ephemeral sub-system state** (CES sessions, in-memory caches) | absent (by design) | CES sessions are in-memory; a restart resets them — accepted, since they are exploratory mock environments | `ate/tool/ces` |
+| Guarantee | Status | Obligation |
+| --- | --- | --- |
+| **Checkpoint / resume** | guaranteed | every recurring acquisition records its progress; after any interruption, work resumes from the last recorded point |
+| **Progress continuity** | guaranteed | completed work is never re-executed; re-delivery of already-recorded items changes nothing |
+| **Execution-identity continuity** | guaranteed | a recurring obligation retains its identity across restarts and deployments |
+| **Deduplication → exactly-once record effects** | guaranteed | a re-observed item collapses into the already-stored record; replays change nothing |
+| **At-least-once processing + reconciliation** | guaranteed | work accepted by the system survives any interruption before processing; processing resumes from the durable record of the work, never from the notification |
+| **Durable queue** | guaranteed | accepted-but-unprocessed work is held until it is processed or explicitly abandoned |
+| **Failure detection / health** | guaranteed | every recurring obligation reports its state; stale, failing, and never-started obligations are visible |
+| **Graceful degradation** | guaranteed | loss of the persistence layer reduces capability — it never destroys records or halts the whole system |
+| **Resource reacquisition / process continuation** | guaranteed | services are stateless: a restarted process re-derives its state and continues where it left off |
+| **Configuration continuity** | guaranteed | the declared configuration survives restarts and loss of the runtime store; it is not runtime state |
+| **Codebase identity continuity** | guaranteed | any running state is reproducible from the repository |
+| **Notification-channel independence** | guaranteed | notification channels are optimizations; correctness never depends on their durability |
+| **Retry of failed obligations** | best-effort | failures are recorded and re-attempted next cycle, but there is no backoff or dead-letter policy |
+| **Ephemeral exploratory state** | absent (by design) | exploratory, in-memory state is not preserved; a restart resets it — accepted for mock environments |
 
 ## Joint-continuity today
 
-Computation is genuinely distributed: server, collectors, workers, and
-container infrastructure each hold part of the ongoing process.
+Computation is genuinely distributed: services, background executors, and the
+deployment layer each hold part of the ongoing process.
 
 | Delegation | Continuity of the link |
 | --- | --- |
-| **collector daemon → server** (`GET /api/sources`, `POST /api/poll`) | best-effort: the daemon sweeps on a timer and re-asks every cycle, so a missed sweep self-heals; but the daemon itself is **hand-started and unsupervised** (see gaps) |
-| **desktop collectors → ingest** (PKTS/PWTS batches) | best-effort: push over HTTP; if the server is down *at push time* the batch is lost — there is no store-and-forward on the collector side |
-| **server → RQ workers** | guaranteed via CouchDB reconciliation (above); Redis is an optimization, not a source of truth |
-| **CES → AOOS / PBS** (result posts) | **absent** — fire-and-forget POSTs with no acknowledgment, retry, or record. If the receiver is down, the result vanishes: a live joint-continuity gap |
-| **operator → deployment** (`make deploy-*`, CI) | guaranteed: images are rebuilt from git; the running system is always reproducible from the repository |
+| **acquisition service → observation service** | best-effort: sweeps re-run on a timer, so a missed cycle self-heals; the service itself is hand-started and unsupervised (see gaps) |
+| **edge collectors → ingestion** | best-effort: push at collection time; if the receiver is down at that moment, the batch is lost at the source — no store-and-forward |
+| **services → background executors** | guaranteed: correctness rests on durable work records and reconciliation, never on the notification channel |
+| **execution tool → record systems** | **absent** — results are posted without acknowledgment, retry, or record: a live joint-continuity gap |
+| **operator → deployment** | guaranteed: the running system is always reproducible from the repository |
 
 ## Known discontinuities
 
@@ -82,39 +83,40 @@ Honest gaps — what the system does **not** yet guarantee, with the roadmap:
 
 | Gap | Consequence | Roadmap |
 | --- | --- | --- |
-| **No CouchDB backups** | host/volume loss destroys the whole corpus (observations, cursors, batches) — the one unrecoverable artifact | periodic `couchdb-dump`/replication to a second location; restore runbook |
-| **Single-node CouchDB** | no replication, no failover; DB downtime = degraded mode for every store-backed sub-system | 2-node replication or scheduled snapshot restore drill |
-| **Unsupervised collectors** | the WOS collector (and desktop collectors) are hand-started; a host reboot silently stops perception until noticed | systemd units / supervised processes with health reporting into WOS itself |
-| **No ack/retry on result feeds** (CES → AOOS/PBS) | joint-continuity break: delegated results can vanish silently | durable result documents + retry, or route results through CouchDB instead of POSTs |
-| **Collector push without store-and-forward** | PKTS/PWTS batches generated while the server is down are lost at the source | local spool on the collector; drain on reconnect |
-| **No backoff / dead-letter for failing feeds** | a dead mirror is retried every sweep at full cost | backoff policy in the cursor; dead-letter state |
+| **No backups of the persistent corpus** | loss of the persistence volume destroys observations, progress records, and accepted work — the one unrecoverable artifact | periodic backups to a second location; restore runbook |
+| **Single persistence node** | no replication or failover; persistence-layer downtime means degraded mode for every store-backed sub-system | replication, or a scheduled snapshot-restore drill |
+| **Unsupervised background services** | background services are hand-started; an interruption silently stops them until noticed | supervised services with health reporting into the system itself |
+| **Unacknowledged result delivery** | delegated results can vanish silently | durable result records + retry |
+| **Ingestion without store-and-forward** | work generated while the receiver is down is lost at the source | local spool on the emitter; drain on reconnect |
+| **No backoff / dead-letter policy** | a failing dependency is retried every cycle at full cost | backoff policy; dead-letter state |
 
 ## The continuity loop
 
-The note's minimal architecture, as instantiated here:
+The minimal architecture, as the system realizes it:
 
 ```txt
-COLLECT / COMPUTE            (server, collectors, workers — stateless)
+COLLECT / COMPUTE            (application services — stateless)
    ↓
-UPDATE STATE                 (observations, cursors, batches, clusters doc)
+UPDATE STATE                 (acquired items, progress records, accepted work, derived projections)
    ↓
-PERSIST STATE                (CouchDB documents; seed.json for desired state)
+PERSIST STATE                (the durable store; declared configuration for desired state)
    ↓
-   [INTERRUPTION]            (crash, redeploy, host reboot, DB outage)
+   [INTERRUPTION]            (crash, redeploy, reboot, persistence-layer outage)
    ↓
-RECOVER STATE                (restart: rehydrate from CouchDB; re-read seed)
+RECOVER STATE                (restart: rehydrate from the durable store; re-read the declared configuration)
    ↓
-RECONSTRUCT CONTEXT          (cursors → what was fetched; health → what failed)
+RECONSTRUCT CONTEXT          (progress records → what was done; health → what failed)
    ↓
-CONTINUE                     (next sweep resumes; workers drain; user re-renders)
+CONTINUE                     (the next cycle resumes; pending work drains)
    ↓
 COLLECT / COMPUTE ...
 ```
 
-Design rule this encodes: **all durable state lives in CouchDB or committed
-files; every process is a stateless function of that state.** Any mechanism
-that breaks the rule (in-memory sessions, fire-and-forget posts, hand-started
-daemons) is a listed discontinuity above, not an accident.
+Design rule this encodes: **all durable state lives in the durable store or the
+declared configuration; every process is a stateless function of that state.**
+Any mechanism that breaks the rule (in-memory sessions, fire-and-forget
+delivery, hand-started services) is a listed discontinuity above, not an
+accident.
 
 ## QA
 
