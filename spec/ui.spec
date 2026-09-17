@@ -224,6 +224,11 @@ design.md §5).
 
 ### 5.1 Spacing — 4/8 Baseline Grid
 
+**Rule:** app-shell css uses the `--space-*` scale exclusively — raw px
+padding/margin is a conformance error (hairlines, 1–2px optical tweaks,
+and border widths excepted). Document plates keep their layout px and
+snap 4/8-multiples opportunistically.
+
 | Token        | rem       | px |
 | ------------ | --------- | -- |
 | `--space-1`  | `0.25rem` | 4  |
@@ -512,7 +517,16 @@ only — tokens and fonts come from the shared layer.
 
 A sub-project may **extend** the token set or component catalog (new views, domain-specific visualizations) but may **not contradict** it. Divergent themes (dark neon, saturated marketing, generic dashboard chrome) are out of scope and must be refactored to converge on this standard. (The former PKTS dark/cyan prototype was the motivating example; it was reconciled onto the canonical palette and shell.)
 
-### 11.5 Reference Implementation
+### 11.5 Shared JS behaviors
+
+Duplicated behavior is drift. `confirmDialog` (§10.6) and `toast` live in
+`/ui/js/ui.js` (`AUTOREGIA.*`); the icon registry in `/ui/js/icons.js`
+(`AUTOREGIA.ICONS` + `defineIconElement`). Tools keep thin aliases
+(`AO.toast = …`) so call sites never reference the shared namespace
+directly. What is **never** shared: markup and chrome (§12) — behaviors
+and styles share, DOM ownership does not.
+
+### 11.6 Reference Implementation
 
 The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS implementation wins over prose in this document; contradictions should be filed against this spec, not the code.
 
@@ -522,9 +536,9 @@ The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS imple
 
 > Every Autoregia page must have a **navbar** and a **footer** — both provide
 > context. What may never be shared is **markup**: each page implements its
-> own chrome outright — no injected script, no served fragment. (Stylesheets
-> are the opposite: tokens, fonts, and base styles are shared via `/ui/css/`
-> per §11.2.)
+> own chrome outright — no injected script, no served fragment. Stylesheets
+> and JS *behaviors* are the opposite: they share via `/ui/css/` and
+> `/ui/js/` (§11.2, §11.5).
 
 - **Landmarks:** the navbar is a `<nav>` element; the footer is a `<footer>`
   element.

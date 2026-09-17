@@ -169,13 +169,16 @@ everything else runs out-of-band:
   alias layer) live ONLY in `app/support/ui/`, served by the `/ui/` route
   in `app/app.py`. Never re-declare tokens/fonts per surface — link
   `/ui/css/{tokens,fonts,base,standalone}.css` (with `?v=YYYYMMDD`
-  cache-busters; bump `v` when editing the layer). `ui` must never be
+  cache-busters; bump `v` when editing the layer). Shared JS behaviors too:
+  `confirmDialog`/`toast` in `/ui/js/ui.js`, the icon registry in
+  `/ui/js/icons.js` (tools keep thin aliases). `ui` must never be
   added to `prefix_assets.py` SEGMENTS — `/ui/` is global, not per-tool.
   Per-tool css keeps only `layout/components/views/command-palette`
   (+ additive files). Font families come from the layer too (`--font-*`,
   aliased as `--serif/--sans/--mono` on plates) — as do font sizes:
   always a `--text-*` step (incl. `--text-2sm` 12px); raw px only inside
-  fluid `clamp()` (`spec/ui.spec` §4.2).
+  fluid `clamp()` (`spec/ui.spec` §4.2). Shell css spacing uses `--space-*`
+  only (`spec/ui.spec` §5.1).
 - **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,
