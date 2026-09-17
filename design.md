@@ -163,7 +163,7 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `pbs`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `gial`, `sarl` | app shell / standalone | ✅ conforms (token set; aias dialect noted, motion+focus guards added 2026-09) |
+| `pbs`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `ctes`, `gial`, `sarl` | app shell / standalone | ✅ conforms (token set; aias dialect noted, motion+focus guards added 2026-09) |
 | `wos`, `gis`, `aoos`, `loop` | app shell | ✅ conforms (paper-on-accent token, Lucide icons, contrast — 2026-09) |
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |

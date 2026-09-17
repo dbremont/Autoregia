@@ -1048,7 +1048,9 @@
         actually be done. The work itself is organized by the <strong>Agent Operation Organization System</strong>
         (AOOS — the Action Organization stage, its own element in the table above). Within the toolbox: the
         <strong>Computation Execution System</strong> (CES) provisions computational environments, dispatches work
-        units, captures artifacts, and feeds results back into the loop — the Execution stage; the <strong>General
+        units, captures artifacts, and feeds results back into the loop — the Execution stage; the <strong>Computation
+          Task Execution System</strong> (CTES) manages the lifecycle of tasks from submission to completion — designed,
+        plate only; the <strong>General
           Integration Abstraction Layer</strong> (GIAL) gives the agent one abstraction for connecting to external
         systems — designed, plate only; the <strong>Sistema Asistencia de Revisión Lingüística</strong> (SARL)
         verifies and corrects the linguistic, stylistic, terminological, and orthotypographic aspects of a text —
@@ -1068,6 +1070,12 @@
             <td>Provisions computational environments, dispatches work units, captures artifacts, and feeds results back
               into the loop.</td>
             <td>Execution (Actuation) · Execute Plans</td>
+          </tr>
+          <tr>
+            <td class="code"><a href="/ate/tool/ctes/">CTES</a></td>
+            <td>Manages the lifecycle of tasks from submission to completion — queues, schedulers, dispatchers, workers,
+              and result channels.</td>
+            <td>Execution · Task Lifecycle · designed</td>
           </tr>
           <tr>
             <td class="code"><a href="/ate/tool/gial/">GIAL</a></td>

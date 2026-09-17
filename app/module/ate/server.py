@@ -55,6 +55,15 @@ TOOLS = [
         "href": "/ate/tool/ces/",
     },
     {
+        "id": "ctes",
+        "name": "Computation Task Execution System",
+        "summary": ("Manages the lifecycle of tasks from submission to "
+                    "completion — queues, schedulers, dispatchers, workers, "
+                    "and result channels. Designed; plate only."),
+        "vsm": "Toolbox — Task Execution",
+        "href": "/ate/tool/ctes/",
+    },
+    {
         "id": "gial",
         "name": "General Integration Abstraction Layer",
         "summary": ("One abstraction for connections to external systems — "

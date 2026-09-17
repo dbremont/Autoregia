@@ -24,6 +24,7 @@ app/                 the application
 │       asrs/ pais/ peos/ …    husks — __pycache__ only, deleted modules
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── ces/  a tool (own Flask app, mounted at /ate/tool/ces/)
+│         └── ctes/  a tool — design plate only, unimplemented (spec/ctes/)
 │         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/

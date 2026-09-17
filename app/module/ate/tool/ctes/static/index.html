@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTES — Computation Task Execution System</title>
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
+<style>
+
+  
+  *{box-sizing:border-box;margin: 0;padding: 0}
+  body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin: 0 auto;padding: 0 28px}
+  nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+  nav.topnav .topnav-in{max-width:880px;margin: 0 auto;padding: 0 28px;display:flex;align-items:center;height:60px;gap: 18px}
+  nav.topnav .lockup{font-family:var(--serif);font-size:var(--text-lg);font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  nav.topnav .links{margin-left: auto;display:flex;gap: 26px}
+  nav.topnav .links a{font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);text-decoration:none;padding: var(--space-1) 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+  nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  header.masthead{padding: 72px 0 0;text-align:center}
+  .eyebrow{font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom: var(--space-4)}
+  h1.title{font-size:clamp(52px,8vw,84px);font-weight:300;letter-spacing:-.02em;line-height:1;margin-bottom: 10px}
+  .subtitle{font-size:var(--text-lg);color:var(--ink-soft);font-style:italic}
+  .gold-rule{height:1px;background:var(--gold);width:64px;margin: 28px auto;opacity:.7}
+  p.lede{font-size:var(--text-md);color:var(--ink-soft);max-width:640px;margin: 0 auto;line-height:1.65}
+  .status{margin: 36px auto 0;max-width:640px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-5);font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);display:flex;gap: 14px;align-items:baseline;text-align:left}
+  .status .tag{font-family:var(--mono);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding: 2px 7px;white-space:nowrap}
+  .section-eyebrow{margin: 56px 0 0;font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap: 14px;margin: 14px 0 0}
+  .model-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: var(--space-4) 18px}
+  .mc-code{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.14em;color:var(--accent);font-weight:600}
+  .mc-desc{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 7px;line-height:1.55}
+  table.matrix{width:100%;border-collapse:collapse;margin: 14px 0 0;font-family:var(--sans);font-size:var(--text-sm)}
+  table.matrix th{font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding: var(--space-2) 10px;border-bottom:1px solid var(--rule)}
+  table.matrix td{padding: 10px;border-bottom:1px solid var(--rule);color:var(--ink-soft);vertical-align:top}
+  table.matrix td:first-child{font-family:var(--mono);font-size:var(--text-2sm);color:var(--ink);white-space:nowrap}
+  table.matrix .st-live{color:var(--accent);font-weight:600}
+  .auth-ladder{display:flex;flex-wrap:wrap;gap: 10px;margin: 14px 0 0}
+  .chip{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.08em;color:var(--ink-soft);border:1px solid var(--rule);border-radius:20px;padding: 5px 13px;background:var(--surface)}
+  .chip.hot{color:var(--accent);border-color:var(--gold)}
+  .step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap: 14px;margin: var(--space-4) 0 0}
+  .step{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-4)}
+  .step .n{font-family:var(--mono);font-size:var(--text-xs);color:var(--gold);font-weight:600;letter-spacing:.12em}
+  .step .t{font-family:var(--sans);font-size:var(--text-sm);font-weight:600;margin-top: var(--space-1)}
+  .step .d{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 5px;line-height:1.5}
+  pre.flow{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: var(--space-4) var(--space-5);font-family:var(--mono);font-size:var(--text-2sm);line-height:1.7;color:var(--ink-soft);overflow-x:auto;margin: 14px 0 0}
+  .note{max-width:640px;font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 14px;line-height:1.6}
+  footer{border-top:1px solid var(--rule);margin-top: 72px;padding: var(--space-8) 0 56px;text-align:center}
+  footer .mono{font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-in">
+    <a class="lockup" href="/index.html">Autoregia</a>
+    <div class="links">
+      <a href="/ate/">Toolbox</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">ATE · Tool</div>
+    <h1 class="title">CTES</h1>
+    <div class="subtitle">Computation Task Execution System</div>
+    <div class="gold-rule"></div>
+    <p class="lede">A system that manages the lifecycle of tasks — from submission to completion: how specified work is emitted, stored, scheduled, dispatched, executed, and has its results returned reliably. Where CES provisions the environments work runs in, CTES is the discipline of the work itself: queues, schedulers, dispatchers, workers, and result channels.</p>
+    <div class="status">
+      <span class="tag">designed — not yet implemented</span>
+      <span>The full design is written — task formulation, the execution workflow, taxonomy, lifecycle state machine, coordination, failure handling, trade-offs, and verification. This plate reserves CTES's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/ctes/</span>.</span>
+    </div>
+  </header>
+
+  <div class="section-eyebrow">The Model</div>
+  <div class="model-grid">
+    <div class="model-card">
+      <div class="mc-code">OBJECTIVE</div>
+      <div class="mc-desc">What is to be accomplished — the task's stated purpose. The unit of intent.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">INPUT · OPERATION</div>
+      <div class="mc-desc">Information execution operates on, and what is to be done to it. The unit of specification.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">OUTPUT · CONSTRAINTS</div>
+      <div class="mc-desc">The expected result and the conditions governing execution — deadlines, resources, policy. The unit of contract.</div>
+    </div>
+    <div class="model-card">
+      <div class="mc-code">DEPENDENCIES · MODE</div>
+      <div class="mc-desc">Other tasks or resources required, and when the result is expected — synchronous or asynchronous. The unit of ordering.</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">The Execution Workflow</div>
+  <pre class="flow">Task Emitter ──► Task Submission ──► Task Storage / Queue
+                                        │ stores pending work
+                                        ▼
+               Scheduling / Dispatch ──► Task Executor
+                                        │ performs work
+                                        ▼
+               Task Result ──► Result / Feedback Channel
+                                        │
+                                        ▼
+                                  Task Emitter ──► (subsequent tasks)</pre>
+  <p class="note">Cross-cutting mechanisms operate across this structure: state management, leases, heartbeats, timeouts, retries, logging, and monitoring.</p>
+
+  <div class="section-eyebrow">Temporal Modes</div>
+  <div class="step-grid">
+    <div class="step">
+      <div class="n">SYNC</div>
+      <div class="t">Synchronous</div>
+      <div class="d">The emitter waits for the execution result: emitter → execute → result → emitter.</div>
+    </div>
+    <div class="step">
+      <div class="n">ASYNC</div>
+      <div class="t">Asynchronous</div>
+      <div class="d">The emitter submits and continues; the result arrives later through the feedback channel.</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">The Space · Task Execution Systems</div>
+  <table class="matrix">
+    <tr><th>Type</th><th>Executes</th><th>Instances</th></tr>
+    <tr><td>Function Execution</td><td>a discrete function in response to a task</td><td>AWS Lambda, OpenFaaS</td></tr>
+    <tr><td>Job Execution</td><td>submitted jobs via a queue and worker pool</td><td>Celery, Sidekiq</td></tr>
+    <tr><td>Workflow Execution</td><td>multiple tasks coordinated by dependencies and workflow logic</td><td>Temporal, Apache Airflow</td></tr>
+    <tr><td>Build Execution</td><td>transformation of source artifacts into derived artifacts</td><td>Bazel, Buck, Ninja</td></tr>
+    <tr><td>Batch Execution</td><td>collections of tasks or computations as batches</td><td>Apache Hadoop, Apache Spark</td></tr>
+    <tr><td>Stream Processing</td><td>continuous computation as data arrives through a stream</td><td>Apache Flink, Kafka Streams</td></tr>
+    <tr><td>Serverless Execution</td><td>tasks without user-managed execution infrastructure</td><td>AWS Lambda, Google Cloud Functions</td></tr>
+    <tr><td>Distributed Execution</td><td>tasks across machines, coordinating resources and execution</td><td>Ray, Dask</td></tr>
+    <tr><td>Cluster Execution</td><td>tasks across a managed cluster under resource and scheduling constraints</td><td>Kubernetes, Slurm</td></tr>
+  </table>
+  <p class="note">These are not separate categories — they are different configurations of the same underlying task-execution problem.</p>
+
+  <div class="section-eyebrow">Task Lifecycle</div>
+  <pre class="flow">Created → Submitted → Pending → Dispatched → Running
+                                            ├─► Completed
+                                            └─► Failed ─► Retry → Pending
+                                                       └► Abandoned
+Cancellation may transition a task from several intermediate states to Cancelled.</pre>
+
+  <div class="section-eyebrow">Mechanisms</div>
+  <div class="auth-ladder">
+    <span class="chip">job queue</span>
+    <span class="chip">scheduler</span>
+    <span class="chip">dispatcher</span>
+    <span class="chip">executor · worker pool</span>
+    <span class="chip">dependency resolver</span>
+    <span class="chip hot">retry · backoff</span>
+    <span class="chip">timeout</span>
+    <span class="chip">lease</span>
+    <span class="chip">lock</span>
+    <span class="chip">heartbeat</span>
+    <span class="chip hot">dedup · idempotency</span>
+  </div>
+
+  <div class="section-eyebrow">Trade-offs</div>
+  <table class="matrix">
+    <tr><th>Trade-off</th><th>One side</th><th>Other side</th></tr>
+    <tr><td>Throughput ↔ Latency</td><td>maximize tasks completed</td><td>minimize individual completion time</td></tr>
+    <tr><td>Reliability ↔ Resource cost</td><td>retries, replication, persistence</td><td>less resource consumption</td></tr>
+    <tr><td>Persistence ↔ Performance</td><td>durable task and state storage</td><td>lower storage overhead and latency</td></tr>
+    <tr><td>Fault tolerance ↔ Complexity</td><td>recover from more failures</td><td>simpler implementation</td></tr>
+    <tr><td>Ordering ↔ Concurrency</td><td>preserve execution order</td><td>execute independent tasks concurrently</td></tr>
+  </table>
+
+  <div class="section-eyebrow">Scales of Implementation</div>
+  <table class="matrix">
+    <tr><th>Scale</th><th>Typical implementation</th></tr>
+    <tr><td>local</td><td>function calls, process execution, local queue</td></tr>
+    <tr><td>single-process</td><td>in-memory task queue and worker pool</td></tr>
+    <tr><td>single-machine</td><td>processes/threads plus persistent queue</td></tr>
+    <tr><td>multi-process</td><td>broker plus multiple workers</td></tr>
+    <tr><td>distributed</td><td>distributed queue/state store plus worker pool</td></tr>
+    <tr><td>workflow-scale</td><td>persistent workflow state plus task orchestration</td></tr>
+  </table>
+</div>
+
+<footer>
+  <div class="wrap"><span class="mono">Autoregia · CTES — the task-lifecycle layer of the toolbox</span></div>
+</footer>
+
+</body>
+</html>
