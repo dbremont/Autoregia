@@ -19,9 +19,21 @@ WOS.Flow = (() => {
     return { rows, names: [...names].sort() };
   }
   function render(){
+    const items = WOS.Store.observations();
+    const total = items.length;
+    const srcs = new Set(items.map(o=>o.source||'?')).size;
+    const byDay = {};
+    items.forEach(o=>{ if(o.observed_at_ms) byDay[new Date(o.observed_at_ms).toISOString().slice(0,10)] = (byDay[new Date(o.observed_at_ms).toISOString().slice(0,10)]||0)+1; });
+    const peak = Object.entries(byDay).sort((x,y)=>y[1]-x[1])[0];
     return `
-      ${v.header('Flow', v.windowSeg())}
-      <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">A stream graph of the signal over time — ribbon thickness is volume. Read it left to right to see when and where the conversation swells.</p>
+      ${v.header('Observation Flow', v.windowSeg())}
+      <p class="text-sm text-muted animate-in" style="max-width:var(--measure)"><strong>How does volume move through time?</strong> A stream graph of the signal — ribbon thickness is volume; read left to right to see when and where the conversation swells.</p>
+      <div class="stat-row animate-in">
+        ${v.statCard(total,'items in window')}
+        ${v.statCard(srcs,'sources flowing')}
+        ${v.statCard(peak ? peak[0] : '—','peak day')}
+        ${v.statCard(peak ? peak[1] : '—','items at peak')}
+      </div>
       <div class="chart-card animate-in">
         <div class="chart-head"><div><span class="eyebrow">stream graph</span><h3>Volume by source</h3></div></div>
         <div class="chart-box" id="chartFlow" style="height:420px"></div>

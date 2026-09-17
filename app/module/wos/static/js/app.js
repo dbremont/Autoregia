@@ -11,10 +11,10 @@ WOS.VIEWS = [
   { id:'dashboard',     label:'Dashboard',     icon:'home',      group:'Observation', desc:'volume, spikes, what is hot now' },
   { id:'sources',       label:'Sources',       icon:'rss',       group:'Observation', desc:'watched feeds' },
   { id:'search',        label:'Observations',  icon:'radio',     group:'Observation', desc:'the observation stream' },
-  { id:'flow',          label:'Flow',          icon:'waves',     group:'Analysis',    desc:'stream graph over time' },
-  { id:'composition',   label:'Composition',   icon:'git-branch',group:'Analysis',    desc:'source make-up' },
-  { id:'landscape',     label:'Landscape',     icon:'network',   group:'Analysis',    desc:'words & co-occurrence' },
-  { id:'clusters',      label:'Clusters',      icon:'layers',    group:'Analysis',    desc:'semantic clusters' },
+
+  { id:'overview',          label:'Overview',            icon:'compass',      group:'Analysis', desc:'trends, anomalies, evolution, geography, flow — the world at a glance' },
+  { id:'cluster-analysis',  label:'Clustering Analysis', icon:'layers',       group:'Analysis', desc:'projection, profiles, trends, composition, similarity' },
+
   { id:'documentation', label:'Documentation', icon:'book-open', group:'System',      desc:'about this dashboard' },
   { id:'about',         label:'About',         icon:'info',      group:'System',      desc:'what WOS is' },
   { id:'settings',      label:'Settings',      icon:'settings',  group:'System',      desc:'read-only demo', action:'settings' },
@@ -22,7 +22,16 @@ WOS.VIEWS = [
 ];
 
 // Pre-rename hashes, kept as aliases so old bookmarks keep working.
-WOS._ALIASES = { pulse:'dashboard', reading:'search', topics:'sources' };
+WOS._ALIASES = {
+  pulse:'dashboard', reading:'search', topics:'sources',
+  trends:'overview/trends', emerging:'overview/emerging', anomalies:'overview/anomalies',
+  spatiotemporal:'overview/spatiotemporal', evolution:'overview/evolution',
+  wordcloud:'overview/wordcloud', recent:'overview/recent', treemap:'overview/treemap',
+  flow:'overview/flow', geo:'overview/geo', landscape:'overview/wordcloud',
+  'cluster-projection':'cluster-analysis/projection', clusters:'cluster-analysis/profiles',
+  'cluster-trends':'cluster-analysis/trends', 'cluster-composition':'cluster-analysis/composition',
+  'cluster-similarity':'cluster-analysis/similarity',
+};
 
 // Sidebar items that trigger chrome instead of navigating to a view.
 WOS.runAction = function (name) {
@@ -46,16 +55,21 @@ WOS.renderSidebar = function () {
   const groups = [];
   WOS.VIEWS.forEach(v => {
     let g = groups[groups.length-1];
-    if (!g || g.name !== v.group){ g = { name: v.group, views: [] }; groups.push(g); }
-    g.views.push(v);
+    if (!g || g.name !== v.group){ g = { name: v.group, sections: [] }; groups.push(g); }
+    let s = g.sections[g.sections.length-1];
+    if (!s || s.name !== (v.section||'')){ s = { name: v.section||'', views: [] }; g.sections.push(s); }
+    s.views.push(v);
   });
   nav.innerHTML = groups.map(g =>
-    `<div class="sidebar-label">${g.name}</div>` + g.views.map(v => {
-      const inner = `<span class="nav-icon">${WOS.icon(v.icon,16)}</span><span>${v.label}</span>`;
-      return v.action
-        ? `<a href="#" data-action="${v.action}">${inner}</a>`
-        : `<a href="#${v.id}" data-view="${v.id}">${inner}</a>`;
-    }).join('')
+    `<div class="sidebar-label">${g.name}</div>` + g.sections.map(s =>
+      (s.name ? `<div class="sidebar-sublabel">${s.name}</div>` : '') +
+      s.views.map(v => {
+        const inner = `<span class="nav-icon">${WOS.icon(v.icon,16)}</span><span>${v.label}</span>`;
+        return v.action
+          ? `<a href="#" data-action="${v.action}">${inner}</a>`
+          : `<a href="#${v.id}" data-view="${v.id}">${inner}</a>`;
+      }).join('')
+    ).join('')
   ).join('');
   nav.querySelectorAll('a[data-action]').forEach(a =>
     a.addEventListener('click', (e)=>{ e.preventDefault(); WOS.runAction(a.dataset.action); }));
@@ -67,15 +81,18 @@ WOS.setupRouter = function () {
 WOS.getHash = () => location.hash.slice(1);
 
 WOS.navigate = function (view) {
-  if (WOS._ALIASES[view]) view = WOS._ALIASES[view];
-  const def = WOS.VIEWS.find(v=>v.id===view);
+  view = WOS._ALIASES[view] || view;
+  const slash = view.indexOf('/');
+  const sub = slash >= 0 ? view.slice(slash+1) : '';
+  const base = slash >= 0 ? view.slice(0, slash) : view;
+  const def = WOS.VIEWS.find(v=>v.id===base);
   if (def && def.action){ WOS.runAction(def.action); return; }   // chrome, not a view
-  this.current = view; location.hash = '#'+view;
-  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===view));
+  this.current = view; this.currentSub = sub; location.hash = '#'+view;
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===base));
   const c = document.getElementById('appContent');
-  const cap = view.charAt(0).toUpperCase()+view.slice(1);
-  c.innerHTML = (WOS[cap] && WOS[cap].render) ? WOS[cap].render() : `<div class="empty-state"><h3>Unknown view</h3></div>`;
-  setTimeout(()=>{ if(WOS[cap]&&WOS[cap].afterRender) WOS[cap].afterRender(); this.setupWindow(); this.bindMeta(); this.updateFooter(); }, 40);
+  const cap = base.split('-').map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join('');
+  c.innerHTML = (WOS[cap] && WOS[cap].render) ? WOS[cap].render(sub) : `<div class="empty-state"><h3>Unknown view</h3></div>`;
+  setTimeout(()=>{ if(WOS[cap]&&WOS[cap].afterRender) WOS[cap].afterRender(sub); this.setupWindow(); this.bindMeta(); this.updateFooter(); }, 40);
 };
 
 WOS.updateFooter = function () {
@@ -169,7 +186,7 @@ WOS.docsHTML = function () {
     <h4>Purpose</h4>
     <p>A sense-making dashboard over what <strong>other agents</strong> say about the world — comments, posts and news collected from free feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT). Every item is stored as an <em>observational</em> event in CouchDB; the instruments here turn that stream into orientation.</p>
     <h4>The instruments</h4>
-    <p><strong>Dashboard</strong> orients — volume over time, spikes, and what is hot now. <strong>Flow</strong> is the stream graph (a timeline of ribbons by source). <strong>Composition</strong> shows how the stream splits across sources and semantic clusters. <strong>Landscape</strong> maps the vocabulary (word cloud ⇄ treemap) and term co-occurrence. <strong>Clusters</strong> groups items by meaning via a local embedding model. <strong>Search</strong> is the ground-truth observation stream. <strong>Sources</strong> lists the configured poll specs — plain poll specs managed in <code>config/seed.json</code> (the panel is read-only; edit the file to change the watched set).</p>
+    <p><strong>Dashboard</strong> orients — volume over time, spikes, and what is hot now. The <strong>Analysis</strong> section is two tabbed pages: <em>Overview</em> — trends, emerging topics, anomalies, spatiotemporal detection, evolution, word cloud, recent arrivals, source treemap, flow, geography, composition — and <em>Clustering Analysis</em> — the 2-D projection, cluster profiles, cluster trends, composition, and similarity (all built by a local embedding model; Recompute refreshes them). <strong>Search</strong> is the ground-truth observation stream. <strong>Sources</strong> lists the configured poll specs — plain poll specs managed in <code>config/seed.json</code> (the panel is read-only; edit the file to change the watched set).</p>
     <h4>The click→filter bus</h4>
     <p>Click almost any chart element (a source wedge, a cluster card, a word) to filter the Search stream. It is how the charts stop being decoration and start being sense.</p>
     <h4>Navigation</h4><div class="kbd-grid">${binds}</div>

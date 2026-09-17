@@ -1,7 +1,8 @@
 /* ════════════════════════════════════════════════════════════
-   WOS Clusters — semantic topic clusters from a local embedding
-   model (fastembed MiniLM/BGE-small), lexical fallback. Each card
-   is a discovered topic; click to read its members.
+   WOS Cluster Profiles — semantic topic clusters from a local
+   embedding model (fastembed MiniLM/BGE-small), lexical
+   fallback. Each card is a discovered topic's profile; click to
+   read its members.
    ════════════════════════════════════════════════════════════ */
 window.WOS = window.WOS || {};
 WOS.Clusters = (() => {
@@ -26,7 +27,7 @@ WOS.Clusters = (() => {
       </div>`;
     }).join('') || '<div class="empty-state"><h3>No clusters yet</h3><p>Run the clusterer to group the stream into semantic clusters.</p></div>';
     return `
-      ${v.header('Clusters', `<button class="btn btn-primary btn-sm" id="btnRecluster">${WOS.icon('refresh',15)} Recompute</button>`)}
+      ${v.header('Cluster Profiles', `<button class="btn btn-primary btn-sm" id="btnRecluster">${WOS.icon('refresh',15)} Recompute</button>`)}
       <p class="text-sm text-muted animate-in" style="max-width:var(--measure)">The corpus grouped into clusters by a local embedding model — no data leaves the machine. Clusters are labelled by their most characteristic terms.</p>
       <div class="stat-row animate-in">
         ${v.statCard(meta.k||0,'clusters')}
