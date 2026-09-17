@@ -74,7 +74,7 @@ or `calendar.readonly` for a read-only deployment.
   not a competing record store.
 - **Sibling sub-projects:** [PBS](../../pbs/), [PKTS](../../pkts/), [PTOCS](../../ptocs/), [AGS](/about.html#elements).
 - **Shared UI standard:** [`../ui.spec`](../ui.spec).
-- **Decision log:** [`../../logos.log.md`](../../logos.log.md).
+- **Decision log:** [`../../log.md`](../../log.md).
 
 ## References
 

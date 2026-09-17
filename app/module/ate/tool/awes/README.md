@@ -70,4 +70,4 @@ awes/
 - **Spec:** [`../spec/awes/spec.md`](../spec/awes/spec.md)
 - **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/),
   [PTOCS](../ptocs/), [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/)
-- **Decision log:** [`../logos.log.md`](../logos.log.md)
+- **Decision log:** [`../log.md`](../../../../../log.md)

@@ -18,7 +18,7 @@ Autoregia decomposes self-management into a set of cooperating systems, each map
 Autoregia/
 ├── README.md            # this document (about)
 ├── design.md            # style standard for every plate and module UI
-├── logos.log.md         # decision & design log
+├── log.md         # decision & design log
 ├── spec/                # conceptual specifications of every sub-system
 ├── img/                 # images (control-loop diagrams, …)
 ├── requirements.txt     # root application dependencies
@@ -101,7 +101,7 @@ The sub-systems developed within this workspace:
 - **[Agency Grounding System (AGS)](app/ags/index.html)** — the grounding substrate (in the model, not yet built): binds the World boundary, the Self Model, and Policy into one coherent stance. Its **policy corpus** is live — [charter](app/ags/policies/charter.html), principles, values, commitments, and domain policies (health, learning, conduct) under `app/ags/policies/`, served at `/ags/policies/…`.
 - **[Agent Operation Organization System (AOOS)](app/module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PBS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
 
-> The design rationale and decision log live in [`logos.log.md`](logos.log.md).
+> The design rationale and decision log live in [`log.md`](log.md).
 
 ---
 

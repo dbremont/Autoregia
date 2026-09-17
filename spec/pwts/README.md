@@ -35,7 +35,7 @@ the processed `pkts` CouchDB database read-only for the join.
 - **Sibling:** [PKTS](../pkts/README.md) — the keystroke stream PWTS joins with.
 - **Shared module:** [`shared/focus_watcher.py`](../shared/) — focused-window
   source of truth (X11 + Wayland backend chain).
-- **Decision log:** [`logos.log.md`](../logos.log.md).
+- **Decision log:** [`log.md`](../../log.md).
 
 ## Status
 

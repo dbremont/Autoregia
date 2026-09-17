@@ -28,7 +28,7 @@
   - [PBS](../../README.md) — the recording system for externalized state.
   - [PKTS](../../README.md) — keyword/attention accounting.
 - **Shared UI standard:** [`spec/ui.spec`](../ui.spec) — the canonical, project-wide UI specification every Autoregia tool must converge on.
-- **Decision log:** [`logos.log.md`](../../logos.log.md) — conceptual and design rationale.
+- **Decision log:** [`log.md`](../../log.md) — conceptual and design rationale.
 - **Project index:** [`index.html`](../../index.html) — the Autoregia landing page.
 
 ## Scope

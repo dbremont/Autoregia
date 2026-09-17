@@ -38,7 +38,7 @@
   [PTOCS](../../spec/ptocs/), [AGS](../../spec/ags/ags/), [AOOS](../../spec/aoos/),
   [PRAS](../../spec/pras/)
 - **Shared UI standard:** [`../ui.spec`](../ui.spec)
-- **Decision log:** [`../../logos.log.md`](../../logos.log.md)
+- **Decision log:** [`../../log.md`](../../log.md)
 
 ## References
 

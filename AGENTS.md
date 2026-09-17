@@ -5,28 +5,39 @@ Guidance for coding agents working in this repository.
 ## What this is
 
 Autoregia — a **Personal Viable System Model (PVSM)**: one Flask server that
-mounts ~14 self-management sub-systems under URL prefixes on a single port.
-See `README.md` for the system map and `logos.log.md` for the decision log.
+mounts ~11 self-management sub-systems under URL prefixes on a single port.
+See `README.md` for the system map and `log.md` for the decision log.
 
 ## Layout
 
 ```
 app/                 the application
-├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix dispatcher)
-├── index.html       landing plate        ├── about.html   docs.html
-├── module/          the sub-systems (pbs, pkts, pwts, wos, gis, aias,
-│                    aoos, ate, pras, acsms, loop, pwos)
+├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix
+│                    dispatcher, plate-only routes)
+├── index.html       landing plate     (about.html and docs.html beside it)
+├── module/          the sub-systems — 11 mounted in SUBSYSTEMS:
+│                    pbs, pkts, pwts, wos, gis, aias, aoos, ate, pras,
+│                    acsms, loop
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
+│       ags/ gwob/ pks/        plate-only (index.html; ags adds policies/):
+│                             served by root routes in app.py, NOT SUBSYSTEMS
+│       asrs/ pais/ peos/ …    husks — __pycache__ only, deleted modules
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── awes/  a tool (own Flask app, mounted at /ate/tool/awes/)
 │         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/
-spec/                conceptual specs (spec/ui.spec = normative design spec)
+spec/                conceptual specs (spec/ui.spec = normative design spec;
+                     spec/todo/ = personal notes, not system docs)
 app/module/wos/config/seed.json   WOS poll specs (the watched sources;
-                     spec/wos/policy.md); read directly by the server
+                     spec/wos/policy.md); read directly from file by the
+                     server, not stored in CouchDB
 design.md            style standard (tokens, typography, conformance)
+log.md               decision & design log (entries under `## Index`)
+todo.md              project TODO
+env/                 git-ignored Python 3.12 venv — the only place the deps
+                     live (see Commands)
 img/  requirements.txt  Dockerfile  Makefile  .env (git-ignored)
 ```
 
@@ -36,6 +47,10 @@ served from the repository root.
 ## Commands
 
 ```sh
+# dependencies live ONLY in the git-ignored venv at env/ (Python 3.12);
+# system python3 has none of them:
+source env/bin/activate       # or prefix with env/bin/ (env/bin/python -m pytest)
+
 # run locally, no docker (8080 is often taken; the deployed container uses 8081)
 make run               # also: make run DEV_PORT=8091
 
@@ -57,11 +72,75 @@ pulls the production image and is reserved for the human operator.
 
 No linter is configured.
 
+## Runtime & processes
+
+`app/app.py` is the only process that the Makefile or Dockerfile start;
+everything else runs out-of-band:
+
+- **WOS collector** — a separate daemon, `python3 app/module/wos/collector.py`
+  (second terminal; never started by `app.py`, the Makefile, or the
+  container). Every `WOS_SWEEP_S` (default 60s) it asks the server which
+  poll specs are due and POSTs `/api/poll`. Intervals come from
+  `config/seed.json`: `interval_s: 0` falls through to the per-source-type
+  default hard-coded in `wos/sources/*.py`.
+- **PKTS/PWTS collectors** — desktop-host only (evdev/pynput/Xlib; the
+  Dockerfile deliberately excludes those deps from the image). They POST
+  batches to `/pkts/api/ingest` and `/pwts/api/ingest`. Gotcha:
+  `pkts/collector.py` still defaults `PKTS_INGEST_URL` to the standalone-port
+  era `http://localhost:5001/...` — set the env var explicitly.
+- **PKTS/PWTS RQ workers** — `python3 app/module/<sys>/worker.py` drain Redis
+  queues (`REDIS_URL`, default `redis://localhost:6379/0`; queues `pkts`,
+  `pwts`). **Redis is optional**: ingest persists the raw batch to CouchDB
+  first, enqueue failures are caught, and a worker drains all unprocessed
+  batches on its next run.
+- **AWES result feed** — fire-and-forget POSTs to `AWES_AOOS_URL` /
+  `AWES_PBS_URL` (defaults are stale standalone ports, :5005/:5000).
+- **AOOS Google Calendar sync** — optional; needs an OAuth client secret at
+  `app/module/aoos/config/client_secret.json` (or `AOOS_GC_CLIENT_SECRET`),
+  writes `config/token.json` on connect; status machine
+  mock → authorized_pending → connected.
+- **Plate-only routes** — `/ags/` (+ `/ags/policies/…`), `/gwob/`, `/pks/`
+  are static plates served by root routes in `app/app.py`, not `SUBSYSTEMS`
+  mounts. A real mount with the same prefix shadows the plate route.
+
+## Data & storage
+
+- `support/storage` `Store` is the CouchDB wrapper. Its config
+  (`COUCHDB_URL`, `COUCHDB_USER`, `COUCHDB_PASSWORD`, `COUCHDB_DB_PREFIX`)
+  is read at **import time** — that is why `app.py` loads `.env` before
+  importing any sub-system, and why tests must set env vars *before*
+  importing a server module. `COUCHDB_DB_PREFIX` is prepended to every DB
+  name (test suites use `wos_test_`, `gis_test_`).
+- Seeds (`data/*.json`) apply **only when the DB is empty**; `put` upserts by
+  the doc's application-level `id` field.
+- DB map (names all subject to `COUCHDB_DB_PREFIX`):
+
+  | module | DBs |
+  |---|---|
+  | pbs | `pbs` |
+  | gis | `ptocs` + `ptocs_activity` |
+  | aias | `aias` |
+  | aoos | `aoos` (falls back to `data/*.json` files when CouchDB is down) |
+  | wos | `wos` |
+  | pkts | `pkts_raw` + `pkts` |
+  | pwts | `pwts_raw` + `pwts` |
+
+- Local-file only (no CouchDB): `loop` (read-only `data/mock_loop.json`),
+  `awes` (in-memory sessions + read-only mock environments), `pras`
+  (`deliberations/*.html` files *are* the data), `acsms` (static prototype).
+
 ## Invariants (do not break silently)
 
 - **URL prefixes are baked into static assets.** Renaming a prefix in
   `app/app.py` (`SUBSYSTEMS`) requires re-running `app/support/tools/prefix_assets.py`,
   or the sub-system's assets will request the old paths.
+- **prefix_assets mechanics:** idempotent; it rewrites `"/<seg>/…"` (seg ∈
+  `css, js, fonts, api, data, static, policies`) and `href="/"` → the tool's
+  prefix in `.html/.js/.css` under its `TOOLS` dirs. The `href="/"` rewrite
+  is why `/index.html` exists as a root alias — link the landing page as
+  `/index.html`, never bare `/`, inside tool assets. Tools that use relative
+  URLs (`wos`, `awes`) don't need a `TOOLS` entry; the `ags` entry points at
+  a nonexistent directory and silently no-ops.
 - **URL prefixes are independent of repo layout.** Moving files must not
   change any `/<prefix>/` URL.
 - **Sub-system servers** expose a Flask `app` and are loaded by `app/app.py`
@@ -76,6 +155,10 @@ No linter is configured.
   move files, those depths move in lockstep — count them, don't guess.
 - **`support/shared/focus_watcher.py`** is the single source of truth for the
   focused window, shared by PWTS and PKTS collectors. Never fork it.
+- **Tests are listed explicitly in `make test`** — there is no pytest config
+  and no auto-discovery, so a new suite does not run until added to the
+  Makefile. WOS/GIS suites module-level-skip when CouchDB is unreachable;
+  AWES needs nothing (in-memory).
 - **Design standard:** `design.md` governs every plate and sub-system UI.
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
@@ -98,17 +181,29 @@ No linter is configured.
   seed file does not refresh a running DB. To pick up a regenerated seed,
   drop the DB and restart the server:
   `curl -X DELETE http://admin:<password>@127.0.0.1:5984/<db>` (check the
-  DB for non-seed entries first). GIS owns two DBs: `ptocs` (entries) and
-  `ptocs_activity` (activity log). Test suites use isolated prefixes
-  (`wos_test_`, `gis_test_`) and never touch dev data.
-- Push to `main` → GitHub Actions builds and pushes the image to GHCR.
+  DB for non-seed entries first).
+- **Secrets on disk:** `.gitignore` does **not** cover
+  `app/module/aoos/config/` — Google OAuth `client_secret.json` /
+  `token.json` live there and must never be staged or committed.
+- Push to `main` → GitHub Actions builds and pushes the image to GHCR
+  (`<sha>` + `latest`). **CI runs no tests** — testing is local only
+  (`make test`).
 - Deploy with `make deploy-server` (pull the GHCR image — production) or
   `make deploy-local` (build `autoregia:local` from the repo — dev/testing).
   Both recreate container `autoregia` (`--network host`, `.env` mounted
   read-only at `/srv/.env`, port from `AUTOREGIA_PORT` in `.env`).
   Coding agents may only run `make deploy-local` — never `make deploy-server`.
-- `app/module/pwos/` and `*.log` are git-ignored; `pwos` also has an ignore
-  rule for `config/`.
+- The Dockerfile concatenates every `requirements.txt` in the repo, minus
+  `evdev`/`pynput`/`python-xlib` (desktop-collector-only) — a new module's
+  `requirements.txt` is picked up automatically.
+
+## Decision log
+
+Significant architectural decisions are recorded in `log.md`: append a
+`### <year> — <title>` entry under `## Index` with bold-labeled fields —
+**Question.** / **Decision.** (numbered) / **Rationale.** /
+**Trade-offs accepted.** / **Implements.** (relative links). Keep the
+existing entry untouched; don't restructure the file.
 
 ## Git conventions
 
@@ -179,7 +274,9 @@ in-repo. Commits are SSH-signed via 1Password (`op-ssh-sign`).
 
 1. `make run` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `make test` → 76 passed.
+2. `make test` → currently **82 passed, 1 failed**
+   (`test_wos.py::test_clusters_lexical_backend_groups_related` —
+   pre-existing lexical-backend clustering failure).
 3. `make deploy-local` → curl the mount matrix on the container port; check
    `docker logs autoregia` for tracebacks.
 4. Update `README.md` tree/links if the layout changed.

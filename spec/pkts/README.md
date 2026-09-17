@@ -15,7 +15,7 @@ Parts:
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Sibling sub-project:** [PBS](../pbs/README.md) — the recording system for externalized state.
 - **Shared schema:** [`records_schema.json`](../records_schema.json) — the atomic record unit shared across PBS and PKTS.
-- **Decision log:** [`logos.log.md`](../logos.log.md) — conceptual and design rationale.
+- **Decision log:** [`log.md`](../../log.md) — conceptual and design rationale.
 - **Project index:** [`index.html`](../index.html) — the Autoregia landing page.
 
 ## Scope (to be elaborated)

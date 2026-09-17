@@ -186,7 +186,7 @@ aoos/
 - **Storage substrate:** [PBS](../pbs/) — AOOS operates over PBS records; it is
   not a competing record store.
 - **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/), [PTOCS](../ptocs/), [AGS](/about.html#elements).
-- **Decision log:** [`../logos.log.md`](../logos.log.md).
+- **Decision log:** [`../log.md`](../../../log.md).
 
 ## References
 

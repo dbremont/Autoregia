@@ -142,7 +142,7 @@ alien theme).
 - **Role:** **Intelligence System** (VSM System 4 – Intelligence).
 - **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/).
 - **Shared UI standard:** [`../spec/ui.spec`](../spec/ui.spec).
-- **Decision log:** [`../logos.log.md`](../logos.log.md).
+- **Decision log:** [`../log.md`](../../../log.md).
 
 ## References
 
