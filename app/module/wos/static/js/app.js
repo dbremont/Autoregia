@@ -19,6 +19,7 @@ WOS.VIEWS = [
   { id:'about',         label:'About',         icon:'info',      group:'System',      desc:'what WOS is' },
   { id:'settings',      label:'Settings',      icon:'settings',  group:'System',      desc:'read-only demo', action:'settings' },
   { id:'export',        label:'Export',        icon:'download',  group:'System',      desc:'download the corpus as JSON', action:'export' },
+  { id:'self-monitoring', label:'Self Monitoring', icon:'gauge', group:'System',      desc:'the system observing itself' },
 ];
 
 // Pre-rename hashes, kept as aliases so old bookmarks keep working.
@@ -60,6 +61,9 @@ WOS.renderSidebar = function () {
     if (!s || s.name !== (v.section||'')){ s = { name: v.section||'', views: [] }; g.sections.push(s); }
     s.views.push(v);
   });
+  // entries by label length, shortest first (ties alphabetical)
+  groups.forEach(g=>g.sections.forEach(s=>s.views.sort((a,b)=>
+    a.label.length-b.label.length || a.label.localeCompare(b.label))));
   nav.innerHTML = groups.map(g =>
     `<div class="sidebar-label">${g.name}</div>` + g.sections.map(s =>
       (s.name ? `<div class="sidebar-sublabel">${s.name}</div>` : '') +
@@ -182,7 +186,37 @@ WOS.aboutHTML = function () {
 
 WOS.docsHTML = function () {
   const binds = WOS.VIEWS.filter(v=>!v.action).map(v=>`<div class="kbd-row"><span>${v.label} — <em class="text-muted">${v.desc}</em></span><span><a href="#${v.id}" class="text-mono text-xs">#${v.id}</a></span></div>`).join('');
+  // The recurring task types WOS needs an executor (CES/CTES) to run in
+  // order to meet its spec — grouped by purpose, shortest first. Codes match
+  // the `operation` field of /api/self/tasks.
+  const TASK_CATALOG = [
+    ['Collection', [
+      ['poll+persist', 'feed fetch — poll a source spec, normalize, persist observations', 'minutes'],
+    ]],
+    ['Sense-making', [
+      ['zscore', 'spike detection — z-scores over the volume buckets', 'seconds'],
+      ['cooccur', 'co-occurrence graph — the terms that travel together', 'seconds'],
+      ['tokenize+count', 'terms & bigrams — corpus vocabulary counts', 'seconds'],
+      ['vader-score', 'tone scoring — per-item tone and aggregates', 'seconds'],
+      ['kmeans+label', 'semantic clustering — cluster and label the corpus', 'tens of seconds — minutes (model load)'],
+    ]],
+    ['Serving', [
+      ['layout', 'word-cloud layout cache', 'seconds'],
+      ['index', 'search index delta — newly arrived observations', 'seconds'],
+      ['aggregate', 'region pre-aggregates — feeds the Geography Lens', 'sub-minute'],
+    ]],
+    ['Record-keeping', [
+      ['format+post', 'log / audit records — failing mirrors, self-audit summaries', 'seconds'],
+      ['normalize+put', 'execution artifacts folded into PBS records', 'sub-minute'],
+    ]],
+  ];
+  const catalog = TASK_CATALOG.map(([group, rows]) =>
+    `<p class="text-mono text-xs text-muted" style="margin:12px 0 4px;letter-spacing:.12em;text-transform:uppercase">${group}</p><div class="kbd-grid">${rows.map(([code, desc, len])=>
+      `<div class="kbd-row"><span><code class="text-mono text-xs">${code}</code> — <em class="text-muted">${desc}</em></span><span class="text-mono text-xs">${len}</span></div>`).join('')}</div>`).join('');
   return `<div class="docs-prose">
+    <h4>Task catalog</h4>
+    <p>The recurring task types the system needs an executor (<strong>CES/CTES</strong>) to run in order to meet its spec — every instrument below is fed by at least one of them. Grouped by purpose, shortest first; the live instances are visible under <a href="#self-monitoring">Self Monitoring</a>.</p>
+    ${catalog}
     <h4>Purpose</h4>
     <p>A sense-making dashboard over what <strong>other agents</strong> say about the world — comments, posts and news collected from free feeds (Hacker News, Lobsters, Reddit, Mastodon, GDELT). Every item is stored as an <em>observational</em> event in CouchDB; the instruments here turn that stream into orientation.</p>
     <h4>The instruments</h4>

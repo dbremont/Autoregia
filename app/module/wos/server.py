@@ -637,6 +637,168 @@ def stats():
     })
 
 
+# ── self monitoring: observability of ongoing computations ──────────────────
+# The integration model with CTES (/ate/tool/ctes/) is not yet defined, so
+# this endpoint serves generated fixture data shaped like the CTES task model
+# (spec/ctes/). When the real contract exists, the generator below is swapped
+# for an adapter; the Self Monitoring surface does not change.
+_SELF_TASK_FIXTURES = [
+    # objective, operation, input, expected_output, state, priority,
+    # deadline_s, deps, submitted_ago_s, start_after_s, run_s, retries,
+    # result, error
+    ("Cluster the week's observations and refresh the semantic landscape",
+     "kmeans+label", "wos://observations?hours=168", "clusters doc",
+     "completed", "normal", 3600, [], 96 * 60, 30, 41, 0,
+     "3 clusters, 25 items assigned", None),
+    ("Score tone for the last 100 items", "vader-score",
+     "wos://observations?limit=100", "tone aggregates",
+     "completed", "low", 1800, [], 80 * 60, 25, 12, 0,
+     "mean +0.08 across 100 items", None),
+    ("Extract top terms and bigrams for the Landscape view", "tokenize+count",
+     "wos://observations?hours=168", "top_terms / top_bigrams",
+     "completed", "low", 1800, [], 70 * 60, 18, 9, 0,
+     "100 terms, 32 bigrams", None),
+    ("Compute spikes for the Anomaly view", "zscore",
+     "wos://analytics/volume", "spike list",
+     "completed", "low", 900, [], 50 * 60, 6, 3, 0,
+     "2 spikes above 2.0σ", None),
+    ("Build the co-occurrence graph for the Landscape view", "cooccur",
+     "wos://observations?hours=168", "nodes + links",
+     "completed", "low", 1800, ["k-4103"], 40 * 60, 15, 8, 0,
+     "48 nodes, 61 links", None),
+    ("Re-ingest the WOLFRAM feed after mirror outage", "poll+persist",
+     "rss://blog.wolfram.com/feed/", "new observations",
+     "running", "high", 1800, [], 22 * 60, 240, None, 0, None, None),
+    ("Recompute semantic clusters after new arrivals", "kmeans+label",
+     "wos://observations?all", "clusters doc",
+     "running", "high", 7200, ["k-4101"], 15 * 60, 90, None, 0, None, None),
+    ("Render the Geography Lens pre-aggregates", "aggregate",
+     "wos://analytics/regions", "region counts",
+     "running", "normal", 3600, [], 9 * 60, 45, None, 0, None, None),
+    ("Fold today's execution artifacts into PBS records", "normalize+put",
+     "ces://artifacts/today", "pbs records",
+     "running", "normal", 3600, ["k-4106"], 4 * 60, 20, None, 0, None, None),
+    ("Re-poll the SIAM etoc feeds (two journals)", "poll+persist",
+     "rss://epubs.siam.org/…siread · …smjmap.1", "new observations",
+     "dispatched", "normal", 1800, [], 3 * 60, 25, None, 0, None, None),
+    ("Refresh the word-cloud layout cache", "layout",
+     "wos://analytics/top_terms", "cached layout",
+     "pending", "low", 3600, [], 90, None, None, 0, None, None),
+    ("Index new observations for the Search view", "index",
+     "wos://observations?since=1h", "search index delta",
+     "pending", "normal", 1800, ["k-4105"], 60, None, None, 0, None, None),
+    ("Summarize the failing SIAM mirror into the log", "format+post",
+     "wos://sources/status", "pbs record",
+     "failed", "normal", 900, [], 30 * 60, 12, 8, 1, None,
+     "feed unreachable after 1 retry — dead-lettered"),
+    ("Draft the weekly self-audit summary", "compose",
+     "wos://self/tasks", "audit note",
+     "cancelled", "low", 86400, [], 45 * 60, None, None, 0, None, None),
+]
+
+_SELF_STATE_PATH = {
+    "created":   ["Created"],
+    "submitted": ["Created", "Submitted"],
+    "pending":   ["Created", "Submitted", "Pending"],
+    "dispatched": ["Created", "Submitted", "Pending", "Dispatched"],
+    "running":   ["Created", "Submitted", "Pending", "Dispatched", "Running"],
+    "completed": ["Created", "Submitted", "Pending", "Dispatched", "Running",
+                  "Completed"],
+    "failed":    ["Created", "Submitted", "Pending", "Dispatched", "Running",
+                  "Failed"],
+    "cancelled": ["Created", "Submitted", "Pending", "Cancelled"],
+}
+
+
+def _self_task_note(state: str, result, error) -> str:
+    return {
+        "Created": "drafted by wos",
+        "Submitted": "emitted to ctes",
+        "Pending": "queued — awaiting a free worker",
+        "Dispatched": "dispatched to worker w-2",
+        "Running": "execution started",
+        "Completed": f"completed — {result}" if result else "completed",
+        "Failed": f"failed — {error}" if error else "failed",
+        "Cancelled": "cancelled by operator",
+    }.get(state, state)
+
+
+def _self_tasks_blob() -> dict:
+    import random
+    now = now_ms()
+    rng = random.Random(7)
+    tasks = []
+    for i, row in enumerate(_SELF_TASK_FIXTURES, start=1):
+        (objective, operation, inp, output, state, priority, deadline, deps,
+         ago_s, start_after_s, run_s, retries, result, error) = row
+        tid = f"k-{4100 + i:04d}"
+        t0 = now - int(ago_s * 1000) - rng.randint(0, 900)
+        path = _SELF_STATE_PATH[state.lower()]
+        started = state in ("running", "completed", "failed")
+        submitted_at = t0 if len(path) > 1 else None
+        started_at = t0 + int((start_after_s or 0) * 1000) if started else None
+        finished_at = started_at + int(run_s * 1000) if (
+            started and run_s is not None) else None
+        events = []
+        for j, st in enumerate(path):
+            if st == "Created":
+                ts = t0
+            elif st == "Submitted":
+                ts = t0 + 2_000
+            elif st == "Pending":
+                ts = t0 + 4_000
+            elif st == "Dispatched":
+                ts = t0 + int((start_after_s or 10) * 1000) - 1_000
+            elif st == "Running":
+                ts = started_at
+            else:
+                ts = finished_at
+            if st == "Failed" and retries:
+                ts = finished_at
+            events.append({"ts_ms": ts, "state": st,
+                           "note": _self_task_note(st, result, error)})
+        duration_ms = (finished_at - started_at) if (
+            started_at and finished_at) else (
+            (now - started_at) if started_at else None)
+        tasks.append({
+            "id": tid, "objective": objective, "operation": operation,
+            "input": inp, "expected_output": output,
+            "state": state.capitalize(),
+            "priority": priority,
+            "constraints": {"deadline_s": deadline},
+            "dependencies": deps, "target": "ctes",
+            "submitted_at_ms": submitted_at, "started_at_ms": started_at,
+            "finished_at_ms": finished_at, "duration_ms": duration_ms,
+            "retries": retries, "result": result, "error": error,
+            "events": events,
+        })
+    counts: dict[str, int] = {}
+    for t in tasks:
+        counts[t["state"]] = counts.get(t["state"], 0) + 1
+    return {
+        "generated_at": now_iso(),
+        "source": "fixture",
+        "summary": {
+            "total": len(tasks),
+            "pending": counts.get("Pending", 0) + counts.get("Submitted", 0)
+                       + counts.get("Created", 0),
+            "dispatched": counts.get("Dispatched", 0),
+            "running": counts.get("Running", 0),
+            "completed": counts.get("Completed", 0),
+            "failed": counts.get("Failed", 0),
+            "cancelled": counts.get("Cancelled", 0),
+        },
+        "tasks": tasks,
+    }
+
+
+@app.route("/api/self/tasks", methods=["GET"])
+def get_self_tasks():
+    """Observability of ongoing computations — the tasks WOS delegates to
+    CTES. Serves generated fixture data (see ``_SELF_TASK_FIXTURES``)."""
+    return jsonify(_self_tasks_blob())
+
+
 @app.route("/api/export", methods=["GET"])
 def export_data():
     docs = store.all()
