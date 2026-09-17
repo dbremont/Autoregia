@@ -291,7 +291,7 @@ Inputs/selects: `--surface-2` background, hairline border, `--radius-md`, focus 
 
 ### 7.5 Modal & Overlay
 
-`.modal-overlay` — fixed inset, ink-tinted scrim (`rgba(28,26,23,0.42)`), blur+saturate backdrop-filter, `fadeIn` entrance. `.modal` — `--radius-xl`, `--shadow-xl`, sticky header, optional sticky footer on warm surface, `modalIn` entrance. Closes on `Esc` and scrim click.
+`.modal-overlay` — fixed inset, ink-tinted scrim (`rgba(28,26,23,0.42)`), blur+saturate backdrop-filter, `fadeIn` entrance. `.modal` — `--radius-xl`, `--shadow-xl`, sticky header, optional sticky footer on warm surface, `modalIn` entrance. Closes on `Esc` and scrim click. Dialogs implement the APG focus contract (§10.6): focus in → trap → restore to invoker.
 
 ### 7.6 Command Palette
 
@@ -335,6 +335,10 @@ A baseline set every application surface must honor (tool-specific actions may e
 | `↑` / `↓` (in palette)  | Navigate results               |
 | `/`                     | Focus global search            |
 
+**Shortcut guards (WCAG 2.1.4):** single-character shortcuts are inert while
+an editable element has focus, and never fire with Ctrl/Cmd/Alt/Shift held —
+they must not shadow platform shortcuts (§10.2).
+
 ### 8.2 Progressive Disclosure
 
 Essential metadata first; advanced sections collapse (`.meta-section` with chevron). Long detail renders within a reading-measure manuscript column; diagnostics, provenance, and configuration are hidden behind disclosure or modals.
@@ -356,11 +360,92 @@ Essential metadata first; advanced sections collapse (`.meta-section` with chevr
 
 ## 10. Platform & Accessibility
 
-- **Offline-first:** fonts and icons are self-hosted per project; no runtime CDN dependencies for core UI.
+> **Normative baseline: WCAG 2.2 AA** (W3C), the **ARIA Authoring Practices
+> Guide (APG)** for the widget patterns in §7, and standard usability
+> heuristics (Nielsen). Conformance is judged per surface; deviations are
+> tracked under the §11.4 policy and in `design.md` §5.
+
+### 10.1 Contrast (WCAG 1.4.3, 1.4.11)
+
+- Body text ≥ **4.5:1** against its background; text ≥ 24px (or ≥ 18.66px
+  bold) ≥ **3:1**; UI component boundaries and meaningful graphics ≥ **3:1**.
+- Sanctioned text pairs: `--ink`, `--ink-soft`, `--muted` (`#6B665B`) on
+  `--paper` / `--surface` pass. `--faint` (`#8C877B`) and lighter warm
+  grays are **decorative only** — never for informative text below 24px.
+- `--gold` (`#A8854A`) is a **non-text accent** (rules, eyebrows at display
+  sizes, borders, icons); it is never the color of body-size text.
+- Text on accent fills uses `--paper-on-accent` (warm near-white, ≥ 4.5:1
+  on `--oxford`). Define the token in `variables.css`; do not inline
+  ad-hoc hexes (audited offender: raw `#FAF1E6` across wos/gis/aoos/loop).
+
+### 10.2 Keyboard (WCAG 2.1.1, 2.1.4)
+
+- Every action is reachable and operable by keyboard; no focus traps —
+  Tab and Esc can always move focus out.
+- Single-character shortcuts (§8.1: `N`, `/`) must (a) be **inert while
+  focus is in any editable target** (input, textarea, select,
+  contenteditable), and (b) **never fire when Ctrl/Cmd/Alt/Shift is held** —
+  modifier combinations must not shadow user-agent or platform shortcuts
+  (copy, print, reload).
+- The §8.1 baseline is mandatory on every app shell; tool-specific
+  shortcuts are documented in the command palette.
+
+### 10.3 Focus visibility (WCAG 2.4.7)
+
+The §8.3 Oxford ring is mandatory on **every** interactive element — links,
+buttons, palette rows, cards-as-links, chips, close buttons. Removing the
+outline (`outline: none`) without an equivalent visible indicator is a
+violation.
+
+### 10.4 Target size (WCAG 2.5.8)
+
+Pointer targets — icon buttons, chips, keycap-like pills, modal close
+buttons — are at least **24×24 CSS px**, spaced so adjacent targets cannot
+be mis-hit.
+
+### 10.5 Names, roles, labels (WCAG 1.1.1, 1.3.1, 3.3.2, 4.1.2)
+
+- Icon-only controls carry `aria-label` (a `title` is the floor, not the
+  pattern); decorative icons are `aria-hidden`.
+- Every input has a programmatic label (`<label for>` or `aria-label`) —
+  placeholder text alone is not a label.
+- Informative SVGs (diagrams, charts) get `role="img"` + `aria-label`; the
+  landing control-loop plate is the in-repo pattern.
+- Landmarks `<header> <nav> <main> <footer>`; every page has `lang` and a
+  meaningful `<title>`.
+
+### 10.6 Dialogs & destructive actions (APG; heuristics: error prevention, user control)
+
+- Modals follow the **APG dialog pattern**: `role="dialog"` +
+  `aria-modal="true"` + accessible name; focus moves into the dialog on
+  open, is trapped while open, and **returns to the invoking element** on
+  close; `Esc` and scrim click close (§7.5).
+- Native `confirm()` / `alert()` / `prompt()` are **not permitted** in
+  product flows. Destructive actions use the in-app modal: an explicit
+  statement of consequence and a clearly-marked destructive button; prefer
+  undo (toast) where the domain allows.
+
+### 10.7 Reflow & zoom (WCAG 1.4.4, 1.4.10)
+
+Usable at 200% zoom and at 320px CSS width without loss of content or
+page-level horizontal scroll; wide data tables scroll inside a scoped
+container, never the page chrome.
+
+### 10.8 Async feedback (heuristics: visibility of system status)
+
+Every asynchronous surface renders **loading**, **empty** (§7.8), and
+**error** states — never a silent blank. Optimistic updates are reverted
+visibly on failure.
+
+### 10.9 Retained platform rules
+
+- **Offline-first:** fonts and icons are self-hosted per project; no
+  runtime CDN dependencies for core UI.
 - **Reduced motion:** respected (§9).
-- **Reduced transparency:** the paper-grain overlay (`body::before`) is hidden under `@media (prefers-reduced-transparency: reduce)`.
-- **Data legibility:** tabular figures on all numeric data (§4.4); reading measure enforced on prose.
-- **Color contrast:** text colors drawn from the ink ramp maintain WCAG AA against `--paper`; semantic colors are reserved for non-text badges/accents unless paired with compliant text.
+- **Reduced transparency:** the paper-grain overlay (`body::before`) is
+  hidden under `@media (prefers-reduced-transparency: reduce)`.
+- **Data legibility:** tabular figures on all numeric data (§4.4); reading
+  measure enforced on prose.
 ---
 
 ## 11. Implementation Conventions
@@ -426,6 +511,12 @@ The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS imple
   by the `.sidebar-colophon` (§7.10) — satisfy both requirements; no
   additional chrome is required.
 - A page without both elements is non-conformant, regardless of archetype.
+- **Link integrity:** every chrome link points at a route the unified server
+  actually serves; chrome is never a source of dead links.
+- **Lockup:** the brand lockup links to `/` (or `/index.html`) — never a
+  bare `#`.
+- **New-tab links** are visibly marked (e.g. `↗`) and carry an accessible
+  name so the behavior is not a surprise (§10.5).
 
 ---
 
@@ -436,6 +527,12 @@ The PBS prototype (`pbs/static/`) is the reference. When in doubt, the PBS imple
 - [PKTS — client spec](pkts/client.spec) — analytical surface to be reconciled with this standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6)
 - [Lucide Icons](https://lucide.dev) — icon source set.
+- [WCAG 2.2](https://www.w3.org/TR/WCAG22/) (W3C Recommendation) — the
+  accessibility conformance target (§10).
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/) —
+  widget patterns: dialog, disclosure, combobox (§7, §10.6).
+- [Ten Usability Heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/)
+  (Nielsen Norman Group) — the usability baseline cited in §10.
 
 - **Semantics:** landmarks use `<header>`, `<aside>`, `<main>`; icons in buttons carry `aria-hidden` or `title`; modals close on `Esc`.
 

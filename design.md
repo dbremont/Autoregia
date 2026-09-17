@@ -50,9 +50,12 @@ Semantic status (meaning only, never decoration):
 | Token      | Value     | Use                                |
 | ---------- | --------- | ---------------------------------- |
 | success    | `#3F6E50` / bg `#ECF3EE` | completed, enacted, healthy |
-| warning    | `#B07A2A` / bg `#FBF1E3` | pending, timed out, partial |
-| danger     | `#7A1A2A` (oxford) / bg `#F4E8EA` | failed, blocked    |
+| warning    | `#B4742A` / bg `#FBF1E3` | pending, timed out, partial |
+| danger     | `#A33434` / bg `#FAECEC` | failed, blocked    |
 | info       | `#3F6092` / bg `#EAEFF6` | informational               |
+
+(These match `spec/ui.spec` §3.7 and every module's `variables.css`; the
+semantic layer is independent of the oxford accent.)
 
 ### 2.2 Typography
 
@@ -126,6 +129,10 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
    may not introduce an alien theme (`spec/ui.spec` §11.4).
 4. **Mono for data** — identifiers, timestamps, payloads, and numeric data set
    in `--mono`.
+5. **Accessibility baseline** — WCAG 2.2 AA is the conformance floor for
+   every surface: token-ramp contrast, visible Oxford focus, full keyboard
+   operation with shortcut guards, named controls, APG-compliant dialogs.
+   Normative details: `spec/ui.spec` §10.
 6. **Motion with purpose** — guarded by `prefers-reduced-motion`.
 7. **Context chrome** — every page must have a **navbar** and a **footer**.
    Both provide context. The navbar follows the root landing's `topnav`
@@ -141,24 +148,49 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `pbs`, `pkts`, `pwts`, `wos`, `gis`, `aoos`, `aias`, `loop` | app shell | ✅ conforms (token set) |
+| `pbs`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `gial`, `sarl` | app shell / standalone | ✅ conforms (token set) |
+| `wos`, `gis`, `aoos`, `loop` | app shell | ⚠ conforms, raw `#FAF1E6` + glyph icons tracked below |
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
-| `ags`                             | standalone | ✅ conforms |
-| `acsms` — landing                  | standalone | ✅ conforms |
+| `ags`, `gwob`, `pks` — landing plates | standalone | ⚠ legacy token block (§6 migration) |
+| `acsms` — landing                  | standalone | ⚠ legacy token block + glyph icons |
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
-| `ate` — toolbox index               | standalone | ✅ conforms |
-| `gial` — design plate (`/ate/tool/gial/`) | standalone | ✅ conforms |
-| `sarl` — design plate (`/ate/tool/sarl/`) | standalone | ✅ conforms |
-| `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (tokens aligned 2026-09) |
+| `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts added 2026-09) |
 
-**Residual convergence items** (tracked, non-blocking):
+**Tracked non-conformances** (audit 2026-09, against `spec/ui.spec` §10 —
+fix or accept per §11.4):
 
-- Root plates do not yet load self-hosted `@font-face` (they rely on the
-  fallback chain); serve `static/fonts/` from the root app when convenient.
-- Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
-  `#e0d2b0`, `#f4ecda`, …) predate the token set; they sit inside the family
-  and may converge onto token-derived values progressively.
+- **Legacy token blocks** — `ags`, `gwob`, `pks`, `acsms`, `about.html`,
+  `docs.html` inline `#1c1916/#4a443d/#7a736a/#d8d0c4/#fffdf8` instead of
+  the §2.1 neutrals (§6 migration rows exist).
+- **Unnamed on-accent tint** — raw `#FAF1E6` as text-on-accent in
+  `wos`/`gis`/`aoos`/`loop` CSS+JS (~29 uses); tokenize as
+  `--paper-on-accent` (§10.1).
+- **Glyph icons** — unicode characters doing icon work: `aoos` (`⚠`,
+  `▲▶▼`), `wos` (`✕`, `★`), `awes` (`▶`, `✓`, `✗`), `acsms` (`▼`),
+  `pras` (`★`), landing (`↗`, `❯`) — replace with Lucide SVGs (§6
+  iconography).
+- **Contrast outliers** — landing maps `--muted` to `#8C877B` at
+  9.5–10.5px; gold `#A8854A` body-size text on `about`/`docs`;
+  `#8A6A34` (`wos` crossref pill) — §10.1.
+- **Destructive flows use native `confirm()`** — `aoos` (×4), `aias`,
+  `gis` — replace with the in-app modal (§10.6).
+- **Missing accessible names** — icon-only modal close buttons and
+  unlabeled search inputs across app shells (§10.5).
+- **Keyboard baseline gaps** — `/` search shortcut missing on
+  `wos`/`gis`/`aoos`/`loop` (§8.1).
+- **Sub-10px micro-labels** — `aoos` (8px), `wos` (9px), `loop` (8px SVG
+  arc labels) (§4.2 floor).
+- **Landing finder** — search hits link to module roots, not the matched
+  record.
+- **Standalone-page hygiene** — `about`/`docs` missing `← Index`
+  breadcrumb; `about` duplicated blockquote + placeholder table row;
+  `aoos` `docs.html`/`share.html` lack context chrome; dead 0-byte
+  `aoos/static/about.html`.
+
+Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
+`#e0d2b0`, `#f4ecda`, …) predate the token set; they sit inside the family
+and may converge onto token-derived values progressively.
 
 ---
 
@@ -169,9 +201,16 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `--parchment: #f7f3ea`        | `--paper: #FAFAF6`     |
 | `--gold: #b8893a`             | `--gold: #A8854A`      |
 | `--green: #4ade80`            | success `#3F6E50` / `#ECF3EE` |
-| `--yellow: #fbbf24`           | warning `#B07A2A` / `#FBF1E3` |
-| `--red: #f87171`              | danger `#7A1A2A` / `#F4E8EA` |
+| `--yellow: #fbbf24`           | warning `#B4742A` / `#FBF1E3` |
+| `--red: #f87171`              | danger `#A33434` / `#FAECEC` |
 | `--blue: #60a5fa` (buttons)   | `--oxford: #7A1A2A`    |
+| `--ink: #1c1916` (legacy plates) | `--ink: #2C2A26`    |
+| `--ink-soft: #4a443d`         | `--ink-soft: #44413B`  |
+| `--muted: #7a736a`            | `--muted: #6B665B`     |
+| `--rule: #d8d0c4`             | `--rule: #E2DED4`      |
+| `--rule-soft: #e8e1d4`        | `--rule-soft: #EEEAE0` |
+| `--surface: #fffdf8`          | `--surface: #FFFFFF`   |
+| raw `#FAF1E6` (text on accent) | `--paper-on-accent` (`spec/ui.spec` §10.1) |
 | `--bg: #1a1a1e` (dark themes) | `--paper: #FAFAF6`     |
 | serif without `Spectral`      | `Spectral`-first stack |
 | `-apple-system`-first sans    | `Inter`-first stack    |
