@@ -3,12 +3,17 @@
    ════════════════════════════════════════════════════════════ */
 PBS.scratchpad = {
   open() {
-    document.getElementById('scratchpadOverlay').classList.remove('hidden');
+    const ov = document.getElementById('scratchpadOverlay');
+    ov.classList.remove('hidden');
+    this._dlg = AUTOREGIA.dialog(ov, { label: 'Quick capture' });
     const ta = document.getElementById('scratchpadText');
     ta.value = '';
     setTimeout(()=>ta.focus(),100);
   },
-  close() { document.getElementById('scratchpadOverlay').classList.add('hidden'); },
+  close() {
+    document.getElementById('scratchpadOverlay').classList.add('hidden');
+    if (this._dlg) { this._dlg.close(); this._dlg = null; }
+  },
   async save() {
     const text = document.getElementById('scratchpadText').value.trim();
     if (!text) return;

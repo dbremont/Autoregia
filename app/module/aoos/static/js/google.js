@@ -27,7 +27,7 @@ AO.Google.render = async function () {
     } catch (e) { calList = '<p class="text-muted">Could not list calendars.</p>'; }
   }
 
-  const color = status.status === 'connected' ? '#2D6A4F' : (status.status === 'mock' ? '#9A9589' : '#B4742A');
+  const color = status.status === 'connected' ? '#2D6A4F' : (status.status === 'mock' ? '#8C877B' : '#B4742A');
   el.innerHTML =
     '<div class="card"><div class="card-body">' +
     '<div class="detail-row"><span class="stat-label">Status</span> <strong style="color:' + color + '">' + AO.prettyEnum(status.status) + '</strong></div>' +

@@ -104,9 +104,11 @@
   function doSearch(q) {
     if (!q.trim()) { resultsEl.innerHTML = ''; return; }
     fetch('/pras/api/search?q=' + encodeURIComponent(q))
-      .then(function (r) { return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(renderResults)
-      .catch(function () { resultsEl.innerHTML = ''; });
+      .catch(function () {
+        resultsEl.innerHTML = '<p class="result-snippet" role="status" style="text-align:center">Search is unavailable — the PRAS API did not respond.</p>';
+      });
   }
 
   // ── Wire up ──────────────────────────────────────────────────

@@ -161,10 +161,10 @@ PT.HomeIndex = (() => {
           '<div class="ix-chips" id="ixChips">' + activeChips() + '</div>' +
           '<div class="home-toolbar-right">' +
             '<label class="ix-sort-label">' + PT.icon('arrow-up-down', 13) + ' Sort</label>' +
-            '<select id="ixSort">' + sortOpts + '</select>' +
+            '<select id="ixSort" aria-label="Sort entries">' + sortOpts + '</select>' +
             '<div class="ix-mode-toggle">' +
-              '<button id="ixModeList" class="ix-mode-btn' + (state.mode === 'list' ? ' active' : '') + '" title="List view">' + PT.icon('list', 15) + '</button>' +
-              '<button id="ixModeGrid" class="ix-mode-btn' + (state.mode === 'grid' ? ' active' : '') + '" title="Grid view">' + PT.icon('layout-grid', 15) + '</button>' +
+              '<button id="ixModeList" class="ix-mode-btn' + (state.mode === 'list' ? ' active' : '') + '" title="List view" aria-label="List view">' + PT.icon('list', 15) + '</button>' +
+              '<button id="ixModeGrid" class="ix-mode-btn' + (state.mode === 'grid' ? ' active' : '') + '" title="Grid view" aria-label="Grid view">' + PT.icon('layout-grid', 15) + '</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -214,8 +214,12 @@ PT.HomeIndex = (() => {
     '</div>';
   }
 
-  function paintResults(data) {
+  function paintResults(data, offline) {
     const box = document.getElementById('homeResults'); if (!box) return;
+    if (offline) {
+      box.insertAdjacentHTML('afterbegin',
+        '<div class="ix-offline-banner" role="status">Server unreachable — showing locally cached entries.</div>');
+    }
     if (!data.entries.length) {
       box.innerHTML = '<div class="empty-state"><div class="empty-icon">' + PT.icon('search', 40) + '</div>' +
         '<h3>Nothing found</h3><p>No entries match the current filters. Clear a filter or add a new entry.</p></div>';
@@ -356,8 +360,8 @@ PT.HomeIndex = (() => {
     if (box && !loadedOnce) box.innerHTML = ixSkeleton();
     fetch('/gis/api/index?' + queryParams())
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(data => { loadedOnce = true; paintResults(data); })
-      .catch(() => { loadedOnce = true; paintResults(localIndex()); });
+      .then(data => { loadedOnce = true; paintResults(data, false); })
+      .catch(() => { loadedOnce = true; paintResults(localIndex(), true); });
   }
   function fetchOverview() {
     fetch('/gis/api/overview')

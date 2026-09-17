@@ -7,11 +7,16 @@
 window.LOOP = window.LOOP || {};
 LOOP.scratchpad = {
   open() {
-    document.getElementById('scratchpadOverlay').classList.remove('hidden');
+    const ov = document.getElementById('scratchpadOverlay');
+    ov.classList.remove('hidden');
+    LOOP._scratchDlg = AUTOREGIA.dialog(ov, { label: 'Quick capture' });
     const ta = document.getElementById('scratchpadText'); ta.value='';
     setTimeout(()=>ta.focus(),100);
   },
-  close() { document.getElementById('scratchpadOverlay').classList.add('hidden'); },
+  close() {
+    document.getElementById('scratchpadOverlay').classList.add('hidden');
+    if (LOOP._scratchDlg) { LOOP._scratchDlg.close(); LOOP._scratchDlg = null; }
+  },
   save() {
     const text = document.getElementById('scratchpadText').value.trim();
     if (!text) return;
@@ -20,10 +25,4 @@ LOOP.scratchpad = {
   }
 };
 
-LOOP.toast = function(msg) {
-  let t = document.getElementById('loopToast');
-  if (!t) { t = document.createElement('div'); t.id='loopToast'; t.className='wm-toast';
-    document.body.appendChild(t); }
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(this._toastT); this._toastT = setTimeout(()=>t.classList.remove('show'), 2600);
-};
+LOOP.toast = function(msg) { AUTOREGIA.toast(msg, { id: 'toast' }); };

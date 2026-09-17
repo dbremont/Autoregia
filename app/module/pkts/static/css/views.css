@@ -61,7 +61,7 @@
   border: var(--hairline) solid var(--color-border-light); border-radius: var(--radius-sm);
   overflow: hidden; font-size: var(--text-2xs); font-family: var(--font-mono);
 }
-.matrix .matrix-cell { background: var(--color-surface); padding: 3px 5px; text-align: center;
+.matrix .matrix-cell { background: var(--color-surface); padding: var(--space-1) var(--space-1); text-align: center;
   color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .matrix .matrix-head { background: var(--color-surface-warm); color: var(--color-text-muted);
   font-weight: 600; }
@@ -72,15 +72,15 @@
 
 /* ── Badge / pill ────────────────────────────────────── */
 .pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 9px; border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-2); border-radius: var(--radius-pill);
   font-size: var(--text-2xs); font-weight: 600; text-transform: uppercase;
   letter-spacing: var(--tracking-wide); font-variant: small-caps;
   background: var(--color-surface-2); color: var(--color-text-secondary);
   border: var(--hairline) solid var(--color-border-light);
 }
 .pill.accent { background: var(--oxford-tint); color: var(--oxford-deep); border-color: transparent; }
-.pill.gold   { background: var(--gold-tint); color: var(--gold); border-color: transparent; }
+.pill.gold   { background: var(--gold-tint); color: var(--gold-ink); border-color: transparent; }
 .pill.success{ background: var(--color-success-light); color: var(--color-success); border-color: transparent; }
 .pill.warning{ background: var(--color-warning-light); color: var(--color-warning); border-color: transparent; }
 .pill.danger { background: var(--color-danger-light); color: var(--color-danger); border-color: transparent; }
@@ -92,7 +92,7 @@
   padding: var(--space-3); border-radius: var(--radius-md);
   border: var(--hairline) solid var(--color-border-light);
 }
-.kb-row { display: flex; gap: 4px; margin-bottom: var(--space-1); }
+.kb-row { display: flex; gap: var(--space-1); margin-bottom: var(--space-1); }
 .kb-row:last-child { margin-bottom: 0; }
 .kb-key {
   width: 34px; height: 34px; border-radius: var(--radius-sm);
@@ -113,7 +113,7 @@
 .detail-section { margin-bottom: var(--space-6); }
 .detail-section h4 {
   font-size: var(--text-2xs); text-transform: uppercase;
-  letter-spacing: var(--tracking-widest); color: var(--gold);
+  letter-spacing: var(--tracking-widest); color: var(--gold-ink);
   margin-bottom: var(--space-3); font-family: var(--font-body);
   font-weight: 600; font-variant: small-caps;
 }
@@ -146,12 +146,12 @@
 .artifact-item .ai-label { font-size: var(--text-xs); color: var(--color-text-muted);
   text-transform: uppercase; letter-spacing: var(--tracking-wide); font-variant: small-caps; }
 .artifact-item .ai-name { font-family: var(--font-display); font-size: var(--text-base); font-weight: 600; color: var(--ink-0); }
-.artifact-item .ai-type { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--gold); }
+.artifact-item .ai-type { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--gold-ink); }
 .artifact-item .ai-desc { font-size: var(--text-xs); color: var(--color-text-secondary); line-height: var(--leading-relaxed); }
 
 /* ── Empty state ─────────────────────────────────────── */
 .empty-state { text-align: center; padding: var(--space-16) var(--space-6); color: var(--color-text-muted); }
-.empty-state .empty-icon { font-size: var(--text-4xl); margin-bottom: var(--space-4); opacity: 0.35; color: var(--ink-6); }
+.empty-state .empty-icon { font-size: var(--text-4xl); margin-bottom: var(--space-4); opacity: 0.35; color: var(--color-text-muted); }
 .empty-state h3 { color: var(--color-text-muted); margin-bottom: var(--space-2); }
 .empty-state p { font-size: var(--text-sm); max-width: 360px; margin: 0 auto; }
 
@@ -169,7 +169,7 @@
 
 /* ── Toolbox / Docs modal body ───────────────────────── */
 .docs-prose { max-width: var(--measure); }
-.docs-prose h4 { color: var(--gold); font-size: var(--text-xs); text-transform: uppercase;
+.docs-prose h4 { color: var(--gold-ink); font-size: var(--text-xs); text-transform: uppercase;
   letter-spacing: var(--tracking-widest); margin: var(--space-4) 0 var(--space-2); font-variant: small-caps; }
 .docs-prose p { font-size: var(--text-sm); line-height: var(--leading-relaxed); color: var(--color-text-secondary); }
 .kbd-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-2) var(--space-4); }

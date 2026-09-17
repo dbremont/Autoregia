@@ -120,8 +120,8 @@ AO.Session.openStart = function () {
   if (active) {
     pop.innerHTML =
       '<div class="sp-label">Running session</div>' +
-      '<input class="sp-desc" id="spDesc" value="' + AO.esc(active.description || '') + '" placeholder="What are you working on?" autocomplete="off">' +
-      '<select class="sp-action" id="spAction">' + actionOpts + '</select>' +
+      '<input class="sp-desc" id="spDesc" value="' + AO.esc(active.description || '') + '" placeholder="What are you working on?" aria-label="Session description" autocomplete="off">' +
+      '<select class="sp-action" id="spAction" aria-label="Action">' + actionOpts + '</select>' +
       '<div class="sp-actions">' +
         '<button class="btn btn-ghost btn-sm" onclick="AO.Session.saveRunning()">Save</button>' +
         '<button class="btn btn-primary btn-sm" onclick="AO.Session.stop()"><ao-icon name="square" size="13"></ao-icon> Stop</button>' +
@@ -130,8 +130,8 @@ AO.Session.openStart = function () {
   } else {
     pop.innerHTML =
       '<div class="sp-label">Start a session</div>' +
-      '<input class="sp-desc" id="spDesc" placeholder="What are you working on?" autocomplete="off">' +
-      '<select class="sp-action" id="spAction">' + actionOpts + '</select>' +
+      '<input class="sp-desc" id="spDesc" placeholder="What are you working on?" aria-label="Session description" autocomplete="off">' +
+      '<select class="sp-action" id="spAction" aria-label="Action">' + actionOpts + '</select>' +
       '<div class="sp-actions">' +
         '<button class="btn btn-ghost btn-sm" onclick="AO.Session.closeStart()">Cancel</button>' +
         '<button class="btn btn-primary btn-sm" onclick="AO.Session.startFromPopover()"><ao-icon name="play" size="13"></ao-icon> Start</button>' +
@@ -243,9 +243,9 @@ AO.Session._renderChart = function (seven) {
 AO.Session._renderFilters = function () {
   const fb = document.getElementById('sessionFilters');
   if (!fb) return;
-  fb.innerHTML = '<select class="select" id="sfAction"><option value="">All actions</option>' +
+  fb.innerHTML = '<select class="select" id="sfAction" aria-label="Filter by action"><option value="">All actions</option>' +
     AO.Store.getActions().map(function (a) { return '<option value="' + a.id + '"' + (AO._sfAction === a.id ? ' selected' : '') + '>' + AO.esc(a.record_id) + '</option>'; }).join('') +
-    '</select> <select class="select" id="sfStatus"><option value="">All statuses</option>' +
+    '</select> <select class="select" id="sfStatus" aria-label="Filter by status"><option value="">All statuses</option>' +
     '<option value="completed"' + (AO._sfStatus === 'completed' ? ' selected' : '') + '>Completed</option>' +
     '<option value="active"' + (AO._sfStatus === 'active' ? ' selected' : '') + '>Active</option>' +
     '<option value="abandoned"' + (AO._sfStatus === 'abandoned' ? ' selected' : '') + '>Abandoned</option></select>';
@@ -293,8 +293,8 @@ AO.Session._row = function (s) {
       '<div class="sess-sub">' + AO.Session._actionChip(s.action_id) +
         '<span class="sess-src"><ao-icon name="' + srcIcon + '" size="11"></ao-icon>' + s.source + '</span></div></div>' +
     '<div class="sess-act">' + badge +
-      '<button class="btn-icon-inline" title="Edit" onclick="AO.Session.openEditor(\'' + s.id + '\')"><ao-icon name="pencil-line" size="14"></ao-icon></button>' +
-      '<button class="btn-icon-inline" title="Delete" onclick="AO.Session.confirmDelete(\'' + s.id + '\')"><ao-icon name="trash-2" size="14"></ao-icon></button></div>' +
+      '<button class="btn-icon-inline" title="Edit" aria-label="Edit session" onclick="AO.Session.openEditor(\'' + s.id + '\')"><ao-icon name="pencil-line" size="14"></ao-icon></button>' +
+      '<button class="btn-icon-inline" title="Delete" aria-label="Delete session" onclick="AO.Session.confirmDelete(\'' + s.id + '\')"><ao-icon name="trash-2" size="14"></ao-icon></button></div>' +
   '</div>';
 };
 
@@ -320,8 +320,9 @@ AO.Session.openEditor = function (existing) {
     '<label class="form-field"><span>Source</span><select class="select" id="sf_source">' + opts(['manual', 'timer'], s.source || 'manual') + '</select></label>' +
     '</div>';
   modal.classList.remove('hidden');
+  AO._sessionDlg = AO.openDialog('sessionModal', 'Edit session');
 };
-AO.Session.closeEditor = function () { document.getElementById('sessionModal').classList.add('hidden'); AO._editingSession = null; };
+AO.Session.closeEditor = function () { AO._sessionDlg = AO.closeDialog(AO._sessionDlg, 'sessionModal'); AO._editingSession = null; };
 AO.Session._toLocal = function (iso) {
   if (!iso) return '';
   const d = new Date(iso);

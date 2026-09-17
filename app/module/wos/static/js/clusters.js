@@ -14,7 +14,7 @@ WOS.Clusters = (() => {
     const cards = cl.map(c=>{
       const terms = (c.top_terms||[]).slice(0,6).map(t=>`<span class="pill gold">${t}</span>`).join(' ');
       const src = Object.entries(c.sources||{}).map(([k,n])=>`<span class="text-xs text-muted">${k} ${n}</span>`).join(' · ');
-      const samples = (c.sample||[]).slice(0,2).map(s=>`<div class="cluster-sample"> ${WOS.esc(s.title||'(no title)')} <a class="text-xs" href="${s.url}" target="_blank">↗</a></div>`).join('');
+      const samples = (c.sample||[]).slice(0,2).map(s=>`<div class="cluster-sample"> ${WOS.esc(s.title||'(no title)')} <a class="text-xs" href="${s.url}" target="_blank" rel="noopener" aria-label="Open in new tab">↗</a></div>`).join('');
       return `<div class="card cluster-card animate-in" data-cluster="${c.cluster_id}">
         <div class="card-header"><div><span class="eyebrow">${c.cluster_id} · ${c.count} items</span><h3>${WOS.esc(c.label)}</h3></div>
           <button class="btn btn-secondary btn-sm" data-cluster="${c.cluster_id}">Read</button></div>

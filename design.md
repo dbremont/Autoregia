@@ -172,17 +172,33 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts, canonical tokens 2026-09) |
 
-**Tracked non-conformances** (audit 2026-09): none outstanding. The
-2026-09 audit items are all resolved — legacy token blocks, raw
-`#FAF1E6` (now `--paper-on-accent`), unicode glyph icons, small-size
-contrast outliers, native `confirm()` (replaced by in-app dialogs),
-missing aria-labels, `/` search shortcuts, sub-10px micro-labels,
-root-plate self-hosted fonts, dead links, missing breadcrumbs and
-context chrome, and landing-finder deep-links (GIS `#entry=`, AIAS
-`#intent=`, PBS `#record=`, PRAS document paths). The AOOS `docs.html`
-self-contained theme was converged onto the canonical palette; its dark
-code-block pair (`--code-bg` `#2A2620` / `#E8E2D4`) remains as a
-sanctioned domain surface (§11.4).
+**Tracked non-conformances** (re-audit 2026-09-17, remediation pass):
+the 2026-09 audit items were re-tested against WCAG 2.2 AA / APG /
+Nielsen practice and the following were found outstanding and are now
+**fixed in this pass**: silent localStorage fallbacks reporting success
+(pbs/pkts/aias/gis stores now write through to the API and report
+"saved locally — sync pending" honestly), broken `<label>` association
+in JS-generated forms (gis/pbs/aias helpers emit `for=`), missing modal
+APG contract (all modals/palettes wire `AUTOREGIA.dialog`: `role="dialog"`,
+`aria-modal`, focus trap, restore-to-invoker), AOOS Space-key hijack of
+button activation, single-char shortcuts firing with modifiers held,
+unlabeled icon-only buttons and selects, contrast failures (informative
+`--ink-6`/`--faint` text swept to passing steps; gold-as-text now uses
+`--gold-ink` `#8A6A2F`), sub-24px chip-remove targets, palette search
+focus visibility, native `alert()` in pbs, unhandled fetch failures
+(awes/wos/pwts/pras), pure-black shadows, off-token chart hues
+(pbs private palette, purple/pink/brown/light-blue converging onto §3
+values via `AUTOREGIA.CHART`), dead per-tool `css/{fonts,base}.css`
+links, missing `↑/↓` navigation in the AOOS palette, missing palettes
+on pwts and awes, missing `<main>` on standalone plates, missing
+`tabular-nums`/breakpoints on pwts, and pras missing `base.css`.
+Known remaining deviations: AOOS `docs.html` dark code-block pair
+(`--code-bg` `#2A2620`/`#E8E2D4`, sanctioned §11.4 domain surface);
+document plates keep their layout px (§5.1) — raw radii/spacing there
+are grandfathered; ECharts canvas `fontSize` numerics remain (canvas
+cannot consume CSS vars — palettes/colors are token-derived via
+`AUTOREGIA.CHART`); pbs delete is client-side only (no server DELETE
+endpoint) and is reported as unpersisted.
 
 Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
 `#e0d2b0`, `#f4ecda`, …) predate the token set; they sit inside the family

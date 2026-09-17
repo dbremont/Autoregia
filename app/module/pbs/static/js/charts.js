@@ -10,13 +10,13 @@ PBS.Charts = {
     const w = el.clientWidth || 280;
     const barH = 22; const gap = 6;
     const h = entries.length * (barH + gap) + 10;
-    const colors = ['#8B1A1A','#4A7C59','#C17930','#4A6FA5','#B08D57','#6B5B95','#2D6A4F','#9A9589'];
-    let svg = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}">`;
+    const colors = ['#7A1A2A','#2D6A4F','#B4742A','#3F6092','#A8854A','#5C4E78','#2D6A4F','#8C877B'];
+    let svg = `<svg role="img" aria-label="Data chart" width="100%" height="${h}" viewBox="0 0 ${w} ${h}">`;
     entries.forEach((e,i) => {
       const bw = (e[1]/max)*(w-80);
-      svg += `<text x="0" y="${i*(barH+gap)+barH-3}" font-size="11" fill="#666" text-anchor="start">${e[0]}</text>`;
+      svg += `<text x="0" y="${i*(barH+gap)+barH-3}" font-size="11" fill="#5B574E" text-anchor="start">${e[0]}</text>`;
       svg += `<rect x="${w-75-bw}" y="${i*(barH+gap)}" width="${bw}" height="${barH}" rx="3" fill="${colors[i%colors.length]}" opacity="0.85"/>`;
-      svg += `<text x="${w-5}" y="${i*(barH+gap)+barH-3}" font-size="11" fill="#666" text-anchor="end">${e[1]}</text>`;
+      svg += `<text x="${w-5}" y="${i*(barH+gap)+barH-3}" font-size="11" fill="#5B574E" text-anchor="end">${e[1]}</text>`;
     });
     svg += `</svg>`;
     el.innerHTML = svg;
@@ -27,8 +27,8 @@ PBS.Charts = {
     const entries = Object.entries(data).filter(e=>e[1]>0);
     const total = entries.reduce((s,e)=>s+e[1],0)||1;
     const size = 140; const cx=size/2, cy=size/2, r=50, ir=30;
-    const colors = {'Active':'#2D6A4F','Draft':'#999','Pending':'#C17930','Blocked':'#B33A3A',
-      'Completed':'#4A6FA5','Archived':'#888','Scheduled':'#4A6FA5','Cancelled':'#B33A3A'};
+    const colors = {'Active':'#2D6A4F','Draft':'#999','Pending':'#B4742A','Blocked':'#A33434',
+      'Completed':'#3F6092','Archived':'#888','Scheduled':'#3F6092','Cancelled':'#A33434'};
     let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
     let startAngle = -Math.PI/2;
     entries.forEach(e => {
@@ -44,7 +44,7 @@ PBS.Charts = {
       const mid = startAngle+slice/2;
       const lx = cx+(r+12)*Math.cos(mid), ly = cy+(r+12)*Math.sin(mid);
       if (e[1]/total>0.06) {
-        svg += `<text x="${lx}" y="${ly}" font-size="9" fill="#666" text-anchor="middle">${e[0]} (${e[1]})</text>`;
+        svg += `<text x="${lx}" y="${ly}" font-size="9" fill="#5B574E" text-anchor="middle">${e[0]} (${e[1]})</text>`;
       }
       startAngle += slice;
     });

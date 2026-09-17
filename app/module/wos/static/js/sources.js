@@ -15,7 +15,7 @@ WOS.Sources = (() => {
   const DONUT = [
     { name: 'ARXIV',    n: 42, pct: 33, color: '#7A1A2A' },
     { name: 'RSS',      n: 31, pct: 24, color: '#3F6092' },
-    { name: 'NITTER',   n: 27, pct: 21, color: '#6E9FC4' },
+    { name: 'NITTER',   n: 27, pct: 21, color: '#3F6092' },
     { name: 'CROSSREF', n: 18, pct: 14, color: '#A8854A' },
     { name: 'BIORXIV',  n: 10, pct: 8,  color: '#5C4E78' },
   ];
@@ -138,14 +138,14 @@ WOS.Sources = (() => {
         <input type="search" id="srcSearchInput" placeholder="Search sources…" autocomplete="off"></div>
       <div class="src-chips" id="srcChips"></div>
       <div class="src-toolbar-right">
-        <select class="src-select" id="srcTypeSel"><option value="all">Type</option></select>
-        <select class="src-select" id="srcActSel">
+        <select class="src-select" id="srcTypeSel" aria-label="Filter by type"><option value="all">Type</option></select>
+        <select class="src-select" id="srcActSel" aria-label="Filter by activity">
           <option value="any">Activity</option><option value="none">No activity (+0)</option>
           <option value="some">Active (1–9)</option><option value="hot">Hot (10+)</option></select>
-        <select class="src-select" id="srcLastSel">
+        <select class="src-select" id="srcLastSel" aria-label="Filter by last observed">
           <option value="any">Last observed</option><option value="15">Last 15 min</option>
           <option value="60">Last hour</option><option value="1440">Last 24 h</option></select>
-        <button class="btn-icon" title="Density" tabindex="-1">${WOS.icon('list', 16)}</button>
+        <button class="btn-icon" title="Density" aria-label="Density" tabindex="-1">${WOS.icon('list', 16)}</button>
       </div>
     </div>`;
   }
@@ -265,9 +265,9 @@ WOS.Sources = (() => {
         <tbody>${slice.map(tr).join('')}</tbody>
       </table>
       ${rows.length ? `<div class="src-pager" id="srcPager">
-        <button class="src-page-btn" id="srcPrev" ${page > 0 ? '' : 'disabled'} aria-label="Previous page">‹</button>
+        <button class="src-page-btn" id="srcPrev" ${page > 0 ? '' : 'disabled'} aria-label="Previous page">${WOS.icon('chevron-left', 15)}</button>
         <span class="src-page-ind">${page + 1} / ${pc}</span>
-        <button class="src-page-btn" id="srcNext" ${page < pc - 1 ? '' : 'disabled'} aria-label="Next page">›</button>
+        <button class="src-page-btn" id="srcNext" ${page < pc - 1 ? '' : 'disabled'} aria-label="Next page">${WOS.icon('chevron-right', 15)}</button>
       </div>` : `<div class="empty-state"><h3>No sources match</h3><p>Adjust the search or filters.</p></div>`}`;
 
     document.getElementById('srcPrev')?.addEventListener('click', () => { page--; drawTable(); });

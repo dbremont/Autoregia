@@ -15,7 +15,7 @@ PBS.Timeline = {
           <div class="timeline-dot" style="border-color:${tc};background:${tc}22;"></div>
           <div class="timeline-date">${new Date(r.created_at).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}</div>
           <div class="timeline-content" onclick="PBS.record.showDetail('${r.id}')">
-            <span class="rc-type" style="background:${tc}15;color:${tc};font-size:10px;">${r.record_type}</span>
+            <span class="rc-type" style="background:${tc}15;color:${tc};font-size:var(--text-2xs);">${r.record_type}</span>
             <strong>${this.esc(r.content)}</strong>
             <p class="text-xs text-muted" style="margin-top:4px;">${r.id} · ${r.status}</p>
           </div>

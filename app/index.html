@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Autoregia — Self-Management System</title>
-  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260916">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
 <style>
 
   :root{
@@ -81,7 +81,7 @@
   .att-dot.medium{background:var(--color-warning)}
   .att-sev{font-family:var(--mono);font-size:var(--text-2xs);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
   .att-text{color:var(--ink-2)}
-  .att-tool{font-family:var(--mono);font-size:var(--text-2xs);color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
+  .att-tool{font-family:var(--mono);font-size:var(--text-2xs);color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:5px 9px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
   .att-tool:hover{text-decoration:none;background:var(--accent);color:var(--surface);border-color:var(--accent)}
   .res-item{margin-bottom:11px}
   .res-head{display:flex;justify-content:space-between;gap:8px;font-size:var(--text-base);margin-bottom:4px}
@@ -125,7 +125,8 @@
   .finder.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
   .finder .bar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--rule-soft)}
   .finder .bar svg{flex:0 0 auto}
-  .finder input{flex:1;border:none;background:none;outline:none;font-family:var(--mono);font-size:var(--text-base);color:var(--ink-0)}
+  .finder input:focus-visible{outline:2px solid var(--oxford);outline-offset:-2px;border-radius:6px}
+  .finder input{flex:1;border:none;background:none;font-family:var(--mono);font-size:var(--text-base);color:var(--ink-0)}
   .finder input::placeholder{color:var(--ink-6)}
   .finder .esc{font-family:var(--mono);font-size:var(--text-2xs);color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--paper)}
   .finder .res{max-height:300px;overflow-y:auto;padding:8px}
@@ -143,7 +144,7 @@
   section.stage-sit{display:flex;flex-direction:column;margin-top:22px}
   section.stage-sit[hidden]{display:none}
   section.stage-sit .sit-card{margin-top:12px;border-radius:14px;box-shadow:0 24px 60px -44px rgba(60,50,30,.5)}
-  .sit-close{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted);padding:4px 8px;border-radius:6px}
+  .sit-close{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted);padding:6px 10px;border-radius:6px}
   .sit-close:hover{color:var(--accent);background:var(--gold-tint)}
   .sit-modal{position:fixed;inset:0;background:rgba(30,28,25,.44);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal);opacity:0;pointer-events:none;transition:opacity .2s}
   .sit-modal.on{opacity:1;pointer-events:auto}
@@ -174,6 +175,7 @@
     </div>
   </div>
 </nav>
+  <main>
 
 <div class="wrap page-col">
 
@@ -184,10 +186,10 @@
       <p class="lede">A <strong>forma</strong> for agency — structure that shapes, guides, and channels the <strong>exercise of agency</strong> without substituting for it; light enough to set down when it is not needed. <a class="lede-more" href="about.html">Open the reference architecture →</a></p>
     </div>
     <div class="action-grid">
-      <a class="action" href="/pbs/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="a-label">Capture</span></a>
-      <a class="action" href="/aoos/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="a-label">Today's plan</span></a>
-      <a class="action" href="/pras/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span class="a-label">Review</span></a>
-      <a class="action" href="/ags/policies/charter.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg><span class="a-label">Charter</span></a>
+      <a class="action" href="/pbs/"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="a-label">Capture</span></a>
+      <a class="action" href="/aoos/"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="a-label">Today's plan</span></a>
+      <a class="action" href="/pras/"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span class="a-label">Review</span></a>
+      <a class="action" href="/ags/policies/charter.html"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg><span class="a-label">Charter</span></a>
     </div>
   </header>
 
@@ -430,6 +432,7 @@
   <div class="sit-modal" id="situation-modal" role="dialog" aria-modal="true" aria-label="The Situation — state estimate" hidden></div>
 
   <!-- ═══ Footer ═══ -->
+    </main>
   <footer>
     <div class="f-row">
       <div><span class="f-brand">Autoregia</span> </div>
@@ -456,8 +459,15 @@
   var f=document.getElementById('finder'),q=document.getElementById('q'),res=document.getElementById('res');
   var sm=document.getElementById('situation-modal'),sitBtn=document.getElementById('sitBtn'),sitClose=document.getElementById('sitClose'),sitSlot=document.getElementById('situation'),sitCard=sitSlot.querySelector('.sit-card');
   var timer=null;
-  function openSit(){sm.classList.add('on')}
-  function closeSit(){sm.classList.remove('on')}
+  var sitDlg=null;
+  function openSit(){
+    sm.classList.add('on');
+    if(!sm.hidden&&!sitDlg&&window.AUTOREGIA) sitDlg=AUTOREGIA.dialog(sm,{label:'The Situation — state estimate'});
+  }
+  function closeSit(){
+    sm.classList.remove('on');
+    if(sitDlg){sitDlg.close();sitDlg=null}
+  }
   sitBtn.addEventListener('click',openSit);
   sitClose.addEventListener('click',closeSit);
   sm.addEventListener('click',function(e){if(e.target===sm)closeSit()});
@@ -468,6 +478,7 @@
      measure, fall back. */
   function applySitMode(){
     var open=sm.classList.contains('on');
+    if(open&&sitDlg){closeSit();open=false}
     sitSlot.hidden=false;sitSlot.appendChild(sitCard);sm.hidden=true;sm.classList.remove('on');
     if(document.documentElement.scrollHeight<=window.innerHeight+1){
       document.body.classList.add('sit-inline');
@@ -492,7 +503,7 @@
     var el=document.activeElement;
     var typing=!!el&&(el===q||el.tagName==='INPUT'||el.tagName==='TEXTAREA'||el.tagName==='SELECT'||el.isContentEditable);
     if(e.key==='Escape'){closeF();closeSit();return}
-    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    if(e.ctrlKey||e.metaKey||e.altKey||e.shiftKey)return;
     if(e.key==='/'&&!typing){e.preventDefault();openF()}
     else if(e.key==='/'&&typing&&el===q){e.preventDefault()}
     else if(e.key.toLowerCase()==='c'&&!typing){location.href='/pbs/'}
@@ -529,5 +540,6 @@
   q.addEventListener('keydown',function(e){if(e.key==='Enter'){clearTimeout(timer);run(q.value)}});
 })();
 </script>
+<script src="/ui/js/ui.js?v=20260917"></script>
 </body>
 </html>

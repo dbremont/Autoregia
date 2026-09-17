@@ -7,14 +7,9 @@
    ════════════════════════════════════════════════════════════ */
 window.WOS = window.WOS || {};
 WOS.scratchpad = {
-  open(){ document.getElementById('scratchpadOverlay').classList.remove('hidden'); const ta=document.getElementById('scratchpadText'); ta.value=''; setTimeout(()=>ta.focus(),100); },
-  close(){ document.getElementById('scratchpadOverlay').classList.add('hidden'); },
+  open(){ const ov=document.getElementById('scratchpadOverlay'); ov.classList.remove('hidden'); WOS._scratchDlg = AUTOREGIA.dialog(ov, { label: 'Quick capture' }); const ta=document.getElementById('scratchpadText'); ta.value=''; setTimeout(()=>ta.focus(),100); },
+  close(){ document.getElementById('scratchpadOverlay').classList.add('hidden'); if (WOS._scratchDlg) { WOS._scratchDlg.close(); WOS._scratchDlg = null; } },
   save(){ const t=document.getElementById('scratchpadText').value.trim(); if(!t) return; this.close(); WOS.Store.applyFilter({q:t}); WOS.renderSidebar(); WOS.navigate('search'); WOS.toast('Filtering stream for: '+t); }
 };
 
-WOS.toast = function(msg){
-  let t=document.getElementById('wosToast');
-  if(!t){ t=document.createElement('div'); t.id='wosToast'; t.className='wm-toast'; document.body.appendChild(t); }
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(this._tt); this._tt=setTimeout(()=>t.classList.remove('show'),2600);
-};
+WOS.toast = function(msg){ AUTOREGIA.toast(msg, { id: 'toast' }); };

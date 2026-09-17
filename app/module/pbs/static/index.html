@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PBS — Personal Binnacle System</title>
-  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/base.css?v=20260916">
-  <link rel="stylesheet" href="/pbs/css/fonts.css">
-  <link rel="stylesheet" href="/pbs/css/base.css">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260917">
   <link rel="stylesheet" href="/pbs/css/layout.css">
   <link rel="stylesheet" href="/pbs/css/components.css">
   <link rel="stylesheet" href="/pbs/css/views.css">
@@ -26,7 +24,7 @@
     </div>
     <div class="header-search">
       <span class="search-icon"><pbs-icon name="search" size="16"></pbs-icon></span>
-      <input type="search" id="globalSearch" placeholder="Search records…" autocomplete="off">
+      <input type="search" id="globalSearch" placeholder="Search records…" aria-label="Search records" autocomplete="off">
     </div>
     <div class="header-actions">
       <button class="btn btn-ghost btn-sm" id="btnScratchpad" title="Quick Capture (Ctrl+Shift+N)"><pbs-icon name="pencil-line" size="15"></pbs-icon> Capture</button>
@@ -86,13 +84,13 @@
 
 <!-- ═══ Command Palette ═══ -->
 <div class="cmd-palette-overlay hidden" id="cmdPalette">
-  <div class="cmd-palette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
     <div class="cmd-palette-search">
       <span><pbs-icon name="search" size="17"></pbs-icon></span>
-      <input type="text" id="cmdInput" placeholder="Type a command or search…" autocomplete="off">
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command or search…" autocomplete="off">
       <span class="kbd">ESC</span>
     </div>
-    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
   </div>
 </div>
 
@@ -101,7 +99,7 @@
   <div class="scratchpad">
     <div class="scratchpad-header">
       <h3 style="margin:0;font-size:var(--text-base);">Quick Capture</h3>
-      <button class="btn-icon" onclick="PBS.scratchpad.close()"><pbs-icon name="x" size="17"></pbs-icon></button>
+      <button class="btn-icon" aria-label="Close quick capture" onclick="PBS.scratchpad.close()"><pbs-icon name="x" size="17"></pbs-icon></button>
     </div>
     <div class="scratchpad-body">
       <textarea id="scratchpadText" placeholder="Capture a thought, observation, or idea…"></textarea>
@@ -118,7 +116,7 @@
   <div class="modal" style="max-width:800px;">
     <div class="modal-header">
       <h2 id="modalTitle">New Record</h2>
-      <button class="btn-icon" onclick="PBS.record.closeModal()"><pbs-icon name="x" size="17"></pbs-icon></button>
+      <button class="btn-icon" aria-label="Close record editor" onclick="PBS.record.closeModal()"><pbs-icon name="x" size="17"></pbs-icon></button>
     </div>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-footer">
@@ -133,7 +131,7 @@
   <div class="modal" style="max-width:820px;">
     <div class="modal-header">
       <h2 id="detailTitle">Record Detail</h2>
-      <button class="btn-icon" onclick="PBS.record.closeDetail()"><pbs-icon name="x" size="17"></pbs-icon></button>
+      <button class="btn-icon" aria-label="Close record detail" onclick="PBS.record.closeDetail()"><pbs-icon name="x" size="17"></pbs-icon></button>
     </div>
     <div class="modal-body" id="detailBody"></div>
   </div>
@@ -144,7 +142,7 @@
   <div class="modal" style="max-width:640px;">
     <div class="modal-header">
       <h2>Generate Log Records</h2>
-      <button class="btn-icon" onclick="PBS.Working.closeReview()"><pbs-icon name="x" size="17"></pbs-icon></button>
+      <button class="btn-icon" aria-label="Close review" onclick="PBS.Working.closeReview()"><pbs-icon name="x" size="17"></pbs-icon></button>
     </div>
     <div class="modal-body" id="wmReviewBody"></div>
     <div class="modal-footer">
@@ -154,8 +152,11 @@
   </div>
 </div>
 
+<div class="wm-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/ui/js/ui.js?v=20260917"></script>
 <script src="/pbs/js/store.js"></script>
-<script src="/ui/js/icons.js?v=20260916"></script>
+<script src="/ui/js/icons.js?v=20260917"></script>
 
 <script src="/pbs/js/icons.js"></script>
 <script src="/pbs/js/app.js"></script>

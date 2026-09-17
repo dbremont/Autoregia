@@ -3,10 +3,10 @@ const PT = window.PT || {};
 
 PT.KIND_COLORS = {
   software_tool: '#7A1A2A', library_framework: '#B4742A', service_platform: '#3F6092',
-  data_source: '#2D6A4F', infrastructure: '#6B5B95', hardware_device: '#A8854A',
-  physical_instrument: '#8C6E54', reference_artifact: '#3F6E50', workflow_method: '#5C4E78',
-  capability_skill: '#9A9589', document: '#8C877B', language: '#2D6A4F',
-  person: '#3F6092', project: '#7A1A2A', other: '#9A9589',
+  data_source: '#2D6A4F', infrastructure: '#5C4E78', hardware_device: '#A8854A',
+  physical_instrument: '#962030', reference_artifact: '#3F6E50', workflow_method: '#5C4E78',
+  capability_skill: '#8C877B', document: '#8C877B', language: '#2D6A4F',
+  person: '#3F6092', project: '#7A1A2A', other: '#8C877B',
 };
 PT.KIND_ICONS = {
   software_tool: 'box', library_framework: 'layers', service_platform: 'cloud',
@@ -35,9 +35,9 @@ PT.SPACES = [
 ];
 PT.RELATION_COLORS = {
   depends_on: '#A33434', required_by: '#A33434', integrates_with: '#3F6092',
-  alternative_to: '#B4742A', complements: '#3F6E50', contains: '#6B5B95',
-  part_of: '#6B5B95', references: '#8C877B', enables: '#2D6A4F',
-  version_of: '#9A9589', supersedes: '#7A1A2A', consumes: '#A8854A', produces: '#A8854A',
+  alternative_to: '#B4742A', complements: '#3F6E50', contains: '#5C4E78',
+  part_of: '#5C4E78', references: '#8C877B', enables: '#2D6A4F',
+  version_of: '#8C877B', supersedes: '#7A1A2A', consumes: '#A8854A', produces: '#A8854A',
 };
 PT.ENUMS = {
   object_kind: ['software_tool','library_framework','service_platform','data_source','infrastructure','hardware_device','physical_instrument','reference_artifact','workflow_method','capability_skill','document','language','person','project','other'],
@@ -134,6 +134,7 @@ PT.setupGlobalSearch = function () {
 PT.setupKeyboard = function () {
   document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); PT.CommandPalette.open(''); }
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
     if (e.key === 'n' && !isInputFocused()) { e.preventDefault(); PT.Entry.openEditor(); }
     if (e.key === '/' && !isInputFocused()) { e.preventDefault(); document.getElementById('globalSearch').focus(); }
     if (e.key === 'Escape') {
@@ -187,6 +188,6 @@ PT.prettySystem = function (s) {
 PT.esc = function (s) { if (s == null) return ''; const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
 
 PT.confirmDialog = function (opts) { return AUTOREGIA.confirmDialog(opts); };
-PT.kindColor = function (k) { return PT.KIND_COLORS[k] || '#9A9589'; };
+PT.kindColor = function (k) { return PT.KIND_COLORS[k] || '#8C877B'; };
 PT.toast = function (msg) { AUTOREGIA.toast(msg); };
 PT.badge = function (cls, text) { return '<span class="badge ' + cls + '">' + PT.esc(text) + '</span>'; };

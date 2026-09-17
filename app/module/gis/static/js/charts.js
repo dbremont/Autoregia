@@ -4,7 +4,7 @@
    ════════════════════════════════════════════════════════════ */
 PT.Charts = {
   // Shared chart palette drawn from the design tokens.
-  PALETTE: ['#7A1A2A', '#B4742A', '#3F6092', '#2D6A4F', '#6B5B95', '#A8854A', '#3F6E50', '#8C6E54', '#9A9589', '#5C4E78'],
+  PALETTE: ['#7A1A2A', '#B4742A', '#3F6092', '#2D6A4F', '#5C4E78', '#A8854A', '#3F6E50', '#962030', '#8C877B', '#5C4E78'],
   TEXT: '#5B574E', GRID: '#E2DED4',
 
   base(extra) {
@@ -18,6 +18,7 @@ PT.Charts = {
 
   hbar(elId, data, opts) {
     const el = document.getElementById(elId); if (!el) return;
+    el.setAttribute('role', 'img'); el.setAttribute('aria-label', 'Bar chart of ' + elId);
     const entries = Object.entries(data).sort(function (a,b) { return b[1]-a[1]; });
     const chart = echarts.init(el);
     chart.setOption(this.base({
@@ -35,6 +36,7 @@ PT.Charts = {
 
   donut(elId, data, opts) {
     const el = document.getElementById(elId); if (!el) return;
+    el.setAttribute('role', 'img'); el.setAttribute('aria-label', 'Donut chart of ' + elId);
     const entries = Object.entries(data).filter(function (e) { return e[1] > 0; });
     const chart = echarts.init(el);
     chart.setOption(this.base({

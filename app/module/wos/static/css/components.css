@@ -81,7 +81,7 @@
   font-size: var(--text-2xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: var(--tracking-wide);
   font-variant: small-caps;
-  padding: 2px 9px; border-radius: var(--radius-pill); margin-bottom: var(--space-2);
+  padding: 2px var(--space-2); border-radius: var(--radius-pill); margin-bottom: var(--space-2);
   border: var(--hairline) solid currentColor;
 }
 .rc-title {
@@ -100,15 +100,15 @@
   display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
   font-size: var(--text-xs); color: var(--color-text-muted);
 }
-.rc-domain { display: inline-flex; align-items: center; gap: 4px; color: var(--color-text-secondary); }
-.rc-domain .wos-icon { color: var(--color-text-faint); }
+.rc-domain { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--color-text-secondary); }
+.rc-domain .wos-icon { color: var(--color-text-muted); }
 .rc-tag { color: var(--color-text-secondary); font-family: var(--font-mono); font-size: var(--text-2xs); }
 
 /* ── Badges & Seals ──────────────────────────────────── */
 .badge {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: var(--space-1);
   font-size: var(--text-2xs); font-weight: 600;
-  padding: 2px 9px; border-radius: var(--radius-pill);
+  padding: 2px var(--space-2); border-radius: var(--radius-pill);
   white-space: nowrap; line-height: 1.7;
   letter-spacing: var(--tracking-wide);
   font-variant: small-caps; text-transform: uppercase;
@@ -124,7 +124,7 @@
 
 .pri-critical { background: var(--oxford-bg); color: var(--oxford-deep); }
 .pri-high     { background: var(--color-warning-light); color: var(--priority-high); }
-.pri-medium   { background: var(--gold-tint); color: var(--gold); }
+.pri-medium   { background: var(--gold-tint); color: var(--gold-ink); }
 .pri-low      { background: var(--color-surface-2); color: var(--ink-5); }
 
 /* Status seal (circular stamp) */
@@ -167,13 +167,19 @@ textarea { resize: vertical; min-height: 80px; line-height: var(--leading-relaxe
 }
 .tag-input-container:focus-within { border-color: var(--oxford); box-shadow: var(--ring-focus); }
 .tag-chip {
-  display: inline-flex; align-items: center; gap: 4px;
-  background: var(--gold-tint); color: var(--gold);
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  background: var(--gold-tint); color: var(--gold-ink);
   font-size: var(--text-xs); padding: 2px var(--space-2); border-radius: var(--radius-pill);
   font-weight: 500; border: var(--hairline) solid var(--rule-gold);
 }
-.tag-chip .remove-tag { cursor: pointer; opacity: 0.6; font-weight: bold; }
-.tag-chip .remove-tag:hover { opacity: 1; }
+/* ≥24×24 pointer target (WCAG 2.5.8); negative margin keeps chip compact */
+.tag-chip .remove-tag {
+  appearance: none; background: none; border: none; padding: 0; color: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; margin: -6px -8px -6px 0;
+  cursor: pointer; opacity: 0.6; border-radius: var(--radius-pill);
+}
+.tag-chip .remove-tag:hover { opacity: 1; background: rgba(138,106,47,0.12); }
 .tag-input-container input {
   border: none; background: transparent; padding: var(--space-1); flex: 1;
   min-width: 100px; outline: none; font-size: var(--text-sm); box-shadow: none;
@@ -195,7 +201,7 @@ textarea { resize: vertical; min-height: 80px; line-height: var(--leading-relaxe
   box-shadow: var(--shadow-xl); max-width: 720px; width: 100%;
   max-height: 85vh; overflow-y: auto;
   animation: modalIn 280ms var(--ease-out-expo);
-  border: var(--hairline) solid rgba(0,0,0,0.04);
+  border: var(--hairline) solid rgba(30,28,25,0.04);
 }
 .modal-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -216,7 +222,7 @@ textarea { resize: vertical; min-height: 80px; line-height: var(--leading-relaxe
   text-align: center; padding: var(--space-16) var(--space-6);
   color: var(--color-text-muted);
 }
-.empty-state .empty-icon { font-size: var(--text-4xl); margin-bottom: var(--space-4); opacity: 0.35; color: var(--ink-6); }
+.empty-state .empty-icon { font-size: var(--text-4xl); margin-bottom: var(--space-4); opacity: 0.35; color: var(--color-text-muted); }
 .empty-state h3 { color: var(--color-text-muted); margin-bottom: var(--space-2); }
 .empty-state p { font-size: var(--text-sm); max-width: 360px; margin: 0 auto; }
 

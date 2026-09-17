@@ -18,12 +18,12 @@ AO.renderActionList = function (list) {
   const fb = document.getElementById('actionFilters');
   if (fb) {
     const kinds = [''].concat(AO.ENUMS.kind);
-    fb.innerHTML = '<select class="select" id="filterKind"><option value="">All kinds</option>' +
+    fb.innerHTML = '<select class="select" id="filterKind" aria-label="Filter by kind"><option value="">All kinds</option>' +
       kinds.slice(1).map(k => '<option value="' + k + '"' + (AO._kindFilter === k ? ' selected' : '') + '>' + k + '</option>').join('') +
-      '</select> <select class="select" id="filterSched"><option value="">All states</option>' +
+      '</select> <select class="select" id="filterSched" aria-label="Filter by scheduling state"><option value="">All states</option>' +
       AO.ENUMS.scheduling_state.map(s => '<option value="' + s + '">' + AO.prettyEnum(s) + '</option>').join('') +
-      '</select> <label class="filter-check"><input type="checkbox" id="filterPinned"> Pinned only</label> ' +
-      '<label class="filter-check"><input type="checkbox" id="filterBlocked"> Blocked only</label>';
+      '</select> <label class="filter-check"><input type="checkbox" id="filterPinned" aria-label="Pinned only"> Pinned only</label> ' +
+      '<label class="filter-check"><input type="checkbox" id="filterBlocked" aria-label="Blocked only"> Blocked only</label>';
     document.getElementById('filterKind').addEventListener('change', function () { AO._kindFilter = this.value; AO.renderActionList(); });
     document.getElementById('filterSched').addEventListener('change', function () { AO._schedFilter = this.value; AO.renderActionList(); });
     document.getElementById('filterPinned').addEventListener('change', function () { AO._pinnedFilter = this.checked; AO.renderActionList(); });
@@ -76,11 +76,12 @@ AO.Action.openEditor = function (existing) {
     '<label class="form-field"><span>Confidence</span><select class="select" id="f_effconf">' + opts(AO.ENUMS.confidence, (a.effort_estimate || {}).confidence) + '</select></label>' +
     '<label class="form-field"><span>Capacity Resource</span><select class="select" id="f_capres">' + opts(AO.ENUMS.capacity_resource, (a.capacity_profile || {}).resource) + '</select></label>' +
     '<label class="form-field"><span>Capacity Band</span><select class="select" id="f_capband">' + opts(AO.ENUMS.capacity_band, (a.capacity_profile || {}).band) + '</select></label>' +
-    '<label class="form-field form-field-wide"><span>Pinned</span><label class="filter-check"><input type="checkbox" id="f_pinned" ' + (a.pinned ? 'checked' : '') + '></label></label>' +
+    '<label class="form-field form-field-wide"><span>Pinned</span><span class="filter-check"><input type="checkbox" id="f_pinned" ' + (a.pinned ? 'checked' : '') + '></span></label>' +
     '</div>';
   modal.classList.remove('hidden');
+  AO._editorDlg = AO.openDialog('actionModal', existing ? 'Edit action' : 'New action');
 };
-AO.Action.closeEditor = function () { document.getElementById('actionModal').classList.add('hidden'); AO._editing = null; };
+AO.Action.closeEditor = function () { AO._editorDlg = AO.closeDialog(AO._editorDlg, 'actionModal'); AO._editing = null; };
 
 AO.Action.saveEditor = async function () {
   const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
@@ -125,9 +126,9 @@ AO.Action.showDetail = function (id) {
     '<div class="detail-actions"><button class="btn btn-ghost btn-sm" onclick="AO.Action.edit(\'' + a.id + '\')"><ao-icon name="pencil-line" size="14"></ao-icon> Edit</button> ' +
     '<button class="btn btn-ghost btn-sm" onclick="AO.Store.togglePin(\'' + a.id + '\');AO.Action.closeDetail()"><ao-icon name="bookmark" size="14"></ao-icon> Pin</button> ' +
     '<button class="btn btn-ghost btn-sm" onclick="AO.confirmDelete(\'' + a.id + '\')"><ao-icon name="trash-2" size="14"></ao-icon> Delete</button></div>';
-  document.getElementById('detailModal').classList.remove('hidden');
+  AO._detailDlg = AO.openDialog('detailModal', 'Action detail');
 };
-AO.Action.closeDetail = function () { document.getElementById('detailModal').classList.add('hidden'); };
+AO.Action.closeDetail = function () { AO._detailDlg = AO.closeDialog(AO._detailDlg, 'detailModal'); };
 AO.Action.edit = function (id) { AO.Action.closeDetail(); AO.Action.openEditor(AO.Store.getById(id)); };
 
 AO.confirmDelete = async function (id) {

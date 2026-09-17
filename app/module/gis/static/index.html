@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GIS — General Index System</title>
-  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/base.css?v=20260916">
-  <link rel="stylesheet" href="/gis/css/fonts.css?v=20260910">
-  <link rel="stylesheet" href="/gis/css/base.css?v=20260910">
-  <link rel="stylesheet" href="/gis/css/layout.css?v=20260910">
-  <link rel="stylesheet" href="/gis/css/components.css?v=20260910">
-  <link rel="stylesheet" href="/gis/css/views.css?v=20260910">
-  <link rel="stylesheet" href="/gis/css/command-palette.css?v=20260910">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/base.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/layout.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/components.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/views.css?v=20260917">
+  <link rel="stylesheet" href="/gis/css/command-palette.css?v=20260917">
 </head>
 <body>
 
@@ -75,13 +75,13 @@
 
 <!-- ═══ Command Palette ═══ -->
 <div class="cmd-palette-overlay hidden" id="cmdPalette">
-  <div class="cmd-palette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
     <div class="cmd-palette-search">
       <span><pt-icon name="search" size="18"></pt-icon></span>
-      <input type="text" id="cmdInput" placeholder="Type a command or search entries…" autocomplete="off">
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command or search entries…" autocomplete="off">
       <span class="kbd-hint">ESC</span>
     </div>
-    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
   </div>
 </div>
 
@@ -118,22 +118,22 @@
 <div class="toast" id="toast"></div>
 
 <script src="/gis/js/vendor/echarts.min.js"></script>
-<script src="/gis/js/store.js?v=20260910"></script>
-<script src="/ui/js/icons.js?v=20260916"></script>
+<script src="/gis/js/store.js?v=20260917"></script>
+<script src="/ui/js/icons.js?v=20260917"></script>
 
-<script src="/gis/js/icons.js?v=20260910"></script>
-<script src="/gis/js/charts.js?v=20260910"></script>
-<script src="/ui/js/ui.js?v=20260916"></script>
+<script src="/gis/js/icons.js?v=20260917"></script>
+<script src="/gis/js/charts.js?v=20260917"></script>
+<script src="/ui/js/ui.js?v=20260917"></script>
 
-<script src="/gis/js/app.js?v=20260910"></script>
-<script src="/gis/js/search.js?v=20260910"></script>
-<script src="/gis/js/entry.js?v=20260910"></script>
-<script src="/gis/js/dashboard.js?v=20260910"></script>
-<script src="/gis/js/relations.js?v=20260910"></script>
-<script src="/gis/js/analysis.js?v=20260910"></script>
-<script src="/gis/js/home.js?v=20260910"></script>
-<script src="/gis/js/reference.js?v=20260910"></script>
-<script src="/gis/js/command-palette.js?v=20260910"></script>
+<script src="/gis/js/app.js?v=20260917"></script>
+<script src="/gis/js/search.js?v=20260917"></script>
+<script src="/gis/js/entry.js?v=20260917"></script>
+<script src="/gis/js/dashboard.js?v=20260917"></script>
+<script src="/gis/js/relations.js?v=20260917"></script>
+<script src="/gis/js/analysis.js?v=20260917"></script>
+<script src="/gis/js/home.js?v=20260917"></script>
+<script src="/gis/js/reference.js?v=20260917"></script>
+<script src="/gis/js/command-palette.js?v=20260917"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => { PT.init(); });
 </script>

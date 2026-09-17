@@ -35,6 +35,7 @@ AI.app = (() => {
     });
 
     document.addEventListener('keydown', e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === 'n' && !inField(e) && !modalOpen()) { e.preventDefault(); AI.Editor.openNew(); }
       if (e.key === '/' && !inField(e) && !modalOpen()) { e.preventDefault(); searchEl.focus(); }
     });
@@ -96,7 +97,7 @@ AI.app = (() => {
   }
 
   function table(items) {
-    return `<table class="table"><thead><tr>
+    return `<div class="table-wrap"><table class="table"><thead><tr>
       <th>Intent</th><th>Source</th><th>Priority</th><th>Status</th><th>Deadline</th>
       </tr></thead><tbody>` +
       items.map(i => `<tr data-id="${esc(i.id)}">
@@ -106,7 +107,7 @@ AI.app = (() => {
         <td><span class="badge pri-${i.priority}"><span class="dot"></span>${esc(i.priority)}</span></td>
         <td class="mono" style="font-size:var(--text-xs);color:var(--color-text-secondary)">${esc(i.status)}</td>
         <td class="mono" style="font-size:var(--text-xs);color:var(--color-text-muted)">${i.deadline ? esc(i.deadline) : '—'}</td>
-      </tr>`).join('') + `</tbody></table>`;
+      </tr>`).join('') + `</tbody></table></div>`;
   }
 
   function exportData() {

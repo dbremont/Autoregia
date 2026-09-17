@@ -50,7 +50,7 @@ PBS.Heatmap.renderSVG = function() {
     const x = 28 + week*(cellSize+cellGap);
     const y = dow*(cellSize+cellGap);
     const intensity = count===0?0:Math.ceil((count/maxCount)*4);
-    const colors = ['#EDE9E1','#C9D8C4','#A5CC9E','#7BBF78','#5AAF56'];
+    const colors = ['#F6EFE1','#E8D9B8','#D4BE85','#BE9A5E','#A8854A'];
     const title = `${date}: ${count} record${count!==1?'s':''}`;
     svg += `<rect class="heatmap-cell" x="${x}" y="${y}" width="${cellSize}" height="${cellSize}"
       fill="${colors[intensity]}" rx="2" data-count="${count}"><title>${title}</title></rect>`;
@@ -60,7 +60,7 @@ PBS.Heatmap.renderSVG = function() {
   svg += `<text x="${lx}" y="${ly}" font-size="10" fill="#999">Less</text>`;
   [0,1,2,3,4].forEach(i=>{
     svg += `<rect x="${lx+25+i*16}" y="${ly-10}" width="12" height="12" rx="2"
-      fill="${['#EDE9E1','#C9D8C4','#A5CC9E','#7BBF78','#5AAF56'][i]}"/>`;
+      fill="${['#F6EFE1','#E8D9B8','#D4BE85','#BE9A5E','#A8854A'][i]}"/>`;
   });
   svg += `<text x="${lx+105}" y="${ly}" font-size="10" fill="#999">More</text>`;
   svg += `</svg>`;

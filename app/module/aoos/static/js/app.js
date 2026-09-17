@@ -3,14 +3,14 @@ window.AO = window.AO || {};
 
 AO.KIND_COLORS = {
   Objective: '#7A1A2A', Initiative: '#B4742A', Project: '#3F6092',
-  Task: '#2D6A4F', Routine: '#6B5B95', Commitment: '#A33434',
+  Task: '#2D6A4F', Routine: '#5C4E78', Commitment: '#A33434',
 };
 AO.KIND_ICONS = {
   Objective: 'target', Initiative: 'flag', Project: 'folder',
   Task: 'list-checks', Routine: 'repeat', Commitment: 'handshake',
 };
 AO.SCHED_COLORS = {
-  unscheduled: '#9A9589', scheduled: '#3F6092', deferred: '#B4742A',
+  unscheduled: '#8C877B', scheduled: '#3F6092', deferred: '#B4742A',
   'in-progress': '#2D6A4F', done: '#7A1A2A',
 };
 AO.ENUMS = {
@@ -85,10 +85,11 @@ AO.setupKeyboard = function () {
     const meta = e.metaKey || e.ctrlKey;
     if (meta && e.key.toLowerCase() === 'k') { e.preventDefault(); AO.CommandPalette.toggle(); }
     else if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); AO.Action.openEditor(); }
-    else if (e.key === 'n' && !isInputFocused() && AO.currentView === 'actions') { AO.Action.openEditor(); }
-    else if (e.key === '/' && !isInputFocused()) { e.preventDefault(); document.getElementById('globalSearch').focus(); }
-    // Space — toggle the timer (open start popover / stop running)
-    else if (e.key === ' ' && !isInputFocused()) {
+    else if (e.key === 'n' && !isInputFocused() && !isInteractive(e.target) && AO.currentView === 'actions') { AO.Action.openEditor(); }
+    else if (e.key === '/' && !isInputFocused() && !e.altKey && !e.shiftKey) { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+    // Space — toggle the timer, but never steal Space from an
+    // interactive control (button/link/checkbox activation, WCAG 2.1.1)
+    else if (e.key === ' ' && !isInputFocused() && !isInteractive(e.target)) {
       e.preventDefault();
       const active = AO.Store.getActiveSession();
       if (active) AO.Session.stop();
@@ -96,13 +97,18 @@ AO.setupKeyboard = function () {
     }
     // F1 (?) — quick help
     else if (e.key === 'F1') { e.preventDefault(); AO.Help.toggle(); }
-    else if (e.key === '?' && !isInputFocused()) { AO.Help.open(); }
+    else if (e.key === '?' && !isInputFocused() && !e.shiftKey) { AO.Help.open(); }
     if (e.key === 'Escape') { AO.CommandPalette.close(); AO.Action.closeEditor(); AO.Action.closeDetail(); AO.Help.close(); AO.Session.closeStart(); }
   });
 };
 function isInputFocused() {
   const t = document.activeElement && document.activeElement.tagName;
-  return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT';
+  return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || (document.activeElement && document.activeElement.isContentEditable);
+}
+// Any focusable control: its own activation keys must not be hijacked.
+function isInteractive(el) {
+  if (!el || !el.closest) return false;
+  return !!el.closest('button, a[href], [role="button"], [role="link"], input[type="checkbox"], input[type="radio"], input[type="button"], input[type="submit"], select, summary, [tabindex]:not([tabindex="-1"])');
 }
 
 AO.setupHeaderButtons = function () {
@@ -117,12 +123,14 @@ AO.setupHeaderButtons = function () {
 /* ── Help modal (F1 / ?) — quick in-app guidance ─────────────── */
 AO.Help = AO.Help || {};
 AO.Help.open = function () {
+  if (AO._helpDlg) return;
   const m = document.getElementById('helpModal');
-  if (m) m.classList.remove('hidden');
+  if (m) { m.classList.remove('hidden'); AO._helpDlg = AUTOREGIA.dialog(m, { label: 'AOOS help' }); }
 };
 AO.Help.close = function () {
   const m = document.getElementById('helpModal');
   if (m) m.classList.add('hidden');
+  if (AO._helpDlg) { AO._helpDlg.close(); AO._helpDlg = null; }
 };
 AO.Help.toggle = function () {
   const m = document.getElementById('helpModal');
@@ -165,7 +173,7 @@ AO.refreshGoogleStatus = async function () {
     const pill = document.getElementById('gcPill');
     if (pill) {
       pill.textContent = 'GC: ' + d.status;
-      pill.style.color = d.status === 'connected' ? '#2D6A4F' : (d.status === 'mock' ? '#9A9589' : '#B4742A');
+      pill.style.color = d.status === 'connected' ? '#2D6A4F' : (d.status === 'mock' ? '#8C877B' : '#B4742A');
     }
   } catch (e) { /* ignore */ }
 };
@@ -193,7 +201,19 @@ AO.ExportView = function () {
 AO.esc = function (s) { if (s == null) return ''; const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
 
 AO.confirmDialog = function (opts) { return AUTOREGIA.confirmDialog(opts); };
-AO.kindColor = function (k) { return AO.KIND_COLORS[k] || '#9A9589'; };
+AO.openDialog = function (id, label) {
+  const ov = document.getElementById(id);
+  if (!ov) return null;
+  ov.classList.remove('hidden');
+  return AUTOREGIA.dialog(ov, { label: label || id });
+};
+AO.closeDialog = function (handle, id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('hidden');
+  if (handle) handle.close();
+  return null;
+};
+AO.kindColor = function (k) { return AO.KIND_COLORS[k] || '#8C877B'; };
 AO.prettyEnum = function (s) {
   if (s == null) return '—'; return String(s).replace(/[-_]/g, ' ').replace(/(?:^|\s)\S/g, c => c.toUpperCase());
 };

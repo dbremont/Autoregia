@@ -59,6 +59,7 @@ PKTS.setupKeyboard = function() {
   document.addEventListener('keydown',(e)=>{
     if((e.metaKey||e.ctrlKey)&&e.key==='k'){ e.preventDefault(); PKTS.CommandPalette.open(''); }
     if((e.metaKey||e.ctrlKey)&&e.shiftKey&&e.key==='N'){ e.preventDefault(); PKTS.scratchpad.open(); }
+    if(e.key==='/'&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.shiftKey){ const t=document.activeElement?.tagName; if(t!=='INPUT'&&t!=='TEXTAREA'&&t!=='SELECT'&&document.activeElement?.isContentEditable!==true){ e.preventDefault(); const g=document.getElementById('globalSearch'); if(g) g.focus(); } }
     if(e.key==='Escape'){ PKTS.CommandPalette.close(); PKTS.scratchpad.close(); PKTS.closeModal(); }
   });
 };
@@ -74,9 +75,14 @@ PKTS.openDocs = function(kind) {
   const body = document.getElementById('modalBody');
   document.getElementById('modalTitle').textContent = kind==='bindings' ? 'Keyword Bindings' : 'PKTS Documentation';
   body.innerHTML = kind==='bindings' ? this.bindingsHTML() : this.docsHTML();
-  document.getElementById('appModal').classList.remove('hidden');
+  const ov = document.getElementById('appModal');
+  ov.classList.remove('hidden');
+  PKTS._modalDlg = AUTOREGIA.dialog(ov, { label: document.getElementById('modalTitle').textContent });
 };
-PKTS.closeModal = function() { document.getElementById('appModal')?.classList.add('hidden'); };
+PKTS.closeModal = function() {
+  document.getElementById('appModal')?.classList.add('hidden');
+  if (PKTS._modalDlg) { PKTS._modalDlg.close(); PKTS._modalDlg = null; }
+};
 
 PKTS.docsHTML = function() {
   return `<div class="docs-prose">

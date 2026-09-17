@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AWES — Automated Work Execution System</title>
-  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260916">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
 <style>
   /* Autoregia warm-parchment aesthetic — tokens per design.md / spec/ui.spec */
   :root {
@@ -30,7 +30,7 @@
   }
   a.back {
     display: inline-block; font-size: var(--text-2sm); letter-spacing: .14em;
-    text-transform: uppercase; color: var(--faint); text-decoration: none; margin-top: 12px;
+    text-transform: uppercase; color: var(--color-text-muted); text-decoration: none; margin-top: var(--space-3);
   }
   a.back:hover { color: var(--oxford); }
   a.back::before { content: "← "; }
@@ -50,15 +50,15 @@
   nav.topnav .links { margin-left: auto; display: flex; gap: 26px; }
   nav.topnav .links a {
     font-family: var(--sans); font-size: var(--text-sm); color: var(--muted);
-    text-decoration: none; padding: 4px 0;
+    text-decoration: none; padding: var(--space-1) 0;
     border-bottom: 1px solid transparent;
     transition: color .15s, border-color .15s;
   }
   nav.topnav .links a:hover { color: var(--oxford); border-bottom-color: var(--oxford); }
-  header.masthead { padding: 16px 0 8px; text-align: center; }
+  header.masthead { padding: var(--space-4) 0 var(--space-2); text-align: center; }
   .eyebrow {
     font-size: var(--text-xs); letter-spacing: .22em; text-transform: uppercase;
-    color: var(--gold); font-weight: 600; margin-bottom: 12px;
+    color: var(--gold); font-weight: 600; margin-bottom: var(--space-3);
   }
   h1 {
     font-family: var(--serif); font-size: var(--text-2xl); font-weight: 400;
@@ -68,7 +68,7 @@
     font-family: var(--serif); font-style: italic;
     color: var(--muted); font-size: var(--text-md); margin-top: 6px;
   }
-  .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto 8px; opacity: .7; }
+  .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto var(--space-2); opacity: .7; }
   h2 {
     font-family: var(--serif); font-size: var(--text-lg); font-weight: 500;
     margin: 1.6rem 0 .7rem; color: var(--ink);
@@ -167,7 +167,24 @@
   }
   .actions .danger:hover { background: var(--oxford-tint); }
   .spacer { flex: 1; }
-  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: var(--text-2sm); color: var(--faint); }
+  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: var(--text-2sm); color: var(--color-text-muted); }
+.empty-note{padding:var(--space-5);text-align:center;color:var(--text-dim);
+  font-family:var(--font-display);font-style:italic;font-size:var(--text-sm)}
+.cmd-palette-overlay{position:fixed;inset:0;z-index:var(--z-palette);background:rgba(30,28,25,0.38);
+  display:flex;justify-content:center;padding-top:14vh;backdrop-filter:blur(4px)}
+.cmd-palette-overlay.hidden{display:none}
+.cmd-palette{width:min(560px,92vw);background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);overflow:hidden}
+.cmd-search-row{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-4) var(--space-5);
+  border-bottom:1px solid var(--color-border-light);color:var(--color-text-muted)}
+.cmd-search-row input{flex:1;border:none;background:none;font-size:var(--text-md);color:var(--ink-0);
+  font-family:var(--sans);padding:0}
+.cmd-results{max-height:320px;overflow-y:auto}
+.cmd-result-item{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-5);
+  cursor:pointer;border-left:2px solid transparent;color:var(--color-text)}
+.cmd-result-item:hover,.cmd-result-item.active{background:var(--oxford-bg);border-left-color:var(--rule-gold)}
+.cmd-result-item .t{font-size:var(--text-sm);font-weight:500}
+@media (prefers-reduced-motion: reduce){*,:before,:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -183,6 +200,7 @@
       </div>
     </div>
   </nav>
+  <main>
   <header class="masthead">
     <div class="eyebrow">Execution</div>
     <h1>AWES</h1>
@@ -205,8 +223,7 @@
     <label for="payload">Payload</label>
     <textarea id="payload" placeholder="echo hello"></textarea>
     <div class="actions">
-      <button id="run-btn" onclick="run()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px;margin-right:5px"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run</button>
-      <span id="run-status" style="font-size:var(--text-sm);color:var(--muted)"></span>
+      <button id="run-btn" onclick="run()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px;margin-right: 5px"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run</button> <span id="run-status" style="font-size:var(--text-sm);color:var(--muted)"></span>
       <span class="spacer"></span>
       <button class="danger" onclick="clearSessions()">Clear History</button>
     </div>
@@ -215,8 +232,23 @@
   <h2>Execution History</h2>
   <div class="panel"><div id="session-list"></div></div>
 
+    </main>
   <footer>AWES · Execution — VSM System 1</footer>
 
+
+<!-- ═══ Command Palette (Ctrl/Cmd+K) ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmd-search-row">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command…" autocomplete="off">
+      <span class="kbd">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
+  </div>
+</div>
+
+<script src="/ui/js/ui.js?v=20260917"></script>
 <script src="/ate/tool/awes/js/exec.js"></script>
 </body>
 </html>

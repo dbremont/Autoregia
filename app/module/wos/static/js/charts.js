@@ -32,6 +32,7 @@ WOS.Charts = (() => {
   }
   const instances = {};
   function get(id){ if(instances[id]) instances[id].dispose(); const el=document.getElementById(id); if(!el) return null;
+    el.setAttribute('role','img');
     const ch = echarts.init(el, null, {renderer:'canvas'}); instances[id]=ch; return ch; }
 
   // on-click bus: every chart wires WOS.Charts.onClick where relevant

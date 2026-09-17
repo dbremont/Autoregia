@@ -319,10 +319,11 @@ AO.Calendar.showBlock = function (id) {
     '</div>' +
     (cf ? '<div class="detail-section"><h3>Conflicts</h3>' + cf + '</div>' : '') +
     '<div class="detail-actions"><button class="btn btn-ghost btn-sm" onclick="AO.Calendar.deleteBlock(\'' + b.id + '\')"><ao-icon name="trash-2" size="14"></ao-icon> Delete</button></div>';
-  document.getElementById('detailModal').classList.remove('hidden');
+  AO._detailDlg = AO.openDialog('detailModal', 'Block detail');
 };
 
 AO.Calendar.deleteBlock = async function (id) {
+  if (!(await AO.confirmDialog({ title: 'Delete calendar block', message: 'Delete this scheduled block? This cannot be undone.', confirmText: 'Delete' }))) return;
   await AO.Store.removeBlock(id); AO.Action.closeDetail(); AO.Calendar.render(); AO.toast('Block deleted');
 };
 
@@ -356,7 +357,7 @@ AO.Calendar.saveBlock = async function () {
     status: val('bf_status'),
   };
   await AO.Store.addBlock(data);
-  document.getElementById('actionModal').classList.remove('hidden');
+  AO._editorDlg = AO.closeDialog(AO._editorDlg, 'actionModal');
   AO._blockEditing = false;
   document.getElementById('btnSaveAction').onclick = AO.Action.saveEditor;
   AO.Calendar.render();

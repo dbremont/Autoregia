@@ -5,11 +5,13 @@
 window.LOOP = window.LOOP || {};
 LOOP.CommandPalette = {
   open(initialQuery) {
+    try { input.setAttribute('aria-expanded','true'); } catch(e){}
     document.getElementById('cmdPalette').classList.remove('hidden');
     const input = document.getElementById('cmdInput');
     input.value = initialQuery || ''; input.focus(); this.renderResults('');
   },
-  close() { document.getElementById('cmdPalette').classList.add('hidden'); },
+  close() {
+    try { document.getElementById('cmdInput').setAttribute('aria-expanded','false'); } catch(e){} document.getElementById('cmdPalette').classList.add('hidden'); },
   renderResults(query) {
     const el = document.getElementById('cmdResults');
     const q = (query || '').toLowerCase();
@@ -58,6 +60,11 @@ LOOP.CommandPalette = {
       }
     }
     el.innerHTML = html;
+    el.querySelectorAll('.cmd-result-item').forEach((it, i) => {
+      it.id = 'cmd-opt-' + i;
+      it.setAttribute('role', 'option');
+      it.setAttribute('aria-selected', it.classList.contains('active') ? 'true' : 'false');
+    });
     const items = [...el.querySelectorAll('.cmd-result-item')];
     items.forEach((item, i) => {
       if (i < filtered.length) item.addEventListener('click', () => filtered[i]?.action?.());

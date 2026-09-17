@@ -7,11 +7,11 @@ PBS.record = {
 };
 
 const TYPE_COLORS = {
-  Goal:'#8B1A1A', Decision:'#4A7C59', Task:'#C17930', Project:'#4A6FA5',
-  Event:'#B08D57', Observation:'#2D6A4F', Hypothesis:'#6B5B95',
-  Question:'#C17930', Principle:'#8B1A1A', Reference:'#4A6FA5', Lesson:'#B08D57',
-  Idea:'#9A9589', Meeting:'#4A6FA5', Procedure:'#2D6A4F', Commitment:'#8B1A1A',
-  Constraint:'#B33A3A', Resource:'#4A7C59', Opportunity:'#B08D57'
+  Goal:'#7A1A2A', Decision:'#2D6A4F', Task:'#B4742A', Project:'#3F6092',
+  Event:'#A8854A', Observation:'#2D6A4F', Hypothesis:'#5C4E78',
+  Question:'#B4742A', Principle:'#7A1A2A', Reference:'#3F6092', Lesson:'#A8854A',
+  Idea:'#8C877B', Meeting:'#3F6092', Procedure:'#2D6A4F', Commitment:'#7A1A2A',
+  Constraint:'#A33434', Resource:'#2D6A4F', Opportunity:'#A8854A'
 };
 
 PBS.record.renderList = function() {
@@ -60,7 +60,7 @@ PBS.record.cardHTML = function(r, i) {
         <span class="badge pri-${priClass}">${r.priority||'Medium'}</span>
         ${r.domain ? `<span class="rc-domain"><pbs-icon name="folder" size="13"></pbs-icon> ${r.domain}</span>` : ''}
         ${r.tags && r.tags.length ? r.tags.slice(0,3).map(t=>`<span class="rc-tag">#${t}</span>`).join(' ') : ''}
-        <span style="margin-left:auto;font-family:var(--font-mono);font-size:10px;">${r.id}</span>
+        <span style="margin-left:auto;font-family:var(--font-mono);font-size:var(--text-2xs);">${r.id}</span>
       </div>
     </div>`;
 };
@@ -101,45 +101,63 @@ PBS.record.openEditor = function(id) {
   const rec = id ? PBS.Store.getById(id) : null;
   document.getElementById('modalTitle').textContent = rec ? 'Edit Record' : 'New Record';
   document.getElementById('modalBody').innerHTML = this.editorForm(rec);
-  document.getElementById('recordModal').classList.remove('hidden');
+  const ov = document.getElementById('recordModal');
+  ov.classList.remove('hidden');
+  this._modal = AUTOREGIA.dialog(ov, { label: rec ? 'Edit record' : 'New record' });
+  document.getElementById('edContent')?.focus();
 };
 
-PBS.record.closeModal = function() { document.getElementById('recordModal').classList.add('hidden'); };
+PBS.record.closeModal = function() {
+  document.getElementById('recordModal').classList.add('hidden');
+  if (this._modal) { this._modal.close(); this._modal = null; }
+};
 
 PBS.record.editorForm = function(rec) {
-  return `<div class="form-group"><label>Content *</label>
+  return `<div class="form-group"><label for="edContent">Content *</label>
     <textarea id="edContent" rows="2" placeholder="What do you want to record?">${rec?this.esc(rec.content):''}</textarea></div>
-    <div class="form-group"><label>Detail / Notes</label>
+    <div class="form-error" id="edError" role="alert" hidden></div>
+    <div class="form-group"><label for="edDetail">Detail / Notes</label>
       <textarea id="edDetail" rows="4" placeholder="Extended information...">${rec?this.esc(rec.detail):''}</textarea></div>
     <div class="meta-grid">
-      <div class="form-group"><label>Type</label><select id="edType">
+      <div class="form-group"><label for="edType">Type</label><select id="edType">
         ${['Idea','Goal','Decision','Task','Project','Event','Observation','Hypothesis','Question','Principle','Reference','Lesson','Meeting','Procedure','Commitment','Constraint','Resource','Opportunity'].map(t=>`<option${rec?.record_type===t?' selected':''}>${t}</option>`).join('')}
       </select></div>
-      <div class="form-group"><label>Status</label><select id="edStatus">
+      <div class="form-group"><label for="edStatus">Status</label><select id="edStatus">
         ${['Draft','Active','Pending','Blocked','Completed','Archived','Scheduled','Cancelled'].map(s=>`<option${rec?.status===s?' selected':''}>${s}</option>`).join('')}
       </select></div>
-      <div class="form-group"><label>Priority</label><select id="edPriority">
+      <div class="form-group"><label for="edPriority">Priority</label><select id="edPriority">
         ${['Critical','High','Medium','Low'].map(p=>`<option${rec?.priority===p?' selected':''}>${p}</option>`).join('')}
       </select></div>
-      <div class="form-group"><label>Domain</label><input type="text" id="edDomain" value="${rec?this.esc(rec.domain||''):'Software Engineering'}"></div>
-      <div class="form-group"><label>Subject</label><input type="text" id="edSubject" value="${rec?this.esc(rec.subject||''):''}"></div>
-      <div class="form-group"><label>Project</label><input type="text" id="edProject" value="${rec?this.esc(rec.project||''):'PBS Implementation'}"></div>
-      <div class="form-group"><label>Confidence</label><select id="edConfidence">
+      <div class="form-group"><label for="edDomain">Domain</label><input type="text" id="edDomain" value="${rec?this.esc(rec.domain||''):'Software Engineering'}"></div>
+      <div class="form-group"><label for="edSubject">Subject</label><input type="text" id="edSubject" value="${rec?this.esc(rec.subject||''):''}"></div>
+      <div class="form-group"><label for="edProject">Project</label><input type="text" id="edProject" value="${rec?this.esc(rec.project||''):'PBS Implementation'}"></div>
+      <div class="form-group"><label for="edConfidence">Confidence</label><select id="edConfidence">
         ${['Very Low','Low','Medium','High','Very High'].map(c=>`<option${rec?.confidence===c?' selected':''}>${c}</option>`).join('')}
       </select></div>
-      <div class="form-group"><label>Deadline</label><input type="date" id="edDeadline" value="${rec?.deadline?rec.deadline.split('T')[0]:''}"></div>
+      <div class="form-group"><label for="edDeadline">Deadline</label><input type="date" id="edDeadline" value="${rec?.deadline?rec.deadline.split('T')[0]:''}"></div>
     </div>
     <div class="meta-section open">
       <div class="meta-section-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="chevron"><pbs-icon name="chevron-right" size="14"></pbs-icon></span> Tags
       </div>
       <div class="meta-section-body">
-        <div class="tag-input-container" onclick="this.querySelector('input').focus()">
-          ${(rec?.tags||[]).map(t=>`<span class="tag-chip">${t}<span class="remove-tag" onclick="event.stopPropagation();this.parentElement.remove()"><pbs-icon name="x" size="11"></pbs-icon></span></span>`).join('')}
-          <input type="text" placeholder="Add tag + Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();const v=this.value.trim();if(v){const s=document.createElement(\'span\');s.className=\'tag-chip\';s.textContent=v;this.before(s);this.value=\'\';}}">
+        <div class="tag-input-container" id="tagInputContainer" onclick="this.querySelector('input').focus()">
+          ${(rec?.tags||[]).map(t=>this.tagChipHTML(t)).join('')}
+          <input type="text" placeholder="Add tag + Enter" aria-label="Add tag" onkeydown="if(event.key==='Enter'){event.preventDefault();PBS.record.addTagFromInput(this);}">
         </div>
       </div>
     </div>`;
+};
+
+PBS.record.tagChipHTML = function(t) {
+  return `<span class="tag-chip">${this.esc(t)}<button type="button" class="remove-tag" aria-label="Remove tag ${this.esc(t)}" onclick="event.stopPropagation();this.parentElement.remove()"><pbs-icon name="x" size="11"></pbs-icon></button></span>`;
+};
+
+PBS.record.addTagFromInput = function(input) {
+  const v = input.value.trim();
+  if (!v) return;
+  input.insertAdjacentHTML('beforebegin', this.tagChipHTML(v));
+  input.value = '';
 };
 
 // ── Save Record Handler ────────────────────────────────
@@ -151,7 +169,9 @@ PBS.record.saveCurrent = async function() {
   const getTags = () => {
     const c = document.getElementById('tagInputContainer');
     if (!c) return [];
-    return [...c.querySelectorAll('.tag-chip')].map(el => el.textContent.trim());
+    return [...c.querySelectorAll('.tag-chip')]
+      .map(el => (el.childNodes[0]?.textContent || '').trim())
+      .filter(Boolean);
   };
   const data = {
     content: document.getElementById('edContent')?.value || '',
@@ -167,10 +187,17 @@ PBS.record.saveCurrent = async function() {
     tags: getTags(),
     state_class: getStateClass(document.getElementById('edType')?.value||'Idea')
   };
-  if (!data.content.trim()) { alert('Content is required'); return; }
-  await PBS.Store.add(data);
+  const errEl = document.getElementById('edError');
+  if (!data.content.trim()) {
+    if (errEl) { errEl.textContent = 'Content is required.'; errEl.hidden = false; }
+    document.getElementById('edContent')?.focus();
+    return;
+  }
+  if (errEl) { errEl.hidden = true; errEl.textContent = ''; }
+  const rec = await PBS.Store.add(data);
   this.closeModal();
   PBS.navigate(PBS.currentView);
+  PBS.toast(rec && rec._persisted === false ? 'Record saved locally — sync pending' : 'Record saved');
 };
 
 function getStateClass(type) {
@@ -189,9 +216,14 @@ PBS.record.showDetail = function(id) {
   if (!rec) return;
   document.getElementById('detailTitle').textContent = rec.record_type;
   document.getElementById('detailBody').innerHTML = this.detailHTML(rec);
-  document.getElementById('detailModal').classList.remove('hidden');
+  const ov = document.getElementById('detailModal');
+  ov.classList.remove('hidden');
+  this._detailModal = AUTOREGIA.dialog(ov, { label: rec.record_type + ' detail' });
 };
-PBS.record.closeDetail = function() { document.getElementById('detailModal').classList.add('hidden'); };
+PBS.record.closeDetail = function() {
+  document.getElementById('detailModal').classList.add('hidden');
+  if (this._detailModal) { this._detailModal.close(); this._detailModal = null; }
+};
 
 PBS.record.detailHTML = function(r) {
   const tc = TYPE_COLORS[r.record_type]||'#888';
@@ -210,21 +242,26 @@ PBS.record.detailHTML = function(r) {
       <span class="badge badge-${sc}">${r.status}</span>
       <span class="badge pri-${pc}">${r.priority}</span>
       ${r.domain?`<span class="rc-domain"><pbs-icon name="folder" size="14"></pbs-icon> ${this.esc(r.domain)}</span>`:''}
-      ${r.created_at?`<span style="font-family:var(--font-mono);font-size:11px;">${new Date(r.created_at).toLocaleDateString()}</span>`:''}
-      <span class="folio" style="margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--color-text-faint);">${r.id}</span>
+      ${r.created_at?`<span style="font-family:var(--font-mono);font-size:var(--text-2sm);">${new Date(r.created_at).toLocaleDateString()}</span>`:''}
+      <span class="folio" style="margin-left:auto;font-family:var(--font-mono);font-size:var(--text-2sm);color:var(--color-text-faint);">${r.id}</span>
     </div>
     ${r.detail?`<div class="detail-section"><h4>Detail</h4><div class="detail-content"><p>${this.esc(r.detail)}</p></div></div>`:''}
     ${r.tags?.length?`<div class="detail-section"><h4>Tags</h4>${r.tags.map(t=>`<span class="tag-chip" style="cursor:default">#${t}</span>`).join(' ')}</div>`:''}
     ${r.links?.length?`<div class="detail-section"><h4>Relationships</h4><ul class="link-list">${r.links.map(l=>`<li class="link-item" onclick="PBS.record.showDetail('${l.target}')"><span class="link-type">${l.type}</span> <pbs-icon name="arrow-right" size="13"></pbs-icon> ${l.target}</li>`).join('')}</ul></div>`:''}
     ${r.annotations?.length?`<div class="detail-section"><h4>Annotations (${r.annotations.length})</h4><ul class="annotation-list">${r.annotations.map(a=>`<li class="annotation-item"><div class="annotation-kind">${a.kind}</div><div class="annotation-text">${this.esc(a.text)}</div><div class="annotation-meta">${a.author} · ${new Date(a.created_at).toLocaleDateString()}</div></li>`).join('')}</ul></div>`:''}
-    <div class="detail-section"><h4>All Metadata</h4>
-      <div class="meta-grid" style="font-size:var(--text-sm);color:var(--color-text-secondary);">
-        <div><strong>State Class:</strong> ${r.state_class||'—'}</div><div><strong>Evidence:</strong> ${r.evidence_level||'—'}</div>
-        <div><strong>Source:</strong> ${r.source_type||'—'}</div><div><strong>Horizon:</strong> ${r.horizon||'—'}</div>
-        <div><strong>Relevance:</strong> ${r.relevance||'—'}</div><div><strong>Workflow:</strong> ${r.workflow_state||'—'}</div>
-        <div><strong>Recurrence:</strong> ${r.recurrence||'—'}</div><div><strong>Validity:</strong> ${r.validity||'—'}</div>
-        <div><strong>Owner:</strong> ${r.owner||'—'}</div>${r.deadline?`<div><strong>Deadline:</strong> ${r.deadline.split('T')[0]}</div>`:''}
-        <div><strong>Updated:</strong> ${r.updated_at?new Date(r.updated_at).toLocaleString():'—'}</div>
+    <div class="meta-section">
+      <div class="meta-section-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="chevron"><pbs-icon name="chevron-right" size="14"></pbs-icon></span> All Metadata
+      </div>
+      <div class="meta-section-body">
+        <div class="meta-grid" style="font-size:var(--text-sm);color:var(--color-text-secondary);">
+          <div><strong>State Class:</strong> ${r.state_class||'—'}</div><div><strong>Evidence:</strong> ${r.evidence_level||'—'}</div>
+          <div><strong>Source:</strong> ${r.source_type||'—'}</div><div><strong>Horizon:</strong> ${r.horizon||'—'}</div>
+          <div><strong>Relevance:</strong> ${r.relevance||'—'}</div><div><strong>Workflow:</strong> ${r.workflow_state||'—'}</div>
+          <div><strong>Recurrence:</strong> ${r.recurrence||'—'}</div><div><strong>Validity:</strong> ${r.validity||'—'}</div>
+          <div><strong>Owner:</strong> ${r.owner||'—'}</div>${r.deadline?`<div><strong>Deadline:</strong> ${r.deadline.split('T')[0]}</div>`:''}
+          <div><strong>Updated:</strong> ${r.updated_at?new Date(r.updated_at).toLocaleString():'—'}</div>
+        </div>
       </div>
     </div>
   </div>`;

@@ -5,6 +5,7 @@
 window.WOS = window.WOS || {};
 WOS.CommandPalette = {
   open(initialQuery){
+    try { input.setAttribute('aria-expanded','true'); } catch(e){}
     document.getElementById('cmdPalette').classList.remove('hidden');
     const input=document.getElementById('cmdInput');
     input.value=initialQuery||''; input.focus(); this.renderResults('');

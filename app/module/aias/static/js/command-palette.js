@@ -6,17 +6,18 @@ AI.Cmd = (() => {
   let sel = 0; let items = []; let input; let results; let overlay;
 
   function open() {
+    try { input.setAttribute('aria-expanded','true'); } catch(e){}
     if (overlay) return;
     overlay = document.createElement('div');
     overlay.className = 'cmd-overlay';
     overlay.innerHTML = `
-      <div class="cmd-palette">
+      <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="cmd-search">
           <span>${AI.icon('search', 18)}</span>
-          <input id="cmdInput" placeholder="Type a command or search intentions…" autocomplete="off">
+          <input id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command or search intentions…" autocomplete="off">
           <span class="kbd-hint">ESC</span>
         </div>
-        <div class="cmd-results" id="cmdResults"></div>
+        <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
       </div>`;
     document.body.appendChild(overlay);
     input = overlay.querySelector('#cmdInput');
@@ -29,7 +30,8 @@ AI.Cmd = (() => {
     input.focus();
   }
 
-  function close() { if (overlay) { overlay.remove(); overlay = null; } document.removeEventListener('keydown', onEsc); }
+  function close() {
+    try { document.getElementById('cmdInput').setAttribute('aria-expanded','false'); } catch(e){} if (overlay) { overlay.remove(); overlay = null; } document.removeEventListener('keydown', onEsc); }
   function onEsc(e) {
     if (e.key === 'Escape') close();
     else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); overlay ? close() : open(); }
@@ -74,9 +76,17 @@ AI.Cmd = (() => {
     }).join('');
     results.querySelectorAll('.cmd-item').forEach(el => {
       const i = +el.getAttribute('data-i');
-      el.addEventListener('mouseenter', () => { sel = i; render(); });
+      el.id = 'cmd-opt-' + i;
+      el.setAttribute('role', 'option');
+      el.setAttribute('aria-selected', i === sel ? 'true' : 'false');
+      el.addEventListener('mouseenter', () => { if (sel !== i) { sel = i; render(); } });
       el.addEventListener('click', () => activate(i));
     });
+    const activeEl = results.querySelector('.cmd-item.sel');
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: 'nearest' });
+      input.setAttribute('aria-activedescendant', activeEl.id);
+    }
   }
 
   function onKeyDown(e) {

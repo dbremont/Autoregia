@@ -75,9 +75,9 @@ WOS.Search = (() => {
     const pg = WOS.Store.getPaging();
     // Pagination is always visible when there is anything to show.
     const pager = total > 0 ? `<div class="pager animate-in">
-        <button class="btn btn-secondary btn-sm" id="pagePrev" ${pg.page>1?'':'disabled'}>‹ prev</button>
+        <button class="btn btn-secondary btn-sm" id="pagePrev" ${pg.page>1?'':'disabled'}>${WOS.icon('chevron-left', 14)} prev</button>
         <span class="results-meta">page ${pg.page}${pg.total?` · ${pg.total} in view`:''}</span>
-        <button class="btn btn-secondary btn-sm" id="pageNext" ${pg.has_more?'':'disabled'}>next ›</button>
+        <button class="btn btn-secondary btn-sm" id="pageNext" ${pg.has_more?'':'disabled'}>next ${WOS.icon('chevron-right', 14)}</button>
       </div>` : '';
     const summary = WOS.Store.filterSummary();
     const meta = searching ? 'searching…'

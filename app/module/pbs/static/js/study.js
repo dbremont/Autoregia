@@ -74,7 +74,7 @@ PBS.Study = {
     const W = el.clientWidth||700, H=300, padL=40, padB=28, padT=16, padR=120;
     const plotW=W-padL-padR, plotH=H-padT-padB;
     const stacks = ['Immediate','Short-term','Medium-term','Long-term'];
-    const palette=['#8B1A1A','#4A7C59','#C17930','#4A6FA5'];
+    const palette=['#7A1A2A','#2D6A4F','#B4742A','#3F6092'];
     // cumulative counts per month
     const cum = months.map(()=>0);
     let svg=`<svg class="study-svg" viewBox="0 0 ${W} ${H}">`;
@@ -166,7 +166,7 @@ PBS.Study = {
     const w=weeks*(cellSize+cellGap)+30, h=7*(cellSize+cellGap)+20;
     let svg=`<svg class="heatmap-svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
     ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach((day,i)=>{svg+=`<text x="0" y="${i*(cellSize+cellGap)+cellSize+2}" class="heatmap-label">${day}</text>`;});
-    const colors=['#EDE9E1','#C9D8C4','#A5CC9E','#7BBF78','#5AAF56'];
+    const colors=['#F6EFE1','#E8D9B8','#D4BE85','#BE9A5E','#A8854A'];
     entries.forEach(([date,count],i)=>{const week=Math.floor(i/7), dow=i%7;
       const x=28+week*(cellSize+cellGap), y=dow*(cellSize+cellGap);
       const intensity=count===0?0:Math.ceil((count/maxCount)*4);
@@ -203,7 +203,7 @@ PBS.Study = {
     records.forEach(r=>{const d=r.domain||'General'; domains[d]=(domains[d]||0)+1;});
     const entries = Object.entries(domains).sort((a,b)=>b[1]-a[1]);
     const W=el.clientWidth||700, H=320, cx=W/2, cy=H/2;
-    const palette=['#8B1A1A','#4A7C59','#C17930','#4A6FA5','#B08D57','#2D6A4F','#6B5B95','#9A9589'];
+    const palette=['#7A1A2A','#2D6A4F','#B4742A','#3F6092','#A8854A','#2D6A4F','#5C4E78','#8C877B'];
     const positions = entries.map((e,i)=>{
       const angle=(i/entries.length)*2*Math.PI + i*0.3;
       const radius=60+Math.sqrt(e[1])*16;
@@ -240,7 +240,7 @@ PBS.Study = {
     const records = PBS.Store.getAll();
     const domains = [...new Set(records.map(r=>r.domain||'General'))];
     const W=el.clientWidth||700, H=340;
-    const palette=['#8B1A1A','#4A7C59','#C17930','#4A6FA5','#B08D57','#2D6A4F','#6B5B95','#9A9589'];
+    const palette=['#7A1A2A','#2D6A4F','#B4742A','#3F6092','#A8854A','#2D6A4F','#5C4E78','#8C877B'];
     const centers = domains.map((d,i)=>{const a=(i/domains.length)*2*Math.PI;
       return {domain:d, x:W/2+110*Math.cos(a), y:H/2+90*Math.sin(a), color:palette[i%palette.length]};});
     let svg=`<svg class="study-svg" viewBox="0 0 ${W} ${H}">`;
@@ -277,7 +277,7 @@ PBS.Study = {
     const groups = {}; cadences.forEach(c=>groups[c]=records.filter(r=>(r.recurrence||'None')===c));
     const W=el.clientWidth||700, H=320, cx=W/2, cy=H/2;
     const maxR=Math.min(W,H)/2-40;
-    const palette=['#8B1A1A','#4A7C59','#C17930','#4A6FA5','#B08D57'];
+    const palette=['#7A1A2A','#2D6A4F','#B4742A','#3F6092','#A8854A'];
     let svg=`<svg class="study-svg" viewBox="0 0 ${W} ${H}">`;
     cadences.forEach((c,i)=>{const r=maxR*((i+1)/cadences.length);
       svg+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#EEE"/>`;
@@ -293,7 +293,7 @@ PBS.Study = {
         svg+=`<circle class="graph-node" cx="${x}" cy="${y}" r="5" fill="${color}" onclick="PBS.record.showDetail('${it.id}')"><title>${this.esc((it.content||'').slice(0,40))} (${c})</title></circle>`;
       });
     });
-    svg+=`<circle cx="${cx}" cy="${cy}" r="8" fill="#8B1A1A"/>`;
+    svg+=`<circle cx="${cx}" cy="${cy}" r="8" fill="#7A1A2A"/>`;
     svg+=`</svg>`;
     el.innerHTML=svg;
   }

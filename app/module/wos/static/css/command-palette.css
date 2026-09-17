@@ -16,7 +16,7 @@
   width: 580px; max-width: 92vw;
   background: var(--color-surface);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl), 0 0 0 var(--hairline) rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-xl), 0 0 0 var(--hairline) rgba(30,28,25,0.05);
   overflow: hidden;
   animation: paletteIn 220ms var(--ease-out-expo);
   border: var(--hairline) solid var(--color-border);
@@ -30,7 +30,7 @@
 .cmd-palette-search > span:first-child { color: var(--color-text-muted); display: inline-flex; }
 .cmd-palette-search input {
   border: none; background: transparent; font-size: var(--text-md);
-  outline: none; width: 100%; color: var(--ink-0);
+  width: 100%; color: var(--ink-0);
   font-family: var(--font-body); padding: 0;
 }
 .cmd-palette-search input::placeholder { color: var(--color-text-faint); }
@@ -59,7 +59,7 @@
 .cmd-result-shortcut {
   font-size: var(--text-2xs); color: var(--color-text-muted);
   font-family: var(--font-mono); background: var(--color-surface-2);
-  padding: 2px 7px; border-radius: var(--radius-sm);
+  padding: 2px var(--space-2); border-radius: var(--radius-sm);
   border: var(--hairline) solid var(--color-border-light);
 }
 
@@ -67,7 +67,7 @@
   font-size: var(--text-2xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: var(--tracking-widest);
   font-variant: small-caps;
-  color: var(--color-text-faint); padding: var(--space-3) var(--space-5) var(--space-1);
+  color: var(--color-text-muted); padding: var(--space-3) var(--space-5) var(--space-1);
   background: var(--color-surface-warm);
   border-top: var(--hairline) solid var(--color-border-light);
 }

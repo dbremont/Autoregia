@@ -85,7 +85,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
   font-variant: small-caps;
   padding: 0 var(--space-6);
   margin-bottom: var(--space-2);
@@ -121,7 +121,7 @@
   font-variant-numeric: tabular-nums;
   font-family: var(--font-mono);
   background: var(--color-surface);
-  padding: 1px 7px; border-radius: var(--radius-pill);
+  padding: 1px var(--space-2); border-radius: var(--radius-pill);
   color: var(--color-text-muted);
   border: var(--hairline) solid var(--color-border-light);
 }
@@ -146,7 +146,7 @@
 }
 .sidebar-colophon .colophon-meta {
   font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-faint); letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted); letter-spacing: var(--tracking-wide);
 }
 
 /* ── Main Content ────────────────────────────────────── */

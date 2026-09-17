@@ -70,7 +70,7 @@
 .sidebar-label {
   font-size: var(--text-2xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: var(--tracking-widest);
-  font-variant: small-caps; color: var(--color-text-faint);
+  font-variant: small-caps; color: var(--color-text-muted);
   padding: var(--space-3) var(--space-3) var(--space-2);
 }
 .sidebar-nav a {
@@ -93,7 +93,7 @@
 .sidebar-nav a.active .nav-icon { color: var(--oxford); opacity: 1; }
 .sidebar-nav a .nav-count {
   margin-left: auto; font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-faint); font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted); font-variant-numeric: tabular-nums;
 }
 
 .sidebar-colophon {
@@ -107,7 +107,7 @@
 }
 .sidebar-colophon .colophon-meta {
   font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-faint); letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted); letter-spacing: var(--tracking-wide);
   margin-top: var(--space-2);
 }
 
@@ -142,14 +142,14 @@
 .filter-bar .seg button {
   border: none; background: transparent; cursor: pointer;
   font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-secondary); padding: 3px 11px;
+  color: var(--color-text-secondary); padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill); letter-spacing: var(--tracking-wide);
   transition: background var(--transition-fast), color var(--transition-fast);
 }
 .filter-bar .seg button.active { background: var(--oxford); color: var(--paper-on-accent); }
 .filter-bar .filter-label {
   font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: var(--tracking-wider);
-  font-variant: small-caps; color: var(--color-text-faint);
+  font-variant: small-caps; color: var(--color-text-muted);
 }
 
 /* ── Footer (editorial colophon) ─────────────────────── */
@@ -170,7 +170,7 @@
 }
 .app-footer .footer-meta {
   font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-faint); letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted); letter-spacing: var(--tracking-wide);
   margin-left: auto;
 }
 

@@ -62,6 +62,7 @@ LOOP.setupKeyboard = function () {
     const typing = !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); LOOP.CommandPalette.open(''); }
     if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'N' || e.key === 'n')) { e.preventDefault(); LOOP.scratchpad.open(); }
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
     if (e.key === '/' && !typing) { e.preventDefault(); document.getElementById('globalSearch')?.focus(); }
     if (e.key === 'Escape') { LOOP.CommandPalette.close(); LOOP.scratchpad.close(); LOOP.closeModal(); }
   });
@@ -94,9 +95,14 @@ LOOP.exportData = function () {
 LOOP.openDocs = function () {
   document.getElementById('modalTitle').textContent = 'Autoregia Agency Dashboard — Documentation';
   document.getElementById('modalBody').innerHTML = LOOP.docsHTML();
-  document.getElementById('appModal').classList.remove('hidden');
+  const ov = document.getElementById('appModal');
+  ov.classList.remove('hidden');
+  LOOP._modalDlg = AUTOREGIA.dialog(ov, { label: 'Loop console' });
 };
-LOOP.closeModal = function () { document.getElementById('appModal')?.classList.add('hidden'); };
+LOOP.closeModal = function () {
+  document.getElementById('appModal')?.classList.add('hidden');
+  if (LOOP._modalDlg) { LOOP._modalDlg.close(); LOOP._modalDlg = null; }
+};
 
 LOOP.docsHTML = function () {
   const bindings = LOOP.VIEWS.map(v => `<div class="kbd-row"><span>${v.label} — <em class="text-muted">${v.desc}</em></span><span><a href="#${v.id}" onclick="LOOP.closeModal()" class="text-mono text-xs">#${v.id}</a></span></div>`).join('');

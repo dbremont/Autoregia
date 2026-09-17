@@ -19,16 +19,17 @@ AI.Editor = (() => {
       <div class="modal-overlay" id="capOverlay">
         <div class="modal" style="max-width:520px">
           <div class="modal-header"><h2>Quick capture</h2>
-            <button class="btn-icon" data-close>${AI.icon('x', 17)}</button></div>
+            <button class="btn-icon" aria-label="Close" data-close>${AI.icon('x', 17)}</button></div>
           <div class="modal-body">
+            <div class="form-error" id="capError" role="alert" hidden></div>
             <div class="field">
-              <label class="field-label">What wants attention?</label>
+              <label class="field-label" for="capDesc">What wants attention?</label>
               <textarea class="textarea" id="capDesc" placeholder="An intention, a problem, an opportunity…" autofocus></textarea>
             </div>
             <div class="field-row">
-              <div class="field"><label class="field-label">Source</label>
+              <div class="field"><label class="field-label" for="capSrc">Source</label>
                 <select class="select" id="capSrc">${opts(t.sources, 'Problem')}</select></div>
-              <div class="field"><label class="field-label">Priority</label>
+              <div class="field"><label class="field-label" for="capPri">Priority</label>
                 <select class="select" id="capPri">${opts(t.priorities, 'Medium')}</select></div>
             </div>
           </div>
@@ -40,13 +41,16 @@ AI.Editor = (() => {
       </div>`;
     mount(html, () => {
       const desc = document.getElementById('capDesc').value.trim();
-      if (!desc) { AI.app.toast('Describe the intention first'); return; }
+      if (!desc) { showFormError('capError', 'Describe the intention first.'); return; }
       AI.Store.add({
         description: desc,
         source: document.getElementById('capSrc').value,
         priority: document.getElementById('capPri').value,
         status: 'Generated', confidence: 'Medium'
-      }).then(() => { close(); AI.app.toast('Candidate captured into triage'); });
+      }).then((r) => {
+        close();
+        AI.app.toast(r && r._persisted === false ? 'Captured locally — sync pending' : 'Candidate captured into triage');
+      });
     });
     document.getElementById('capDesc').focus();
   }
@@ -60,38 +64,39 @@ AI.Editor = (() => {
       <div class="modal-overlay" id="edOverlay">
         <div class="modal" style="max-width:720px">
           <div class="modal-header"><h2>${it ? 'Edit intention' : 'New intention'}</h2>
-            <button class="btn-icon" data-close>${AI.icon('x', 17)}</button></div>
+            <button class="btn-icon" aria-label="Close" data-close>${AI.icon('x', 17)}</button></div>
           <div class="modal-body">
-            <div class="field"><label class="field-label">Description</label>
+            <div class="form-error" id="edError" role="alert" hidden></div>
+            <div class="field"><label class="field-label" for="fDesc">Description</label>
               <textarea class="textarea" id="fDesc" placeholder="What the agent intends to bring about">${esc(it && it.description)}</textarea></div>
-            <div class="field"><label class="field-label">Expected value / rationale</label>
+            <div class="field"><label class="field-label" for="fValue">Expected value / rationale</label>
               <input class="input" id="fValue" value="${esc(it && it.expected_value)}" placeholder="What is gained by succeeding"></div>
             <div class="field-row">
-              <div class="field"><label class="field-label">Source</label>
+              <div class="field"><label class="field-label" for="fSrc">Source</label>
                 <select class="select" id="fSrc">${opts(t.sources, (it && it.source) || 'Problem')}</select></div>
-              <div class="field"><label class="field-label">Priority</label>
+              <div class="field"><label class="field-label" for="fPri">Priority</label>
                 <select class="select" id="fPri">${opts(t.priorities, (it && it.priority) || 'Medium')}</select></div>
             </div>
             <div class="field-row">
-              <div class="field"><label class="field-label">Status</label>
+              <div class="field"><label class="field-label" for="fStatus">Status</label>
                 <select class="select" id="fStatus">${opts(t.statuses, (it && it.status) || 'Generated')}</select></div>
-              <div class="field"><label class="field-label">Confidence</label>
+              <div class="field"><label class="field-label" for="fConf">Confidence</label>
                 <select class="select" id="fConf">${opts(t.confidences, (it && it.confidence) || 'Medium')}</select></div>
             </div>
             <div class="field-row">
-              <div class="field"><label class="field-label">Deadline</label>
+              <div class="field"><label class="field-label" for="fDeadline">Deadline</label>
                 <input class="input" type="date" id="fDeadline" value="${esc(it && it.deadline) || ''}"></div>
-              <div class="field"><label class="field-label">Owner</label>
+              <div class="field"><label class="field-label" for="fOwner">Owner</label>
                 <input class="input" id="fOwner" value="${esc(it && it.owner) || 'Self'}"></div>
             </div>
-            <div class="field"><label class="field-label">Constraints</label>
+            <div class="field"><label class="field-label" for="fConstraints">Constraints</label>
               ${chips('fConstraints', (it && it.constraints) || [], 'add constraint')}</div>
-            <div class="field"><label class="field-label">Dependencies</label>
+            <div class="field"><label class="field-label" for="fDeps">Dependencies</label>
               ${chips('fDeps', (it && it.dependencies) || [], 'add dependency')}</div>
             <div class="field-row">
-              <div class="field"><label class="field-label">Review schedule</label>
+              <div class="field"><label class="field-label" for="fReview">Review schedule</label>
                 <input class="input" id="fReview" value="${esc(it && it.review_schedule)}" placeholder="e.g. every Friday"></div>
-              <div class="field"><label class="field-label">Termination condition</label>
+              <div class="field"><label class="field-label" for="fTerm">Termination condition</label>
                 <input class="input" id="fTerm" value="${esc(it && it.termination_condition)}" placeholder="when is it done?"></div>
             </div>
           </div>
@@ -103,7 +108,7 @@ AI.Editor = (() => {
       </div>`;
     mount(html, () => {
       const desc = document.getElementById('fDesc').value.trim();
-      if (!desc) { AI.app.toast('Description is required'); return; }
+      if (!desc) { showFormError('edError', 'Description is required.'); return; }
       const data = {
         description: desc,
         expected_value: val('fValue'),
@@ -119,7 +124,12 @@ AI.Editor = (() => {
         termination_condition: val('fTerm')
       };
       const done = it ? AI.Store.update(it.id, data) : AI.Store.add(data);
-      done.then(() => { close(); AI.app.toast(it ? 'Intention updated' : 'Intention created'); });
+      done.then((r) => {
+        close();
+        AI.app.toast(r && r._persisted === false
+          ? (it ? 'Saved locally — sync pending' : 'Created locally — sync pending')
+          : (it ? 'Intention updated' : 'Intention created'));
+      });
     });
   }
 
@@ -135,7 +145,7 @@ AI.Editor = (() => {
           <div class="modal-header">
             <div><div class="eyebrow mono">${esc(it.id)}</div>
               <h2>Intention</h2></div>
-            <button class="btn-icon" data-close>${AI.icon('x', 17)}</button>
+            <button class="btn-icon" aria-label="Close" data-close>${AI.icon('x', 17)}</button>
           </div>
           <div class="modal-body">
             <div class="detail-eyebrow">
@@ -166,7 +176,7 @@ AI.Editor = (() => {
                 ${n.text ? `<div class="rev-text">${esc(n.text)}</div>` : ''}
               </li>`).join('')}</ul>` : `<div class="empty" style="padding:var(--space-3)">No revisions yet.</div>`}
             <div class="note-add">
-              <input class="input" id="noteText" placeholder="Add a revision note…">
+              <input class="input" id="noteText" placeholder="Add a revision note…" aria-label="Add a revision note">
               <button class="btn btn-secondary btn-sm" id="noteAdd">${AI.icon('message-square', 13)} Note</button>
             </div>
           </div>
@@ -185,14 +195,18 @@ AI.Editor = (() => {
     document.getElementById('dtDelete').addEventListener('click', () => {
       AI.app.confirmDialog({ title: 'Delete intention', message: 'Delete this intention? This cannot be undone.', confirmText: 'Delete' }).then((ok) => {
         if (!ok) return;
-        AI.Store.remove(it.id).then(() => { close(); AI.app.toast('Intention removed'); });
+        AI.Store.remove(it.id).then((r) => {
+          close();
+          AI.app.toast(r && r._persisted === false ? 'Removed locally — sync pending' : 'Intention removed');
+        });
       });
     });
     document.getElementById('noteAdd').addEventListener('click', () => {
       const text = document.getElementById('noteText').value.trim();
       if (!text) return;
-      AI.Store.addNote(it.id, { kind: 'comment', text }).then(() => {
-        close(); openDetail(it.id); AI.app.toast('Note added');
+      AI.Store.addNote(it.id, { kind: 'comment', text }).then((r) => {
+        close(); openDetail(it.id);
+        AI.app.toast(r && r._persisted === false ? 'Note saved locally — sync pending' : 'Note added');
       });
     });
     document.querySelectorAll('[data-transition]').forEach(b =>
@@ -220,12 +234,13 @@ AI.Editor = (() => {
   function secondary(status, icon) { return `<button class="btn btn-secondary btn-sm" data-transition="${status}">${AI.icon(icon || 'sliders', 12)} ${status}</button>`; }
 
   /* ── helpers ───────────────────────────────────────────── */
+  let dlg = null;
   function mount(html, onSave) {
     close();
     const root = document.createElement('div'); root.innerHTML = html;
     const overlay = root.firstElementChild;
     document.body.appendChild(overlay);
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    dlg = AUTOREGIA.dialog(overlay, { label: overlay.querySelector('h2') ? overlay.querySelector('h2').textContent : 'Dialog' });
     overlay.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', close));
     if (onSave) {
       const btn = overlay.querySelector('#capSave, #edSave');
@@ -234,13 +249,17 @@ AI.Editor = (() => {
         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) onSave();
       });
     }
-    document.addEventListener('keydown', onEsc);
   }
-  function onEsc(e) { if (e.key === 'Escape') close(); }
   function close() {
+    if (dlg) { const d = dlg; dlg = null; d.close(); }
     document.querySelectorAll('.modal-overlay').forEach(o => o.remove());
-    document.removeEventListener('keydown', onEsc);
     AI.app && AI.app.render && AI.app.render();
+  }
+  function showFormError(id, msg) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = msg; el.hidden = false; }
+    const desc = document.getElementById('capDesc') || document.getElementById('fDesc');
+    if (desc) desc.focus();
   }
 
   function opts(arr, sel) { return arr.map(v => `<option${v === sel ? ' selected' : ''}>${esc(v)}</option>`).join(''); }
@@ -250,9 +269,9 @@ AI.Editor = (() => {
   function chipList(arr) { return `<div class="list-chips">${arr.map(c => `<span class="chip">${esc(c)}</span>`).join('')}</div>`; }
 
   function chips(id, arr, ph) {
-    return `<div class="chip-input" id="${id}">${arr.map(c => chip(c)).join('')}<input placeholder="${esc(ph)}" data-chip-input="${id}"></div>`;
+    return `<div class="chip-input" id="${id}">${arr.map(c => chip(c)).join('')}<input placeholder="${esc(ph)}" aria-label="${esc(ph)}" data-chip-input="${id}"></div>`;
   }
-  function chip(text) { return `<span class="chip">${esc(text)}<button type="button" data-chip-remove>${AI.icon('x', 11)}</button></span>`; }
+  function chip(text) { return `<span class="chip">${esc(text)}<button type="button" data-chip-remove aria-label="Remove ${esc(text)}">${AI.icon('x', 11)}</button></span>`; }
   function readChips(id) {
     const el = document.getElementById(id); if (!el) return [];
     return Array.from(el.querySelectorAll('.chip')).map(c => c.textContent.trim());
@@ -280,7 +299,7 @@ AI.Editor = (() => {
     const b = e.target.closest('[data-chip-remove]');
     if (b) b.closest('.chip').remove();
   });
-  function makeChip(text) { const s = document.createElement('span'); s.className = 'chip'; s.innerHTML = esc(text) + `<button type="button" data-chip-remove>${AI.icon('x', 11)}</button>`; return s; }
+  function makeChip(text) { const s = document.createElement('span'); s.className = 'chip'; s.innerHTML = esc(text) + `<button type="button" data-chip-remove aria-label="Remove ${esc(text)}">${AI.icon('x', 11)}</button>`; return s; }
 
   return { openNew, openEdit, openDetail, openCapture, close };
 })();

@@ -77,7 +77,7 @@ PBS.Summary = {
     const deadlines = inRange.filter(r=>r.deadline).length;
     const annotations = inRange.reduce((s,r)=>s+((r.annotations||[]).length),0);
     const highlights = [...inRange].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,5);
-    const accent = {'daily':'#8B1A1A','weekly':'#4A6FA5','monthly':'#4A7C59','annual':'#C17930'}[period];
+    const accent = {'daily':'#7A1A2A','weekly':'#3F6092','monthly':'#2D6A4F','annual':'#B4742A'}[period];
 
     const pillRow = (entries) => entries.length
       ? `<div class="summary-pill-row">${entries.map(([k,v])=>`<span class="summary-pill"><span class="summary-pill-k">${this.esc(k)}</span><span class="summary-pill-v">${v}</span></span>`).join('')}</div>`

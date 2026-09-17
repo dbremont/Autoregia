@@ -10,6 +10,14 @@ AI.Store = (() => {
 
   function notify() { listeners.forEach(fn => fn(intents)); }
 
+  // Honest sync state (ui.spec §2 "Transparent system state")
+  let sync = { online: null, lastError: null };
+  function setSync(online, err) {
+    if (sync.online === online && sync.lastError === (err || null)) return;
+    sync = { online, lastError: err || null };
+  }
+  AI.Store_syncState = () => ({ ...sync });
+
   async function load() {
     const stored = localStorage.getItem(KEY);
     if (stored) { try { intents = JSON.parse(stored); } catch { intents = []; } }
@@ -25,8 +33,9 @@ AI.Store = (() => {
   async function refreshFromAPI() {
     try {
       const res = await fetch('/aias/api/intents');
-      if (res.ok) { intents = await res.json(); saveLocal(); }
-    } catch (e) { /* keep local cache */ }
+      if (res.ok) { intents = await res.json(); saveLocal(); setSync(true); }
+      else setSync(false, 'HTTP ' + res.status);
+    } catch (e) { setSync(false, 'offline'); }
   }
 
   function saveLocal() { localStorage.setItem(KEY, JSON.stringify(intents)); }
@@ -39,16 +48,18 @@ AI.Store = (() => {
       const res = await fetch('/aias/api/intents', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const saved = await res.json(); await refreshFromAPI();
-      return saved;
+      return { ...saved, _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const intent = {
         ...data, id: data.id || generateId(),
         created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
         notes: data.notes || []
       };
       intents.unshift(intent); saveLocal(); notify();
-      return intent;
+      return { ...intent, _persisted: false };
     }
   }
 
@@ -57,20 +68,30 @@ AI.Store = (() => {
       const res = await fetch(`/aias/api/intents/${id}`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const saved = await res.json(); await refreshFromAPI();
-      return saved;
+      return { ...saved, _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const idx = intents.findIndex(i => i.id === id);
       if (idx === -1) return null;
       intents[idx] = { ...intents[idx], ...updates, updated_at: new Date().toISOString() };
       saveLocal(); notify();
-      return intents[idx];
+      return { ...intents[idx], _persisted: false };
     }
   }
 
   async function remove(id) {
-    try { await fetch(`/aias/api/intents/${id}`, { method: 'DELETE' }); await refreshFromAPI(); }
-    catch (e) { intents = intents.filter(i => i.id !== id); saveLocal(); notify(); }
+    try {
+      const res = await fetch(`/aias/api/intents/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      await refreshFromAPI();
+      return { _persisted: true };
+    } catch (e) {
+      setSync(false, e.message);
+      intents = intents.filter(i => i.id !== id); saveLocal(); notify();
+      return { _persisted: false };
+    }
   }
 
   async function addNote(id, note) {
@@ -78,9 +99,11 @@ AI.Store = (() => {
       const res = await fetch(`/aias/api/intents/${id}/notes`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(note) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const saved = await res.json(); await refreshFromAPI();
-      return saved;
+      return { ...saved, _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const it = getById(id); if (!it) return;
       if (!it.notes) it.notes = [];
       const n = { ...note, id: 'n-' + Math.random().toString(36).substr(2, 6),

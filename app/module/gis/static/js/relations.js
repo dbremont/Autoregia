@@ -327,12 +327,12 @@ PT.Graph = (() => {
     '<div class="graph-layout" id="graphLayout">' +
         '<div class="graph-stage">' +
           '<div class="graph-canvas-toolbar">' +
-            '<select id="gKind" class="graph-select">' + kindOpts + '</select>' +
-            '<select id="gStatus" class="graph-select">' + statusOpts + '</select>' +
-            '<select id="gRelation" class="graph-select">' + relOpts + '</select>' +
+            '<select id="gKind" class="graph-select" aria-label="Filter by kind">' + kindOpts + '</select>' +
+            '<select id="gStatus" class="graph-select" aria-label="Filter by status">' + statusOpts + '</select>' +
+            '<select id="gRelation" class="graph-select" aria-label="Relation depth">' + relOpts + '</select>' +
             '<div class="graph-search-wrap">' +
               '<span class="search-glyph"><pt-icon name="search" size="13"></pt-icon></span>' +
-              '<input type="search" id="gSearch" class="graph-search" placeholder="Search in graph…" value="' + PT.esc(state.q) + '">' +
+              '<input type="search" id="gSearch" class="graph-search" placeholder="Search in graph…" aria-label="Search in graph" value="' + PT.esc(state.q) + '">' +
             '</div>' +
           '</div>' +
           '<div class="graph-canvas">' +

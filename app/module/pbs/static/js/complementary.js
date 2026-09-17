@@ -49,9 +49,9 @@ PBS.Complementary = {
       <div class="card" style="grid-column:1/-1;"><div class="card-header"><h3>${PBS.icon('lock',16)} Encryption Status</h3><span class="badge badge-completed">Mock</span></div>
         <div class="card-body"><p class="text-sm">Data encryption at rest is planned. Currently stored in localStorage plain text.</p>
           <div style="display:flex;gap:var(--space-3);margin-top:var(--space-3);flex-wrap:wrap;">
-            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-success-light);border-radius:14px;font-size:11px;color:var(--status-active);">${PBS.icon('check',13)} Local Storage</span>
-            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-warning-light);border-radius:14px;font-size:11px;color:var(--status-pending);">${PBS.icon('circle',8)} Encryption Pending</span>
-            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-info-light);border-radius:14px;font-size:11px;color:var(--status-scheduled);">${PBS.icon('check',13)} Autosave On</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-success-light);border-radius:14px;font-size:var(--text-2sm);color:var(--status-active);">${PBS.icon('check',13)} Local Storage</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-warning-light);border-radius:14px;font-size:var(--text-2sm);color:var(--status-pending);">${PBS.icon('circle',8)} Encryption Pending</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:var(--color-info-light);border-radius:14px;font-size:var(--text-2sm);color:var(--status-scheduled);">${PBS.icon('check',13)} Autosave On</span>
           </div></div></div>
     </div>`;
   },
@@ -65,8 +65,9 @@ PBS.Complementary = {
     r.onload=async(e)=>{
       try{const d=JSON.parse(e.target.result);if(Array.isArray(d)){let n=0;
         for(const it of d){if(it.id&&!PBS.Store.getById(it.id)){await PBS.Store.add(it);n++;}}
-        alert(`Imported ${n} records.`);PBS.navigate(PBS.currentView);}
-      }catch(err){alert('Invalid JSON file.');}
+        PBS.toast(`Imported ${n} record${n===1?'':'s'}.`);PBS.navigate(PBS.currentView);}
+        else PBS.toast('Invalid JSON file: expected an array of records.');
+      }catch(err){PBS.toast('Invalid JSON file.');}
     };r.readAsText(file);
   }
 };

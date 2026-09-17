@@ -25,7 +25,7 @@ AO._echartsTheme = function () {
     mono: tok('--font-mono', 'IBM Plex Mono, monospace').split(',')[0],
   };
 };
-AO._anPalette = ['#7A1A2A', '#3F6092', '#A8854A', '#2D6A4F', '#6B5B95',
+AO._anPalette = ['#7A1A2A', '#3F6092', '#A8854A', '#2D6A4F', '#5C4E78',
                  '#B4742A', '#3F6E50', '#962030', '#5C4E78', '#8C877B'];
 AO._anCharts = [];
 AO._anDispose = function () {
@@ -405,9 +405,10 @@ AO._anInsightsCard = function (data) {
 };
 
 /* ── Chart mount helper ──────────────────────────────────────── */
-AO._anMount = function (id) {
+AO._anMount = function (id, label) {
   const el = document.getElementById(id);
   if (!el) return null;
+  if (label) { el.setAttribute('role', 'img'); el.setAttribute('aria-label', label); }
   const c = echarts.init(el, null, { renderer: 'canvas' });
   AO._anCharts.push(c);
   return c;
@@ -427,7 +428,7 @@ AO._markovMatrixReading = function (d) {
 };
 
 AO.Analytics._chartMarkovMatrix = function (data) {
-  const c = AO._anMount('anMarkovMatrix'); if (!c) return;
+  const c = AO._anMount('anMarkovMatrix'); if (c) { const card = document.getElementById('anMarkovMatrix')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anMarkovMatrix')?.setAttribute('role','img'); document.getElementById('anMarkovMatrix')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, states = data.states || [], m = data.matrix || [];
   const labels = states.map(s => s.label);
   const heatData = [];
@@ -448,7 +449,7 @@ AO.Analytics._chartMarkovMatrix = function (data) {
       axisLine: { show: false }, axisTick: { show: false },
       axisLabel: { color: t.ink, fontSize: 10, fontFamily: t.mono } },
     visualMap: { min: 0, max: maxV, calculable: false, show: false,
-      inRange: { color: ['#F4F1EA', '#E0B3BB', '#C77685', '#962030', '#7A1A2A'] } },
+      inRange: { color: ['#F4F1EA', '#F4E8EA', '#962030', '#962030', '#7A1A2A'] } },
     series: [{
       type: 'heatmap', data: heatData,
       label: { show: true, formatter: p => p.value[2] >= 0.005 ? (p.value[2] * 100).toFixed(0) + (p.value[2] >= 0.1 ? '%' : '') : '',
@@ -460,7 +461,7 @@ AO.Analytics._chartMarkovMatrix = function (data) {
 };
 
 AO.Analytics._chartMarkovGraph = function (data) {
-  const c = AO._anMount('anMarkovGraph'); if (!c) return;
+  const c = AO._anMount('anMarkovGraph'); if (c) { const card = document.getElementById('anMarkovGraph')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anMarkovGraph')?.setAttribute('role','img'); document.getElementById('anMarkovGraph')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, states = data.states || [], m = data.matrix || [];
   const idx = {}; states.forEach((s, i) => { idx[s.id] = i; });
   // Fixed positions: horizontal = progress toward done; vertical = health
@@ -581,7 +582,7 @@ AO.Analytics._renderGoals = function (G) {
   if (!G || !G.count) return;
   const t = AO._theme;
   // trajectory
-  const c1 = AO._anMount('anGoalTraj');
+  const c1 = AO._anMount('anGoalTraj'); if (c1) { const card = document.getElementById('anGoalTraj')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anGoalTraj')?.setAttribute('role','img'); document.getElementById('anGoalTraj')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); }
   if (c1) {
     const s = G.trajectory || [];
     c1.setOption(AO._anBase({
@@ -595,7 +596,7 @@ AO.Analytics._renderGoals = function (G) {
     }));
   }
   // status donut
-  const c2 = AO._anMount('anGoalStatus');
+  const c2 = AO._anMount('anGoalStatus'); if (c2) { const card = document.getElementById('anGoalStatus')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anGoalStatus')?.setAttribute('role','img'); document.getElementById('anGoalStatus')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); }
   if (c2) {
     const bs = G.by_status || {};
     const colorMap = { 'on-track': t.success, 'at-risk': t.warning, 'off-track': t.danger, 'achieved': t.info, 'dormant': t.faint };
@@ -636,7 +637,7 @@ AO.Analytics._renderMarkovFate = function (data) {
 };
 
 AO.Analytics._chartMarkovEvolution = function (data) {
-  const c = AO._anMount('anMarkovEvo'); if (!c) return;
+  const c = AO._anMount('anMarkovEvo'); if (c) { const card = document.getElementById('anMarkovEvo')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anMarkovEvo')?.setAttribute('role','img'); document.getElementById('anMarkovEvo')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, labels = data.labels || [], kts = data.key_transitions || [];
   const colors = [t.success, t.danger, t.info, t.warning];
   c.setOption(AO._anBase({
@@ -709,7 +710,7 @@ AO.Analytics._renderGauges = function (idx) {
 };
 
 AO.Analytics._chartThroughput = function (data) {
-  const c = AO._anMount('anThroughput'); if (!c) return;
+  const c = AO._anMount('anThroughput'); if (c) { const card = document.getElementById('anThroughput')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anThroughput')?.setAttribute('role','img'); document.getElementById('anThroughput')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, days = data.days || [];
   c.setOption(AO._anBase({
     legend: { data: ['Created', 'Completed', '7-day velocity'], top: 0, right: 8,
@@ -734,7 +735,7 @@ AO.Analytics._chartThroughput = function (data) {
   }));
 };
 AO.Analytics._chartTrajectory = function (data) {
-  const c = AO._anMount('anTrajectory'); if (!c) return;
+  const c = AO._anMount('anTrajectory'); if (c) { const card = document.getElementById('anTrajectory')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anTrajectory')?.setAttribute('role','img'); document.getElementById('anTrajectory')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, s = data.series || [];
   c.setOption(AO._anBase({
     tooltip: { trigger: 'axis' },
@@ -749,7 +750,7 @@ AO.Analytics._chartTrajectory = function (data) {
   }));
 };
 AO.Analytics._chartFunnel = function (data) {
-  const c = AO._anMount('anFunnel'); if (!c) return;
+  const c = AO._anMount('anFunnel'); if (c) { const card = document.getElementById('anFunnel')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anFunnel')?.setAttribute('role','img'); document.getElementById('anFunnel')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, stages = data.stages || [];
   c.setOption(AO._anBase({
     tooltip: { trigger: 'item', formatter: '{b}: {c}' },
@@ -762,7 +763,7 @@ AO.Analytics._chartFunnel = function (data) {
   }));
 };
 AO.Analytics._chartRhythm = function (data) {
-  const c = AO._anMount('anRhythm'); if (!c) return;
+  const c = AO._anMount('anRhythm'); if (c) { const card = document.getElementById('anRhythm')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anRhythm')?.setAttribute('role','img'); document.getElementById('anRhythm')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, wd = data.weekdays || [];
   c.setOption(AO._anBase({
     legend: { data: ['Avg completed', 'Due'], top: 0, right: 4,
@@ -779,7 +780,7 @@ AO.Analytics._chartRhythm = function (data) {
   }));
 };
 AO.Analytics._chartHourly = function (data) {
-  const c = AO._anMount('anHourly'); if (!c) return;
+  const c = AO._anMount('anHourly'); if (c) { const card = document.getElementById('anHourly')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anHourly')?.setAttribute('role','img'); document.getElementById('anHourly')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, m = data.matrix || [];
   const dows = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hours = []; for (let h = 0; h < 24; h++) hours.push(h);
@@ -798,7 +799,7 @@ AO.Analytics._chartHourly = function (data) {
       axisLabel: { color: t.ink, fontSize: 10, fontFamily: t.mono } },
     visualMap: { min: 0, max: maxV, calculable: false, orient: 'horizontal',
       left: 'center', bottom: 0, show: false,
-      inRange: { color: ['#F4F1EA', '#E0B3BB', '#C77685', '#962030', '#7A1A2A'] } },
+      inRange: { color: ['#F4F1EA', '#F4E8EA', '#962030', '#962030', '#7A1A2A'] } },
     series: [{ type: 'heatmap', data: heatData,
       label: { show: false },
       itemStyle: { borderRadius: 2, borderColor: t.surface, borderWidth: 1 },
@@ -810,7 +811,7 @@ AO._fmtHr = function (h) {
   if (h === 12) return '12p'; return (h - 12) + 'p';
 };
 AO.Analytics._chartMonthly = function (data) {
-  const c = AO._anMount('anMonthly'); if (!c) return;
+  const c = AO._anMount('anMonthly'); if (c) { const card = document.getElementById('anMonthly')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anMonthly')?.setAttribute('role','img'); document.getElementById('anMonthly')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, ms = data.months || [];
   c.setOption(AO._anBase({
     legend: { data: ['Created', 'Completed'], top: 0, right: 8,
@@ -837,7 +838,7 @@ AO.Analytics._chartMonthly = function (data) {
   }));
 };
 AO.Analytics._chartCycletime = function (data) {
-  const c = AO._anMount('anCycletime'); if (!c) return;
+  const c = AO._anMount('anCycletime'); if (c) { const card = document.getElementById('anCycletime')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anCycletime')?.setAttribute('role','img'); document.getElementById('anCycletime')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, ps = data.by_priority || [];
   c.setOption(AO._anBase({
     legend: { data: ['p50', 'p90'], top: 0, right: 8,
@@ -855,7 +856,7 @@ AO.Analytics._chartCycletime = function (data) {
   }));
 };
 AO.Analytics._chartPriorityDebt = function (data) {
-  const c = AO._anMount('anPriorityDebt'); if (!c) return;
+  const c = AO._anMount('anPriorityDebt'); if (c) { const card = document.getElementById('anPriorityDebt')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anPriorityDebt')?.setAttribute('role','img'); document.getElementById('anPriorityDebt')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, s = data.series || [];
   c.setOption(AO._anBase({
     tooltip: { trigger: 'axis' },
@@ -869,7 +870,7 @@ AO.Analytics._chartPriorityDebt = function (data) {
   }));
 };
 AO.Analytics._chartOverdue = function (data) {
-  const c = AO._anMount('anOverdue'); if (!c) return;
+  const c = AO._anMount('anOverdue'); if (c) { const card = document.getElementById('anOverdue')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anOverdue')?.setAttribute('role','img'); document.getElementById('anOverdue')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, order = ['0-7d', '7-30d', '30-90d', '90+d'], b = data.overdue_buckets || {};
   c.setOption(AO._anBase({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -884,7 +885,7 @@ AO.Analytics._chartOverdue = function (data) {
   }));
 };
 AO.Analytics._chartAging = function (data) {
-  const c = AO._anMount('anAging'); if (!c) return;
+  const c = AO._anMount('anAging'); if (c) { const card = document.getElementById('anAging')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anAging')?.setAttribute('role','img'); document.getElementById('anAging')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, order = ['0-7d', '7-30d', '30-90d', '90-180d', '180+d'], b = data.buckets || {};
   c.setOption(AO._anBase({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -899,7 +900,7 @@ AO.Analytics._chartAging = function (data) {
   }));
 };
 AO.Analytics._chartProjIntel = function (data) {
-  const c = AO._anMount('anProjIntel'); if (!c) return;
+  const c = AO._anMount('anProjIntel'); if (c) { const card = document.getElementById('anProjIntel')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anProjIntel')?.setAttribute('role','img'); document.getElementById('anProjIntel')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, ps = (data.projects || []).slice(0, 8);
   const verdictColor = { heating: t.success, cooling: t.warning, steady: t.info, dormant: t.faint };
   c.setOption(AO._anBase({
@@ -920,7 +921,7 @@ AO.Analytics._chartProjIntel = function (data) {
   }));
 };
 AO.Analytics._chartLabels = function (data) {
-  const c = AO._anMount('anLabels'); if (!c) return;
+  const c = AO._anMount('anLabels'); if (c) { const card = document.getElementById('anLabels')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anLabels')?.setAttribute('role','img'); document.getElementById('anLabels')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, labs = data.labels || [];
   c.setOption(AO._anBase({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -936,7 +937,7 @@ AO.Analytics._chartLabels = function (data) {
   }));
 };
 AO.Analytics._chartRadar = function (data) {
-  const c = AO._anMount('anRadar'); if (!c) return;
+  const c = AO._anMount('anRadar'); if (c) { const card = document.getElementById('anRadar')?.closest('.card'); const h = card?.querySelector('h3'); document.getElementById('anRadar')?.setAttribute('role','img'); document.getElementById('anRadar')?.setAttribute('aria-label', (h?.textContent || 'Analytics chart') + ' chart'); } if (!c) return;
   const t = AO._theme, dims = data.dimensions || [];
   c.setOption(AO._anBase({
     legend: { data: ['This period', 'Previous'], top: 0, right: 8,
@@ -968,7 +969,7 @@ AO.Analytics._renderHabits = function (data) {
   days.forEach(d => {
     const v = d.count;
     const lv = v === 0 ? 0 : Math.min(4, Math.ceil(v / maxC * 4));
-    const fill = ['#EEEAE0', '#E0B3BB', '#C77685', '#A04050', '#7A1A2A'][lv];
+    const fill = ['#EEEAE0', '#F4E8EA', '#962030', '#7A1A2A', '#7A1A2A'][lv];
     cal += '<span class="an-habit-cell" style="background:' + fill + '" title="' + d.date + ': ' + v + '"></span>';
   });
   cal += '</div>';
@@ -1031,7 +1032,7 @@ AO.Analytics._renderHeatmap = function (data) {
   }
   if (col.length) cols.push(col);
   const cell = 11, gap = 3;
-  const lvColor = ['#EEEAE0', '#F4E8EA', '#E0B3BB', '#C77685', '#A04050', '#7A1A2A'];
+  const lvColor = ['#EEEAE0', '#F4E8EA', '#F4E8EA', '#962030', '#7A1A2A', '#7A1A2A'];
   const lv = v => v <= 0 ? 0 : v <= 2 ? 1 : v <= 5 ? 2 : v <= 8 ? 3 : v <= 12 ? 4 : 5;
   const w = cols.length * (cell + gap) + 14;
   const h = 7 * (cell + gap) + 18;

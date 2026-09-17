@@ -27,10 +27,16 @@ PT.Entry = {
     this._editing = isEdit ? entry.id : null;
     document.getElementById('entryModalTitle').textContent = isEdit ? 'Edit Entry' : 'New Entry';
     document.getElementById('entryModalBody').innerHTML = this._editorForm(isEdit ? entry : null);
-    document.getElementById('entryModal').classList.remove('hidden');
+    const ov = document.getElementById('entryModal');
+    ov.classList.remove('hidden');
+    this._editorDlg = AUTOREGIA.dialog(ov, { label: isEdit ? 'Edit entry' : 'New entry' });
     setTimeout(function () { const n = document.getElementById('fld_name'); if (n) n.focus(); }, 60);
   },
-  closeEditor() { document.getElementById('entryModal').classList.add('hidden'); this._editing = null; },
+  closeEditor() {
+    document.getElementById('entryModal').classList.add('hidden');
+    if (this._editorDlg) { this._editorDlg.close(); this._editorDlg = null; }
+    this._editing = null;
+  },
 
   _editorForm(e) {
     e = e || {};
@@ -73,7 +79,9 @@ PT.Entry = {
       f('Tags', '<input id="fld_tags" value="' + PT.esc((e.tags || []).join(', ')) + '">', true) +
       '</div>';
     function f(label, control, full) {
-      return '<div class="form-field' + (full ? ' full' : '') + '"><label>' + label + '</label>' + control + '</div>';
+      const idm = /id="([^"]+)"/.exec(control);
+      const labelHtml = '<label' + (idm ? ' for="' + idm[1] + '"' : '') + '>' + label + '</label>';
+      return '<div class="form-field' + (full ? ' full' : '') + '">' + labelHtml + control + '</div>';
     }
   },
 
@@ -97,11 +105,11 @@ PT.Entry = {
       epistemic: { fit_confidence: g('fld_fit') || 'medium', evidence_level: g('fld_evidence') || 'anecdotal', rating: n('fld_rating') },
     };
     if (this._editing) {
-      await PT.Store.update(this._editing, payload);
-      PT.toast('Entry updated');
+      const r = await PT.Store.update(this._editing, payload);
+      PT.toast(r && r._persisted === false ? 'Entry saved locally — sync pending' : 'Entry updated');
     } else {
-      await PT.Store.add(payload);
-      PT.toast('Entry created');
+      const r = await PT.Store.add(payload);
+      PT.toast(r && r._persisted === false ? 'Entry created locally — sync pending' : 'Entry created');
     }
     this.closeEditor();
     if (PT.currentView === 'dashboard') PT.navigate('dashboard');
@@ -114,7 +122,9 @@ PT.Entry = {
     fetch('/gis/api/entries/' + id + '/view', { method: 'POST' }).catch(function () {});
     document.getElementById('detailTitle').textContent = e.name;
     document.getElementById('detailBody').innerHTML = this._detailBody(e);
-    document.getElementById('detailModal').classList.remove('hidden');
+    const ov = document.getElementById('detailModal');
+    ov.classList.remove('hidden');
+    this._detailDlg = AUTOREGIA.dialog(ov, { label: e.name + ' detail' });
     // bind annotation form
     const ab = document.getElementById('annSubmit');
     if (ab) ab.addEventListener('click', function () { PT.Entry.submitAnnotation(id); });
@@ -123,7 +133,10 @@ PT.Entry = {
       h.addEventListener('click', function () { h.parentElement.classList.toggle('open'); });
     });
   },
-  closeDetail() { document.getElementById('detailModal').classList.add('hidden'); },
+  closeDetail() {
+    document.getElementById('detailModal').classList.add('hidden');
+    if (this._detailDlg) { this._detailDlg.close(); this._detailDlg = null; }
+  },
 
   _detailBody(e) {
     const color = PT.kindColor(e.object_kind);
@@ -187,8 +200,8 @@ PT.Entry = {
         '<span class="annotation-date">' + fmtDate(a.created_at) + '</span></div>' +
         '<div class="annotation-text">' + PT.esc(a.text) + '</div></div>'; }).join('') : '<p class="text-muted text-sm">No annotations yet.</p>') +
       '</div>' +
-      '<div class="annotation-form"><textarea id="annText" placeholder="Add an annotation…"></textarea>' +
-      '<div class="annotation-form-row"><select id="annKind" style="max-width:160px;">' + PT.ENUMS.annotation_kind.map(function (k) { return '<option value="' + k + '">' + k.replace(/_/g,' ') + '</option>'; }).join('') + '</select>' +
+      '<div class="annotation-form"><textarea id="annText" placeholder="Add an annotation…" aria-label="Add an annotation"></textarea>' +
+      '<div class="annotation-form-row"><select id="annKind" aria-label="Annotation kind" style="max-width:160px;">' + PT.ENUMS.annotation_kind.map(function (k) { return '<option value="' + k + '">' + k.replace(/_/g,' ') + '</option>'; }).join('') + '</select>' +
       '<button class="btn btn-primary btn-sm" id="annSubmit">Add</button></div></div>' +
       '</div>';
     // Footer actions
@@ -204,17 +217,19 @@ PT.Entry = {
 
   async submitAnnotation(id) {
     const ta = document.getElementById('annText'); const ki = document.getElementById('annKind');
-    if (!ta || !ta.value.trim()) return;
-    await PT.Store.addAnnotation(id, { author: 'self', kind: ki ? ki.value : 'comment', text: ta.value.trim(), state: 'open' });
-    PT.toast('Annotation added');
+    if (!ta) return;
+    if (!ta.value.trim()) { ta.focus(); ta.setAttribute('aria-invalid', 'true'); PT.toast('Annotation text is required'); return; }
+    ta.removeAttribute('aria-invalid');
+    const r = await PT.Store.addAnnotation(id, { author: 'self', kind: ki ? ki.value : 'comment', text: ta.value.trim(), state: 'open' });
+    PT.toast(r && r._persisted === false ? 'Annotation saved locally — sync pending' : 'Annotation added');
     this.showDetail(id);
   },
 };
 
 // Footer actions defined on the PT namespace (referenced by detail body).
 PT.retire = async function (id) {
-  await PT.Store.update(id, { status: 'retired', lifecycle_state: 'retired', workflow_state: 'removed' });
-  PT.toast('Entry retired');
+  const r = await PT.Store.update(id, { status: 'retired', lifecycle_state: 'retired', workflow_state: 'removed' });
+  PT.toast(r && r._persisted === false ? 'Entry retired locally — sync pending' : 'Entry retired');
   PT.Entry.closeDetail();
   if (PT.currentView === 'dashboard') PT.navigate('dashboard');
   if (PT.currentView === 'index') PT.navigate('index');
@@ -233,8 +248,8 @@ PT.confirmDelete = function (id) {
   const e = PT.Store.getById(id); if (!e) return;
   PT.confirmDialog({ title: 'Delete entry', message: 'Delete entry "' + e.name + '"? This cannot be undone.', confirmText: 'Delete' }).then(function (ok) {
     if (!ok) return;
-    PT.Store.remove(id).then(function () {
-      PT.toast('Entry deleted'); PT.Entry.closeDetail();
+    PT.Store.remove(id).then(function (r) {
+      PT.toast(r && r._persisted === false ? 'Deleted locally — sync pending' : 'Entry deleted'); PT.Entry.closeDetail();
       if (PT.currentView === 'dashboard') PT.navigate('dashboard');
       if (PT.currentView === 'index') PT.navigate('index');
     });

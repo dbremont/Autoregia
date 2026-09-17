@@ -35,10 +35,12 @@
   --color-border-focus:  var(--oxford);
 
   /* ── Text ───────────────────────────────────────────────── */
+  /* Muted/faint map to the WCAG-passing ramp steps (ui.spec §10.1:
+     #6B665B passes for informative text; #8C877B is decorative-only). */
   --color-text:           var(--ink-1);
   --color-text-secondary: var(--ink-3);
-  --color-text-muted:     var(--ink-5);
-  --color-text-faint:     var(--ink-6);
+  --color-text-muted:     var(--ink-4);
+  --color-text-faint:     var(--ink-5);
 
   /* ── Oxford Accent (library binding red, deepened) ─────── */
   --oxford:        #7A1A2A;
@@ -55,9 +57,11 @@
   --gold:        #A8854A;
   --gold-soft:   #C7A972;
   --gold-tint:   #F6EFE1;
+  --gold-ink:    #8A6A2F;   /* gold as text — 4.8:1 on paper/surface (ui.spec §10.1) */
   --rule-gold:   var(--gold-soft);
   --color-gold:  var(--gold);
   --color-gold-light: var(--gold-tint);
+  --color-gold-ink:   var(--gold-ink);
 
   /* ── Semantic / Status ─────────────────────────────────── */
   --color-success:        #3F6E50;

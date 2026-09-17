@@ -25,11 +25,11 @@ PT.Reference = (() => {
   }
   function p(text) { return '<p>' + text + '</p>'; }
   function table(head, rows) {
-    return '<table class="doc-table"><thead><tr>' +
+    return '<div class="doc-table-wrap"><table class="doc-table"><thead><tr>' +
       head.map(h => '<th>' + h + '</th>').join('') +
       '</tr></thead><tbody>' +
       rows.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') +
-      '</tbody></table>';
+      '</tbody></table></div>';
   }
   // Link that opens the Index home pre-filtered.
   function ixLink(label, fn) {

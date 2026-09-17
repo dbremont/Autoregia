@@ -49,7 +49,7 @@
 .detail-section { margin-bottom: var(--space-8); }
 .detail-section h4 {
   font-size: var(--text-2xs); text-transform: uppercase;
-  letter-spacing: var(--tracking-widest); color: var(--gold);
+  letter-spacing: var(--tracking-widest); color: var(--gold-ink);
   margin-bottom: var(--space-3); font-family: var(--font-body);
   font-weight: 600; font-variant: small-caps;
 }
@@ -94,7 +94,7 @@
 .annotation-kind {
   font-size: var(--text-2xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: var(--tracking-wide);
-  color: var(--gold); margin-bottom: var(--space-1);
+  color: var(--gold-ink); margin-bottom: var(--space-1);
   font-variant: small-caps;
 }
 .annotation-text { font-size: var(--text-sm); color: var(--color-text-secondary); }
@@ -209,12 +209,12 @@
 @media (max-width: 700px) { .summary-grid { grid-template-columns: 1fr; } }
 .summary-h4 {
   font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: var(--tracking-wider);
-  color: var(--gold); margin-bottom: var(--space-2); font-variant: small-caps; font-weight: 600;
+  color: var(--gold-ink); margin-bottom: var(--space-2); font-variant: small-caps; font-weight: 600;
 }
 .summary-pill-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .summary-pill {
   display: inline-flex; align-items: center; gap: var(--space-1);
-  padding: 3px 10px; background: var(--color-surface); border: var(--hairline) solid var(--color-border-light);
+  padding: var(--space-1) var(--space-2); background: var(--color-surface); border: var(--hairline) solid var(--color-border-light);
   border-radius: var(--radius-pill); font-size: var(--text-2xs);
 }
 .summary-pill-k { color: var(--color-text-secondary); }
@@ -275,12 +275,12 @@
 .wm-todo.done .wm-todo-text { text-decoration: line-through; color: var(--color-text-muted); }
 .wm-del {
   width: 24px; height: 24px; flex-shrink: 0; border: none; background: transparent;
-  color: var(--color-text-faint); cursor: pointer; border-radius: var(--radius-sm);
+  color: var(--color-text-muted); cursor: pointer; border-radius: var(--radius-sm);
   display: inline-flex; align-items: center; justify-content: center; transition: all var(--transition-fast);
 }
 .wm-del:hover { background: var(--color-danger-light); color: var(--color-danger); }
 .wm-empty {
-  padding: var(--space-5); text-align: center; color: var(--color-text-faint);
+  padding: var(--space-5); text-align: center; color: var(--color-text-muted);
   font-size: var(--text-sm); font-style: italic; font-family: var(--font-display);
 }
 .wm-card-footer { margin-top: var(--space-3); padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-border-light); }
@@ -292,7 +292,7 @@
 }
 .wm-note:focus { outline: none; border-color: var(--oxford); box-shadow: var(--ring-focus); background: var(--color-surface); }
 .wm-gen-count {
-  margin-left: var(--space-1); padding: 1px 7px; border-radius: var(--radius-pill);
+  margin-left: var(--space-1); padding: 1px var(--space-2); border-radius: var(--radius-pill);
   background: rgba(250,241,230,0.25); font-family: var(--font-mono); font-size: var(--text-2xs);
 }
 #wmGenBtn:disabled { opacity: 0.55; cursor: not-allowed; }

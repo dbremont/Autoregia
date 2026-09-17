@@ -36,7 +36,7 @@ AO.renderDashboard = async function () {
     AO._statCard('Scheduled Blocks', s.confirmed_blocks || 0, 'calendar', '#2D6A4F') +
     AO._statCard('Scheduled Hours', hrs, 'clock', '#B4742A') +
     AO._statCard('Blocked Actions', s.blocked_actions || 0, 'alert-triangle', '#A33434') +
-    AO._statCard('Pinned', s.pinned || 0, 'bookmark', '#6B5B95') +
+    AO._statCard('Pinned', s.pinned || 0, 'bookmark', '#5C4E78') +
     AO._statCard('Scratchpad', (s.scratch_words || 0) + 'w', 'file-text', '#A8854A') +
     AO._statCard('Conflicts', s.conflicts || 0, 'alert-triangle', '#A33434') +
     goalList +

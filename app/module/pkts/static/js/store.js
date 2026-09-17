@@ -19,7 +19,7 @@ PKTS.Store = (() => {
     try {
       const res = await fetch('/pkts/api/keystrokes');
       if (res.ok) { const d = await res.json(); events = d.events||d; sessions = d.sessions||[]; saveLocal(); }
-    } catch(e) { console.warn('API unavailable, using local/embedded data'); }
+    } catch(e) { console.warn('API unavailable, using local/embedded data'); PKTS && PKTS.toast && PKTS.toast('API unavailable — showing cached data'); }
   }
   function saveLocal() { localStorage.setItem(KEY, JSON.stringify({sessions, events})); }
 

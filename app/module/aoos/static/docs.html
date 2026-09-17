@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AOOS — Documentation</title>
-    <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260916">
+    <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
 <style>
     :root {
       --paper-warm: var(--ink-10);
@@ -23,12 +23,12 @@
     main{padding:48px 56px 96px;max-width:860px}
     .toc-brand{font-family:var(--serif);font-size:var(--text-lg);color:var(--ink-0);margin-bottom:2px}
     .toc-brand em{font-style:italic;color:var(--oxford)}
-    .toc-tag{font-family:var(--mono)};font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:26px}
+    .toc-tag{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:26px}
     .toc-search{width:100%;padding:7px 11px;border:1px solid var(--rule);border-radius:6px;background:var(--paper-2);font-size:var(--text-sm);color:var(--ink-1);margin-bottom:20px;font-family:inherit}
     .toc-search:focus{outline:2px solid var(--oxford);outline-offset:1px}
     .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
     .toc ol>li{counter-increment:toc;margin-bottom:2px}
-    .toc>ol>li>a::before{content:counter(toc) ".  ";color:var(--faint);font-variant-numeric:tabular-nums}
+    .toc>ol>li>a::before{content:counter(toc) ".  ";color:var(--muted);font-variant-numeric:tabular-nums}
     .toc a{display:block;padding:5px 9px;border-radius:5px;color:var(--ink-2);text-decoration:none;transition:background .15s,color .15s;line-height:1.4}
     .toc a:hover{background:var(--paper-2);color:var(--oxford)}
     .toc ol ol{margin:2px 0 8px 22px}
@@ -42,7 +42,7 @@
     nav.site-chrome .links{margin-left:auto;display:flex;gap:22px}
     nav.site-chrome .links a{font-family:var(--sans);font-size:var(--text-2sm);color:var(--muted);text-decoration:none}
     nav.site-chrome .links a:hover{color:var(--oxford)}
-    footer.site-colophon{max-width:860px;margin:0 auto;padding:26px 56px 60px;font-family:var(--mono);font-size:var(--text-xs);color:var(--faint);border-top:1px solid var(--rule)}
+    footer.site-colophon{max-width:860px;margin:0 auto;padding:26px 56px 60px;font-family:var(--mono);font-size:var(--text-xs);color:var(--muted);border-top:1px solid var(--rule)}
     @media(max-width:900px){footer.site-colophon{padding:22px 24px 48px}}
     h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-0);line-height:1.2;font-weight:600}
     h1{font-size:var(--text-3xl);letter-spacing:-.01em;margin:0 0 8px}
@@ -69,14 +69,14 @@
     .comp-card{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:20px 22px;border:1px solid var(--rule);border-radius:10px;background:var(--paper-2)}
     .comp-card .ctag{width:44px;height:44px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--paper-on-accent);font-family:var(--mono);font-weight:700;font-size:var(--text-lg)}
     .comp-card h4{margin:0 0 6px;font-size:var(--text-md)}
-    .comp-card .crole{font-family:var(--mono);font-size:var(--text-2sm);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+    .comp-card .crole{font-family:var(--mono);font-size:var(--text-2sm);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
     .comp-card p{margin:0;font-size:var(--text-md);color:var(--ink-2)}
     .ctag.a{background:var(--oxford)} .ctag.b{background:var(--slate)} .ctag.c{background:var(--sage)}
     .table-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);border-radius:8px}
     table{border-collapse:collapse;width:100%;font-size:var(--text-base);font-family:var(--sans)}
     th{text-align:left;background:var(--paper-warm);padding:10px 14px;font-weight:600;color:var(--ink-0);border-bottom:1px solid var(--rule);font-size:var(--text-2sm);letter-spacing:.04em;text-transform:uppercase}
     td{padding:10px 14px;border-bottom:1px solid var(--rule-soft);color:var(--ink-2);vertical-align:top} tr:last-child td{border-bottom:none} td code{font-size:var(--text-2sm)}
-    .kbd{display:inline-block;font-family:var(--mono);font-size:var(--text-2sm);background:var(--paper-warm);color:var(--ink-1);padding:2px 8px;border-radius:4px;border:1px solid var(--rule);box-shadow:0 1px 0 rgba(0,0,0,.05);border-bottom:2px solid var(--rule);margin:0 1px}
+    .kbd{display:inline-block;font-family:var(--mono);font-size:var(--text-2sm);background:var(--paper-warm);color:var(--ink-1);padding:2px 8px;border-radius:4px;border:1px solid var(--rule);box-shadow:0 1px 0 rgba(30,28,25,.05);border-bottom:2px solid var(--rule);margin:0 1px}
     .doc-head{padding:64px 0 8px;max-width:1180px;margin:0 auto}
     .doc-eyebrow{font-family:var(--mono);font-size:var(--text-2sm);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
     .doc-sub{font-family:var(--sans);font-size:var(--text-base);color:var(--muted);margin-top:4px}

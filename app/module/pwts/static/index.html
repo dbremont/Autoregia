@@ -4,15 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PWTS — Personal Workstation Tracking System</title>
-  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
-  <link rel="stylesheet" href="/ui/css/base.css?v=20260916">
-  <link rel="stylesheet" href="/pkts/css/fonts.css">
-  <link rel="stylesheet" href="/pkts/css/base.css">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260917">
   <link rel="stylesheet" href="/pkts/css/layout.css">
   <link rel="stylesheet" href="/pkts/css/components.css">
   <link rel="stylesheet" href="/pkts/css/views.css">
   <link rel="stylesheet" href="/pwts/css/pwts.css">
+  <link rel="stylesheet" href="/pkts/css/command-palette.css">
 </head>
 <body>
 
@@ -25,7 +24,7 @@
       <span class="brand-wordmark">Personal <em>Application Interaction</em> System</span>
     </div>
     <div class="header-search">
-      <span class="search-icon" aria-hidden="true">⌕</span>
+      <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
       <input type="search" id="appFilter" placeholder="Filter by application name…" autocomplete="off">
     </div>
     <div class="header-actions">
@@ -84,9 +83,15 @@
   </footer>
 </div>
 
+<script src="/ui/js/ui.js?v=20260917"></script>
+<script src="/ui/js/icons.js?v=20260917"></script>
 <script src="/pkts/js/vendor/echarts.min.js"></script>
 <script src="/pwts/js/store.js"></script>
 <script src="/pwts/js/views.js"></script>
+<script src="/pwts/js/command-palette.js"></script>
 <script src="/pwts/js/app.js"></script>
+
+<!-- ═══ Command Palette (Ctrl/Cmd+K) ═══ -->
+<script>document.addEventListener('DOMContentLoaded', () => { PWTS.CommandPalette.init(); });</script>
 </body>
 </html>

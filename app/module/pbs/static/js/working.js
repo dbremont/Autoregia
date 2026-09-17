@@ -10,7 +10,8 @@ PBS.Working = (() => {
   const NOTE_KEY = 'pbs_working_notes';
   const BASELINE_KEY = 'pbs_working_baseline';
   let noteSaveTimer = null;
-  let pending = null; // proposed summary record awaiting approval
+  let pending = null;         // proposed summary record awaiting approval
+  let reviewModal = null;
 
   /* ── Persistence (browser only) ─────────────────────── */
   const get = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
@@ -137,9 +138,15 @@ PBS.Working = (() => {
         <div class="wm-review-detail">${esc(rec.detail)}</div>
         <div class="wm-review-meta">${rec.tags.map(t => `<span class="rc-tag">#${t}</span>`).join(' ')}</div>
       </div>`;
-    document.getElementById('wmReviewModal').classList.remove('hidden');
+    const ov = document.getElementById('wmReviewModal');
+    ov.classList.remove('hidden');
+    reviewModal = AUTOREGIA.dialog(ov, { label: 'Generate log records' });
   }
-  function closeReview() { document.getElementById('wmReviewModal').classList.add('hidden'); pending = null; }
+  function closeReview() {
+    document.getElementById('wmReviewModal').classList.add('hidden');
+    if (reviewModal) { reviewModal.close(); reviewModal = null; }
+    pending = null;
+  }
 
   async function approve() {
     if (!pending) { closeReview(); return; }
@@ -149,14 +156,8 @@ PBS.Working = (() => {
     flash('Log record created; baseline advanced.');
   }
 
-  /* ── Tiny toast ─────────────────────────────────────── */
-  function flash(msg) {
-    const t = document.getElementById('wmToast');
-    if (!t) return;
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(flash._t);
-    flash._t = setTimeout(() => t.classList.remove('show'), 2600);
-  }
+  /* ── Tiny toast (shared layer) ──────────────────────── */
+  function flash(msg) { PBS.toast(msg); }
 
   function renderActions() {
     const n = computeDelta().size;
@@ -208,7 +209,7 @@ PBS.Working = (() => {
           <textarea id="wmNoteText" class="wm-note" placeholder="Jot working thoughts, fragments, context… autosaved to this browser." oninput="PBS.Working.onNoteInput()">${esc(note.text || '')}</textarea>
         </div>
       </div>
-      <div class="wm-toast" id="wmToast"></div>`;
+`;
   }
 
   function afterRender() {

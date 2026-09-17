@@ -1,6 +1,7 @@
 /* GIS Command Palette — Ctrl+K universal command interface */
 PT.CommandPalette = {
   open(initialQuery) {
+    try { input.setAttribute('aria-expanded','true'); } catch(e){}
     const overlay = document.getElementById('cmdPalette');
     overlay.classList.remove('hidden');
     const input = document.getElementById('cmdInput');
@@ -8,7 +9,8 @@ PT.CommandPalette = {
     input.focus();
     this.renderResults('');
   },
-  close() { const o = document.getElementById('cmdPalette'); if (o) o.classList.add('hidden'); },
+  close() {
+    try { document.getElementById('cmdInput').setAttribute('aria-expanded','false'); } catch(e){} const o = document.getElementById('cmdPalette'); if (o) o.classList.add('hidden'); },
   renderResults(query) {
     const el = document.getElementById('cmdResults');
     const q = (query || '').toLowerCase();
@@ -39,6 +41,11 @@ PT.CommandPalette = {
       }
     }
     el.innerHTML = html;
+    el.querySelectorAll('.cmd-result-item').forEach((it, i) => {
+      it.id = 'cmd-opt-' + i;
+      it.setAttribute('role', 'option');
+      it.setAttribute('aria-selected', it.classList.contains('active') ? 'true' : 'false');
+    });
     el.querySelectorAll('.cmd-result-item[data-action]').forEach(function (item, i) {
       item.addEventListener('click', function () { PT.CommandPalette.close(); visible[i] && visible[i].action && visible[i].action(); });
     });
@@ -51,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     cmdInput.addEventListener('input', function (e) { PT.CommandPalette.renderResults(e.target.value); });
     cmdInput.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') PT.CommandPalette.close();
-      if (e.key === 'Enter') { const first = document.querySelector('#cmdResults .cmd-result-item'); if (first) first.click(); }
+      if (e.key === 'Enter') { const first = document.querySelector('#cmdResults .cmd-result-item.active') || document.querySelector('#cmdResults .cmd-result-item'); if (first) first.click(); }
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const items = Array.prototype.slice.call(document.querySelectorAll('#cmdResults .cmd-result-item'));

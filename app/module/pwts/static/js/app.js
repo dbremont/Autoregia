@@ -23,6 +23,11 @@
       PWTS.views.renderIdle(data.idle_gaps);
     } catch (err) {
       console.error("[pwts]", err);
+      const empty = document.getElementById("emptyState");
+      if (empty) {
+        empty.classList.remove("hidden");
+        empty.innerHTML = '<h3>Dashboard unavailable</h3><p>The PWTS API did not respond. Check that the server and worker are running.</p>';
+      }
     }
   }
 
@@ -49,7 +54,7 @@
     filterTimer = setTimeout(async () => {
       const r = await fetch(PWTS.api + "/analytics" +
         (filter.value.trim() ? "?app=" + encodeURIComponent(filter.value.trim()) : ""));
-      if (!r.ok) return;
+      if (!r.ok) { console.warn("[pwts] filter fetch failed:", r.status); return; }
       const data = await r.json();
       PWTS.views.renderTotals(data.totals);
       PWTS.views.renderAppsTable(data.apps);

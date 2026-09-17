@@ -31,6 +31,8 @@ PWTS.views.renderWindow = function (win) {
 PWTS.views.renderTimeChart = function (apps) {
   const el = document.getElementById("timeChart");
   if (!el || !window.echarts) return;
+  el.setAttribute("role", "img");
+  el.setAttribute("aria-label", "Bar chart of active time by application");
   const chart = echarts.init(el);
   const data = apps.slice().sort((a, b) => b.time_ms - a.time_ms).slice(0, 15);
   chart.setOption({
@@ -84,6 +86,8 @@ PWTS.views.renderAppsTable = function (apps) {
 PWTS.views.renderTimeline = function (timeline) {
   const el = document.getElementById("timelineChart");
   if (!el || !window.echarts) return;
+  el.setAttribute("role", "img");
+  el.setAttribute("aria-label", "Timeline chart of keystrokes, clicks, and scrolls over time");
   const chart = echarts.init(el);
   const buckets = timeline.map(b => ({
     name: new Date(b.bucket_ms).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),

@@ -137,7 +137,7 @@
 }
 .app-footer .footer-meta {
   font-family: var(--font-mono); font-size: var(--text-2xs);
-  color: var(--color-text-faint); letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted); letter-spacing: var(--tracking-wide);
   margin-left: auto;
 }
 

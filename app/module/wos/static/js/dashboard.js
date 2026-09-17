@@ -6,7 +6,7 @@
    ════════════════════════════════════════════════════════════ */
 window.WOS = window.WOS || {};
 WOS.Dashboard = (() => {
-  const PALETTE = ['#7A1A2A', '#3F6092', '#A8854A', '#3F6E50', '#5C4E78', '#6E9FC4', '#B4742A', '#A33434'];
+  const PALETTE = ['#7A1A2A', '#3F6092', '#A8854A', '#3F6E50', '#5C4E78', '#3F6092', '#B4742A', '#A33434'];
   const REGION_COORDS = {
     'North America': [40, -100], 'Europe': [52, 12], 'Asia': [35, 90],
     'Latin America': [-15, -60], 'Africa': [2, 20], 'Oceania': [-25, 140],
@@ -89,13 +89,16 @@ WOS.Dashboard = (() => {
   // ── data ─────────────────────────────────────────────────────
   async function load() {
     a = WOS.Store.analytics() || {};
+    let failures = 0;
+    const fail = () => { failures++; return null; };
     await Promise.all([
-      fetch('./api/sources/status').then(r => r.json()).then(j => { status = j; }).catch(() => {}),
-      fetch('./api/search?limit=1000&since_ms=' + cut()).then(r => r.json())
-        .then(j => { flowObs = (j && j.items) || []; }).catch(() => {}),
-      fetch('./api/search?limit=5').then(r => r.json())
-        .then(j => { recent = (j && j.items) || []; }).catch(() => {}),
+      fetch('./api/sources/status').then(r => { if (!r.ok) throw 0; return r.json(); }).then(j => { status = j; }).catch(fail),
+      fetch('./api/search?limit=1000&since_ms=' + cut()).then(r => { if (!r.ok) throw 0; return r.json(); })
+        .then(j => { flowObs = (j && j.items) || []; }).catch(fail),
+      fetch('./api/search?limit=5').then(r => { if (!r.ok) throw 0; return r.json(); })
+        .then(j => { recent = (j && j.items) || []; }).catch(fail),
     ]);
+    if (failures === 3) { const el = document.getElementById('toast'); if (el) WOS.toast('Dashboard data unavailable — server unreachable'); }
     drawKpis(); drawCloud(); drawTopics(); drawInsights();
     drawFlow(); drawComposition(); drawGraph(); drawRecent(); drawGeo(); drawSentiment();
   }
@@ -371,8 +374,9 @@ WOS.Dashboard = (() => {
         flowH = parseInt(b.dataset.h, 10);
         document.querySelectorAll('#ovFlowSeg .seg-btn').forEach(x =>
           x.classList.toggle('active', x === b));
-        fetch('./api/search?limit=1000&since_ms=' + cut()).then(r => r.json())
-          .then(j => { flowObs = (j && j.items) || []; drawFlow(); }).catch(() => {});
+        fetch('./api/search?limit=1000&since_ms=' + cut()).then(r => { if (!r.ok) throw 0; return r.json(); })
+          .then(j => { flowObs = (j && j.items) || []; drawFlow(); })
+          .catch(() => { WOS.toast('Could not refresh flow data'); });
       }));
     if (!WOS._ovResize) {
       WOS._ovResize = true;

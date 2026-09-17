@@ -28,7 +28,7 @@ PBS.Dashboard = {
           ${records.slice(0,8).map(r=>`<div style="padding:var(--space-2) 0;border-bottom:1px solid var(--color-border-light);display:flex;gap:var(--space-3);align-items:center;cursor:pointer;" onclick="PBS.record.showDetail('${r.id}')">
             <span style="width:8px;height:8px;border-radius:50%;background:${TYPE_COLORS[r.record_type]||'#999'};flex-shrink:0;"></span>
             <span style="flex:1;font-size:var(--text-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this.esc(r.content)}</span>
-            <span style="font-size:10px;color:var(--color-text-muted);font-family:var(--font-mono);">${r.record_type.substring(0,3)}</span>
+            <span style="font-size:var(--text-2xs);color:var(--color-text-muted);font-family:var(--font-mono);">${r.record_type.substring(0,3)}</span>
           </div>`).join('')}
         </div>
       </div>

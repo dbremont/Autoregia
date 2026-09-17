@@ -3,6 +3,7 @@
    ════════════════════════════════════════════════════════════ */
 PBS.CommandPalette = {
   open(initialQuery) {
+    try { input.setAttribute('aria-expanded','true'); } catch(e){}
     const overlay = document.getElementById('cmdPalette');
     overlay.classList.remove('hidden');
     const input = document.getElementById('cmdInput');
@@ -10,7 +11,8 @@ PBS.CommandPalette = {
     input.focus();
     this.renderResults('');
   },
-  close() { document.getElementById('cmdPalette').classList.add('hidden'); },
+  close() {
+    try { document.getElementById('cmdInput').setAttribute('aria-expanded','false'); } catch(e){} document.getElementById('cmdPalette').classList.add('hidden'); },
   renderResults(query) {
     const el = document.getElementById('cmdResults');
     const q = (query||'').toLowerCase();
@@ -49,6 +51,11 @@ PBS.CommandPalette = {
       }
     }
     el.innerHTML = html;
+    el.querySelectorAll('.cmd-result-item').forEach((it, i) => {
+      it.id = 'cmd-opt-' + i;
+      it.setAttribute('role', 'option');
+      it.setAttribute('aria-selected', it.classList.contains('active') ? 'true' : 'false');
+    });
     // Bind click handlers
     el.querySelectorAll('.cmd-result-item[data-action]').forEach((item,i) => {
       item.addEventListener('click', () => { this.close(); commands[i]?.action?.(); });
@@ -63,7 +70,7 @@ document.addEventListener('DOMContentLoaded',() => {
     cmdInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') PBS.CommandPalette.close();
       if (e.key === 'Enter') {
-        const first = document.querySelector('#cmdResults .cmd-result-item');
+        const first = document.querySelector('#cmdResults .cmd-result-item.active') || document.querySelector('#cmdResults .cmd-result-item');
         if (first) first.click();
       }
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -73,7 +80,8 @@ document.addEventListener('DOMContentLoaded',() => {
         items[cur]?.classList.remove('active');
         const next = e.key==='ArrowDown'?Math.min(cur+1,items.length-1):Math.max(cur-1,0);
         items[next]?.classList.add('active');
-        items[next]?.scrollIntoView({block:'nearest'});
+        items.forEach((it,i)=>it.setAttribute('aria-selected', i===next ? 'true' : 'false'));
+        if (items[next]) { items[next].scrollIntoView({block:'nearest'}); input.setAttribute('aria-activedescendant', items[next].id); }
       }
     });
   }

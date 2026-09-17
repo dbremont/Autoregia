@@ -116,7 +116,7 @@ WOS.setupWindow = function () {
     const b = e.target.closest('#windowSeg button'); if(!b) return;
     WOS.Store.setWindow(parseInt(b.dataset.h,10));
     // reload analytics for the new window, then re-render
-    WOS.Store.loadAnalytics().then(()=>{ WOS.Store.loadObservations().then(()=>{ WOS.navigate(WOS.current); WOS.renderSidebar(); }); });
+    WOS.Store.loadAnalytics().then(()=>{ WOS.Store.loadObservations().then(()=>{ WOS.navigate(WOS.current); WOS.renderSidebar(); }).catch(()=>WOS.toast('Could not refresh observations')); }).catch(()=>WOS.toast('Could not refresh analytics'));
   });
 };
 

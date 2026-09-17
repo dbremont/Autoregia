@@ -9,6 +9,14 @@ PT.Store = (() => {
 
   function notify() { listeners.forEach(fn => fn(entries)); }
 
+  // Honest sync state (ui.spec §2 "Transparent system state")
+  let sync = { online: null, lastError: null };
+  function setSync(online, err) {
+    if (sync.online === online && sync.lastError === (err || null)) return;
+    sync = { online, lastError: err || null };
+  }
+  PT.Store_syncState = () => ({ ...sync });
+
   async function load() {
     const stored = localStorage.getItem(KEY);
     if (stored) { try { entries = JSON.parse(stored); } catch { entries = []; } }
@@ -20,8 +28,9 @@ PT.Store = (() => {
   async function fetchFromAPI() {
     try {
       const res = await fetch('/gis/api/entries');
-      if (res.ok) { entries = await res.json(); saveLocal(); }
-    } catch (e) { console.warn('API unavailable, using local storage only'); }
+      if (res.ok) { entries = await res.json(); saveLocal(); setSync(true); }
+      else setSync(false, 'HTTP ' + res.status);
+    } catch (e) { console.warn('API unavailable, using local storage only'); setSync(false, 'offline'); }
   }
 
   async function refreshFromAPI() {
@@ -39,12 +48,16 @@ PT.Store = (() => {
     try {
       const res = await fetch('/gis/api/entries', { method: 'POST',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       await res.json(); await refreshFromAPI();
+      return { _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const entry = { ...data, id: data.id || generateId(),
         created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
         relations: data.relations || [], annotations: data.annotations || [] };
       entries.unshift(entry); saveLocal(); notify();
+      return { _persisted: false };
     }
   }
 
@@ -52,26 +65,41 @@ PT.Store = (() => {
     try {
       const res = await fetch(`/gis/api/entries/${id}`, { method: 'PUT',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       await res.json(); await refreshFromAPI();
+      return { _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const idx = entries.findIndex(e => e.id === id);
       if (idx === -1) return null;
       entries[idx] = { ...entries[idx], ...updates, updated_at: new Date().toISOString() };
       saveLocal(); notify();
+      return { _persisted: false };
     }
   }
 
   async function remove(id) {
-    try { await fetch(`/gis/api/entries/${id}`, { method: 'DELETE' }); await refreshFromAPI(); }
-    catch (e) { entries = entries.filter(e => e.id !== id); saveLocal(); notify(); }
+    try {
+      const res = await fetch(`/gis/api/entries/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      await refreshFromAPI();
+      return { _persisted: true };
+    } catch (e) {
+      setSync(false, e.message);
+      entries = entries.filter(e => e.id !== id); saveLocal(); notify();
+      return { _persisted: false };
+    }
   }
 
   async function addAnnotation(id, annotation) {
     try {
       const res = await fetch(`/gis/api/entries/${id}/annotations`, { method: 'POST',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(annotation) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       await res.json(); await refreshFromAPI();
+      return { _persisted: true };
     } catch (e) {
+      setSync(false, e.message);
       const e2 = getById(id); if (!e2) return;
       if (!e2.annotations) e2.annotations = [];
       const ann = { ...annotation, id: 'ann-' + Math.random().toString(36).substr(2,6),

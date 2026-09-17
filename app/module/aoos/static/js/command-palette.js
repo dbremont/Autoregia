@@ -14,6 +14,7 @@ AO.CommandPalette.open = function () {
   p.classList.remove('hidden');
   const input = document.getElementById('cmdInput');
   input.value = '';
+  input.setAttribute('aria-expanded', 'true');
   setTimeout(() => input.focus(), 30);
   AO.CommandPalette.render('');
   input.oninput = function () { AO.CommandPalette.render(this.value); };
@@ -22,6 +23,28 @@ AO.CommandPalette.open = function () {
 AO.CommandPalette.close = function () {
   const p = document.getElementById('cmdPalette');
   if (p) p.classList.add('hidden');
+  const input = document.getElementById('cmdInput');
+  if (input) input.setAttribute('aria-expanded', 'false');
+};
+
+AO.CommandPalette._active = -1;
+
+AO.CommandPalette._items = function () {
+  return Array.prototype.slice.call(document.querySelectorAll('#cmdResults .cmd-item'));
+};
+
+AO.CommandPalette._setActive = function (next) {
+  const items = AO.CommandPalette._items();
+  if (!items.length) return;
+  next = Math.max(0, Math.min(next, items.length - 1));
+  items.forEach(function (it, i) {
+    it.classList.toggle('sel', i === next);
+    it.setAttribute('aria-selected', i === next ? 'true' : 'false');
+  });
+  items[next].scrollIntoView({ block: 'nearest' });
+  const input = document.getElementById('cmdInput');
+  if (input) input.setAttribute('aria-activedescendant', items[next].id);
+  AO.CommandPalette._active = next;
 };
 
 AO.CommandPalette._commands = function () {
@@ -56,10 +79,36 @@ AO.CommandPalette.render = function (query) {
          run: () => { AO.CommandPalette.close(); AO.navigate('actions'); setTimeout(() => AO.Action.showDetail(a.id), 50); } }));
   }
   const all = cmds.concat(actions);
-  if (!all.length) { results.innerHTML = '<div class="cmd-empty">No matches</div>'; return; }
+  AO.CommandPalette._active = -1;
+  const input = document.getElementById('cmdInput');
+  if (input) input.removeAttribute('aria-activedescendant');
+  if (!all.length) { results.innerHTML = '<div class="cmd-empty" role="status">No matches</div>'; return; }
   results.innerHTML = all.map((c, i) =>
-    '<div class="cmd-item" data-idx="' + i + '"><ao-icon name="' + c.icon + '" size="16"></ao-icon><span>' + AO.esc(c.label) + '</span></div>').join('');
+    '<div class="cmd-item" id="cmd-opt-' + i + '" role="option" aria-selected="false" data-idx="' + i + '"><ao-icon name="' + c.icon + '" size="16"></ao-icon><span>' + AO.esc(c.label) + '</span></div>').join('');
   results.querySelectorAll('.cmd-item').forEach((item, i) => {
     item.onclick = function () { AO.CommandPalette.close(); all[i].run(); };
   });
 };
+
+/* Keyboard: ↑/↓ navigate, Enter selects the active (or first) result. */
+document.addEventListener('keydown', function (e) {
+  const p = document.getElementById('cmdPalette');
+  if (!p || p.classList.contains('hidden')) return;
+  const input = document.getElementById('cmdInput');
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    const items = AO.CommandPalette._items();
+    if (!items.length) return;
+    const cur = AO.CommandPalette._active;
+    const next = e.key === 'ArrowDown'
+      ? (cur < 0 ? 0 : Math.min(cur + 1, items.length - 1))
+      : Math.max(cur - 1, 0);
+    AO.CommandPalette._setActive(next);
+  } else if (e.key === 'Enter') {
+    const items = AO.CommandPalette._items();
+    if (!items.length) return;
+    e.preventDefault();
+    const idx = AO.CommandPalette._active >= 0 ? AO.CommandPalette._active : 0;
+    items[idx].click();
+  }
+});

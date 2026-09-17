@@ -90,7 +90,7 @@ AO._goalCard = function (g) {
     '<div class="goal-foot"><span class="text-muted text-sm">Deadline ' + dl + '</span>' +
     '<button class="btn btn-secondary btn-sm" data-checkin="' + g.id + '"><ao-icon name="edit" size="13"></ao-icon> Check in</button></div>' +
     '<div class="checkin-form hidden" id="checkin-' + g.id + '">' +
-    '<label class="form-label">New current value (' + AO.esc(tunit || 'value') + ')</label>' +
+    '<label class="form-label" for="cin-' + g.id + '">New current value (' + AO.esc(tunit || 'value') + ')</label>' +
     '<input type="number" step="any" id="cin-' + g.id + '" value="' + g.current + '">' +
     '<button class="btn btn-primary btn-sm" data-save-checkin="' + g.id + '">Save check-in</button></div>' +
     '</div>';
