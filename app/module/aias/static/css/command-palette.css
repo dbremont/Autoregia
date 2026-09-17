@@ -17,3 +17,8 @@
 .cmd-empty { padding: var(--space-5); text-align: center; font-size: var(--text-sm); color: var(--color-text-muted); font-style: italic; font-family: var(--font-display); }
 
 @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+/* ── Motion guard (ui.spec §9) ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cmd-overlay { animation: none !important; }
+}

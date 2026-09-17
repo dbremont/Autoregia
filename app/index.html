@@ -18,7 +18,7 @@
   a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
   ::selection{background:var(--gold-tint);color:var(--ink-0)}
   /* ── Nav bar — sticky, with the mark ── */
-  nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--ink-9)}
+  nav.topnav{position:sticky;top:0;z-index:var(--z-sticky);background:var(--paper);border-bottom:1px solid var(--ink-9)}
   .topnav-in{display:flex;align-items:center;height:60px;gap:18px}
   .lockup{display:flex;align-items:center;text-decoration:none;color:var(--ink-0)}
   .lockup span{font-family:var(--serif);font-size:var(--text-lg);font-weight:500;letter-spacing:-.01em}
@@ -89,7 +89,7 @@
   .res-val{font-family:var(--mono);font-size:var(--text-xs);color:var(--muted)}
   .res-val.over{color:var(--accent);font-weight:600}
   .res-bar{height:6px;background:var(--rule-soft);border-radius:999px;overflow:hidden}
-  .res-bar>span{display:block;height:100%;background:#c7a972;border-radius:999px}
+  .res-bar>span{display:block;height:100%;background:var(--gold-soft);border-radius:999px}
   .res-bar.over>span{background:var(--accent)}
   .res-bar.ok>span{background:var(--color-success)}
   .loop-strip{list-style:none;padding:0;margin:0}
@@ -121,7 +121,7 @@
   }
 
   /* ── search float ── */
-  .finder{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(14px);width:min(620px,92vw);background:var(--surface);border:1px solid var(--rule);border-radius:12px;box-shadow:0 30px 70px -30px rgba(30,28,25,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+  .finder{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(14px);width:min(620px,92vw);background:var(--surface);border:1px solid var(--rule);border-radius:12px;box-shadow:0 30px 70px -30px rgba(30,28,25,.45);z-index:var(--z-overlay);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
   .finder.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
   .finder .bar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--rule-soft)}
   .finder .bar svg{flex:0 0 auto}
@@ -145,7 +145,7 @@
   section.stage-sit .sit-card{margin-top:12px;border-radius:14px;box-shadow:0 24px 60px -44px rgba(60,50,30,.5)}
   .sit-close{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted);padding:4px 8px;border-radius:6px}
   .sit-close:hover{color:var(--accent);background:var(--gold-tint)}
-  .sit-modal{position:fixed;inset:0;background:rgba(30,28,25,.44);display:flex;align-items:center;justify-content:center;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s}
+  .sit-modal{position:fixed;inset:0;background:rgba(30,28,25,.44);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal);opacity:0;pointer-events:none;transition:opacity .2s}
   .sit-modal.on{opacity:1;pointer-events:auto}
   .sit-modal[hidden]{display:none}
   .sit-modal .sit-card{position:relative;width:min(900px,92vw);max-height:86vh;overflow-y:auto;border-radius:14px;padding:24px 26px;box-shadow:0 30px 70px -30px rgba(30,28,25,.45)}

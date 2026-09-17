@@ -69,31 +69,31 @@
   --color-info:           #3F6092;
   --color-info-light:     #EAEFF6;
 
-  /* Status colors */
+  /* Status colors (alias the semantic palette; unique values define it) */
   --status-active:    #2D6A4F;
   --status-draft:     var(--ink-5);
-  --status-pending:   #B4742A;
-  --status-blocked:   #A33434;
-  --status-completed: #3F6092;
+  --status-pending:   var(--color-warning);
+  --status-blocked:   var(--color-danger);
+  --status-completed: var(--color-info);
   --status-archived:  var(--ink-5);
-  --status-scheduled: #3F6092;
-  --status-cancelled: #A33434;
+  --status-scheduled: var(--color-info);
+  --status-cancelled: var(--color-danger);
 
   /* Priority colors */
   --priority-critical: var(--oxford);
-  --priority-high:     #B4742A;
+  --priority-high:     var(--color-warning);
   --priority-medium:   var(--gold);
   --priority-low:      var(--ink-5);
 
   /* State class colors */
   --class-internal:      var(--oxford);
-  --class-external:      #3F6E50;
-  --class-social:        #3F6092;
+  --class-external:      var(--color-success);
+  --class-social:        var(--color-info);
   --class-reflective:    var(--gold);
   --class-identity:      #5C4E78;
-  --class-knowledge:     #2D6A4F;
-  --class-task:          #B4742A;
-  --class-environmental: #3F6E50;
+  --class-knowledge:     var(--status-active);
+  --class-task:          var(--color-warning);
+  --class-environmental: var(--color-success);
 
   /* ── Typography ────────────────────────────────────────── */
   --font-display: 'Spectral', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;

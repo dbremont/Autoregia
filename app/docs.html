@@ -15,6 +15,7 @@
     a.back{display:inline-block;font-family:var(--sans);font-size:var(--text-2sm);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:40px;transition:color .18s}
     a.back:hover{color:var(--accent)}
     a.back::before{content:"\2190 "}
+    .ln-accent{color:var(--accent)}
     nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
     nav.topnav .topnav-in{max-width:880px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:18px}
     nav.topnav .lockup{font-family:var(--serif);font-size:var(--text-lg);font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
@@ -53,7 +54,7 @@
 
     /* callouts */
     .callout{background:var(--surface-2);border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 6px 6px 0;margin:18px 0;font-size:var(--text-base);color:var(--ink-soft)}
-    .callout.warn{border-left-color:var(--warn);background:#fbf1e3}
+    .callout.warn{border-left-color:var(--warn);background:var(--color-warning-light)}
     .callout strong{color:var(--ink);font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;font-weight:700}
 
     /* mini sub-label inside a tool guide */
@@ -279,17 +280,17 @@
     </div>
     <div class="tool-body">
       <div class="tool-tag">Grounding · policy corpus</div>
-      <p class="body" style="margin:8px 0 0">AGS grounds the agent — identity, stance, and limits — and carries the policy corpus: a <a href="/ags/policies/charter.html" style="color:var(--accent)">charter</a>, principles, values, commitments, and domain policies (health, learning, conduct). The system itself is in the model, not yet built; the policies are served and current.</p>
+      <p class="body" style="margin:8px 0 0">AGS grounds the agent — identity, stance, and limits — and carries the policy corpus: a <a href="/ags/policies/charter.html" class="ln-accent">charter</a>, principles, values, commitments, and domain policies (health, learning, conduct). The system itself is in the model, not yet built; the policies are served and current.</p>
 
       <h3 class="mini">Read</h3>
       <ol class="steps">
-        <li>The <strong><a href="/ags/policies/charter.html" style="color:var(--accent)">Charter</a></strong> is pinned as the apex document — start there for identity and purpose.</li>
-        <li>Domain policies: <a href="/ags/policies/principles.html" style="color:var(--accent)">principles</a>, <a href="/ags/policies/values.html" style="color:var(--accent)">values</a>, <a href="/ags/policies/commitments.html" style="color:var(--accent)">commitments</a>, <a href="/ags/policies/health.html" style="color:var(--accent)">health</a>, <a href="/ags/policies/learning.html" style="color:var(--accent)">learning</a>, <a href="/ags/policies/conduct.html" style="color:var(--accent)">conduct</a>.</li>
+        <li>The <strong><a href="/ags/policies/charter.html" class="ln-accent">Charter</a></strong> is pinned as the apex document — start there for identity and purpose.</li>
+        <li>Domain policies: <a href="/ags/policies/principles.html" class="ln-accent">principles</a>, <a href="/ags/policies/values.html" class="ln-accent">values</a>, <a href="/ags/policies/commitments.html" class="ln-accent">commitments</a>, <a href="/ags/policies/health.html" class="ln-accent">health</a>, <a href="/ags/policies/learning.html" class="ln-accent">learning</a>, <a href="/ags/policies/conduct.html" class="ln-accent">conduct</a>.</li>
       </ol>
 
       <div class="callout">
         <strong>Note</strong>
-        In the model, not yet built — see <a href="/about.html#elements" style="color:var(--accent)">the Element Set</a>. The policies moved here from the former AGS.
+        In the model, not yet built — see <a href="/about.html#elements" class="ln-accent">the Element Set</a>. The policies moved here from the former AGS.
       </div>
     </div>
   </article>
@@ -420,7 +421,7 @@
     <p class="body">Autoregia is a set of working prototypes of a larger control loop. Each tool stands on its own, but they are not yet wired together: no tool calls another, and the loop does not yet close. Treat the per-tool notes above as the source of truth for what works today.</p>
     <div class="callout">
       <strong>For the technical docs</strong>
-      Conceptual foundations, data models, and schemas live in the <code>spec/</code> directory of the repository; the roadmap that connects these prototypes into one self-regulating system is described in <a href="about.html" style="color:var(--accent)">the reference architecture</a>.
+      Conceptual foundations, data models, and schemas live in the <code>spec/</code> directory of the repository; the roadmap that connects these prototypes into one self-regulating system is described in <a href="about.html" class="ln-accent">the reference architecture</a>.
     </div>
   </section>
 
