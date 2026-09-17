@@ -1,6 +1,7 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Base Styles — Reset, Typography, Global
-   Editorial refinement: OpenType features, measure, paper grain
+   Autoregia Base Styles (shared — /ui/css/base.css)
+   Reset, typography, grain, eyebrow, kbd. Tool-agnostic:
+   per-tool <x-icon> element rules live in each tool's own css.
    ════════════════════════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,7 +76,7 @@ code {
 }
 
 /* Tabular figures everywhere data appears */
-.stat-value, .stat-card, .summary-stat, .meta-grid,
+.stat-value, .stat-card, .summary-stat, .meta-grid, .data-table, .matrix-cell,
 .text-mono, code, .detail-id, .folio, .data-num {
   font-variant-numeric: tabular-nums;
 }
@@ -113,9 +114,6 @@ code {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--ink-6); background-clip: padding-box; }
 
-/* ── Icon element ─────────────────────────────────────── */
-.pbs-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
-pbs-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 
 /* ── Keycap styling ───────────────────────────────────── */
 .kbd, .kbd-hint {
@@ -147,11 +145,3 @@ pbs-icon { display: inline-flex; align-items: center; justify-content: center; l
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0,0,0,0); border: 0;
 }
-
-/* ── Form controls ────────────────────────────────────── */
-/* Strip UA search-field decorations so author padding/icons win everywhere. */
-input[type="search"] { -webkit-appearance: none; appearance: none; }
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration { -webkit-appearance: none; appearance: none; }

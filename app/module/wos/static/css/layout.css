@@ -193,3 +193,7 @@
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .header-search { display: none; }
 }
+
+/* ── Tool icon element ────────────────────────────────── */
+.wos-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+wos-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }

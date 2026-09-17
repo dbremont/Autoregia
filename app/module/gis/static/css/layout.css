@@ -188,3 +188,14 @@
   .app-sidebar { display: none; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
+
+/* ── Tool icon element ────────────────────────────────── */
+.pt-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+pt-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+
+/* ── Form control resets (gis-specific, ex-base.css) ──── */
+input[type="search"] { -webkit-appearance: none; appearance: none; }
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { -webkit-appearance: none; appearance: none; }

@@ -179,7 +179,7 @@
 }
 .study-tab:hover { border-color: var(--color-border-strong); color: var(--ink-1); }
 .study-tab.active {
-  background: var(--oxford); color: #FAF1E6; border-color: var(--oxford-deep);
+  background: var(--oxford); color: var(--paper-on-accent); border-color: var(--oxford-deep);
 }
 .study-viz { width: 100%; }
 .study-svg { width: 100%; height: auto; display: block; }
@@ -267,7 +267,7 @@
   width: 20px; height: 20px; flex-shrink: 0; border-radius: var(--radius-sm);
   border: var(--hairline) solid var(--color-border-strong); background: var(--color-surface);
   cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-  color: #FAF1E6; transition: background var(--transition-fast), border-color var(--transition-fast);
+  color: var(--paper-on-accent); transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 .wm-check:hover { border-color: var(--oxford); }
 .wm-todo.done .wm-check { background: var(--status-active); border-color: var(--status-active); }
@@ -322,7 +322,7 @@
 /* ── Working Memory: Toast ────────────────────────────── */
 .wm-toast {
   position: fixed; bottom: var(--space-8); right: var(--space-8);
-  background: var(--ink-0); color: #FAF1E6; padding: var(--space-3) var(--space-5);
+  background: var(--ink-0); color: var(--paper-on-accent); padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-md); font-size: var(--text-sm); box-shadow: var(--shadow-lg);
   z-index: var(--z-toast); opacity: 0; transform: translateY(8px); pointer-events: none;
   transition: opacity var(--transition-normal), transform var(--transition-normal);

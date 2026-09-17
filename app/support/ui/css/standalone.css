@@ -1,0 +1,34 @@
+/* ════════════════════════════════════════════════════════════
+   Autoregia Standalone Alias Layer (shared — /ui/css/standalone.css)
+   Legacy/short alias custom properties used by the document plates
+   (root plates, policies, landings). Link AFTER tokens.css.
+   ui.spec §11.2 · design.md §3.2
+   ════════════════════════════════════════════════════════════ */
+
+:root {
+  /* short ink aliases */
+  --ink:      var(--ink-1);
+  --ink-soft: var(--ink-3);
+  --muted:    var(--ink-4);
+  --faint:    var(--ink-5);
+  --rule:     var(--ink-8);
+  --rule-soft: var(--ink-9);
+
+  /* surfaces */
+  --surface:   var(--color-surface);
+  --surface-2: var(--color-surface-2);
+  --parchment: var(--paper);
+
+  /* accent aliases */
+  --accent:     var(--oxford);
+  --accent-deep: var(--oxford-deep);
+
+  /* semantic aliases (document-plate vocabulary) */
+  --built: var(--color-success);
+  --warn:  var(--color-warning);
+
+  /* typography stacks (document-plate names) */
+  --serif: 'Spectral', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono:  'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+}

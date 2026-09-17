@@ -167,6 +167,15 @@ def control_loop(filename):
     return send_from_directory(REPO, f"img/{filename}")
 
 
+@app.route("/ui/<path:filename>")
+def ui_assets(filename):
+    # Shared design-system layer (tokens, fonts, base) — the single
+    # source of truth served to every surface. See spec/ui.spec §11.2.
+    # NOTE: prefix_assets.py must never learn the "ui" segment — /ui/
+    # is global, not per-tool.
+    return send_from_directory(os.path.join(ROOT, "support", "ui"), filename)
+
+
 @app.route("/docs.html")
 def docs():
     return send_from_directory(ROOT, "docs.html")

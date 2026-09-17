@@ -1,0 +1,19 @@
+/* ════════════════════════════════════════════════════════════
+   AIAS Command Palette + Scratchpad overlays (§7.6–§7.7)
+   Extracted from components.css — ui.spec §11.2 file split.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Command palette ────────────────────────────────────── */
+.cmd-overlay { position: fixed; inset: 0; background: rgba(30,28,25,0.42); backdrop-filter: blur(2px); display: grid; align-items: start; justify-content: center; padding-top: 12vh; z-index: var(--z-palette); animation: fade-in var(--transition-fast); }
+.cmd-palette { width: min(560px, 92vw); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); overflow: hidden; }
+.cmd-search { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--color-border-light); }
+.cmd-search input { flex: 1; border: 0; outline: none; font-size: var(--text-md); background: none; }
+.cmd-results { max-height: 50vh; overflow-y: auto; padding: var(--space-2); }
+.cmd-item { display: flex; align-items: center; gap: var(--space-3); padding: 9px 11px; border-radius: var(--radius-md); cursor: pointer; }
+.cmd-item.sel, .cmd-item:hover { background: var(--color-surface-2); }
+.cmd-item .cmd-icon { display: flex; color: var(--color-gold); }
+.cmd-item .cmd-title { font-size: var(--text-sm); color: var(--ink-1); }
+.cmd-item .cmd-meta { margin-left: auto; font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--color-text-faint); }
+.cmd-empty { padding: var(--space-5); text-align: center; font-size: var(--text-sm); color: var(--color-text-muted); font-style: italic; font-family: var(--font-display); }
+
+@media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }

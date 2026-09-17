@@ -41,7 +41,7 @@
   border-radius: var(--radius-sm);
   box-shadow: inset 0 0 0 1px var(--oxford-deep), 0 1px 2px rgba(30,28,25,0.12);
 }
-.header-monogram svg { width: 19px; height: 19px; color: #FAF1E6; }
+.header-monogram svg { width: 19px; height: 19px; color: var(--paper-on-accent); }
 .header-brand .brand-wordmark {
   font-variant: small-caps; letter-spacing: var(--tracking-wide);
   font-size: var(--text-md);
@@ -167,3 +167,6 @@
   .header-search { display: none; }
 }
 
+/* ── Tool icon element ────────────────────────────────── */
+.pkts-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+pkts-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }

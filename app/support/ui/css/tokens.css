@@ -1,6 +1,8 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Design Tokens — Editorial / Scholarly Aesthetic
-   Oxford-inspired palette · refined restraint · classic craft
+   Autoregia Design Tokens — the single source of truth.
+   Served at /ui/css/tokens.css (app/support/ui/). Every surface
+   links this file; per-module copies of the token set are gone.
+   Editorial / scholarly aesthetic · ui.spec §3 · design.md §2.1
    ════════════════════════════════════════════════════════════ */
 
 :root {
@@ -17,6 +19,7 @@
   --ink-9:  #EEEAE0;   /* light borders */
   --ink-10: #F4F1EA;   /* surface-warm tint */
   --paper:  #FAFAF6;   /* page background */
+  --paper-on-accent: #FAF1E6;   /* text/icons on oxford & ink fills (ui.spec §10.1) */
 
   /* ── Surfaces (tonal layering) ──────────────────────────── */
   --color-bg:           var(--paper);

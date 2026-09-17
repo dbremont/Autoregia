@@ -60,7 +60,7 @@ PKTS.Signature = {
       rows.map(row=>`<div class="kb-row">${row.map(k=>{
         const c=hm[k]||0; const t=c/max;
         const bg = t>0 ? `rgba(122,26,42,${0.08+t*0.7})` : 'var(--color-surface)';
-        return `<span class="kb-key" title="${k}: ${c}" style="background:${bg};color:${t>0.5?'#FAF1E6':'var(--color-text)'};">${k}</span>`;
+        return `<span class="kb-key" title="${k}: ${c}" style="background:${bg};color:${t>0.5?'var(--paper-on-accent)':'var(--color-text)'};">${k}</span>`;
       }).join('')}</div>`).join('')}</div>`;
     // correction topology
     const ct = PKTS.Store.correctionTopology();
