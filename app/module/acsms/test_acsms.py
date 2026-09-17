@@ -248,6 +248,23 @@ def test_dashboard_stats_and_attention_queue(client):
     assert st["recent"][0]["skill_id"] == fresh["id"]
 
 
+def test_dashboard_domains_and_weekly_milestone(client):
+    a = make_skill(client, name="Da1", domain="Data & Analytics")
+    b = make_skill(client, name="Da2", domain="Data & Analytics")
+    c = make_skill(client, name="Mi1", domain="Misc")
+    make_practice(client, a["id"], days_ago=0)
+
+    st = client.get("/api/dashboard/stats").get_json()
+    doms = {d["domain"]: d for d in st["domains"]}
+    assert doms["Data & Analytics"]["total"] == 2
+    assert doms["Data & Analytics"]["on-track"] == 1
+    assert doms["Data & Analytics"]["never-practiced"] == 1
+    assert doms["Misc"]["total"] == 1
+    assert st["weekly"]["active_skills"] == 3
+    assert st["weekly"]["practiced_skills"] == 1
+    assert st["weekly"]["pct"] == 33
+
+
 def test_health(client):
     s = make_skill(client)
     make_practice(client, s["id"])
@@ -263,7 +280,143 @@ def test_seed_applies_only_to_empty_db(client):
     seed = json.load(open(srv.SEED_PATH, encoding="utf-8"))
     assert seed and all(s.get("id") for s in seed)
     from support.storage import Store
-    st = Store("acsms", seed_paths=[srv.SEED_PATH])
+    st = Store("acsms", seed_paths=[srv.SEED_PATH, srv.PATHS_SEED_PATH])
     assert st.count() >= len(seed)
     names = {d["name"] for d in st.all()}
     assert {s["name"] for s in seed} <= names
+
+
+# ── domain & level ───────────────────────────────────────────────────────────
+def test_domain_and_level_defaults_and_validation(client):
+    s = make_skill(client)
+    assert s["domain"] == "General" and s["level"] == 0
+    for bad in ({"level": 6}, {"level": -1}, {"level": "high"}):
+        r = client.post("/api/skills", json={"name": "X", **bad})
+        assert r.status_code == 400, bad
+    r = client.post("/api/skills", json={"name": "X", "domain": "  Data & Analytics  ",
+                                         "level": 4})
+    assert r.status_code == 201
+    assert r.get_json()["domain"] == "Data & Analytics" and r.get_json()["level"] == 4
+    r = client.put(f"/api/skills/{s['id']}", json={"level": 9})
+    assert r.status_code == 400
+    r = client.put(f"/api/skills/{s['id']}", json={"level": 5})
+    assert r.status_code == 200 and r.get_json()["level"] == 5
+
+
+# ── the skill changelog ──────────────────────────────────────────────────────
+def test_changelog_created_entry(client):
+    s = make_skill(client)
+    changes = client.get(f"/api/skills/{s['id']}").get_json()["changes"]
+    assert len(changes) == 1
+    assert changes[0]["event"] == "created" and changes[0]["changes"] == []
+    assert "at_ms" in changes[0]
+
+
+def test_changelog_update_diff_and_lifecycle_events(client):
+    s = make_skill(client, target_per_week=1)
+    client.put(f"/api/skills/{s['id']}",
+               json={"description": "new", "level": 3, "target_per_week": 2})
+    changes = client.get(f"/api/skills/{s['id']}").get_json()["changes"]
+    assert changes[-1]["event"] == "updated"
+    fields = {d["field"]: d for d in changes[-1]["changes"]}
+    assert set(fields) == {"description", "level", "target_per_week"}
+    assert fields["level"]["from"] == 0 and fields["level"]["to"] == 3
+
+    client.put(f"/api/skills/{s['id']}", json={"status": "paused"})
+    changes = client.get(f"/api/skills/{s['id']}").get_json()["changes"]
+    assert changes[-1]["event"] == "paused"
+    assert changes[-1]["changes"][0]["field"] == "status"
+
+    client.put(f"/api/skills/{s['id']}", json={"status": "retired"})
+    changes = client.get(f"/api/skills/{s['id']}").get_json()["changes"]
+    assert changes[-1]["event"] == "retired"
+
+    # a no-op update writes no entry
+    n = len(changes)
+    client.put(f"/api/skills/{s['id']}", json={"description": "new"})
+    changes = client.get(f"/api/skills/{s['id']}").get_json()["changes"]
+    assert len(changes) == n
+
+
+# ── skill paths ──────────────────────────────────────────────────────────────
+def test_path_create_validation_and_joined_stats(client):
+    a = make_skill(client, name="Alpha")
+    b = make_skill(client, name="Beta")
+    make_practice(client, a["id"], days_ago=0)          # on-track
+    # b is never-practiced → current step
+
+    r = client.post("/api/paths", json={"name": "Alpha Path",
+                                        "skill_ids": [a["id"], b["id"], a["id"]]})
+    assert r.status_code == 201, r.get_json()
+    p = r.get_json()
+    assert p["id"].startswith("PATH-")
+    assert [m["id"] for m in p["members"]] == [a["id"], b["id"]]   # deduped, ordered
+    assert p["completion_pct"] == 50 and p["practiced_count"] == 1
+    assert p["current_step"] == 1
+
+    assert client.post("/api/paths", json={"name": "X",
+                                           "skill_ids": ["SKILL-ghost"]}).status_code == 400
+    assert client.post("/api/paths", json={"skill_ids": []}).status_code == 400
+    assert client.post("/api/paths", json={"name": "X", "status": "gone"}).status_code == 400
+    assert client.get("/api/paths/PATH-missing").status_code == 404
+
+
+def test_path_current_step_tracks_neglected_and_completion(client):
+    a = make_skill(client, name="A1", target_per_week=1)
+    b = make_skill(client, name="B1", target_per_week=1)
+    make_practice(client, a["id"], days_ago=0)
+    make_practice(client, b["id"], days_ago=30)         # neglected
+    p = client.post("/api/paths", json={"name": "P",
+                                        "skill_ids": [a["id"], b["id"]]}).get_json()
+    assert p["completion_pct"] == 100 and p["current_step"] == 1
+
+    make_practice(client, b["id"], days_ago=0)
+    p = client.get(f"/api/paths/{p['id']}").get_json()
+    assert p["current_step"] is None
+
+
+def test_path_update_reorder_and_delete(client):
+    a = make_skill(client, name="A2")
+    b = make_skill(client, name="B2")
+    p = client.post("/api/paths", json={"name": "P2",
+                                        "skill_ids": [a["id"], b["id"]]}).get_json()
+    r = client.put(f"/api/paths/{p['id']}",
+                   json={"skill_ids": [b["id"], a["id"]], "status": "archived"})
+    assert r.status_code == 200
+    body = r.get_json()
+    assert [m["id"] for m in body["members"]] == [b["id"], a["id"]]
+    assert body["status"] == "archived"
+    assert client.delete(f"/api/paths/{p['id']}").status_code == 200
+    assert client.get(f"/api/paths/{p['id']}").status_code == 404
+
+
+def test_path_skips_deleted_skills(client):
+    a = make_skill(client, name="A3")
+    b = make_skill(client, name="B3")
+    p = client.post("/api/paths", json={"name": "P3",
+                                        "skill_ids": [a["id"], b["id"]]}).get_json()
+    client.delete(f"/api/skills/{a['id']}")             # never practiced → deletable
+    body = client.get(f"/api/paths/{p['id']}").get_json()
+    assert [m["id"] for m in body["members"]] == [b["id"]]
+    assert body["completion_pct"] == 0 and body["current_step"] == 0
+
+
+# ── activity feed ────────────────────────────────────────────────────────────
+def test_activity_merges_practices_and_skill_changes(client):
+    s = make_skill(client, name="Feed Skill")
+    make_practice(client, s["id"], days_ago=0, quality=4)
+    client.put(f"/api/skills/{s['id']}", json={"level": 2})
+
+    events = client.get("/api/activity").get_json()
+    kinds = [(e["type"], e.get("event")) for e in events]
+    assert ("skill", "created") in kinds
+    assert ("skill", "updated") in kinds
+    assert ("practice", None) in kinds
+    # newest first: the level update is the latest event
+    assert events[0]["type"] == "skill" and events[0]["event"] == "updated"
+    practice_events = [e for e in events if e["type"] == "practice"]
+    assert practice_events[0]["skill_name"] == "Feed Skill"
+    assert practice_events[0]["quality"] == 4
+
+    limited = client.get("/api/activity?limit=2").get_json()
+    assert len(limited) == 2

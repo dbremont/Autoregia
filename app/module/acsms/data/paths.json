@@ -1,0 +1,43 @@
+[
+  {
+    "id": "PATH-data-foundations",
+    "doc_type": "path",
+    "name": "Data & reasoning foundations",
+    "description": "Sequenced curriculum: model the data first, then the system around it, then write down what was decided.",
+    "skill_ids": [
+      "SKILL-couchdb-data-modeling",
+      "SKILL-systems-thinking",
+      "SKILL-technical-writing"
+    ],
+    "status": "active",
+    "created_at_ms": 1785799510428,
+    "updated_at_ms": 1785799510428,
+    "changes": [
+      {
+        "at_ms": 1785799510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "PATH-deliberate-growth",
+    "doc_type": "path",
+    "name": "Deliberate growth loop",
+    "description": "Meta-path: keep the improvement engine itself sharp \u2014 designing regimes, then holding conversations that test them.",
+    "skill_ids": [
+      "SKILL-deliberate-practice-design",
+      "SKILL-spanish-conversation"
+    ],
+    "status": "active",
+    "created_at_ms": 1787959510428,
+    "updated_at_ms": 1787959510428,
+    "changes": [
+      {
+        "at_ms": 1787959510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  }
+]

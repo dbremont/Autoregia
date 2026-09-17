@@ -8,10 +8,19 @@
       "reasoning",
       "models"
     ],
+    "domain": "Reasoning",
     "status": "active",
     "target_per_week": 2,
-    "created_at_ms": 1781906800265,
-    "updated_at_ms": 1781906800265
+    "level": 2,
+    "created_at_ms": 1781911510428,
+    "updated_at_ms": 1781911510428,
+    "changes": [
+      {
+        "at_ms": 1781911510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   },
   {
     "id": "SKILL-technical-writing",
@@ -22,10 +31,19 @@
       "communication",
       "writing"
     ],
+    "domain": "Technical",
     "status": "active",
     "target_per_week": 3,
-    "created_at_ms": 1779314800265,
-    "updated_at_ms": 1779314800265
+    "level": 3,
+    "created_at_ms": 1779319510428,
+    "updated_at_ms": 1779319510428,
+    "changes": [
+      {
+        "at_ms": 1779319510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   },
   {
     "id": "SKILL-couchdb-data-modeling",
@@ -36,10 +54,19 @@
       "engineering",
       "data"
     ],
+    "domain": "Data & Analytics",
     "status": "active",
     "target_per_week": 1,
-    "created_at_ms": 1784498800265,
-    "updated_at_ms": 1784498800265
+    "level": 3,
+    "created_at_ms": 1784503510428,
+    "updated_at_ms": 1784503510428,
+    "changes": [
+      {
+        "at_ms": 1784503510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   },
   {
     "id": "SKILL-deliberate-practice-design",
@@ -50,10 +77,19 @@
       "meta",
       "learning"
     ],
+    "domain": "Learning",
     "status": "active",
     "target_per_week": 1,
-    "created_at_ms": 1787090800265,
-    "updated_at_ms": 1787090800265
+    "level": 1,
+    "created_at_ms": 1787095510428,
+    "updated_at_ms": 1787095510428,
+    "changes": [
+      {
+        "at_ms": 1787095510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   },
   {
     "id": "SKILL-spanish-conversation",
@@ -63,10 +99,19 @@
     "tags": [
       "language"
     ],
+    "domain": "Language",
     "status": "paused",
     "target_per_week": 3,
-    "created_at_ms": 1772402800265,
-    "updated_at_ms": 1772402800265
+    "level": 2,
+    "created_at_ms": 1772407510428,
+    "updated_at_ms": 1772407510428,
+    "changes": [
+      {
+        "at_ms": 1772407510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   },
   {
     "id": "SKILL-watercolor-plein-air",
@@ -76,9 +121,18 @@
     "tags": [
       "art"
     ],
+    "domain": "Art",
     "status": "retired",
     "target_per_week": 1,
-    "created_at_ms": 1763762800265,
-    "updated_at_ms": 1763762800265
+    "level": 1,
+    "created_at_ms": 1763767510428,
+    "updated_at_ms": 1763767510428,
+    "changes": [
+      {
+        "at_ms": 1763767510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
   }
 ]

@@ -49,11 +49,14 @@ def _no_cache_api(resp):
 
 
 SEED_PATH = os.path.join(os.path.dirname(__file__), "data", "skills.json")
-store = Store("acsms", seed_paths=[SEED_PATH])
+PATHS_SEED_PATH = os.path.join(os.path.dirname(__file__), "data", "paths.json")
+store = Store("acsms", seed_paths=[SEED_PATH, PATHS_SEED_PATH])
 
 STATUSES = ("active", "paused", "retired")
+PATH_STATUSES = ("active", "archived")
 WEEK_MS = 7 * 86_400_000
 NOW_GRACE_MS = 5 * 60_000  # tolerate minor clock skew on reported dates
+CHANGELOG_CAP = 100        # embedded per-skill change entries kept
 
 
 def now_ms() -> int:
@@ -110,13 +113,33 @@ def _clean_cadence(v):
     return f
 
 
+def _clean_domain(v) -> str:
+    d = _clean_str(v or "", 40)
+    return d or "General"
+
+
+def _log_change(doc: dict, event: str, changes: list | None = None) -> None:
+    """Append one changelog entry to a skill (embedded, capped)."""
+    doc.setdefault("changes", []).append(
+        {"at_ms": now_ms(), "event": event, "changes": changes or []})
+    del doc["changes"][:-CHANGELOG_CAP]
+
+
 # ── skill ids ────────────────────────────────────────────────────────────────
-def _skill_id(name: str) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "skill"
-    sid = f"SKILL-{slug}"
+def _slug_id(prefix: str, name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "item"
+    sid = f"{prefix}-{slug}"
     if store.exists(sid):
-        sid = f"SKILL-{slug}-{uuid.uuid4().hex[:4]}"
+        sid = f"{prefix}-{slug}-{uuid.uuid4().hex[:4]}"
     return sid
+
+
+def _skill_id(name: str) -> str:
+    return _slug_id("SKILL", name)
+
+
+def _path_id(name: str) -> str:
+    return _slug_id("PATH", name)
 
 
 # ── the tracking layer: practice history → per-skill state ──────────────────
@@ -211,17 +234,23 @@ def create_skill():
     cadence = _clean_cadence(data.get("target_per_week"))
     if cadence is None:
         return _err("target_per_week must be a number between 0.25 and 70")
+    level = _clean_int(data.get("level"), 0, 5)
+    if data.get("level") not in (None, "") and level is None:
+        return _err("level must be an integer 0–5")
     doc = {
         "id": _skill_id(name),
         "doc_type": "skill",
         "name": name,
         "description": _clean_str(data.get("description") or "", 2000),
         "tags": _clean_tags(data.get("tags")),
+        "domain": _clean_domain(data.get("domain")),
         "status": status,
         "target_per_week": cadence,
+        "level": level if level is not None else 0,
         "created_at_ms": now_ms(),
         "updated_at_ms": now_ms(),
     }
+    _log_change(doc, "created")
     store.put(doc)
     return jsonify(doc), 201
 
@@ -235,37 +264,64 @@ def get_skill(skill_id):
     return jsonify(_join_skill(doc, by_skill, now_ms()))
 
 
+TRACKED_SKILL_FIELDS = ("name", "description", "tags", "domain", "level",
+                        "status", "target_per_week")
+_STATUS_EVENTS = {"active": "activated", "paused": "paused", "retired": "retired"}
+
+
 @app.route("/api/skills/<skill_id>", methods=["PUT"])
 def update_skill(skill_id):
     doc = store.get(skill_id)
     if not doc or doc.get("doc_type") != "skill":
         return _err("skill not found", 404)
     data = request.get_json(silent=True) or {}
+
+    # Resolve + validate the desired next state before touching the doc.
+    next_ = dict(doc)
     if "name" in data:
         name = _clean_str(data.get("name") or "", 120)
         if not name:
             return _err("name cannot be empty")
-        if name != doc.get("name"):
-            doc["name"] = name
-            # keep the denormalized snapshot on past practices truthful
-            for d in store.all():
-                if d.get("doc_type") == "practice" and d.get("skill_id") == skill_id:
-                    d["skill_name"] = name
-                    store.put(d)
+        next_["name"] = name
     if "description" in data:
-        doc["description"] = _clean_str(data.get("description") or "", 2000)
+        next_["description"] = _clean_str(data.get("description") or "", 2000)
     if "tags" in data:
-        doc["tags"] = _clean_tags(data.get("tags"))
+        next_["tags"] = _clean_tags(data.get("tags"))
+    if "domain" in data:
+        next_["domain"] = _clean_domain(data.get("domain"))
+    if "level" in data:
+        level = _clean_int(data.get("level"), 0, 5)
+        if data.get("level") not in (None, "") and level is None:
+            return _err("level must be an integer 0–5")
+        if level is not None:
+            next_["level"] = level
     if "status" in data:
         if data["status"] not in STATUSES:
             return _err(f"status must be one of {STATUSES}")
-        doc["status"] = data["status"]
+        next_["status"] = data["status"]
     if "target_per_week" in data:
         cadence = _clean_cadence(data.get("target_per_week"))
         if cadence is None:
             return _err("target_per_week must be a number between 0.25 and 70")
-        doc["target_per_week"] = cadence
+        next_["target_per_week"] = cadence
+
+    # One changelog entry per update: field-level from→to diffs; a status
+    # change names the entry after the lifecycle event.
+    diffs = [{"field": f, "from": doc.get(f), "to": next_.get(f)}
+             for f in TRACKED_SKILL_FIELDS if doc.get(f) != next_.get(f)]
+    old_name = doc.get("name")
+    doc.update(next_)
+    if diffs:
+        event = _STATUS_EVENTS.get(next_["status"], "updated") \
+            if any(d["field"] == "status" for d in diffs) else "updated"
+        _log_change(doc, event, diffs)
     doc["updated_at_ms"] = now_ms()
+    if old_name != doc["name"]:
+        # keep the denormalized snapshot on past practices truthful
+        for d in store.all():
+            if d.get("doc_type") == "practice" and d.get("skill_id") == skill_id:
+                d["skill_name"] = doc["name"]
+                store.put(d)
     store.put(doc)
     return jsonify(doc)
 
@@ -385,6 +441,173 @@ def delete_practice(practice_id):
     return jsonify({"ok": True})
 
 
+# ── paths: ordered skill curricula ───────────────────────────────────────────
+def _clean_skill_ids(v):
+    """Ordered, deduped list of *existing* skill ids (None = invalid)."""
+    if not isinstance(v, list):
+        return None
+    out: list[str] = []
+    for x in v:
+        sid = _clean_str(x, 120)
+        if sid and sid not in out:
+            out.append(sid)
+    if len(out) > 20:
+        return None
+    known = {d["id"] for d in store.all() if d.get("doc_type") == "skill"}
+    if any(sid not in known for sid in out):
+        return None
+    return out
+
+
+def _join_path(path: dict, joined_by_id: dict[str, dict]) -> dict:
+    """Derive path progress from its member skills (in order).
+
+    ``current_step`` is the index of the first member that still needs work
+    (never-practiced or neglected); None once every member is on-track or
+    out of active maintenance.
+    """
+    members: list[dict] = []
+    practiced = 0
+    current_step = None
+    for sid in path.get("skill_ids") or []:
+        s = joined_by_id.get(sid)
+        if not s:
+            continue  # skill deleted; the path simply skips it
+        if current_step is None and s["practice_state"] in ("never-practiced",
+                                                            "neglected"):
+            current_step = len(members)   # index within the rendered stepper
+        members.append({"id": s["id"], "name": s["name"],
+                        "state": s["practice_state"],
+                        "level": s.get("level", 0),
+                        "practice_count": s["practice_count"]})
+        if s["practice_count"]:
+            practiced += 1
+    n = len(members)
+    return {**path,
+            "members": members,
+            "practiced_count": practiced,
+            "completion_pct": round(100 * practiced / n) if n else 0,
+            "current_step": current_step}
+
+
+def _paths_joined() -> list[dict]:
+    joined_by_id = {s["id"]: s for s in _skills_joined()}
+    return [_join_path(d, joined_by_id) for d in store.all()
+            if d.get("doc_type") == "path"]
+
+
+@app.route("/api/paths", methods=["GET"])
+def get_paths():
+    paths = _paths_joined()
+    status = request.args.get("status")
+    if status:
+        paths = [p for p in paths if (p.get("status") or "active") == status]
+    paths.sort(key=lambda p: p.get("name", "").lower())
+    return jsonify(paths)
+
+
+@app.route("/api/paths/<path_id>", methods=["GET"])
+def get_path(path_id):
+    doc = store.get(path_id)
+    if not doc or doc.get("doc_type") != "path":
+        return _err("path not found", 404)
+    joined_by_id = {s["id"]: s for s in _skills_joined()}
+    return jsonify(_join_path(doc, joined_by_id))
+
+
+@app.route("/api/paths", methods=["POST"])
+def create_path():
+    data = request.get_json(silent=True) or {}
+    name = _clean_str(data.get("name") or "", 120)
+    if not name:
+        return _err("name is required")
+    status = data.get("status") or "active"
+    if status not in PATH_STATUSES:
+        return _err(f"status must be one of {PATH_STATUSES}")
+    ids = _clean_skill_ids(data.get("skill_ids"))
+    if ids is None:
+        return _err("skill_ids must be a list of at most 20 existing skill ids")
+    doc = {
+        "id": _path_id(name),
+        "doc_type": "path",
+        "name": name,
+        "description": _clean_str(data.get("description") or "", 2000),
+        "skill_ids": ids,
+        "status": status,
+        "created_at_ms": now_ms(),
+        "updated_at_ms": now_ms(),
+    }
+    store.put(doc)
+    joined_by_id = {s["id"]: s for s in _skills_joined()}
+    return jsonify(_join_path(doc, joined_by_id)), 201
+
+
+@app.route("/api/paths/<path_id>", methods=["PUT"])
+def update_path(path_id):
+    doc = store.get(path_id)
+    if not doc or doc.get("doc_type") != "path":
+        return _err("path not found", 404)
+    data = request.get_json(silent=True) or {}
+    if "name" in data:
+        name = _clean_str(data.get("name") or "", 120)
+        if not name:
+            return _err("name cannot be empty")
+        doc["name"] = name
+    if "description" in data:
+        doc["description"] = _clean_str(data.get("description") or "", 2000)
+    if "skill_ids" in data:
+        ids = _clean_skill_ids(data.get("skill_ids"))
+        if ids is None:
+            return _err("skill_ids must be a list of at most 20 existing skill ids")
+        doc["skill_ids"] = ids
+    if "status" in data:
+        if data["status"] not in PATH_STATUSES:
+            return _err(f"status must be one of {PATH_STATUSES}")
+        doc["status"] = data["status"]
+    doc["updated_at_ms"] = now_ms()
+    store.put(doc)
+    joined_by_id = {s["id"]: s for s in _skills_joined()}
+    return jsonify(_join_path(doc, joined_by_id))
+
+
+@app.route("/api/paths/<path_id>", methods=["DELETE"])
+def delete_path(path_id):
+    doc = store.get(path_id)
+    if not doc or doc.get("doc_type") != "path":
+        return _err("path not found", 404)
+    store.delete(path_id)
+    return jsonify({"ok": True})
+
+
+# ── activity: the merged change feed ─────────────────────────────────────────
+@app.route("/api/activity", methods=["GET"])
+def activity():
+    """Recent events across the system: practice reports and skill changes
+    (from the embedded changelogs), newest first."""
+    try:
+        limit = min(int(request.args.get("limit") or 30), 100)
+    except ValueError:
+        limit = 30
+    events: list[dict] = []
+    for d in store.all():
+        if d.get("doc_type") == "practice":
+            events.append({
+                "type": "practice", "id": d["id"],
+                "skill_id": d.get("skill_id"), "skill_name": d.get("skill_name"),
+                "at_ms": d.get("practiced_at_ms") or d.get("created_at_ms"),
+                "quality": d.get("quality"),
+            })
+        elif d.get("doc_type") == "skill":
+            for ch in d.get("changes") or []:
+                events.append({
+                    "type": "skill", "id": d["id"], "skill_name": d.get("name"),
+                    "at_ms": ch.get("at_ms"), "event": ch.get("event"),
+                    "changes": ch.get("changes") or [],
+                })
+    events.sort(key=lambda e: e.get("at_ms") or 0, reverse=True)
+    return jsonify(events[:limit])
+
+
 # ── dashboard ────────────────────────────────────────────────────────────────
 @app.route("/api/dashboard/stats")
 def dashboard_stats():
@@ -405,11 +628,28 @@ def dashboard_stats():
         s.get("last_practiced_ms") or s.get("created_at_ms") or 0))
 
     practices.sort(key=lambda d: d.get("practiced_at_ms") or 0, reverse=True)
+
+    # per-domain rollup (domain is free-form; "General" is the fallback)
+    domains: dict[str, dict] = {}
+    for s in skills:
+        dname = s.get("domain") or "General"
+        agg = domains.setdefault(dname, {"domain": dname, "total": 0,
+                                         "on-track": 0, "never-practiced": 0,
+                                         "neglected": 0, "paused": 0, "retired": 0})
+        agg["total"] += 1
+        agg[s.get("practice_state")] = agg.get(s.get("practice_state"), 0) + 1
+    domain_list = sorted(domains.values(), key=lambda d: (-d["total"], d["domain"]))
+
+    # weekly milestone: share of active skills with fresh practice
+    active_skills = [s for s in skills if (s.get("status") or "active") == "active"]
+    practiced_week = sum(1 for s in active_skills
+                         if (s.get("last_practiced_ms") or 0) >= week_ago)
+
     return jsonify({
         "generated_at": now_iso(),
         "skills": {
             "total": len(skills),
-            "active": sum(1 for s in skills if (s.get("status") or "active") == "active"),
+            "active": len(active_skills),
             "paused": states["paused"],
             "retired": states["retired"],
         },
@@ -419,6 +659,12 @@ def dashboard_stats():
                            if (p.get("practiced_at_ms") or 0) >= week_ago),
         },
         "states": states,
+        "domains": domain_list,
+        "weekly": {
+            "active_skills": len(active_skills),
+            "practiced_skills": practiced_week,
+            "pct": round(100 * practiced_week / len(active_skills)) if active_skills else 0,
+        },
         "attention": [{
             "id": s["id"], "name": s["name"],
             "state": s["practice_state"],
