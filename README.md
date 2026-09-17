@@ -54,7 +54,7 @@ Autoregia/
     │   │   ├── server.py    # toolbox registry + /ate/tool/<id>/ mounting
     │   │   └── tool/       # tools mounted at /ate/tool/<id>/
     │   │       ├── ces/  #   Computation Execution System
-    │   │       ├── ctes/  #   Computation Task Execution System (plate only)
+    │   │       ├── ctes/  #   Computation Task Execution System (WOS-style shell: handle register, task specs, runs, audit)
     │   │       ├── gial/  #   General Integration Abstraction Layer (plate only)
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (plate only)
     │   └── ...          # gis, aias, aoos, pras, acsms, loop, pwos

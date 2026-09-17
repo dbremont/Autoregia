@@ -12,8 +12,10 @@
 > The two are complementary, not competing: a task executed by CES would be
 > *managed* by CTES.
 
-Status: **designed — not implemented.** A design plate reserves the place at
-`/ate/tool/ctes/`.
+Status: **partially implemented — phase 2 app shell live.** The register of
+handles (full lifecycle), task specs, synchronous runs, audit, settings, and
+self monitoring are implemented at `/ate/tool/ctes/`; queues, schedulers,
+leases, async dispatch, and retries remain future phases.
 
 ## Formulation
 
@@ -215,10 +217,45 @@ between submission and terminal state**.
 
 ## Implementation Status
 
-**Designed — not implemented.** Design plate: `/ate/tool/ctes/`. No API, no
-queue, no workers exist. The next concrete step, if pursued, is a
-single-machine configuration: CouchDB as the durable task store (the house
-pattern — see dependability), one worker process, synchronous submission.
+**Phase 2 app shell implemented** at `/ate/tool/ctes/` (decision log: "CTES
+phase 1 shell", "CTES phase 2 app shell"). What exists:
+
+- **The register** — CouchDB db `ctes` (shared `Store`; seed applies only
+  when the DB is empty) of *handles*: self-contained Python packages under
+  `packages/<id>/` (`manifest.json`, entry point `module:function`). Code
+  stays on disk; the register holds metadata only. Full lifecycle through
+  the UI and API: register, update (rewrites the manifest), activate/
+  inactivate (soft path — inactive handles refuse runs), manual delete
+  (purges doc + code; the run journal is kept and marks the handle
+  deleted), and read-only code viewing (path-contained).
+- **Task specs** — registered intents that reference a handler directly:
+  objective, payload template, expected output, priority, constraints
+  (timeout, deadline), dependencies. *Emitting* resolves the handler and
+  dispatches synchronously; async mode is stored but rejected (501) until
+  queues exist.
+- **Synchronous runs** — every execution goes through the uniform
+  `runner.py` shim (JSON payload on stdin, JSON envelope on stdout) in a
+  self-contained environment: `docker run --rm -i --network none` with
+  read-only mounts (default when the docker CLI is present), or the venv's
+  own python (`CTES_EXEC_BACKEND=subprocess`, the test fallback). Each run
+  is journaled: input, result, log, exit code, timing, backend, and a
+  sha256 snapshot of the exact code that ran. Run retention is enforced
+  from settings.
+- **Audit** — every mutation of the register, specs, and settings is
+  recorded (typed docs in the same DB) with actor, action, and change
+  details; the trail is never pruned.
+- **Settings** — persisted, editable defaults (timeout, backend, log
+  limit, retention, network policy) consulted by the run path; env-derived
+  values display read-only.
+- **The shell** — WOS-style app: header search, sidebar router, command
+  palette, dashboard (outcome rates, per-handle activity), runs journal
+  with filters and paging, handler manager, spec registry, audit view,
+  self monitoring, settings, documentation, export.
+- **Not yet** (future phases): queues, schedulers, workers, leases,
+  heartbeats, retries/backoff, dependency (DAG) execution, async dispatch.
+
+Design-plate content lives in the spec and the
+[decision log](../../log.md); the tool plate is the working app.
 
 ## References
 

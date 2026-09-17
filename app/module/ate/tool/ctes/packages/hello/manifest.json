@@ -1,0 +1,7 @@
+{
+  "id": "hello",
+  "name": "Hello",
+  "description": "Greets a name — the canonical smoke-test handle.",
+  "entry_point": "main:run",
+  "timeout_s": 30
+}

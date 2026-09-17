@@ -1,0 +1,7 @@
+{
+  "id": "sleepy",
+  "name": "Sleepy",
+  "description": "Sleeps input.seconds, then reports — exercises timeout enforcement.",
+  "entry_point": "main:run",
+  "timeout_s": 30
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "hello",
+    "type": "handle",
+    "name": "Hello",
+    "description": "Greets a name \u2014 the canonical smoke-test handle.",
+    "entry_point": "main:run",
+    "image": null,
+    "network": false,
+    "timeout_s": 30,
+    "code_path": "packages/hello",
+    "created_at": "2026-09-17T00:00:00Z",
+    "status": "active"
+  },
+  {
+    "id": "sleepy",
+    "type": "handle",
+    "name": "Sleepy",
+    "description": "Sleeps input.seconds, then reports \u2014 exercises timeout enforcement.",
+    "entry_point": "main:run",
+    "image": null,
+    "network": false,
+    "timeout_s": 30,
+    "code_path": "packages/sleepy",
+    "created_at": "2026-09-17T00:00:00Z",
+    "status": "active"
+  }
+]

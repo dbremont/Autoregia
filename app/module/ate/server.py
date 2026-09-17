@@ -57,9 +57,11 @@ TOOLS = [
     {
         "id": "ctes",
         "name": "Computation Task Execution System",
-        "summary": ("Manages the lifecycle of tasks from submission to "
-                    "completion — queues, schedulers, dispatchers, workers, "
-                    "and result channels. Designed; plate only."),
+        "summary": ("The task register and its management: handles — "
+                    "self-contained Python packages with a full lifecycle — "
+                    "task specs that bind to them, a synchronous run journal "
+                    "with per-run code provenance, audit, and settings. "
+                    "Queues and scheduling pending."),
         "vsm": "Toolbox — Task Execution",
         "href": "/ate/tool/ctes/",
     },

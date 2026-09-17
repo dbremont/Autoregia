@@ -12,9 +12,16 @@ of the work itself. It is deliberately a design study, not a workflow engine.
 
 ## Status
 
-**Designed — not implemented.** A design plate reserves the place:
+**Phase 2 app shell implemented** — a WOS-style working app: the register
+of handles with a full manager (register, edit, activate/inactivate,
+delete, code viewer), task specs bound to handlers, the synchronous run
+journal with per-run code provenance, audit, settings, self monitoring,
+documentation, and export:
 
     /ate/tool/ctes/
+
+Queues, scheduling, and retries remain future phases (see
+[spec.md](spec.md) → Implementation Status and the project decision log).
 
 - Full design: [spec.md](spec.md)
 - Sibling execution tool: [CES](../ces/)

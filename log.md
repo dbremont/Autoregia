@@ -29,6 +29,121 @@ TODO:
 
 ## Index
 
+### 2026 — CTES phase 2 app shell: manager, specs, audit, self-monitoring
+
+**Question.** Phase 1 proved the execution path but shipped a bare plate —
+no way to manage the register, no story for how emitters' intents relate to
+registered code, no record of who changed what, and no view of CTES's own
+health. Which existing surface should the shell imitate, how do task specs
+bind to handlers, where does the audit live, and how much should Settings
+actually control?
+
+**Decision.**
+
+1. **Copy the WOS app shell** (header search, sidebar router, command
+   palette, per-view JS modules; the generic `layout/components/views/
+   command-palette.css` copied verbatim plus a CTES layer; echarts
+   vendored). CTES keeps WOS's grammar — views registry, click→filter bus
+   into the Runs journal, window presets, `Ctrl K` — so the two surfaces
+   feel like one system. No `wos/` file is touched.
+2. **Task specs reference handlers directly** — `{objective, handler_id,
+   payload template, expected_output, priority, constraints, dependencies,
+   temporal_mode}`. Emitting resolves the handler and dispatches
+   synchronously; the run records `task_spec_id`, the spec snapshot, and a
+   sha256 of the exact code that ran. (Operation-code indirection was
+   considered and rejected: one less resolution step, emitters name the
+   code they mean.)
+3. **Audit lives in the same DB as typed docs** (`type: audit`, never
+   pruned): register, spec, settings, and clear-history mutations append
+   actor/action/summary/details. Runs are their own journal, not audit.
+4. **Handle lifecycle**: update (rewrites the on-disk manifest) ·
+   activate/inactivate (soft path; inactive handles refuse runs with 409) ·
+   manual delete through the UI with confirm — purges doc + `packages/<id>/`,
+   run history kept with the handle marked deleted · read-only path-
+   contained code viewer.
+5. **Settings are a persisted editable subset** (default timeout, default
+   backend, log limit, run retention, allow-network default) consulted by
+   the run path; env-derived values (image, mem/cpus, CouchDB URL) display
+   read-only. Retention is enforced after every run.
+6. **Self monitoring** (`/api/self` + view): store doc counts, register
+   coherence (active/inactive/code-missing), run outcomes and 24h success
+   rate, backend availability, packages disk footprint, last failure,
+   uptime.
+
+**Rationale.** The shell question answers itself — WOS is the house
+application grammar, and reusing it turns CTES from a plate into a
+citizen. Direct spec→handler binding keeps phase 2 honest while the run
+snapshot (code sha) preserves the provenance an indirection layer would
+have obscured; when multiple handlers must serve one intent, the
+resolution can be added above specs without breaking them. Same-DB typed
+audit avoids a second store until volume says otherwise, and the never-
+pruned trail is what makes manual deletion safe to offer.
+
+**Trade-offs accepted.** Specs break loudly (400/409) when their handler
+is missing or inactive — no fuzzy resolution; audit docs share the
+register's DB (one clear-runs path touches only `type: run`); the code
+viewer is read-only (edit on disk, then Scan) — a UI editor is a later,
+dangerous convenience; settings control defaults only, never override a
+handle or run that states its own.
+
+**Implements.** [`spec/ctes/spec.md`](spec/ctes/spec.md) (Design, task
+representation, lifecycle), [`app/module/ate/tool/ctes/`](app/module/ate/tool/ctes/)
+(shell + server), WOS shell grammar (`app/module/wos/static/`, copied, not
+modified).
+
+### 2026 — CTES phase 1 shell: the register of handles
+
+**Question.** CTES was a designed-but-unimplemented tool (`spec/ctes/spec.md`)
+reserving its place with a design plate. Where should its implementation
+start, and what is the smallest thing that is already *the* task-execution
+discipline rather than a demo? Concretely: what is a CTES "task" in phase 1,
+where do the register and the run records live, and how is registered code
+executed so a handle cannot take the server down with it?
+
+**Decision.**
+
+1. **The unit of phase 1 is the *handle*** — a self-contained Python package
+   under `packages/<id>/` (`manifest.json` + code, entry point
+   `module:function` taking a JSON payload, returning a JSON value). Queues,
+   schedulers, leases, and retries stay future phases; the shell is the
+   spec's "single-machine configuration" minus the worker process.
+2. **CouchDB is the register and the run journal** (db `ctes`, via the shared
+   `Store`; seeds only when empty, per house rule). Code itself stays on
+   disk — CouchDB holds the register docs and the run docs (input, result,
+   log, exit code, timing, backend), never executable bytes.
+3. **Every handle runs in a self-contained execution environment** through
+   one uniform shim (`runner.py`: JSON payload on stdin, one JSON envelope on
+   stdout). Two interchangeable backends behind `CTES_EXEC_BACKEND`:
+   `docker` (default when the CLI is present — `docker run --rm -i --network
+   none`, package and shim mounted read-only, disposable container per run)
+   and `subprocess` (venv python, same shim — the test/dev fallback).
+4. **Runs are synchronous** (`POST /api/runs` blocks until a terminal state:
+   completed / failed / timed_out) with per-handle timeouts (request
+   override, capped at 600s) and best-effort `docker rm -f` cleanup.
+5. **The design plate becomes the working app**: register cards + run form +
+   run history, on the shared UI layer, relative `api/…` URLs (no
+   `prefix_assets` involvement). Registration via API creates the package
+   skeleton; `POST /api/handles/scan` picks up hand-written manifests.
+
+**Rationale.** A task-execution system is only honest once registered code
+can actually execute and nothing is silently lost — the run journal in
+CouchDB gives phase 1 its durability invariant, and process/container
+isolation means a handle crash cannot corrupt the server. The shim
+contract (envelope on stdout, handler prints diverted to the run log)
+keeps the machine channel clean for both backends, so the docker upgrade
+changes nothing about how handles are written.
+
+**Trade-offs accepted.** Synchronous dispatch only — no long-running or
+queued work yet; the docker backend is inert inside the deployed container
+(no docker socket — subprocess fallback there); no per-handle dependency
+install (base image only, `CTES_DOCKER_IMAGE` override); one shared DB for
+handles and runs, distinguished by a `type` field, until volume says
+otherwise.
+
+**Implements.** [`spec/ctes/spec.md`](spec/ctes/spec.md) (Formulation,
+single-machine scale), [`app/module/ate/tool/ctes/`](app/module/ate/tool/ctes/)
+(server, runner, backends, packages/, seed, tests), `Makefile` test target.
+
 ### 2026 — UI remediation against industrial practice (WCAG 2.2 AA / APG / Nielsen)
 
 **Question.** `design.md` §5 claimed "none outstanding" for tracked
