@@ -172,7 +172,10 @@ everything else runs out-of-band:
   cache-busters; bump `v` when editing the layer). `ui` must never be
   added to `prefix_assets.py` SEGMENTS — `/ui/` is global, not per-tool.
   Per-tool css keeps only `layout/components/views/command-palette`
-  (+ additive files).
+  (+ additive files). Font families come from the layer too (`--font-*`,
+  aliased as `--serif/--sans/--mono` on plates) — as do font sizes:
+  always a `--text-*` step (incl. `--text-2sm` 12px); raw px only inside
+  fluid `clamp()` (`spec/ui.spec` §4.2).
 - **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,

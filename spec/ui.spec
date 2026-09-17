@@ -176,20 +176,32 @@ These encode record/model semantics. They are **semantic, not decorative** — a
 | `--font-body`     | `'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` | UI chrome, labels, controls, metadata |
 | `--font-mono`     | `'IBM Plex Mono', 'SF Mono', 'Consolas', monospace`              | Identifiers, timestamps, keyboard hints, numeric data |
 
-### 4.2 Modular Type Scale (1.250 — major third)
+### 4.2 Type Scale
 
-| Token          | Size        | Role                          |
-| -------------- | ----------- | ----------------------------- |
-| `--text-2xs`   | `0.625rem`  | Keycaps, folio micro-text     |
-| `--text-xs`    | `0.6875rem` | Labels, eyebrow               |
-| `--text-sm`    | `0.8125rem` | Body small, controls          |
-| `--text-base`  | `0.875rem`  | Body (root control size)      |
-| `--text-md`    | `1rem`      | Body lead, search input       |
-| `--text-lg`    | `1.25rem`   | h3                            |
-| `--text-xl`    | `1.5rem`    | h2                            |
-| `--text-2xl`   | `1.953rem`  | h1                            |
-| `--text-3xl`   | `2.441rem`  | Display / stat values         |
-| `--text-4xl`   | `3.052rem`  | Hero                          |
+Eleven steps, single source in `/ui/css/tokens.css`. The display range
+(`--text-lg` up) follows the 1.250 major-third ratio; the body range
+(≤ 16px) is hand-tuned for UI density — the ramp as shipped is
+**10 · 11 · 12 · 13 · 14 · 16 · 20 · 24 · 31 · 39 · 49 px**.
+
+| Token          | Size        | ≈px | Role                          |
+| -------------- | ----------- | --- | ----------------------------- |
+| `--text-2xs`   | `0.625rem`  | 10  | Keycaps, folio micro-text     |
+| `--text-xs`    | `0.6875rem` | 11  | Labels, eyebrow               |
+| `--text-2sm`   | `0.75rem`   | 12  | Dense labels, table meta      |
+| `--text-sm`    | `0.8125rem` | 13  | Body small, controls          |
+| `--text-base`  | `0.875rem`  | 14  | Body (root control size)      |
+| `--text-md`    | `1rem`      | 16  | Body lead, search input       |
+| `--text-lg`    | `1.25rem`   | 20  | h3                            |
+| `--text-xl`    | `1.5rem`    | 24  | h2                            |
+| `--text-2xl`   | `1.953rem`  | 31  | h1                            |
+| `--text-3xl`   | `2.441rem`  | 39  | Display / stat values         |
+| `--text-4xl`   | `3.052rem`  | 49  | Hero                          |
+
+**Normative rule:** every `font-size` uses a `--text-*` token. The only
+sanctioned exceptions are fluid display type via `clamp()` (with token
+steps as its bounds) and third-party vendored css. Raw px/rem font-sizes
+in first-party css are a conformance error (§10-level, tracked in
+design.md §5).
 
 ### 4.3 Leading, Tracking, Measure
 

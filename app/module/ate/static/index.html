@@ -21,7 +21,7 @@
     line-height: 1.55;
   }
   a.back {
-    display: inline-block; font-size: 12px; letter-spacing: .14em;
+    display: inline-block; font-size: var(--text-2sm); letter-spacing: .14em;
     text-transform: uppercase; color: var(--faint); text-decoration: none; margin-top: 12px;
   }
   a.back:hover { color: var(--oxford); }
@@ -36,12 +36,12 @@
     display: flex; align-items: center; height: 60px; gap: 18px;
   }
   nav.topnav .lockup {
-    font-family: var(--serif); font-size: 20px; font-weight: 500;
+    font-family: var(--serif); font-size: var(--text-lg); font-weight: 500;
     letter-spacing: -.01em; color: var(--ink); text-decoration: none;
   }
   nav.topnav .links { margin-left: auto; display: flex; gap: 26px; }
   nav.topnav .links a {
-    font-family: var(--sans); font-size: 13px; color: var(--muted);
+    font-family: var(--sans); font-size: var(--text-sm); color: var(--muted);
     text-decoration: none; padding: 4px 0;
     border-bottom: 1px solid transparent;
     transition: color .15s, border-color .15s;
@@ -49,24 +49,24 @@
   nav.topnav .links a:hover { color: var(--oxford); border-bottom-color: var(--oxford); }
   header.masthead { padding: 16px 0 8px; text-align: center; }
   .eyebrow {
-    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    font-size: var(--text-xs); letter-spacing: .22em; text-transform: uppercase;
     color: var(--gold); font-weight: 600; margin-bottom: 12px;
   }
   h1 {
-    font-family: var(--serif); font-size: 2rem; font-weight: 400;
+    font-family: var(--serif); font-size: var(--text-2xl); font-weight: 400;
     letter-spacing: -.015em; color: var(--ink);
   }
   .subtitle {
     font-family: var(--serif); font-style: italic;
-    color: var(--muted); font-size: .95rem; margin-top: 6px;
+    color: var(--muted); font-size: var(--text-md); margin-top: 6px;
   }
   .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto 8px; opacity: .7; }
   .lede {
     max-width: 640px; margin: 0 auto; text-align: center;
-    color: var(--muted); font-size: .92rem; padding-top: 10px;
+    color: var(--muted); font-size: var(--text-base); padding-top: 10px;
   }
   h2 {
-    font-family: var(--serif); font-size: 1.15rem; font-weight: 500;
+    font-family: var(--serif); font-size: var(--text-lg); font-weight: 500;
     margin: 1.6rem 0 .7rem; color: var(--ink);
   }
   .panel {
@@ -94,22 +94,22 @@
   a.tool-card:hover { border-color: var(--gold-soft); }
   .tool-card .head { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
   .tool-card .code {
-    font-family: var(--mono); font-size: .8rem; font-weight: 600;
+    font-family: var(--mono); font-size: var(--text-sm); font-weight: 600;
     color: var(--oxford); letter-spacing: .06em;
   }
   .tool-card .vsm {
-    font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+    font-size: var(--text-xs); letter-spacing: .08em; text-transform: uppercase;
     color: var(--faint); white-space: nowrap;
   }
   .tool-card .name {
-    font-family: var(--serif); font-size: 1.02rem; margin-top: .2rem; color: var(--ink);
+    font-family: var(--serif); font-size: var(--text-md); margin-top: .2rem; color: var(--ink);
   }
-  .tool-card .summary { font-size: .84rem; color: var(--muted); margin-top: .35rem; }
+  .tool-card .summary { font-size: var(--text-sm); color: var(--muted); margin-top: .35rem; }
   .tool-card .open {
-    font-size: .78rem; color: var(--gold); margin-top: .5rem;
+    font-size: var(--text-2sm); color: var(--gold); margin-top: .5rem;
     font-family: var(--mono);
   }
-  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: var(--text-2sm); color: var(--faint); }
 </style>
 </head>
 <body>

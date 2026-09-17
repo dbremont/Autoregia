@@ -29,7 +29,7 @@
     line-height: 1.55;
   }
   a.back {
-    display: inline-block; font-size: 12px; letter-spacing: .14em;
+    display: inline-block; font-size: var(--text-2sm); letter-spacing: .14em;
     text-transform: uppercase; color: var(--faint); text-decoration: none; margin-top: 12px;
   }
   a.back:hover { color: var(--oxford); }
@@ -44,12 +44,12 @@
     display: flex; align-items: center; height: 60px; gap: 18px;
   }
   nav.topnav .lockup {
-    font-family: var(--serif); font-size: 20px; font-weight: 500;
+    font-family: var(--serif); font-size: var(--text-lg); font-weight: 500;
     letter-spacing: -.01em; color: var(--ink); text-decoration: none;
   }
   nav.topnav .links { margin-left: auto; display: flex; gap: 26px; }
   nav.topnav .links a {
-    font-family: var(--sans); font-size: 13px; color: var(--muted);
+    font-family: var(--sans); font-size: var(--text-sm); color: var(--muted);
     text-decoration: none; padding: 4px 0;
     border-bottom: 1px solid transparent;
     transition: color .15s, border-color .15s;
@@ -57,20 +57,20 @@
   nav.topnav .links a:hover { color: var(--oxford); border-bottom-color: var(--oxford); }
   header.masthead { padding: 16px 0 8px; text-align: center; }
   .eyebrow {
-    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    font-size: var(--text-xs); letter-spacing: .22em; text-transform: uppercase;
     color: var(--gold); font-weight: 600; margin-bottom: 12px;
   }
   h1 {
-    font-family: var(--serif); font-size: 2rem; font-weight: 400;
+    font-family: var(--serif); font-size: var(--text-2xl); font-weight: 400;
     letter-spacing: -.015em; color: var(--ink);
   }
   .subtitle {
     font-family: var(--serif); font-style: italic;
-    color: var(--muted); font-size: .95rem; margin-top: 6px;
+    color: var(--muted); font-size: var(--text-md); margin-top: 6px;
   }
   .gold-rule { height: 1px; background: var(--gold); width: 64px; margin: 22px auto 8px; opacity: .7; }
   h2 {
-    font-family: var(--serif); font-size: 1.15rem; font-weight: 500;
+    font-family: var(--serif); font-size: var(--text-lg); font-weight: 500;
     margin: 1.6rem 0 .7rem; color: var(--ink);
   }
   .panel {
@@ -92,7 +92,7 @@
     padding: .75rem;
   }
   .env-card .name { font-weight: 500; color: var(--ink); }
-  .env-card .meta { font-size: .8rem; color: var(--muted); margin-top: .25rem; }
+  .env-card .meta { font-size: var(--text-sm); color: var(--muted); margin-top: .25rem; }
   .status-dot {
     display: inline-block;
     width: 8px; height: 8px;
@@ -102,7 +102,7 @@
   .status-ready { background: var(--green); }
   .status-busy { background: var(--amber); }
   .status-error { background: var(--oxford); }
-  label { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+  label { display: block; font-size: var(--text-sm); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
   select, textarea, input {
     width: 100%;
     background: var(--surface);
@@ -111,7 +111,7 @@
     color: var(--ink);
     padding: .6rem;
     font-family: var(--mono);
-    font-size: .85rem;
+    font-size: var(--text-sm);
     margin-bottom: .75rem;
   }
   select:focus, textarea:focus, input:focus { outline: 2px solid var(--oxford); outline-offset: -1px; }
@@ -123,7 +123,7 @@
     border-radius: 6px;
     padding: .6rem 1.2rem;
     font-family: var(--sans);
-    font-size: .9rem;
+    font-size: var(--text-base);
     cursor: pointer;
     transition: background .15s;
   }
@@ -134,15 +134,15 @@
   .session .head {
     display: flex; justify-content: space-between; align-items: center;
   }
-  .session .exe-id { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
-  .session .payload { font-family: var(--mono); font-size: .85rem; margin: .4rem 0; color: var(--ink-soft); }
+  .session .exe-id { font-family: var(--mono); font-size: var(--text-sm); color: var(--muted); }
+  .session .payload { font-family: var(--mono); font-size: var(--text-sm); margin: .4rem 0; color: var(--ink-soft); }
   .session .output {
     background: var(--surface-warm);
     border: 1px solid var(--rule-soft);
     border-radius: 4px;
     padding: .5rem;
     font-family: var(--mono);
-    font-size: .8rem;
+    font-size: var(--text-sm);
     white-space: pre-wrap;
     margin-top: .4rem;
     max-height: 200px;
@@ -152,7 +152,7 @@
     display: inline-block;
     padding: .1rem .5rem;
     border-radius: 4px;
-    font-size: .72rem;
+    font-size: var(--text-xs);
     font-weight: 500;
     letter-spacing: .04em;
   }
@@ -167,7 +167,7 @@
   }
   .actions .danger:hover { background: var(--oxford-tint); }
   .spacer { flex: 1; }
-  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  footer { margin-top: 2.5rem; text-align: center; font-family: var(--mono); font-size: var(--text-2sm); color: var(--faint); }
 </style>
 </head>
 <body>
@@ -206,7 +206,7 @@
     <textarea id="payload" placeholder="echo hello"></textarea>
     <div class="actions">
       <button id="run-btn" onclick="run()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px;margin-right:5px"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run</button>
-      <span id="run-status" style="font-size:0.85rem;color:var(--muted)"></span>
+      <span id="run-status" style="font-size:var(--text-sm);color:var(--muted)"></span>
       <span class="spacer"></span>
       <button class="danger" onclick="clearSessions()">Clear History</button>
     </div>

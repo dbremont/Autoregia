@@ -67,7 +67,10 @@ semantic layer is independent of the oxford accent.)
 | `--sans` | `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`   | UI chrome, labels, controls |
 | `--mono` | `"IBM Plex Mono", "SF Mono", Consolas, monospace`              | identifiers, code, timestamps, data |
 
-Type scale is modular (1.250, major third) — see `spec/ui.spec` §4.2.
+Type scale: eleven `--text-*` steps (10–49px) in `/ui/css/tokens.css`;
+strict 1.250 ratio from `--text-lg` up, hand-tuned body range. All
+font-sizes use the tokens — raw px only inside fluid `clamp()`
+(`spec/ui.spec` §4.2).
 
 ### 2.3 Signature elements
 

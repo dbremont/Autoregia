@@ -151,7 +151,7 @@
 
 /* ── Empty state ─────────────────────────────────────── */
 .empty-state { text-align: center; padding: var(--space-16) var(--space-6); color: var(--color-text-muted); }
-.empty-state .empty-icon { font-size: 48px; margin-bottom: var(--space-4); opacity: 0.35; color: var(--ink-6); }
+.empty-state .empty-icon { font-size: var(--text-4xl); margin-bottom: var(--space-4); opacity: 0.35; color: var(--ink-6); }
 .empty-state h3 { color: var(--color-text-muted); margin-bottom: var(--space-2); }
 .empty-state p { font-size: var(--text-sm); max-width: 360px; margin: 0 auto; }
 

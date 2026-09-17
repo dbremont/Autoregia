@@ -131,7 +131,7 @@
 .heatmap-svg { display: block; }
 .heatmap-cell { rx: 2.5; transition: fill-opacity 150ms var(--ease-out-soft); cursor: pointer; }
 .heatmap-cell:hover { stroke: var(--ink-2); stroke-width: 0.5; opacity: 0.9 !important; }
-.heatmap-label { font-size: 10px; fill: var(--color-text-muted); }
+.heatmap-label { font-size: var(--text-2xs); fill: var(--color-text-muted); }
 
 /* ── Timeline ────────────────────────────────────────── */
 .timeline { position: relative; padding-left: 32px; }
