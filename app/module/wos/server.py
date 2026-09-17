@@ -572,7 +572,9 @@ def get_clusters():
     cd = _clusters_doc()
     return jsonify({"meta": cd.get("meta", {}),
                     "k": len({a.get("cluster_id") for a in cd.get("assignments", {}).values()}),
-                    "assignments": cd.get("assignments", {})})
+                    "assignments": cd.get("assignments", {}),
+                    "centroids": cd.get("centroids", {}),
+                    "projection": cd.get("projection", {})})
 
 
 @app.route("/api/cluster", methods=["POST"])
@@ -585,6 +587,8 @@ def recompute_clusters():
     doc = {
         "id": CLUSTERS_DOC_ID, "doc_type": "clusters",
         "assignments": result["assignments"], "meta": result["meta"],
+        "centroids": result.get("centroids", {}),
+        "projection": result.get("projection", {}),
     }
     store.put(doc)
     return jsonify({"ok": True, **result["meta"],

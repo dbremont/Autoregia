@@ -278,6 +278,15 @@ def tone_aggregates(obs: list[dict], lexicon: dict) -> dict:
 
 
 # ── clusters ─────────────────────────────────────────────────────────────────
+def _cluster_key(o: dict, assignments: dict) -> Optional[tuple[str, str]]:
+    """(cluster_id, label) for one observation, or None if unassigned."""
+    a = assignments.get(o.get("id") or o.get("_id"))
+    if not a:
+        return None
+    cid = a.get("cluster_id", "?")
+    return (cid, a.get("label", cid))
+
+
 def cluster_summary(obs: list[dict], assignments: dict) -> dict:
     """Summarize a {obs_id -> {cluster_id,label}} map against observations."""
     by_cluster: dict[str, list[dict]] = defaultdict(list)
@@ -307,6 +316,101 @@ def cluster_summary(obs: list[dict], assignments: dict) -> dict:
     return {"clusters": clusters, "unassigned": orphan, "k": len(clusters)}
 
 
+def emerging_clusters(obs: list[dict], assignments: dict, now_ms: int,
+                      n: int = 10) -> list[dict]:
+    """Clusters whose membership is rising: last 24h vs the 7-day baseline."""
+    recent_cut = now_ms - 24 * 3_600_000
+    base_cut = now_ms - 8 * 24 * 3_600_000
+    recent: Counter = Counter()
+    baseline: Counter = Counter()
+    for o in obs:
+        k = _cluster_key(o, assignments)
+        if not k:
+            continue
+        ms = o.get("observed_at_ms") or 0
+        if ms >= recent_cut:
+            recent[k] += 1
+        elif ms >= base_cut:
+            baseline[k] += 1
+    out = []
+    for k, rc in recent.items():
+        bc = baseline.get(k, 0)
+        score = rc / max(bc / 7.0, 0.5)
+        out.append({"cluster_id": k[0], "label": k[1], "recent": rc,
+                    "baseline": bc, "score": round(score, 2)})
+    out.sort(key=lambda x: (-x["score"], -x["recent"]))
+    return out[:n]
+
+
+def cluster_volume_series(obs: list[dict], assignments: dict,
+                          granularity: str = "auto", n: int = 12) -> dict:
+    """Per-cluster counts per time bucket — the Cluster Trends series."""
+    times = [o.get("observed_at_ms") or 0 for o in obs if o.get("observed_at_ms")]
+    if not times:
+        return {"bucket": "day", "buckets": [], "series": []}
+    span_days = (max(times) - min(times)) / 86_400_000
+    if granularity == "auto":
+        granularity = "hour" if span_days <= 2 else "day"
+    keyf = _hour_key if granularity == "hour" else _day_key
+    by: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    buckets_seen: set[str] = set()
+    labels: dict[str, str] = {}
+    for o in obs:
+        k = _cluster_key(o, assignments)
+        ms = o.get("observed_at_ms") or 0
+        if not k or not ms:
+            continue
+        b = keyf(ms)
+        buckets_seen.add(b)
+        by[k[0]][b] += 1
+        labels.setdefault(k[0], k[1])
+    buckets = sorted(buckets_seen)
+    ranked = sorted(by, key=lambda c: -sum(by[c].values()))[:n]
+    series = [{"name": labels.get(c, c), "cluster_id": c,
+               "data": [by[c].get(b, 0) for b in buckets]} for c in ranked]
+    return {"bucket": granularity, "buckets": buckets, "series": series}
+
+
+def cluster_regions(obs: list[dict], assignments: dict, n: int = 12) -> list[dict]:
+    """Cluster × origin-region contingency — the spatiotemporal view.
+
+    Regions come from the collector (GDELT items carry one); most other
+    sources report ``Unknown``, so expect a mostly-empty matrix.
+    """
+    by: dict[str, Counter] = defaultdict(Counter)
+    labels: dict[str, str] = {}
+    for o in obs:
+        k = _cluster_key(o, assignments)
+        if not k:
+            continue
+        by[k[0]][o.get("region") or "Unknown"] += 1
+        labels.setdefault(k[0], k[1])
+    out = []
+    for cid in sorted(by, key=lambda c: -sum(by[c].values()))[:n]:
+        out.append({"cluster_id": cid, "label": labels.get(cid, cid),
+                    "regions": dict(by[cid])})
+    return out
+
+
+def term_volume_series(obs: list[dict], top_n: int = 8,
+                       bucket_n: int = 30) -> dict:
+    """Top terms × day buckets — Topic Evolution."""
+    freq: Counter = Counter()
+    per_term: dict[str, Counter] = defaultdict(Counter)
+    for o in obs:
+        b = _day_key(o.get("observed_at_ms") or 0)
+        for t in set(tokenize(_text(o))):
+            freq[t] += 1
+            if b:
+                per_term[t][b] += 1
+    buckets = sorted({b for c in per_term.values() for b in c})
+    if len(buckets) > bucket_n:
+        buckets = buckets[-bucket_n:]
+    series = [{"name": t, "data": [per_term[t].get(b, 0) for b in buckets]}
+              for t, _ in freq.most_common(top_n)]
+    return {"buckets": buckets, "series": series}
+
+
 # ── master blob ──────────────────────────────────────────────────────────────
 def compute(obs: list[dict], lexicon: dict, cluster_assignments: Optional[dict] = None,
             now_ms: Optional[int] = None) -> dict:
@@ -314,6 +418,7 @@ def compute(obs: list[dict], lexicon: dict, cluster_assignments: Optional[dict] 
     import time
     now = now_ms or int(time.time() * 1000)
     vol = volume_series(obs)
+    assigns = cluster_assignments or {}
     return {
         "generated_at_ms": now,
         "n": len(obs),
@@ -325,7 +430,11 @@ def compute(obs: list[dict], lexicon: dict, cluster_assignments: Optional[dict] 
         "top_terms": top_terms(obs),
         "top_bigrams": top_bigrams(obs),
         "tone": tone_aggregates(obs, lexicon),
-        "clusters": cluster_summary(obs, cluster_assignments or {}),
+        "clusters": cluster_summary(obs, assigns),
+        "emerging_clusters": emerging_clusters(obs, assigns, now),
+        "cluster_volume": cluster_volume_series(obs, assigns),
+        "cluster_regions": cluster_regions(obs, assigns),
+        "term_volume": term_volume_series(obs),
         "sources": dict(Counter(o.get("source", "?") for o in obs)),
         "regions": dict(Counter(o.get("region") or "Unknown" for o in obs)),
     }

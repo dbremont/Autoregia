@@ -107,6 +107,42 @@ def _label_clusters(items, labels, k):
     return labels_for
 
 
+def _centroids(matrix, labels, k: int) -> dict[str, list[float]]:
+    """Per-cluster mean vector (cluster_id → centroid), for similarity."""
+    import numpy as np
+    out = {}
+    for j in range(k):
+        pts = matrix[labels == j]
+        if len(pts):
+            out[f"c{j+1}"] = [round(float(v), 5) for v in pts.mean(axis=0)]
+    return out
+
+
+def _pca_project(matrix, max_points: int = 2000, seed: int = 7) -> dict:
+    """Deterministic 2-D PCA projection (t-SNE substitute) → {obs_id: [x, y]}.
+
+    Coordinates are normalized to [-1, 1]; above ``max_points`` items a
+    fixed-seed sample is projected (the corpus is small, this is a guard).
+    """
+    import numpy as np
+    n = matrix.shape[0]
+    idx = np.arange(n)
+    if n > max_points:
+        rng = np.random.default_rng(seed)
+        idx = np.sort(rng.choice(n, max_points, replace=False))
+    X = np.asarray(matrix[idx], dtype=np.float64)
+    X = X - X.mean(axis=0, keepdims=True)
+    cov = (X.T @ X) / max(1, len(X) - 1)
+    vals, vecs = np.linalg.eigh(cov)
+    top = vecs[:, np.argsort(vals)[::-1][:2]]
+    P = X @ top
+    span = np.ptp(P, axis=0)
+    span[span == 0] = 1.0
+    P = (P - P.min(axis=0)) / span * 2 - 1
+    return {str(int(i)): [round(float(x), 4), round(float(y), 4)]
+            for i, (x, y) in zip(idx, P)}
+
+
 def compute_clusters(observations: list[dict], k: int | None = None) -> dict:
     """Return ``{assignments, meta}`` where assignments maps obs id → cluster."""
     items = [(o.get("id") or o.get("_id") or "",
@@ -154,4 +190,6 @@ def compute_clusters(observations: list[dict], k: int | None = None) -> dict:
             "backend": backend, "k": len(set(a["cluster_id"] for a in assignments.values())),
             "n": n, "sizes": dict(sizes), "updated_at_ms": now,
         },
+        "centroids": _centroids(matrix, labels, k),
+        "projection": _pca_project(matrix),
     }
