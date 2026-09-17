@@ -42,6 +42,19 @@ from wos.sources import SOURCE_META, SOURCE_REGISTRY
 from wos.sources.base import now_ms, obs_id
 
 app = Flask(__name__, static_folder="static")
+
+
+@app.after_request
+def _no_cache_api(resp):
+    # API responses carry no validators; without an explicit policy browsers
+    # may heuristically cache GETs and serve stale JSON (e.g. empty analytics
+    # from right after a reseed). Match the static-file policy: always
+    # revalidate, never serve without checking.
+    if "/api/" in request.path:
+        resp.headers.setdefault("Cache-Control", "no-cache")
+    return resp
+
+
 _DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 # Seed file — the desired set of poll specs (spec/wos/policy.md). Resolution:
 # WOS_SOURCES_FILE env override > the module's ``config/seed.json``. It is

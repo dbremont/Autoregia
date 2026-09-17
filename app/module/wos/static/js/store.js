@@ -31,8 +31,11 @@ WOS.Store = (() => {
   }
 
   async function load(){
-    await loadLexicon();
-    await Promise.all([loadAnalytics(), loadObservations(), loadSources()]);
+    // resilient boot: one failing fetch must never leave the store half-empty
+    await loadLexicon().catch(e=>console.error('wos: lexicon load failed', e));
+    const names = ['analytics','observations','sources'];
+    const results = await Promise.allSettled([loadAnalytics(), loadObservations(), loadSources()]);
+    results.forEach((r, i) => { if (r.status === 'rejected') console.error('wos: ' + names[i] + ' load failed', r.reason); });
   }
   async function loadLexicon(){
     const L = await _j(`${API}/api/lexicon`);

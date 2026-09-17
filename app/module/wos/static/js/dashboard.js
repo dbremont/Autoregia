@@ -88,6 +88,13 @@ WOS.Dashboard = (() => {
 
   // ── data ─────────────────────────────────────────────────────
   async function load() {
+    // self-heal: if the store's boot-time analytics fetch failed, retry here —
+    // analytics-derived panels (cloud/topics/insights/graph/sentiment/geo)
+    // otherwise stay empty for the whole session with no way back
+    let analyticsDown = false;
+    if (!WOS.Store.analytics()) {
+      try { await WOS.Store.loadAnalytics(); } catch (e) { analyticsDown = true; }
+    }
     a = WOS.Store.analytics() || {};
     let failures = 0;
     const fail = () => { failures++; return null; };
@@ -99,8 +106,22 @@ WOS.Dashboard = (() => {
         .then(j => { recent = (j && j.items) || []; }).catch(fail),
     ]);
     if (failures === 3) { const el = document.getElementById('toast'); if (el) WOS.toast('Dashboard data unavailable — server unreachable'); }
-    drawKpis(); drawCloud(); drawTopics(); drawInsights();
+    drawKpis();
+    if (analyticsDown) drawAnalyticsDown();
+    else { drawCloud(); drawTopics(); drawInsights(); }
     drawFlow(); drawComposition(); drawGraph(); drawRecent(); drawGeo(); drawSentiment();
+  }
+
+  // explicit failure state for the analytics panels, with a retry link —
+  // never mistake "could not load" for "no data yet"
+  function drawAnalyticsDown() {
+    const msg = `<div class="empty-inline">analytics unavailable — <a href="#" class="ov-retry">retry</a></div>`;
+    ['ovCloud', 'ovTopics', 'ovInsights', 'ovGraph', 'ovLinks', 'ovSentiment'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = msg;
+    });
+    document.querySelectorAll('.ov-retry').forEach(x =>
+      x.addEventListener('click', (e) => { e.preventDefault(); load(); }));
   }
 
   // ── KPI strip ────────────────────────────────────────────────
@@ -125,9 +146,9 @@ WOS.Dashboard = (() => {
     const terms = (a.top_terms || []).slice(0, 40);
     const el = document.getElementById('ovCloud');
     if (!terms.length) { el.innerHTML = empty(); return; }
+    el.innerHTML = '';
     const ch = mk('ovCloud');
     if (!ch) return;
-    el.innerHTML = '';
     ch.setOption({
       textStyle: { fontFamily: 'Inter, sans-serif' },
       series: [{ type: 'wordCloud', shape: 'circle', width: '96%', height: '96%',
@@ -227,9 +248,9 @@ WOS.Dashboard = (() => {
   function drawFlow() {
     const el = document.getElementById('ovFlow');
     if (!flowObs.length) { el.innerHTML = empty('no observations in this window'); return; }
+    el.innerHTML = '';
     const ch = mk('ovFlow');
     if (!ch) return;
-    el.innerHTML = '';
     const { buckets, series } = flowData();
     ch.setOption({
       textStyle: { fontFamily: 'Inter, sans-serif' },
@@ -283,9 +304,9 @@ WOS.Dashboard = (() => {
         <span class="ov-link-name">${esc(l.source)} ↔ ${esc(l.target)}</span><b>${(l.value / max).toFixed(2)}</b></div>`).join('')
       || empty('no co-occurrences yet');
     if (!(g.nodes || []).length) { el.innerHTML = empty(); return; }
+    el.innerHTML = '';
     const ch = mk('ovGraph');
     if (!ch) return;
-    el.innerHTML = '';
     ch.setOption({
       textStyle: { fontFamily: 'Inter, sans-serif' },
       tooltip: { formatter: (p) => p.dataType === 'edge'

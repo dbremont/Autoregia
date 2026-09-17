@@ -1,24 +1,21 @@
 /* ════════════════════════════════════════════════════════════
    WOS Sources — the Sources plate (wos.png replica).
-   The stat strip, donut and Recent Observations keep the mock's
-   figures; the table and the Collection Status card are live over
+   The stat strip, the Source Types donut, the table and the
+   Collection Status card are all live over
    GET /api/sources/status — paginated, searchable, filterable.
-   Per-spec observation counts are not derivable (docs carry only
-   the adapter name), so Observations/Activity report per type.
+   Recent Observations and the Observation Activity chart keep
+   the mock's figures. Per-spec observation counts are not
+   derivable (docs carry only the adapter name), so
+   Observations/Activity report per type.
    ════════════════════════════════════════════════════════════ */
 window.WOS = window.WOS || {};
 WOS.Sources = (() => {
   const PAGE_SIZE = 10;
 
-  // ── plate figures (verbatim from the design mock) ──
-  const STATS = { total: 128, healthy: 119, degraded: 6, failing: 3 };
-  const DONUT = [
-    { name: 'ARXIV',    n: 42, pct: 33, color: '#7A1A2A' },
-    { name: 'RSS',      n: 31, pct: 24, color: '#3F6092' },
-    { name: 'NITTER',   n: 27, pct: 21, color: '#3F6092' },
-    { name: 'CROSSREF', n: 18, pct: 14, color: '#A8854A' },
-    { name: 'BIORXIV',  n: 10, pct: 8,  color: '#5C4E78' },
-  ];
+  // ── plate figures ──
+  // Same palette as the dashboard's Source Composition donut, so
+  // both donuts colour the adapter types identically.
+  const PALETTE = ['#7A1A2A', '#3F6092', '#A8854A', '#3F6E50', '#5C4E78', '#3F6092', '#B4742A', '#A33434'];
   const FEED = [
     { t: '12:42', c: '#A8854A', text: 'Large language models show new alignment patterns' },
     { t: '12:37', c: '#3F6E50', text: 'Agentic systems and tool use in the wild' },
@@ -79,27 +76,25 @@ WOS.Sources = (() => {
   }
 
   function statStrip() {
-    const item = (v, label, dot) =>
-      `<div class="src-stat"><div class="src-stat-v">${dot ? `<span class="src-dot ${dot}"></span>` : ''}${v}</div><div class="src-stat-l">${label}</div></div>`;
+    const item = (id, label, dot) =>
+      `<div class="src-stat"><div class="src-stat-v">${dot ? `<span class="src-dot ${dot}"></span>` : ''}<span id="${id}">—</span></div><div class="src-stat-l">${label}</div></div>`;
     return `<div class="src-stats">
-      ${item(STATS.total, 'Total sources', '')}
-      ${item(STATS.healthy, 'Healthy', 'ok')}
-      ${item(STATS.degraded, 'Degraded', 'warn')}
-      ${item(STATS.failing, 'Failing', 'bad')}
+      ${item('srcStatTotal', 'Total sources', '')}
+      ${item('srcStatHealthy', 'Healthy', 'ok')}
+      ${item('srcStatDegraded', 'Degraded', 'warn')}
+      ${item('srcStatFailing', 'Failing', 'bad')}
     </div>`;
   }
 
   function typesPanel() {
-    const legend = DONUT.map(t =>
-      `<li><span class="src-lg-dot" style="background:${t.color}"></span><span class="src-lg-name">${t.name}</span><b>${t.n}</b><i>${t.pct}%</i></li>`).join('');
     return `<section class="panel src-panel">
       <div class="src-phead"><span class="src-ptitle">Source Types</span></div>
       <div class="src-types-body">
         <div class="src-donut-wrap">
           <div class="chart-box src-donut-box" id="srcTypesChart"></div>
-          <div class="src-donut-center"><div class="src-donut-n">128</div><div class="src-donut-cap">total</div></div>
+          <div class="src-donut-center"><div class="src-donut-n" id="srcDonutN">—</div><div class="src-donut-cap">total</div></div>
         </div>
-        <ul class="src-legend">${legend}</ul>
+        <ul class="src-legend" id="srcTypesLegend"></ul>
       </div>
     </section>`;
   }
@@ -274,6 +269,45 @@ WOS.Sources = (() => {
     document.getElementById('srcNext')?.addEventListener('click', () => { page++; drawTable(); });
   }
 
+  function drawStats() {
+    const t = _status.totals;
+    const set = (id, v) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = v;
+    };
+    set('srcStatTotal', t.specs);
+    set('srcStatHealthy', t.healthy);
+    set('srcStatDegraded', t.degraded);
+    set('srcStatFailing', t.failing);
+  }
+
+  let _donutChart = null;
+
+  function drawTypes() {
+    // same data + palette as the dashboard's Source Composition donut
+    const types = _status.per_type || [];
+    const total = types.reduce((s, t) => s + t.specs, 0);
+    const nEl = document.getElementById('srcDonutN');
+    if (nEl) nEl.textContent = total || '—';
+    const legend = document.getElementById('srcTypesLegend');
+    if (legend) legend.innerHTML = types.map((t, i) =>
+      `<li><span class="src-lg-dot" style="background:${PALETTE[i % PALETTE.length]}"></span><span class="src-lg-name">${WOS.esc(t.type.toUpperCase())}</span><b>${t.specs}</b><i>${total ? Math.round(t.specs / total * 100) : 0}%</i></li>`).join('');
+    const el = document.getElementById('srcTypesChart');
+    if (!el || !window.echarts) return;
+    if (!_donutChart) {
+      _donutChart = echarts.init(el, null, { renderer: 'canvas' });
+      window.addEventListener('resize', () => { try { _donutChart.resize(); } catch {} });
+    }
+    _donutChart.setOption({
+      textStyle: { fontFamily: 'Inter, sans-serif' },
+      series: [{ type: 'pie', radius: ['58%', '82%'], center: ['50%', '50%'], padAngle: 1.5,
+        label: { show: false }, labelLine: { show: false }, silent: true,
+        itemStyle: { borderRadius: 3, borderColor: '#FFFFFF', borderWidth: 2 },
+        data: types.map((t, i) => ({ name: t.type.toUpperCase(), value: t.specs,
+          itemStyle: { color: PALETTE[i % PALETTE.length] } })) }],
+    });
+  }
+
   function drawStatus() {
     const host = document.getElementById('srcStatusHost');
     if (!host || !_status) return;
@@ -296,7 +330,7 @@ WOS.Sources = (() => {
         // same ordering convention as GET /api/sources: type, then id
         j.sources.sort((a, b) => (a.source || '').localeCompare(b.source || '') ||
           (a.id || '').localeCompare(b.id || ''));
-        _status = j; drawChips(); drawTable(); drawStatus();
+        _status = j; drawStats(); drawTypes(); drawChips(); drawTable(); drawStatus();
       })
       .catch(() => {
         const h = document.getElementById('srcTableHost');
@@ -394,19 +428,7 @@ WOS.Sources = (() => {
       });
       window.addEventListener('resize', () => { try { ch.resize(); } catch {} });
     }
-    // source types — donut with center total
-    const donutEl = document.getElementById('srcTypesChart');
-    if (donutEl && window.echarts) {
-      const ch = echarts.init(donutEl, null, { renderer: 'canvas' });
-      ch.setOption({
-        textStyle: { fontFamily: 'Inter, sans-serif' },
-        series: [{ type: 'pie', radius: ['58%', '82%'], center: ['50%', '50%'], padAngle: 1.5,
-          label: { show: false }, labelLine: { show: false }, silent: true,
-          itemStyle: { borderRadius: 3, borderColor: '#FFFFFF', borderWidth: 2 },
-          data: DONUT.map(t => ({ name: t.name, value: t.n, itemStyle: { color: t.color } })) }],
-      });
-      window.addEventListener('resize', () => { try { ch.resize(); } catch {} });
-    }
+    // source types donut is drawn live in drawTypes() once status loads
 
     // ── wire the live toolbar + quick actions ──
     const si = document.getElementById('srcSearchInput');
