@@ -127,6 +127,7 @@ Feedback  (Reflection; Intelligence Layer)
 
 ## References
 
+- [Dependability — Fault Tolerance & Continuity](dependability.md) — the system's dependability guarantees (what it tolerates, how it recovers, where continuity is still broken)
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)
 - [Self-Management](https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link)
 - [Viable System Model (VSM)](https://app.notion.com/p/Viable-System-Model-VSM-204c0f5171ec80fbb08bdf964724daf0?source=copy_link)

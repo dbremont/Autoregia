@@ -30,7 +30,9 @@ app/                 the application
                      (focus_watcher), tools/ (prefix_assets.py), bin/,
                      ui/ (the shared design-system layer served at /ui/)
 spec/                conceptual specs (spec/ui.spec = normative design spec;
-                     spec/todo/ = personal notes, not system docs)
+                     spec/dependability.md = dependability guarantees — fault
+                     tolerance & continuity; spec/todo/ = personal notes, not
+                     system docs)
 app/module/wos/config/seed.json   WOS poll specs (the watched sources;
                      spec/wos/policy.md); read directly from file by the
                      server, not stored in CouchDB
