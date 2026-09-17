@@ -39,7 +39,7 @@ AO.CommandPalette._commands = function () {
     { label: 'Open Scratchpad', icon: 'file-text', run: () => { AO.navigate('scratch'); setTimeout(() => { const ta = document.getElementById('scratchArea'); if (ta) ta.focus(); }, 80); } },
     { label: 'Open Help (F1)', icon: 'help-circle', run: () => AO.Help.open() },
     { label: 'Sync Google Calendar', icon: 'refresh-cw', run: () => AO.doGoogleSync() },
-    { label: 'Open full documentation', icon: 'book-open', run: () => window.open('/docs', '_blank') },
+    { label: 'Open full documentation', icon: 'book-open', run: () => window.open('/aoos/docs', '_blank') },
     { label: 'Export JSON', icon: 'download', run: () => window.open('/aoos/api/export', '_blank') },
   ];
 };

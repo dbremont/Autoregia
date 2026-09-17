@@ -513,13 +513,15 @@
   window.finderOpen=openF;window.finderClose=closeF;
 
   document.addEventListener('keydown',function(e){
-    var typing=document.activeElement===q;
+    var el=document.activeElement;
+    var typing=!!el&&(el===q||el.tagName==='INPUT'||el.tagName==='TEXTAREA'||el.tagName==='SELECT'||el.isContentEditable);
+    if(e.key==='Escape'){closeF();closeSit();return}
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
     if(e.key==='/'&&!typing){e.preventDefault();openF()}
-    else if(e.key==='/'&&typing){e.preventDefault()}
+    else if(e.key==='/'&&typing&&el===q){e.preventDefault()}
     else if(e.key.toLowerCase()==='c'&&!typing){location.href='/pbs/'}
     else if(e.key.toLowerCase()==='p'&&!typing){location.href='/aoos/'}
     else if(e.key.toLowerCase()==='r'&&!typing){location.href='/pras/'}
-    else if(e.key==='Escape'){closeF();closeSit()}
   });
 
   function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
