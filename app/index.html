@@ -38,7 +38,7 @@
     --ring:0 0 0 3px rgba(122,26,42,.16);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--serif);font-size:16px;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"kern","liga";height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  body{font-family:var(--serif);font-size:16px;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"kern","liga";min-height:100vh;display:flex;flex-direction:column}
   a{color:var(--accent)}
   a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
   ::selection{background:var(--gold-tint);color:var(--ink-0)}
@@ -50,8 +50,6 @@
   .links{margin-left:auto;display:flex;gap:26px}
   .links a{font-family:var(--sans);font-size:13px;color:var(--ink-3);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
   .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
-  .links .sit-link{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--ink-3);padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
-  .links .sit-link:hover{color:var(--accent);border-bottom-color:var(--accent)}
   .wrap{max-width:1120px;margin:0 auto;padding:0 32px}
   .page-col{width:100%;flex:1;min-height:0;display:flex;flex-direction:column;padding-top:14px;padding-bottom:12px}
 
@@ -60,23 +58,25 @@
   .mh-copy{display:contents}
   h1.title{grid-column:1;grid-row:1;font-size:clamp(40px,5vw,64px);font-weight:300;letter-spacing:-.026em;line-height:.98;margin:0}
   h1.title em{font-style:italic;font-weight:400;color:var(--accent)}
-  .lede{grid-column:1;grid-row:2;font-size:16px;color:var(--ink-3);max-width:56ch;margin:0;font-style:italic;line-height:1.55;border-left:2px solid var(--gold);padding:2px 0 2px 18px}
+  .lede{grid-column:1;grid-row:2;font-size:17.5px;color:var(--ink-2);max-width:56ch;margin:0;font-style:italic;line-height:1.6;border-left:2px solid var(--gold);padding:2px 0 2px 18px}
+  .lede strong{font-weight:600}
   .lede a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule)}
   .lede a:hover{border-color:var(--accent)}
-  .gold-rule{grid-column:1;grid-row:3;height:2px;background:var(--gold);width:64px;margin:14px 0 0}
+  .lede .lede-more{display:inline-block;margin-top:8px;font-family:var(--sans);font-style:normal;font-size:13px;font-weight:600;letter-spacing:.01em;border-bottom:1px solid transparent}
+  .lede .lede-more:hover{border-bottom-color:var(--accent)}
 
   /* ── Quick actions — compact 2×2 rail, level with the title ── */
-  .action-grid{grid-column:2;grid-row:1 / span 4;display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:10px;align-content:start;justify-content:end;padding-top:2px}
+  .action-grid{grid-column:2;grid-row:1 / span 2;display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:10px;align-content:start;justify-content:end;padding-top:2px}
   a.action{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;transition:transform .16s,box-shadow .16s,border-color .16s}
   a.action:hover{transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(28,25,22,.4);border-color:var(--gold)}
   a.action svg{flex:0 0 auto;width:20px;height:20px;color:var(--gold)}
   .action .a-label{font-family:var(--sans);font-size:13px;font-weight:650;color:var(--ink-0)}
 
-  /* ── sections — the loop fills the remaining viewport ── */
+  /* ── sections ── */
   .section-head{display:flex;align-items:baseline;gap:18px}
   .section-head .sh-title{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.015em;color:var(--ink-0)}
   .section-head .sh-gloss{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:auto;text-align:right}
-  section.stage{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 0 0}
+  section.stage{display:flex;flex-direction:column;padding:14px 0 0}
   .plate{flex:0 0 auto;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:10px 14px;margin-top:12px;box-shadow:0 24px 60px -44px rgba(60,50,30,.5)}
   .plate svg{display:block;width:100%;height:auto}
 
@@ -92,24 +92,24 @@
   .sit-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
   .sit-posture{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:1px solid var(--rule);border-radius:999px;padding:3px 11px;color:var(--muted)}
   .sit-posture.warn{color:var(--accent);border-color:var(--accent);background:#faf3f4}
-  .syn{font-size:17px;line-height:1.6;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--gold);padding:2px 0 2px 18px;margin:0 0 20px}
+  .syn{font-size:18px;line-height:1.65;color:var(--ink-2);font-style:italic;border-left:2px solid var(--gold);padding:2px 0 2px 18px;margin:0 0 20px}
   .syn strong{color:var(--ink);font-style:normal;font-weight:600}
   .sit-cols{display:grid;grid-template-columns:1.25fr 1fr;gap:30px}
   @media(max-width:760px){.sit-cols{grid-template-columns:1fr}}
   .sit-sub{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 10px}
   .sit-sub.spaced{margin-top:18px}
   .att{list-style:none;padding:0;margin:0}
-  .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:14px}
+  .att-item{display:grid;grid-template-columns:auto 66px 1fr auto;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:14.5px}
   .att-item:last-child{border-bottom:0}
   .att-dot{width:8px;height:8px;border-radius:999px;background:var(--gold);display:inline-block;transform:translateY(1px)}
   .att-dot.high{background:var(--accent)}
   .att-dot.medium{background:#b07a2a}
   .att-sev{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
-  .att-text{color:var(--ink-soft)}
+  .att-text{color:var(--ink-2)}
   .att-tool{font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid var(--rule);border-radius:999px;padding:1px 7px;background:var(--gold-tint);text-decoration:none;white-space:nowrap}
   .att-tool:hover{text-decoration:none;background:var(--accent);color:var(--surface);border-color:var(--accent)}
   .res-item{margin-bottom:11px}
-  .res-head{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:4px}
+  .res-head{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;margin-bottom:4px}
   .res-name{color:var(--ink);font-weight:500}
   .res-val{font-family:var(--mono);font-size:11px;color:var(--muted)}
   .res-val.over{color:var(--accent);font-weight:600}
@@ -122,9 +122,9 @@
   .ls-item:last-child{border-bottom:0}
   .ls-item.now{background:var(--gold-tint);margin:0 -8px;padding:6px 8px;border-bottom:1px solid var(--gold-tint)}
   .ls-stage{font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:600}
-  .ls-state{color:var(--ink-soft)}
+  .ls-state{color:var(--ink-2)}
   .ls-tool{font-family:var(--mono);font-size:10px;color:var(--muted)}
-  .sit-note{font-family:var(--sans);font-size:11px;color:var(--muted);text-align:center;margin-top:12px;font-style:italic}
+  .sit-note{font-family:var(--sans);font-size:12px;color:var(--ink-4);text-align:center;margin-top:12px;font-style:italic}
 
   /* ── Footer — thin strip, pinned to the viewport bottom ── */
   footer{flex:0 0 auto;border-top:1px solid var(--rule);margin-top:auto;padding-top:9px}
@@ -134,16 +134,12 @@
   .f-links a{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);text-decoration:none;margin-left:16px;transition:color .18s}
   .f-links a:hover{color:var(--accent)}
 
-  /* No-scroll is a design goal only where it can hold: below ~800px of
-     height or width, reflow to a normal scrolling document. */
-  @media(max-height:799px),(max-width:799px){
-    body{height:auto;min-height:100vh;overflow:visible}
+  /* The plate is a scrolling document; below ~800px of width, reflow
+     the masthead to a single column. */
+  @media(max-width:799px){
     .wrap{padding:0 22px}
-    .page-col{flex:none}
-    section.stage{flex:none}
-    .plate svg{flex:none;width:100%;height:auto}
     header.masthead{grid-template-columns:1fr}
-    h1.title,.lede,.gold-rule,.action-grid{grid-column:1;grid-row:auto}
+    h1.title,.lede,.action-grid{grid-column:1;grid-row:auto}
     .lede{margin-top:12px}
     .action-grid{justify-content:flex-start}
     footer{margin-top:28px;padding:14px 0 28px}
@@ -166,12 +162,26 @@
   .finder .ti{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink-0)}
   .finder .sn{font-family:var(--sans);font-size:12px;color:var(--ink-4);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-  /* ── situation modal ── */
-  .sit-modal{position:fixed;inset:0;background:rgba(30,28,25,.44);display:flex;align-items:center;justify-content:center;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s}
-  .sit-modal.on{opacity:1;pointer-events:auto}
-  .sit-modal .sit-card{position:relative;width:min(900px,92vw);max-height:86vh;overflow-y:auto;border-radius:14px;padding:24px 26px}
+  /* ── Situation — inline after the cooperating systems when the whole plate
+     fits the viewport without scroll; a modal summoned from the nav when it
+     doesn't (decided empirically, see script) ── */
+  section.stage-sit{display:flex;flex-direction:column;margin-top:22px}
+  section.stage-sit[hidden]{display:none}
+  section.stage-sit .sit-card{margin-top:12px;border-radius:14px;box-shadow:0 24px 60px -44px rgba(60,50,30,.5)}
   .sit-close{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:12px;color:var(--muted);padding:4px 8px;border-radius:6px}
   .sit-close:hover{color:var(--accent);background:var(--gold-tint)}
+  .sit-modal{position:fixed;inset:0;background:rgba(30,28,25,.44);display:flex;align-items:center;justify-content:center;z-index:70;opacity:0;pointer-events:none;transition:opacity .2s}
+  .sit-modal.on{opacity:1;pointer-events:auto}
+  .sit-modal[hidden]{display:none}
+  .sit-modal .sit-card{position:relative;width:min(900px,92vw);max-height:86vh;overflow-y:auto;border-radius:14px;padding:24px 26px;box-shadow:0 30px 70px -30px rgba(30,28,25,.45)}
+
+  /* nav twin — button opens the modal, anchor jumps to the inline section */
+  .links .sit-link{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--ink-3);padding:4px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+  .links .sit-link:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  #sitLink{display:none}
+  body.sit-inline #sitBtn{display:none}
+  body.sit-inline #sitLink{display:inline}
+  body.sit-inline #situation .sit-close{display:none}
 </style>
 </head>
 <body>
@@ -183,6 +193,7 @@
     <div class="links">
       <a href="#loop">Systems</a>
       <button class="sit-link" id="sitBtn" type="button">Situation</button>
+      <a id="sitLink" href="#situation">Situation</a>
       <a href="about.html">About ↗</a>
       <a href="docs.html">Docs ↗</a>
     </div>
@@ -195,8 +206,7 @@
   <header class="masthead">
     <div class="mh-copy">
       <h1 class="title">Autoregia</h1>
-      <p class="lede">  A <strong> forma </strong> for agency — a loose structure that shapes, guides, and channels the <strong>exercise of agency</strong> without substituting for it, and that the agent sets down when not needed. <br/> <br/>  For more, <a href="about.html">Open reference architecture →</a></p>
-      <div class="gold-rule"></div>
+      <p class="lede">A <strong>forma</strong> for agency — structure that shapes, guides, and channels the <strong>exercise of agency</strong> without substituting for it; light enough to set down when it is not needed. <a class="lede-more" href="about.html">Open the reference architecture →</a></p>
     </div>
     <div class="action-grid">
       <a class="action" href="/pbs/"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="a-label">Capture</span></a>
@@ -209,11 +219,11 @@
   <!-- ═══ The Cooperating Systems — the loop, as a section ═══ -->
   <section class="stage" id="loop">
     <div class="section-head">
-      <span class="sh-title">The Cooperating Systems</span>
-      <span class="sh-gloss">the agent control loop — every chip is a system</span>
+      <span class="sh-title">Forma</span>
+      <span class="sh-gloss">the structures that organize the exercise of agency</span>
     </div>
     <figure class="plate">
-        <svg viewBox="0 0 1400 642" role="img" aria-label="The agent control loop, figure plate. Bottom band: the World (environment, perceived and acted upon) as a standalone card, and the Agent — the Agent (AGS, the Agency Grounding System, and GIS, the general index), Agent Knowledge (what the agent knows; PKS, the Personal Knowledge System — conceived, not yet designed), and the Agent Capability Self Management System (ACSMS, capability growth), fed by feedback adaptations; read by Perception and instantiated by the Situation Model. Deliberative cycle (upper gold panel): PBS and GWOB (Perception — the General World and Self Observation System, gateway to WOS, PKTS and PWTS), AIAS (Intent Management — the Situation Model stage still has no dedicated system), AOOS (Action Organization). Execution: ATE (Agent Toolbox Ecosystem — the tools an agent uses to get work done; hosting the AWES tool). Feedback: PRAS, directly under Execution — outcomes observed and returned to the World; adaptations feed capability growth. Each chip enters its app; AGS opens a landing plate for the system not yet built.">
+        <svg viewBox="0 0 1400 642" role="img" aria-label="The agent control loop. Lower band: the World — the environment, perceived and acted upon — and the Agent: Agent self (AGS, the Agency Grounding System; GIS, the general index), Agent Knowledge (PKS, the Personal Knowledge System — conceived, not yet designed), and Capability Growth (ACSMS), fed by feedback adaptations; the cycle reads this band and is instantiated by the Situation Model. Upper gold panel, the deliberative cycle: Perception (PBS; GWOB, the General World and Self Observation System, gateway to WOS, PKTS and PWTS) → Situation Model (no dedicated system yet) → Intent Management (AIAS) → Action Organization (AOOS) → commit → Execution (ATE, the Agent Toolbox Ecosystem, hosting AWES). Feedback: PRAS observes outcomes and returns them to the World; adaptations feed Capability Growth. Each chip opens its system.">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A8854A"/></marker>
             <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A1A2A"/></marker>
@@ -392,8 +402,12 @@
     </figure>
   </section>
 
-  <!-- ═══ The Situation — a modal, summoned from the nav ═══ -->
-  <div class="sit-modal" id="situation" role="dialog" aria-modal="true" aria-label="The Situation — state estimate">
+  <!-- ═══ The Situation — an inline section, right after the cooperating systems ═══ -->
+  <section class="stage-sit" id="situation" aria-label="The Situation — state estimate" tabindex="-1">
+    <div class="section-head">
+      <span class="sh-title">The Situation</span>
+      <span class="sh-gloss">the exercise of agency, at a glance</span>
+    </div>
     <div class="sit-card">
       <button class="sit-close" id="sitClose" type="button" aria-label="Close">✕</button>
       <div class="sit-head">
@@ -432,9 +446,13 @@
           </ul>
         </div>
       </div>
-      <div class="sit-note">Mock — a vision of the integrated Situation Model (fake data). The Situation Model is the loop's missing center: an unimplemented stage.</div>
+      <div class="sit-note">Mock data — a vision of the integrated Situation Model. It is the loop's missing center: no system implements this stage yet.</div>
     </div>
-  </div>
+  </section>
+
+  <!-- ═══ The Situation — modal home; the card moves here when the
+       viewport cannot hold the whole plate without scroll ═══ -->
+  <div class="sit-modal" id="situation-modal" role="dialog" aria-modal="true" aria-label="The Situation — state estimate" hidden></div>
 
   <!-- ═══ Footer ═══ -->
   <footer>
@@ -460,13 +478,36 @@
 /* Finder: invocation + unified fan-out search */
 (function(){
   var f=document.getElementById('finder'),q=document.getElementById('q'),res=document.getElementById('res');
-  var sm=document.getElementById('situation'),sitBtn=document.getElementById('sitBtn'),sitClose=document.getElementById('sitClose');
+  var sm=document.getElementById('situation-modal'),sitBtn=document.getElementById('sitBtn'),sitClose=document.getElementById('sitClose'),sitSlot=document.getElementById('situation'),sitCard=sitSlot.querySelector('.sit-card');
   var timer=null;
   function openSit(){sm.classList.add('on')}
   function closeSit(){sm.classList.remove('on')}
   sitBtn.addEventListener('click',openSit);
   sitClose.addEventListener('click',closeSit);
   sm.addEventListener('click',function(e){if(e.target===sm)closeSit()});
+
+  /* Situation placement: the card is inline after the loop section when the
+     whole plate fits the viewport without scroll; otherwise it moves into the
+     modal and the nav button summons it. Empirical check — render inline,
+     measure, fall back. */
+  function applySitMode(){
+    var open=sm.classList.contains('on');
+    sitSlot.hidden=false;sitSlot.appendChild(sitCard);sm.hidden=true;sm.classList.remove('on');
+    if(document.documentElement.scrollHeight<=window.innerHeight+1){
+      document.body.classList.add('sit-inline');
+    }else{
+      sm.appendChild(sitCard);sm.hidden=false;sitSlot.hidden=true;document.body.classList.remove('sit-inline');
+      if(open)sm.classList.add('on');
+    }
+  }
+  var sitTimer=null;
+  function applySitModeSoon(){clearTimeout(sitTimer);sitTimer=setTimeout(applySitMode,120)}
+  window.addEventListener('resize',applySitModeSoon);
+  window.addEventListener('load',applySitMode);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(applySitMode);
+  applySitMode();
+  if(location.hash==='#situation'&&!document.body.classList.contains('sit-inline'))openSit();
+
   function openF(){f.classList.add('on');setTimeout(function(){q.focus()},60)}
   function closeF(){f.classList.remove('on');q.value='';res.innerHTML='<div class="empty">type to search the running systems…</div>';q.blur()}
   window.finderOpen=openF;window.finderClose=closeF;
