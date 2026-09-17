@@ -29,6 +29,53 @@ TODO:
 
 ## Index
 
+### 2026 — ACSMS practice tracking: validated self-reports and computed practice states
+
+**Question.** The ACSMS mount was a static prototype plate. Building the
+skill-tracking system raised a modeling question: practice is *self-reported*
+(human-entered), so what keeps the tracking honest — and what does the system
+do about the skills that never receive any practice at all?
+
+**Decision.**
+
+1. **Practices are bound to existing skills.** A practice document carries a
+   `skill_id`; the server validates it against the catalog and rejects
+   unknown skills (400) and retired skills (400). You cannot self-report
+   practice on a skill that does not exist — the form offers only defined
+   skills, and the API enforces what the UI suggests.
+2. **The inverse gap is tracked automatically.** Every skill carries a
+   computed `practice_state` derived from its practice history and its
+   `target_per_week` cadence: `never-practiced`, `on-track`, `neglected`
+   (last practice older than 2× the target interval), plus the lifecycle
+   states `paused`/`retired`. Flagged active skills surface in the
+   dashboard's attention queue — the Review/Cull stages of the improvement
+   lifecycle, materialized.
+3. **Practiced skills leave through the lifecycle, not through DELETE.**
+   Hard delete is allowed only while a skill has zero practice history;
+   otherwise the API answers 409 and the path is retirement
+   (`PUT {status: "retired"}`), so the cull decision is recorded and the
+   practice history is preserved.
+4. **Two doc kinds, one store** (`acsms` db via the shared `Store`):
+   `skill` (catalog) and `practice` (self-report stream). Practice docs
+   denormalize `skill_name`, kept in sync on rename. Seed catalog in
+   `data/skills.json`, applied only when the DB is empty.
+
+**Rationale.** Self-report data is only as trustworthy as its constraints:
+requiring an existing skill anchors every report to a definition, and
+computing state server-side from history (rather than asking the user
+"are you keeping up?") makes the feedback automated and unfakeable. The
+neglected detector uses 2× the target interval — a tolerant, explicit
+form of "the cadence slipped" that needs no per-skill tuning.
+
+**Trade-offs accepted.** Self-reported quality/confidence remain subjective
+(evidence URLs are optional, not verified); renames rewrite historical
+practice docs (small writes, truthful snapshots); deleting a practiced
+skill is impossible by design — retiring it is the recorded decision.
+
+**Implements.** [`spec/acsms/README.md`](spec/acsms/README.md)
+(Practice/Evidence/Review/Cull stages),
+`app/module/acsms/` (server API, shell UI, seed, tests).
+
 ### 2026 — UI remediation against industrial practice (WCAG 2.2 AA / APG / Nielsen)
 
 **Question.** `design.md` §5 claimed "none outstanding" for tracked

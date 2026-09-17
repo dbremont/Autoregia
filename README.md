@@ -57,7 +57,13 @@ Autoregia/
     │   │       ├── ctes/  #   Computation Task Execution System (plate only)
     │   │       ├── gial/  #   General Integration Abstraction Layer (plate only)
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (plate only)
-    │   └── ...          # gis, aias, aoos, pras, acsms, loop, pwos
+    │   ├── acsms/       # Agent Capability Self Management System
+    │   │   ├── README.md
+    │   │   ├── server.py       # Flask API + CouchDB persistence (skills, practice self-reports, tracking)
+    │   │   ├── data/skills.json# seed catalog (applies only when the DB is empty)
+    │   │   ├── static/         # WOS-style shell: dashboard, skills, practice log
+    │   │   └── test_acsms.py
+    │   └── ...          # gis, aias, aoos, pras, loop, pwos
     └── support/         # everything that supports the modules
         ├── storage/     # shared CouchDB document store (Store)
         ├── shared/      # shared Python package (focus_watcher, …)

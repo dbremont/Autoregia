@@ -63,9 +63,10 @@ make deploy-local      # build the local image (autoregia:local) and run it — 
 make deploy-server     # pull the GHCR image CI publishes and run it — production
 # also: make build | logs | stop
 
-# tests (WOS + GIS tests need CouchDB running on 127.0.0.1:5984)
+# tests (WOS + GIS + ACSMS tests need CouchDB running on 127.0.0.1:5984)
 make test              # = python3 -m pytest app/module/ate/tool/ces/test_ces.py \
-                       #    app/module/wos/test_wos.py app/module/gis/test_gis.py
+                       #    app/module/wos/test_wos.py app/module/gis/test_gis.py \
+                       #    app/module/acsms/test_acsms.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
 make prefix-assets
@@ -128,10 +129,11 @@ everything else runs out-of-band:
   | wos | `wos` |
   | pkts | `pkts_raw` + `pkts` |
   | pwts | `pwts_raw` + `pwts` |
+  | acsms | `acsms` |
 
 - Local-file only (no CouchDB): `loop` (read-only `data/mock_loop.json`),
   `ces` (in-memory sessions + read-only mock environments), `pras`
-  (`deliberations/*.html` files *are* the data), `acsms` (static prototype).
+  (`deliberations/*.html` files *are* the data).
 
 ## Invariants (do not break silently)
 
@@ -292,7 +294,7 @@ in-repo. Commits are SSH-signed via 1Password (`op-ssh-sign`).
 
 1. `make run` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `make test` → currently **82 passed, 1 failed**
+2. `make test` → currently **102 passed, 1 failed**
    (`test_wos.py::test_clusters_lexical_backend_groups_related` —
    pre-existing lexical-backend clustering failure).
 3. `make deploy-local` → curl the mount matrix on the container port; check
