@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T00:00:00Z",
+  "updated_at": "2026-09-17T00:00:00Z",
   "description": "WOS seed — plain poll specs (source + query). Topic assignment happens downstream in the processing pipeline, not at collection time. Resolution: WOS_SOURCES_FILE env > this file.",
   "settings": {
     "nitter_instances": [
@@ -774,6 +774,13 @@
       "enabled": true
     },
     {
+      "id": "nitter-AlexMillerDB",
+      "source": "nitter",
+      "query": "AlexMillerDB",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
       "id": "arxiv-cat-cs-ai",
       "source": "arxiv",
       "query": "cat:cs.AI",
@@ -903,6 +910,363 @@
       "id": "rss-techmeme",
       "source": "rss",
       "query": "https://www.techmeme.com/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-wolfram-blog",
+      "source": "rss",
+      "query": "https://blog.wolfram.com/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-lesswrong-curated",
+      "source": "rss",
+      "query": "https://www.lesswrong.com/feed.xml?view=curated-rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-bactra-notebooks",
+      "source": "rss",
+      "query": "https://bactra.org/notebooks/index.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-simonwillison",
+      "source": "rss",
+      "query": "https://simonwillison.net/atom/everything/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-geohot",
+      "source": "rss",
+      "query": "https://geohot.github.io/blog/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-gwern",
+      "source": "rss",
+      "query": "https://gwern.substack.com/feed",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-eatonphil",
+      "source": "rss",
+      "query": "https://notes.eatonphil.com/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-thegreenplace",
+      "source": "rss",
+      "query": "https://eli.thegreenplace.net/feeds/all.atom.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-nullprogram",
+      "source": "rss",
+      "query": "https://nullprogram.com/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-lemire-blog",
+      "source": "rss",
+      "query": "https://lemire.me/blog/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-hillelwayne",
+      "source": "rss",
+      "query": "https://buttondown.com/hillelwayne/rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-mastodon-cks",
+      "source": "rss",
+      "query": "https://mastodon.social/@cks.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-stapelberg",
+      "source": "rss",
+      "query": "https://michael.stapelberg.ch/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-brendangregg",
+      "source": "rss",
+      "query": "https://www.brendangregg.com/blog/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-sirupsen",
+      "source": "rss",
+      "query": "https://sirupsen.com/atom.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-danluu",
+      "source": "rss",
+      "query": "https://danluu.com/atom.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-jmmv",
+      "source": "rss",
+      "query": "https://jmmv.dev/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-evanjones",
+      "source": "rss",
+      "query": "https://www.evanjones.ca/index.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-wingolog",
+      "source": "rss",
+      "query": "https://wingolog.org/feed/atom",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-stefan-marr",
+      "source": "rss",
+      "query": "https://stefan-marr.de/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-tratt",
+      "source": "rss",
+      "query": "https://tratt.net/laurie/blog/blog.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-borretti",
+      "source": "rss",
+      "query": "https://borretti.me/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-codingconfessions",
+      "source": "rss",
+      "query": "https://blog.codingconfessions.com/feed",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-ayende",
+      "source": "rss",
+      "query": "https://feeds.feedburner.com/AyendeRahien",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-tanelpoder",
+      "source": "rss",
+      "query": "https://tanelpoder.com/posts/index.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-transactional",
+      "source": "rss",
+      "query": "https://transactional.blog/feed.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-scattered-thoughts",
+      "source": "rss",
+      "query": "https://www.scattered-thoughts.net/atom.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-smalldatum",
+      "source": "rss",
+      "query": "https://smalldatum.blogspot.com/feeds/posts/default",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-muratbuffalo",
+      "source": "rss",
+      "query": "https://muratbuffalo.blogspot.com/feeds/posts/default?alt=rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-jack-vanlightly",
+      "source": "rss",
+      "query": "https://jack-vanlightly.com/?format=rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-surfingcomplexity",
+      "source": "rss",
+      "query": "https://surfingcomplexity.blog/rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-ludwigabap",
+      "source": "rss",
+      "query": "https://ludwigabap.com/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-hanselman",
+      "source": "rss",
+      "query": "https://feeds.hanselman.com/ScottHanselman",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-raschka",
+      "source": "rss",
+      "query": "https://sebastianraschka.com/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-netflix-techblog",
+      "source": "rss",
+      "query": "https://netflixtechblog.com/feed",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-meta-engineering",
+      "source": "rss",
+      "query": "https://engineering.fb.com/feed",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-pinterest-engineering",
+      "source": "rss",
+      "query": "https://medium.com/feed/@Pinterest_Engineering",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-slack-engineering",
+      "source": "rss",
+      "query": "http://slack.engineering/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-aws-architecture",
+      "source": "rss",
+      "query": "https://aws.amazon.com/blogs/architecture/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-airbnb-engineering",
+      "source": "rss",
+      "query": "https://medium.com/feed/airbnb-engineering",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-github-engineering",
+      "source": "rss",
+      "query": "https://github.blog/engineering/feed/",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-discord-blog",
+      "source": "rss",
+      "query": "https://discord.com/blog/rss.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-spotify-engineering",
+      "source": "rss",
+      "query": "https://engineering.atspotify.com/feed",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-quantamagazine",
+      "source": "rss",
+      "query": "https://www.quantamagazine.org/rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-siam-siread",
+      "source": "rss",
+      "query": "https://epubs.siam.org/action/showFeed?type=etoc&feed=rss&jc=siread",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-siam-smjmap",
+      "source": "rss",
+      "query": "https://epubs.siam.org/action/showFeed?type=etoc&feed=rss&jc=smjmap.1",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-ams-jams",
+      "source": "rss",
+      "query": "https://www.ams.org/rss/jams.rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-sciam-basic",
+      "source": "rss",
+      "query": "http://rss.sciam.com/basic-science",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-scottaaronson",
+      "source": "rss",
+      "query": "https://scottaaronson.blog/?feed=rss2",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-severelytheoretical",
+      "source": "rss",
+      "query": "https://severelytheoretical.wordpress.com/rss",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-jvns",
+      "source": "rss",
+      "query": "https://jvns.ca/atom.xml",
       "interval_s": 0,
       "enabled": true
     }
