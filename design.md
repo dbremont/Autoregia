@@ -169,7 +169,7 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `pras` — deliberations             | standalone | ✅ conforms |
 | `ags`, `gwob`, `pks` — landing plates | standalone | ✅ conforms (canonical tokens 2026-09) |
 | `acsms` — landing                  | standalone | ✅ conforms (canonical tokens 2026-09) |
-| `awes` — console (`/ate/tool/awes/`) | standalone | ✅ conforms (restyled 2026-09) |
+| `ces` — console (`/ate/tool/ces/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts, canonical tokens 2026-09) |
 
 **Tracked non-conformances** (re-audit 2026-09-17, remediation pass):
@@ -186,11 +186,11 @@ unlabeled icon-only buttons and selects, contrast failures (informative
 `--ink-6`/`--faint` text swept to passing steps; gold-as-text now uses
 `--gold-ink` `#8A6A2F`), sub-24px chip-remove targets, palette search
 focus visibility, native `alert()` in pbs, unhandled fetch failures
-(awes/wos/pwts/pras), pure-black shadows, off-token chart hues
+(ces/wos/pwts/pras), pure-black shadows, off-token chart hues
 (pbs private palette, purple/pink/brown/light-blue converging onto §3
 values via `AUTOREGIA.CHART`), dead per-tool `css/{fonts,base}.css`
 links, missing `↑/↓` navigation in the AOOS palette, missing palettes
-on pwts and awes, missing `<main>` on standalone plates, missing
+on pwts and ces, missing `<main>` on standalone plates, missing
 `tabular-nums`/breakpoints on pwts, and pras missing `base.css`.
 Known remaining deviations: AOOS `docs.html` dark code-block pair
 (`--code-bg` `#2A2620`/`#E8E2D4`, sanctioned §11.4 domain surface);

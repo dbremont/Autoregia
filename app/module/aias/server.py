@@ -3,7 +3,7 @@ Agent Intent Aid System (AIAS) — API Server.
 
 Realizes the Intent Management stage of the control loop: maintains the
 Intent Store (candidate, active, and historical intentions) and exposes the
-Active Intent Set that directs planning (AOOS) and execution (AWES).
+Active Intent Set that directs planning (AOOS) and execution (CES).
 
 Persisted in CouchDB (db ``aias``); seeded from data/mock_intents.json on
 first run against an empty database. The public API shape mirrors the other

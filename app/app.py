@@ -15,7 +15,7 @@ index at the root.
     /wos/...   World Observation System  (Perception — external world)
     /gis/...     General Index (Situation Model)
     /aoos/...    Agent Operation Organization System (System 1 — Operations)
-    /ate/...     Agent Toolbox Ecosystem — the tools an agent uses to get work done (/ate/tool/awes …)
+    /ate/...     Agent Toolbox Ecosystem — the tools an agent uses to get work done (/ate/tool/ces …)
     /pras/...    Personal Reflection & Adaptation  (System 4 — Intelligence / Feedback)
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
     /ags/...     Agency Grounding System (in the model, not yet built — policies at /ags/policies/…)

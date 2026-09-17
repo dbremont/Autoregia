@@ -1,11 +1,11 @@
-# Automated Work Execution System — Prototype
+# Computation Execution System — Prototype
 
-> An **Automated Work Execution System (AWES)** bridges action selection and
+> An **Computation Execution System (CES)** bridges action selection and
 > action completion — it provisions computational environments, dispatches work
 > units to them, captures artifacts, and feeds results back into the agent's
 > operational and reflective systems.
 
-> Within the Autoregia Personal Viable System Model (PVSM), AWES instantiates the
+> Within the Autoregia Personal Viable System Model (PVSM), CES instantiates the
 > **Execution** stage of the agent control loop: it *carries out* the work that
 > the deliberative cycle selects.
 
@@ -41,16 +41,16 @@ Open: http://localhost:5010
 
 ```bash
 pip install pytest
-python3 -m pytest test_awes.py -v
+python3 -m pytest test_ces.py -v
 ```
 
 ## Structure
 
 ```
-awes/
+ces/
 ├── server.py
 ├── requirements.txt
-├── test_awes.py
+├── test_ces.py
 ├── Dockerfile
 ├── docker-compose.yml
 ├── README.md
@@ -67,7 +67,7 @@ awes/
 
 - **Parent:** [Autoregia](../README.md)
 - **Role:** VSM System 1 – Operations (Execution)
-- **Spec:** [`../spec/awes/spec.md`](../spec/awes/spec.md)
+- **Spec:** [`../spec/ces/spec.md`](../spec/ces/spec.md)
 - **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/),
   [PTOCS](../ptocs/), [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/)
 - **Decision log:** [`../log.md`](../../../../../log.md)

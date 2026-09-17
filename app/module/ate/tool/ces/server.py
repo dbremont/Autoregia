@@ -1,7 +1,7 @@
 """
-Automated Work Execution System (AWES) — Prototype Server.
+Computation Execution System (CES) — Prototype Server.
 
-Flask backend implementing the AWES components:
+Flask backend implementing the CES components:
   [E] Environment Manager  — /api/environments (CRUD, registry)
   [T] Task Runner          — /api/execute (dispatch, monitor, capture)
   [A] Artifact Capture     — /api/sessions (history, output, artifacts)
@@ -10,9 +10,9 @@ Work units are executed via subprocess with timeout enforcement. The session
 store is in-memory (prototype only). No container isolation — single-user local
 use only.
 
-Conforms to spec/awes/spec.md.
+Conforms to spec/ces/spec.md.
 
-Run:   python3 awes/server.py
+Run:   python3 ces/server.py
 Open:  http://localhost:5010
 """
 import json
@@ -28,16 +28,16 @@ import urllib.error
 from datetime import datetime, timezone
 from flask import Flask, request, jsonify, send_from_directory
 
-logging.basicConfig(level=logging.INFO, format="[AWES] %(levelname)s %(message)s")
-logger = logging.getLogger("awes")
+logging.basicConfig(level=logging.INFO, format="[CES] %(levelname)s %(message)s")
+logger = logging.getLogger("ces")
 
 app = Flask(__name__, static_folder="static")
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 # Result Feed — target URLs for sibling sub-systems (empty = disabled)
-AOOS_URL = os.environ.get("AWES_AOOS_URL", "http://localhost:5005").rstrip("/")
-PBS_URL = os.environ.get("AWES_PBS_URL", "http://localhost:5000").rstrip("/")
+AOOS_URL = os.environ.get("CES_AOOS_URL", "http://localhost:5005").rstrip("/")
+PBS_URL = os.environ.get("CES_PBS_URL", "http://localhost:5000").rstrip("/")
 
 def _load_json(filename):
     path = os.path.join(DATA_DIR, filename)
@@ -84,7 +84,7 @@ def _feed_result(session):
     """
     sid = session["session_id"]
     aid = session.get("action_id")
-    desc = f"AWES: {session['payload'][:80]}"
+    desc = f"CES: {session['payload'][:80]}"
     domain = "Execution"
 
     # 1. AOOS — create a work session (manual entry)
@@ -95,7 +95,7 @@ def _feed_result(session):
             "started_at": session["started_at"],
             "ended_at": session["ended_at"],
             "status": session["status"],
-            "source": "awes",
+            "source": "ces",
         }
         _post_json(f"{AOOS_URL}/api/sessions", aoos_body)
 
@@ -106,7 +106,7 @@ def _feed_result(session):
         pbs_body = {
             "record_type": "Observation",
             "state_class": "External World",
-            "content": f"AWES execution {sid}: {session['payload'][:120]}",
+            "content": f"CES execution {sid}: {session['payload'][:120]}",
             "detail": (
                 f"Status: {session['status']}  |  "
                 f"Exit code: {session['exit_code']}  |  "
@@ -115,7 +115,7 @@ def _feed_result(session):
             ),
             "status": status_map.get(session["status"], "Completed"),
             "domain": domain,
-            "tags": ["awes", "execution", session["work_type"]],
+            "tags": ["ces", "execution", session["work_type"]],
             "links": [{"target": sid, "type": "references"}],
         }
         if aid:
@@ -281,7 +281,7 @@ def static_files(path):
 @app.route("/api")
 def api_index():
     return jsonify({
-        "name": "AWES — Automated Work Execution System",
+        "name": "CES — Computation Execution System",
         "version": "0.1.0",
         "endpoints": {
             "environments": "/api/environments",
@@ -291,6 +291,6 @@ def api_index():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("AWES_PORT", 5010))
-    print(f"AWES running on http://localhost:{port}")
+    port = int(os.environ.get("CES_PORT", 5010))
+    print(f"CES running on http://localhost:{port}")
     app.run(host="0.0.0.0", port=port, debug=True)

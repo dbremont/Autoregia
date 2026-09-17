@@ -8,7 +8,7 @@ Where the [Personal Binnacle System (PBS)](../pbs/) externalizes **state** and t
 
 > How to think about an `Agent Capability Self Management System`?
 
-An ACSMS is best understood by analogy to an **athlete's training regime** or an organization's **R&D function**. Performance today is produced by the current capability set; a training regime exists to change that set deliberately — identifying weaknesses, scheduling practice, demanding evidence, and retiring what no longer serves. Likewise, an ACSMS does not perform the agent's work (that is [AWES](../awes/)) and does not choose what the agent values (that is AGS); it maintains the **pipeline that converts intent into capability**.
+An ACSMS is best understood by analogy to an **athlete's training regime** or an organization's **R&D function**. Performance today is produced by the current capability set; a training regime exists to change that set deliberately — identifying weaknesses, scheduling practice, demanding evidence, and retiring what no longer serves. Likewise, an ACSMS does not perform the agent's work (that is [CES](../ces/)) and does not choose what the agent values (that is AGS); it maintains the **pipeline that converts intent into capability**.
 
 An ACSMS therefore:
 
@@ -67,7 +67,7 @@ Detect ──► Deliberate ──► Commit ──► Practice ──► Eviden
 | `Detect`     | A gap surfaces: from PTOCS analysis, PRAS reflection, PKTS drift, or AGS strategy. |
 | `Deliberate` | The gap is argued into a program: scope, expected value, cost, and success evidence. |
 | `Commit`     | The program enters AIAS as a committed intent — it now competes for real resources. |
-| `Practice`   | Scheduled work happens (via AOOS/AWES): reading, building, doing, teaching. |
+| `Practice`   | Scheduled work happens (via AOOS/CES): reading, building, doing, teaching. |
 | `Evidence`   | Output is produced and judged. Exposure is not acquisition; output is the test. |
 | `Consolidate`| Demonstrated capability is written back: PTOCS entry, AGS tier promotion, spaced-review schedule. |
 | `Review`     | Held capabilities are revisited on a spaced schedule; anything unrevisited is assumed to be decaying. |

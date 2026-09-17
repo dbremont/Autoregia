@@ -53,7 +53,7 @@ Autoregia/
     │   ├── ate/         # Agent Toolbox Ecosystem — hosts tools under tool/
     │   │   ├── server.py    # toolbox registry + /ate/tool/<id>/ mounting
     │   │   └── tool/       # tools mounted at /ate/tool/<id>/
-    │   │       ├── awes/  #   Automated Work Execution System
+    │   │       ├── ces/  #   Computation Execution System
     │   │       ├── gial/  #   General Integration Abstraction Layer (plate only)
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (plate only)
     │   └── ...          # gis, aias, aoos, pras, acsms, loop, pwos

@@ -1,4 +1,4 @@
-"""Tests for AWES — Automated Work Execution System."""
+"""Tests for CES — Computation Execution System."""
 import json
 import pytest
 from server import app
@@ -131,4 +131,4 @@ class TestAPIIndex:
         res = client.get("/api")
         assert res.status_code == 200
         data = json.loads(res.data)
-        assert "AWES" in data["name"]
+        assert "CES" in data["name"]

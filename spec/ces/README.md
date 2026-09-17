@@ -1,13 +1,13 @@
-# Automated Work Execution System
+# Computation Execution System
 
-> An **Automated Work Execution System (AWES)** is a technical object engineered to
+> An **Computation Execution System (CES)** is a technical object engineered to
 > `bridge action selection and action completion` — it provisions computational
 > environments, dispatches work units to them, captures artifacts, and feeds
 > results back into the agent's operational and reflective systems.
 
-> Within the Autoregia Personal Viable System Model (PVSM), AWES instantiates the
+> Within the Autoregia Personal Viable System Model (PVSM), CES instantiates the
 > **Execution** stage of the agent control loop and maps to **VSM System 1 –
-> Operations (Execution)**. Where AOOS organizes *what* to do, AWES *does* it —
+> Operations (Execution)**. Where AOOS organizes *what* to do, CES *does* it —
 > programmatically.
 
 ## Components

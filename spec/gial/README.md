@@ -17,4 +17,4 @@ toolbox orchestrates over. It is deliberately not a workflow engine.
     /ate/tool/gial/
 
 - Full design: [spec.md](spec.md)
-- Sibling execution tool: [AWES](../awes/)
+- Sibling execution tool: [CES](../ces/)

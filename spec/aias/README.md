@@ -357,7 +357,7 @@ Principal couplings:
 | [AGS](/about.html#elements) | Policy supplies the values, principles, and constraints against which intents are evaluated. |
 | [AGS](/about.html#elements) / AGS | Internal state, capabilities, and resources bound what is feasible. |
 | [AOOS](../aoos/) | The Active Intent Set directs planning and action selection. |
-| [AWES](../awes/) | Execution outcomes return as feedback for revision. |
+| [CES](../ces/) | Execution outcomes return as feedback for revision. |
 | [PRAS](../pras/) | Deliberations on intention–outcome gaps mature into revisions and policy. |
 
 ## Design Principles

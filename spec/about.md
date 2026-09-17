@@ -77,7 +77,7 @@ The Abstract Agency Framework is instantiated by a set of cooperating systems, e
 | **GWOB** | General World and Self Observation System | Perception · Gateway | One gateway over observation — WOS watches the external world (free public feeds), PKTS tracks keyword attention and resource usage, PWTS records workstation interaction; an aggregate view of the state of affairs across the three. |
 | **AIAS** | Agent Intent Aid System | Intent Management | Realizes the Intent Management stage — maintains the Intent Store and Intent Scheduler; generates, evaluates, commits, monitors, and revises intentions, yielding the **Active Intent Set** that directs planning and execution. |
 | **AOOS** | Agent Operation Organization System | Action Organization | Organizes tasks, projects, and routines into a dependency-aware, capacity-checked, calendar-coordinated plan. |
-| **AWES** | Automated Work Execution System | Execution | Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop. |
+| **CES** | Computation Execution System | Execution | Provisions computational environments, dispatches work units, captures artifacts, and feeds results back into the loop. |
 | **PRAS** | Personal Reflection & Adaptation System | Feedback | A corpus of deliberations observing outcomes, making sense of intention–outcome gaps, and maturing into adaptations. |
 | **ACSMS** | Agent Capability Self Management System | Substrate · Capability Self-Management | The agent's improvement engine — turns detected capability gaps (PTOCS, PKTS) and feedback adaptations (PRAS) into committed improvement programs (AIAS), and consolidates demonstrated capability into the Self Model (AGS) and the catalog (PTOCS). |
 

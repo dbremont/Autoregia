@@ -23,7 +23,7 @@ app/                 the application
 │                             served by root routes in app.py, NOT SUBSYSTEMS
 │       asrs/ pais/ peos/ …    husks — __pycache__ only, deleted modules
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
-│         └── awes/  a tool (own Flask app, mounted at /ate/tool/awes/)
+│         └── ces/  a tool (own Flask app, mounted at /ate/tool/ces/)
 │         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
@@ -63,7 +63,7 @@ make deploy-server     # pull the GHCR image CI publishes and run it — product
 # also: make build | logs | stop
 
 # tests (WOS + GIS tests need CouchDB running on 127.0.0.1:5984)
-make test              # = python3 -m pytest app/module/ate/tool/awes/test_awes.py \
+make test              # = python3 -m pytest app/module/ate/tool/ces/test_ces.py \
                        #    app/module/wos/test_wos.py app/module/gis/test_gis.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
@@ -96,8 +96,8 @@ everything else runs out-of-band:
   `pwts`). **Redis is optional**: ingest persists the raw batch to CouchDB
   first, enqueue failures are caught, and a worker drains all unprocessed
   batches on its next run.
-- **AWES result feed** — fire-and-forget POSTs to `AWES_AOOS_URL` /
-  `AWES_PBS_URL` (defaults are stale standalone ports, :5005/:5000).
+- **CES result feed** — fire-and-forget POSTs to `CES_AOOS_URL` /
+  `CES_PBS_URL` (defaults are stale standalone ports, :5005/:5000).
 - **AOOS Google Calendar sync** — optional; needs an OAuth client secret at
   `app/module/aoos/config/client_secret.json` (or `AOOS_GC_CLIENT_SECRET`),
   writes `config/token.json` on connect; status machine
@@ -129,7 +129,7 @@ everything else runs out-of-band:
   | pwts | `pwts_raw` + `pwts` |
 
 - Local-file only (no CouchDB): `loop` (read-only `data/mock_loop.json`),
-  `awes` (in-memory sessions + read-only mock environments), `pras`
+  `ces` (in-memory sessions + read-only mock environments), `pras`
   (`deliberations/*.html` files *are* the data), `acsms` (static prototype).
 
 ## Invariants (do not break silently)
@@ -142,7 +142,7 @@ everything else runs out-of-band:
   prefix in `.html/.js/.css` under its `TOOLS` dirs. The `href="/"` rewrite
   is why `/index.html` exists as a root alias — link the landing page as
   `/index.html`, never bare `/`, inside tool assets. Tools that use relative
-  URLs (`wos`, `awes`) don't need a `TOOLS` entry; the `ags` entry points at
+  URLs (`wos`, `ces`) don't need a `TOOLS` entry; the `ags` entry points at
   a nonexistent directory and silently no-ops.
 - **URL prefixes are independent of repo layout.** Moving files must not
   change any `/<prefix>/` URL.
@@ -161,7 +161,7 @@ everything else runs out-of-band:
 - **Tests are listed explicitly in `make test`** — there is no pytest config
   and no auto-discovery, so a new suite does not run until added to the
   Makefile. WOS/GIS suites module-level-skip when CouchDB is unreachable;
-  AWES needs nothing (in-memory).
+  CES needs nothing (in-memory).
 - **Design standard:** `design.md` governs every plate and sub-system UI.
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
@@ -181,11 +181,11 @@ everything else runs out-of-band:
   always a `--text-*` step (incl. `--text-2sm` 12px); raw px only inside
   fluid `clamp()` (`spec/ui.spec` §4.2). Shell css spacing uses `--space-*`
   only (`spec/ui.spec` §5.1).
-- **AWES DOM contract:** `app/module/ate/tool/awes/static/js/exec.js` addresses the
+- **CES DOM contract:** `app/module/ate/tool/ces/static/js/exec.js` addresses the
   page by fixed IDs (`env-grid`, `env-select`, `work-type`, `payload`,
   `run-btn`, `run-status`, `session-list`), classes (`env-card`, `session`,
   `badge badge-<status>`) and the CSS vars `--text-dim`, `--red`. Restyling
-  AWES must keep all of these defined.
+  CES must keep all of these defined.
 
 ## Infrastructure
 

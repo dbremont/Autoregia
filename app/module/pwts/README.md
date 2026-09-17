@@ -213,5 +213,5 @@ co-deployed).
 - **Role:** VSM System 3 – Audit / Accounting (sibling of PKTS)
 - **Spec:** [`../spec/pwts/spec.md`](../spec/pwts/README.md), [`schema`](../spec/pwts/schema.json)
 - **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/), [PTOCS](../ptocs/),
-  [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/), [AWES](../awes/)
+  [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/), [CES](../ces/)
 - **Decision log:** [`../log.md`](../../../log.md)

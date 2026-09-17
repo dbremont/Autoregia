@@ -10,7 +10,7 @@ complete Flask sub-app that lives in ``tool/<id>/`` and is mounted here under
 
     /ate/               toolbox index (plate listing the tools)
     /ate/api/tools      machine-readable tool registry
-    /ate/tool/awes/...  Automated Work Execution System
+    /ate/tool/ces/...   Computation Execution System
 
 Adding a tool: create ``tool/<id>/`` with a ``server.py`` exposing a Flask
 ``app``, then add one entry to ``TOOLS`` (the mount is derived from it).
@@ -46,13 +46,13 @@ def _load_tool(module_name, rel_path):
 # URL under the unified server; ``vsm`` names the VSM role the tool serves.
 TOOLS = [
     {
-        "id": "awes",
-        "name": "Automated Work Execution System",
+        "id": "ces",
+        "name": "Computation Execution System",
         "summary": ("Provisions computational environments, dispatches work "
                     "units, captures artifacts, and feeds results back into "
                     "the loop."),
         "vsm": "System 1 — Execution",
-        "href": "/ate/tool/awes/",
+        "href": "/ate/tool/ces/",
     },
     {
         "id": "gial",
@@ -84,7 +84,7 @@ class _ToolMount:
     """Mount tool apps under ``/tool/<id>``.
 
     Same contract as app/app.py's ``_SubsystemMount``: a bare prefix
-    (``/tool/awes``) 302-redirects to the trailing-slash URL so relative
+    (``/tool/ces``) 302-redirects to the trailing-slash URL so relative
     references inside the tool resolve against ``/tool/<id>/``.
     """
 

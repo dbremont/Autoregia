@@ -17,4 +17,4 @@ textual outputs. It is deliberately not a writer and not a translator.
     /ate/tool/sarl/
 
 - Full design: [spec.md](spec.md)
-- Sibling tools: [AWES](../awes/) · [GIAL](../gial/)
+- Sibling tools: [CES](../ces/) · [GIAL](../gial/)

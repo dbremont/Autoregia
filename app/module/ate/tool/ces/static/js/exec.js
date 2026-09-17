@@ -1,4 +1,4 @@
-const API = "/ate/tool/awes";
+const API = "/ate/tool/ces";
 
 async function api(path, opts = {}) {
   const res = await fetch(API + path, {
@@ -39,7 +39,7 @@ async function loadEnvironments() {
   const select = document.getElementById("env-select");
   let envs;
   try {
-    envs = await api("/ate/tool/awes/api/environments");
+    envs = await api("/ate/tool/ces/api/environments");
   } catch (e) {
     grid.innerHTML = '<p class="empty-note" role="alert" style="grid-column:1/-1">Failed to load environments: ' +
       escapeHtml(e.message) + "</p>";
@@ -72,7 +72,7 @@ async function loadSessions() {
   const list = document.getElementById("session-list");
   let sessions;
   try {
-    sessions = await api("/ate/tool/awes/api/sessions");
+    sessions = await api("/ate/tool/ces/api/sessions");
   } catch (e) {
     list.innerHTML = '<p class="empty-note" role="alert">Failed to load sessions: ' +
       escapeHtml(e.message) + "</p>";
@@ -109,7 +109,7 @@ async function run() {
   btn.disabled = true;
   status.textContent = "Running...";
   try {
-    const result = await api("/ate/tool/awes/api/execute", {
+    const result = await api("/ate/tool/ces/api/execute", {
       method: "POST",
       body: JSON.stringify({
         env_id: document.getElementById("env-select").value,
@@ -139,7 +139,7 @@ async function clearSessions() {
   });
   if (!ok) return;
   try {
-    await api("/ate/tool/awes/api/sessions", { method: "DELETE" });
+    await api("/ate/tool/ces/api/sessions", { method: "DELETE" });
     toast("Session history cleared");
   } catch (e) {
     toast("Failed to clear sessions: " + e.message, true);
@@ -148,9 +148,9 @@ async function clearSessions() {
 }
 
 /* ── Command palette (Ctrl/Cmd+K, ui.spec §7.6) ────────── */
-const AWES_CMD = { sel: 0, items: [], input: null, results: null, overlay: null };
+const CES_CMD = { sel: 0, items: [], input: null, results: null, overlay: null };
 
-function awesCommands() {
+function cesCommands() {
   return [
     { title: "Run workload", hint: "execute in selected environment", run: () => run() },
     { title: "Clear session history", hint: "delete all recorded sessions", run: () => clearSessions() },
@@ -160,61 +160,61 @@ function awesCommands() {
   ];
 }
 
-function awesPaletteOpen() {
-  const ov = AWES_CMD.overlay;
+function cesPaletteOpen() {
+  const ov = CES_CMD.overlay;
   ov.classList.remove("hidden");
-  AWES_CMD.input.setAttribute("aria-expanded", "true");
-  AWES_CMD.input.value = "";
-  awesPaletteRender("");
-  AWES_CMD.input.focus();
+  CES_CMD.input.setAttribute("aria-expanded", "true");
+  CES_CMD.input.value = "";
+  cesPaletteRender("");
+  CES_CMD.input.focus();
 }
-function awesPaletteClose() {
-  AWES_CMD.overlay.classList.add("hidden");
-  AWES_CMD.input.setAttribute("aria-expanded", "false");
+function cesPaletteClose() {
+  CES_CMD.overlay.classList.add("hidden");
+  CES_CMD.input.setAttribute("aria-expanded", "false");
 }
-function awesPaletteRender(qRaw) {
+function cesPaletteRender(qRaw) {
   const q = qRaw.toLowerCase().trim();
-  AWES_CMD.items = awesCommands().filter(c => !q || c.title.toLowerCase().includes(q));
-  AWES_CMD.sel = 0;
-  AWES_CMD.results.innerHTML = AWES_CMD.items.map((c, i) => `
+  CES_CMD.items = cesCommands().filter(c => !q || c.title.toLowerCase().includes(q));
+  CES_CMD.sel = 0;
+  CES_CMD.results.innerHTML = CES_CMD.items.map((c, i) => `
     <div class="cmd-result-item ${i === 0 ? "active" : ""}" id="cmd-opt-${i}" role="option" aria-selected="${i === 0}" data-i="${i}">
       <div class="t">${c.title}</div><span style="margin-left:auto;font-size:var(--text-2xs);color:var(--text-dim)">${c.hint}</span>
     </div>`).join("");
-  AWES_CMD.results.querySelectorAll(".cmd-result-item").forEach(el => {
+  CES_CMD.results.querySelectorAll(".cmd-result-item").forEach(el => {
     const i = +el.getAttribute("data-i");
-    el.addEventListener("mouseenter", () => { AWES_CMD.sel = i; awesPaintActive(); });
-    el.addEventListener("click", () => awesActivate(i));
+    el.addEventListener("mouseenter", () => { CES_CMD.sel = i; cesPaintActive(); });
+    el.addEventListener("click", () => cesActivate(i));
   });
 }
-function awesPaintActive() {
-  AWES_CMD.results.querySelectorAll(".cmd-result-item").forEach((el, i) => {
-    el.classList.toggle("active", i === AWES_CMD.sel);
-    el.setAttribute("aria-selected", i === AWES_CMD.sel ? "true" : "false");
+function cesPaintActive() {
+  CES_CMD.results.querySelectorAll(".cmd-result-item").forEach((el, i) => {
+    el.classList.toggle("active", i === CES_CMD.sel);
+    el.setAttribute("aria-selected", i === CES_CMD.sel ? "true" : "false");
   });
-  const a = AWES_CMD.results.querySelector(".cmd-result-item.active");
-  if (a) { a.scrollIntoView({ block: "nearest" }); AWES_CMD.input.setAttribute("aria-activedescendant", a.id); }
+  const a = CES_CMD.results.querySelector(".cmd-result-item.active");
+  if (a) { a.scrollIntoView({ block: "nearest" }); CES_CMD.input.setAttribute("aria-activedescendant", a.id); }
 }
-function awesActivate(i) {
-  const it = AWES_CMD.items[i];
-  awesPaletteClose();
+function cesActivate(i) {
+  const it = CES_CMD.items[i];
+  cesPaletteClose();
   if (it) it.run();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   loadEnvironments();
   loadSessions();
-  AWES_CMD.overlay = document.getElementById("cmdPalette");
-  AWES_CMD.input = document.getElementById("cmdInput");
-  AWES_CMD.results = document.getElementById("cmdResults");
-  AWES_CMD.input.addEventListener("input", e => awesPaletteRender(e.target.value));
-  AWES_CMD.input.addEventListener("keydown", e => {
-    if (e.key === "ArrowDown") { e.preventDefault(); AWES_CMD.sel = Math.min(AWES_CMD.sel + 1, AWES_CMD.items.length - 1); awesPaintActive(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); AWES_CMD.sel = Math.max(AWES_CMD.sel - 1, 0); awesPaintActive(); }
-    else if (e.key === "Enter") { e.preventDefault(); awesActivate(AWES_CMD.sel); }
-    else if (e.key === "Escape") awesPaletteClose();
+  CES_CMD.overlay = document.getElementById("cmdPalette");
+  CES_CMD.input = document.getElementById("cmdInput");
+  CES_CMD.results = document.getElementById("cmdResults");
+  CES_CMD.input.addEventListener("input", e => cesPaletteRender(e.target.value));
+  CES_CMD.input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); CES_CMD.sel = Math.min(CES_CMD.sel + 1, CES_CMD.items.length - 1); cesPaintActive(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); CES_CMD.sel = Math.max(CES_CMD.sel - 1, 0); cesPaintActive(); }
+    else if (e.key === "Enter") { e.preventDefault(); cesActivate(CES_CMD.sel); }
+    else if (e.key === "Escape") cesPaletteClose();
   });
-  AWES_CMD.overlay.addEventListener("click", e => { if (e.target === AWES_CMD.overlay) awesPaletteClose(); });
+  CES_CMD.overlay.addEventListener("click", e => { if (e.target === CES_CMD.overlay) cesPaletteClose(); });
   document.addEventListener("keydown", e => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); awesPaletteOpen(); }
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); cesPaletteOpen(); }
   });
 });

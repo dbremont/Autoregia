@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic mock data generator for AWES."""
+"""Deterministic mock data generator for CES."""
 import json
 import sys
 import os

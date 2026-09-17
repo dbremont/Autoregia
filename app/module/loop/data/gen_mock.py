@@ -4,7 +4,7 @@ Deterministic whole-loop mock dataset generator for the Autoregia
 Control-Loop Dashboard ("The Loop").
 
 It synthesizes the cooperating organs' substance — PBS records, AOOS
-action constructs + sessions, AWES executions, PRAS deliberations, the
+action constructs + sessions, CES executions, PRAS deliberations, the
 PEB event stream, AGS consistency violations, and the agent's
 essential variables — woven into causally-linked chains so every
 whole-loop indicator (cycle-time, closed-loop ratio, cascade
@@ -48,7 +48,7 @@ PEB_TYPES = ["RecordCreated", "ActionRegistered", "ActionScheduled", "ActionComp
              "ReactionFailed", "ReactionSuppressed", "BlockConflictDetected",
              "KeywordThresholdCrossed", "PolicyChanged"]
 ORG_ORIGIN = {"RecordCreated": "PBS", "ActionRegistered": "AOOS", "ActionScheduled": "AOOS",
-              "ActionCompleted": "AOOS", "ExecutionFinished": "AWES",
+              "ActionCompleted": "AOOS", "ExecutionFinished": "CES",
               "AdaptationEnacted": "PRAS", "ReactionFired": "PEB", "ReactionSucceeded": "PEB",
               "ReactionFailed": "PEB", "ReactionSuppressed": "PEB",
               "BlockConflictDetected": "AOOS", "KeywordThresholdCrossed": "PKTS",
@@ -239,14 +239,14 @@ def gen():
                     events.append({
                         "event_id": stable_id("EVT", evc),
                         "type": "ExecutionFinished",
-                        "origin": "AWES" if random.random() < 0.3 else "AOOS",
+                        "origin": "CES" if random.random() < 0.3 else "AOOS",
                         "occurred_at": iso(send),
                         "causal_id": act["_reg_event"],
                         "correlation_id": None,
                         "payload_type": "session",
                     })
                     sess["_exec_event"] = events[-1]["event_id"]
-                    # AWES execution record (subset)
+                    # CES execution record (subset)
                     if random.random() < 0.3:
                         ec += 1
                         executions.append({
@@ -294,7 +294,7 @@ def gen():
                         "decision": {"id": act["id"], "kind": act["kind"],
                                      "title": act["project"], "organ": "AOOS"},
                         "execution": {"id": sess["id"], "duration_min": sess["duration_min"],
-                                      "title": sess["description"], "organ": "AOOS/AWES"},
+                                      "title": sess["description"], "organ": "AOOS/CES"},
                         "feedback": {"id": deliberation["del"]["id"], "status": deliberation["del"]["status"],
                                      "type": deliberation["del"]["type"], "title": deliberation["del"]["title"],
                                      "organ": "PRAS"},
@@ -505,7 +505,7 @@ ORGS = {
     "AGS":  {"name": "Agent Self-Representation",      "vsm": "S5", "stage": "Substrate",        "color": "#5C4E78"},
     "PTOCS": {"name": "Personal Technical Object Catalog","vsm":"S4","stage": "Situation Model",  "color": "#2D6A4F"},
     "AOOS":  {"name": "Personal Work Organization",     "vsm": "S1", "stage": "Decision/Action",  "color": "#7A1A2A"},
-    "AWES":  {"name": "Automated Work Execution",       "vsm": "S1", "stage": "Execution",        "color": "#A8854A"},
+    "CES":  {"name": "Computation Execution",       "vsm": "S1", "stage": "Execution",        "color": "#A8854A"},
     "PRAS":  {"name": "Personal Reflection & Adaptation","vsm": "S4", "stage": "Feedback",         "color": "#3F6E50"},
     "AGS":   {"name": "Agency Grounding System",         "vsm": "S5", "stage": "Policy",           "color": "#641020"},
     "PEB":   {"name": "Personal Event Bus",             "vsm": "S2", "stage": "Coordination",     "color": "#C7A972"},
@@ -516,7 +516,7 @@ VSM_LEVELS = [
     {"code": "S4",  "name": "Intelligence",  "orgs": ["PRAS", "PTOCS"]},
     {"code": "S3",  "name": "Control / Audit","orgs": ["PBS", "PKTS"]},
     {"code": "S2",  "name": "Coordination",  "orgs": ["PEB"]},
-    {"code": "S1",  "name": "Operations",    "orgs": ["AOOS", "AWES"]},
+    {"code": "S1",  "name": "Operations",    "orgs": ["AOOS", "CES"]},
 ]
 
 

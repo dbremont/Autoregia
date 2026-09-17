@@ -1,20 +1,20 @@
-# Automated Work Execution System
+# Computation Execution System
 
 > This document establishes the conceptual foundations, data model, functionality,
-> and implementation of an **Automated Work Execution System (AWES)**. An AWES is
+> and implementation of an **Computation Execution System (CES)**. An CES is
 > a technical object engineered to `execute computational work automatically` —
 > it receives an action or command, provisions an execution environment, runs the
 > work, captures the results, and feeds them back into the agent's operational
 > and reflective systems.
 
-> Within the Autoregia Personal Viable System Model (PVSM), AWES instantiates the
+> Within the Autoregia Personal Viable System Model (PVSM), CES instantiates the
 > **Execution** stage of the agent control loop and maps to **VSM System 1 –
 > Operations (Execution)**: it *carries out* the actions that the deliberative
 > cycle selects. Where AOOS organizes action constructs and records actuals,
-> AWES performs the computational work itself — turning "action selected" into
+> CES performs the computational work itself — turning "action selected" into
 > "action completed."
 
-Fundamentally, an AWES exists to maintain persistent representations of the
+Fundamentally, an CES exists to maintain persistent representations of the
 **computational work** relevant for effective automated execution. These include:
 
 - **Execution Environments** — sandboxed runtimes (shell, Python, Jupyter,
@@ -26,18 +26,18 @@ Fundamentally, an AWES exists to maintain persistent representations of the
 - **Execution Artifacts** — files, data, or logs produced during execution,
   addressable by session and storable for later retrieval or reflection.
 
-By preserving these across time, an AWES functions as an externalized
+By preserving these across time, an CES functions as an externalized
 **execution substrate**, reducing the gap between intention and completion,
 enabling automated task pipelines, and providing a verifiable trace of
 computational actions for audit and reflection.
 
 ## Internal Composition
 
-> AWES is composed of four cooperating components. The conceptual separation is
+> CES is composed of four cooperating components. The conceptual separation is
 > real; the deployment boundary is one project.
 
 ```
-AWES — Automated Work Execution System  (VSM System 1 – Execution)
+CES — Computation Execution System  (VSM System 1 – Execution)
  |
  +-- [E] Environment Manager
  |     \_ Provisions and manages execution environments: local shell, Python
@@ -68,9 +68,9 @@ AWES — Automated Work Execution System  (VSM System 1 – Execution)
 
 ## Formulation
 
-> How to think about an `Automated Work Execution System`?
+> How to think about an `Computation Execution System`?
 
-An `Automated Work Execution System` is a technical object with the role of
+An `Computation Execution System` is a technical object with the role of
 externalizing **the agent's computational execution** to scaffold extended
 agency:
 
@@ -96,19 +96,19 @@ Conversely, a work unit is *not* a AOOS action construct. An action construct
 says *why* and *when*; a work unit says *what exactly* and *how*. The same
 action may produce different work units on different execution attempts.
 
-#### (Case Set) When to use AWES
+#### (Case Set) When to use CES
 
 | Case | Description | Example |
 | --- | --- | --- |
 | Headless execution | Run a script without opening a terminal | `POST /api/execute` with a Python script body |
-| Scheduled computation | A AOOS routine triggers a daily report | AWES pulls data, runs analysis, posts to PBS |
-| Interactive exploration | A Jupyter notebook kernel managed by AWES | AWES provisions a kernel, the agent works through the UI, AWES captures the session |
-| CI-style pipeline | A series of dependent work units | AWES runs lint -> test -> build, each step consuming the previous artifact |
-| Reproducible audit | Re-run a past computation to verify a result | AWES replays a session in the same environment |
+| Scheduled computation | A AOOS routine triggers a daily report | CES pulls data, runs analysis, posts to PBS |
+| Interactive exploration | A Jupyter notebook kernel managed by CES | CES provisions a kernel, the agent works through the UI, CES captures the session |
+| CI-style pipeline | A series of dependent work units | CES runs lint -> test -> build, each step consuming the previous artifact |
+| Reproducible audit | Re-run a past computation to verify a result | CES replays a session in the same environment |
 
 ## Data Model
 
-> AWES uses snake_case field naming. Enumerated values match the tables below.
+> CES uses snake_case field naming. Enumerated values match the tables below.
 > The canonical schema is defined in `schema.json`.
 
 ### Environment
@@ -161,7 +161,7 @@ An **artifact** is a file or data object produced during execution.
 
 ## Evaluation
 
-> An AWES implementation is evaluated against the following criteria.
+> An CES implementation is evaluated against the following criteria.
 
 | Criterion | Description | Measure |
 | --- | --- | --- |
@@ -198,7 +198,7 @@ An **artifact** is a file or data object produced during execution.
 
 ### Prototype
 
-The prototype in [`awes/`](../../awes/) implements:
+The prototype in [`ces/`](../../ces/) implements:
 - `GET /api/environments` — list environments
 - `POST /api/environments` — register a new environment
 - `POST /api/execute` — execute a work unit (command or Python script)
@@ -212,7 +212,7 @@ production deployment.
 
 ## References
 
-- [AOOS — spec](../aoos/spec.md) — the operations system AWES feeds into
+- [AOOS — spec](../aoos/spec.md) — the operations system CES feeds into
 - [PBS — spec](../pbs/spec.md) — durable event stream for execution traces
 - [PRAS — spec](../pras/spec.md) — reflection and adaptation on execution outcomes
 - [Autoregia UI Specification](../ui.spec) — shared UI standard

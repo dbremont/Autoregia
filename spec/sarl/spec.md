@@ -13,7 +13,7 @@
 > of the control loop: it is a tool of the **Agent Toolbox Ecosystem (ATE)**,
 > mounted at `/ate/tool/sarl/`. It serves the quality of the agent's textual
 > outputs — documents, notes, READMEs, deliberations, reports — the texts
-> **Execution** (AWES) produces and **Feedback** (PRAS) reads. It is
+> **Execution** (CES) produces and **Feedback** (PRAS) reads. It is
 > deliberately *not* a writer and *not* a translator: it composes nothing and
 > translates nothing — it verifies and corrects what already exists, and every
 > change it proposes is accepted or rejected by the agent.
@@ -33,7 +33,7 @@ repeatable pass. These include:
   terms, forbidden terms, aliases. The unit of terminology.
 - **Reviews** — one pass over a text: the dimensions requested, the findings
   raised, the dispositions taken, and the corrected text with its change log.
-  The unit of a review session — the analogue of AWES sessions and GIAL
+  The unit of a review session — the analogue of CES sessions and GIAL
   executions.
 
 ## The Model
@@ -209,6 +209,6 @@ tests (golden texts per pack, mock LanguageTool endpoint).
   `es` packs encode: <https://www.rae.es/ortografia/>
 - LanguageTool — the external engine, designed dormant:
   <https://languagetool.org/dev-reference>
-- The sibling tools this work complements: [AWES](../awes/) (Execution) and
+- The sibling tools this work complements: [CES](../ces/) (Execution) and
   [GIAL](../gial/) (Integration) — the latter source of the dormant-adapter
   doctrine

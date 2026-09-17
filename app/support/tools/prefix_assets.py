@@ -27,7 +27,7 @@ TOOLS = {
     "gis": ["module/gis/static"],
     "ags": ["app/ags/policies"],
     "aoos": ["module/aoos/static"],
-    "ate/tool/awes": ["module/ate/tool/awes/static"],
+    "ate/tool/ces": ["module/ate/tool/ces/static"],
 }
 
 # Path segments served under each tool's mount that must be prefixed.

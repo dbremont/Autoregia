@@ -36,8 +36,8 @@
    "stage": "Decision/Action",
    "color": "#7A1A2A"
   },
-  "AWES": {
-   "name": "Automated Work Execution",
+  "CES": {
+   "name": "Computation Execution",
    "vsm": "S1",
    "stage": "Execution",
    "color": "#A8854A"
@@ -98,7 +98,7 @@
    "name": "Operations",
    "orgs": [
     "AOOS",
-    "AWES"
+    "CES"
    ]
   }
  ],
@@ -10451,7 +10451,7 @@
     "id": "SES-2026-00001",
     "duration_min": 41,
     "title": "backup rotation",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00002",
@@ -10481,7 +10481,7 @@
     "id": "SES-2026-00002",
     "duration_min": 107,
     "title": "email deadline ingestion",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00003",
@@ -10511,7 +10511,7 @@
     "id": "SES-2026-00003",
     "duration_min": 20,
     "title": "nutrition logging",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00004",
@@ -10541,7 +10541,7 @@
     "id": "SES-2026-00006",
     "duration_min": 84,
     "title": "tax estimate",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00005",
@@ -10571,7 +10571,7 @@
     "id": "SES-2026-00007",
     "duration_min": 73,
     "title": "monthly close",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00006",
@@ -10601,7 +10601,7 @@
     "id": "SES-2026-00010",
     "duration_min": 83,
     "title": "calendar sync",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00007",
@@ -10631,7 +10631,7 @@
     "id": "SES-2026-00012",
     "duration_min": 134,
     "title": "Spectral sequences",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00009",
@@ -10661,7 +10661,7 @@
     "id": "SES-2026-00013",
     "duration_min": 34,
     "title": "Spectral sequences",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00010",
@@ -10691,7 +10691,7 @@
     "id": "SES-2026-00024",
     "duration_min": 52,
     "title": "backup rotation",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00012",
@@ -10721,7 +10721,7 @@
     "id": "SES-2026-00026",
     "duration_min": 10,
     "title": "calendar sync",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00014",
@@ -10751,7 +10751,7 @@
     "id": "SES-2026-00027",
     "duration_min": 52,
     "title": "weekly call",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00015",
@@ -10781,7 +10781,7 @@
     "id": "SES-2026-00030",
     "duration_min": 41,
     "title": "backup rotation",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00016",
@@ -10811,7 +10811,7 @@
     "id": "SES-2026-00032",
     "duration_min": 106,
     "title": "linear algebra",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00017",
@@ -10841,7 +10841,7 @@
     "id": "SES-2026-00036",
     "duration_min": 62,
     "title": "schema migration",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00020",
@@ -10871,7 +10871,7 @@
     "id": "SES-2026-00041",
     "duration_min": 101,
     "title": "Spectral sequences",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00021",
@@ -10901,7 +10901,7 @@
     "id": "SES-2026-00046",
     "duration_min": 15,
     "title": "sleep schedule",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00024",
@@ -10931,7 +10931,7 @@
     "id": "SES-2026-00056",
     "duration_min": 43,
     "title": "subscription audit",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00026",
@@ -10961,7 +10961,7 @@
     "id": "SES-2026-00063",
     "duration_min": 21,
     "title": "calendar sync",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00028",
@@ -10991,7 +10991,7 @@
     "id": "SES-2026-00064",
     "duration_min": 76,
     "title": "weekly call",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00029",
@@ -11021,7 +11021,7 @@
     "id": "SES-2026-00068",
     "duration_min": 61,
     "title": "embedding drift",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00030",
@@ -11051,7 +11051,7 @@
     "id": "SES-2026-00069",
     "duration_min": 103,
     "title": "embedding drift",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00031",
@@ -11081,7 +11081,7 @@
     "id": "SES-2026-00075",
     "duration_min": 101,
     "title": "attention economics",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00033",
@@ -11111,7 +11111,7 @@
     "id": "SES-2026-00078",
     "duration_min": 92,
     "title": "email deadline ingestion",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00035",
@@ -11141,7 +11141,7 @@
     "id": "SES-2026-00083",
     "duration_min": 99,
     "title": "calendar sync",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00037",
@@ -11171,7 +11171,7 @@
     "id": "SES-2026-00085",
     "duration_min": 28,
     "title": "cardio baseline",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00041",
@@ -11201,7 +11201,7 @@
     "id": "SES-2026-00087",
     "duration_min": 30,
     "title": "weekly call",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00042",
@@ -11231,7 +11231,7 @@
     "id": "SES-2026-00091",
     "duration_min": 45,
     "title": "schema migration",
-    "organ": "AOOS/AWES"
+    "organ": "AOOS/CES"
    },
    "feedback": {
     "id": "DLB-2026-00043",
@@ -11310,7 +11310,7 @@
   {
    "event_id": "EVT-73671442",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-10T23:18:44.501604Z",
    "causal_id": "EVT-040ED8CA",
    "correlation_id": "THR-3433E686",
@@ -11445,7 +11445,7 @@
   {
    "event_id": "EVT-601AB60E",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-13T20:35:23.193402Z",
    "causal_id": "EVT-1FEEB346",
    "correlation_id": null,
@@ -11454,7 +11454,7 @@
   {
    "event_id": "EVT-ABF5EF4A",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-13T03:19:17.385505Z",
    "causal_id": "EVT-1FEEB346",
    "correlation_id": null,
@@ -11553,7 +11553,7 @@
   {
    "event_id": "EVT-790D602B",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-15T03:25:31.431219Z",
    "causal_id": "EVT-F4D57C08",
    "correlation_id": "THR-C18FF286",
@@ -11769,7 +11769,7 @@
   {
    "event_id": "EVT-38C30614",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-20T15:24:02.007015Z",
    "causal_id": "EVT-A4BDB534",
    "correlation_id": null,
@@ -11994,7 +11994,7 @@
   {
    "event_id": "EVT-3F737E35",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-25T05:30:10.619203Z",
    "causal_id": "EVT-38320B50",
    "correlation_id": null,
@@ -12111,7 +12111,7 @@
   {
    "event_id": "EVT-856D4D8B",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-25T09:50:55.092717Z",
    "causal_id": "EVT-7E57753D",
    "correlation_id": null,
@@ -12309,7 +12309,7 @@
   {
    "event_id": "EVT-6CBAF0BA",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-03-29T02:47:12.838049Z",
    "causal_id": "EVT-8A98C22B",
    "correlation_id": null,
@@ -12561,7 +12561,7 @@
   {
    "event_id": "EVT-39913541",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-03T08:05:53.486950Z",
    "causal_id": "EVT-129458C7",
    "correlation_id": null,
@@ -12651,7 +12651,7 @@
   {
    "event_id": "EVT-2B64F6D9",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-03T08:05:45.120305Z",
    "causal_id": "EVT-C8A1D3AD",
    "correlation_id": null,
@@ -12984,7 +12984,7 @@
   {
    "event_id": "EVT-CB4CC54C",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-09T23:22:53.697875Z",
    "causal_id": "EVT-116F2D8E",
    "correlation_id": null,
@@ -13029,7 +13029,7 @@
   {
    "event_id": "EVT-C73A25D8",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-10T05:06:05.578752Z",
    "causal_id": "EVT-BC488F09",
    "correlation_id": null,
@@ -13335,7 +13335,7 @@
   {
    "event_id": "EVT-303E31BE",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-21T02:13:23.593889Z",
    "causal_id": "EVT-99D59743",
    "correlation_id": "THR-2BA2304F",
@@ -13407,7 +13407,7 @@
   {
    "event_id": "EVT-1F4CF3DF",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-19T05:35:42.862856Z",
    "causal_id": "EVT-B78FC44A",
    "correlation_id": null,
@@ -13614,7 +13614,7 @@
   {
    "event_id": "EVT-00257E95",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-04-24T15:12:15.831156Z",
    "causal_id": "EVT-9FAF6F08",
    "correlation_id": null,
@@ -14262,7 +14262,7 @@
   {
    "event_id": "EVT-F811601A",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-07T18:23:29.711673Z",
    "causal_id": "EVT-EAD0B81D",
    "correlation_id": null,
@@ -14334,7 +14334,7 @@
   {
    "event_id": "EVT-00B1A1CA",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-09T02:17:45.279076Z",
    "causal_id": "EVT-A78B104D",
    "correlation_id": null,
@@ -14352,7 +14352,7 @@
   {
    "event_id": "EVT-C01B896A",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-09T19:38:13.310160Z",
    "causal_id": "EVT-EB31E522",
    "correlation_id": null,
@@ -14676,7 +14676,7 @@
   {
    "event_id": "EVT-16D4C2A1",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-15T04:40:37.408623Z",
    "causal_id": "EVT-48FC692A",
    "correlation_id": "THR-E4810B78",
@@ -14739,7 +14739,7 @@
   {
    "event_id": "EVT-12C4CFCA",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-15T11:57:12.375654Z",
    "causal_id": "EVT-8774D65D",
    "correlation_id": "THR-2ED4E631",
@@ -14892,7 +14892,7 @@
   {
    "event_id": "EVT-AA5A107E",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-21T02:30:26.844090Z",
    "causal_id": "EVT-1DE1AE01",
    "correlation_id": null,
@@ -14964,7 +14964,7 @@
   {
    "event_id": "EVT-1B39323E",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-05-22T20:03:21.975365Z",
    "causal_id": "EVT-3EB999AC",
    "correlation_id": null,
@@ -15333,7 +15333,7 @@
   {
    "event_id": "EVT-1FA87567",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-03T13:11:06.911434Z",
    "causal_id": "EVT-8C1BB271",
    "correlation_id": "THR-0DE9B048",
@@ -15405,7 +15405,7 @@
   {
    "event_id": "EVT-BEDD652E",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-04T10:55:11.240304Z",
    "causal_id": "EVT-BE086196",
    "correlation_id": null,
@@ -15504,7 +15504,7 @@
   {
    "event_id": "EVT-AC380FB0",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-08T23:29:12.075591Z",
    "causal_id": "EVT-6AD98D63",
    "correlation_id": null,
@@ -15855,7 +15855,7 @@
   {
    "event_id": "EVT-307C5679",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-25T08:22:12.135055Z",
    "causal_id": "EVT-8539246C",
    "correlation_id": null,
@@ -16026,7 +16026,7 @@
   {
    "event_id": "EVT-D22F80C5",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-29T09:49:06.701934Z",
    "causal_id": "EVT-384F9F60",
    "correlation_id": null,
@@ -16107,7 +16107,7 @@
   {
    "event_id": "EVT-041780BF",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-30T06:27:03.009342Z",
    "causal_id": "EVT-1395138D",
    "correlation_id": "THR-01C8576E",
@@ -16170,7 +16170,7 @@
   {
    "event_id": "EVT-3CC00E5B",
    "type": "ExecutionFinished",
-   "origin": "AWES",
+   "origin": "CES",
    "occurred_at": "2026-06-30T23:51:46.840288Z",
    "causal_id": "EVT-8EFAD52C",
    "correlation_id": null,

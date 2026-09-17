@@ -9,6 +9,6 @@ COPY . .
 
 EXPOSE 5010
 
-ENV AWES_PORT=5010
+ENV CES_PORT=5010
 
 CMD ["python", "server.py"]

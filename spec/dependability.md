@@ -40,7 +40,7 @@ here:
 | **Node failure** | host reboot; `autoregia` / `couchdb` container crash; desktop sleep kills the PKTS/PWTS/WOS collectors |
 | **Process crash** | Flask server exception; RQ worker death mid-batch; collector daemon killed |
 | **Network partition** | CouchDB unreachable from the server; nitter mirror down; an external feed timing out; Redis down |
-| **Message loss / delay** | fire-and-forget result POSTs (AWES → AOOS/PBS); ingest POST from a desktop collector while the server is down |
+| **Message loss / delay** | fire-and-forget result POSTs (CES → AOOS/PBS); ingest POST from a desktop collector while the server is down |
 | **Performance degradation** | feed polls stacking behind a slow mirror; embedding model load on first Recompute; disk pressure on the CouchDB volume |
 | **Data corruption / inconsistency** | a bad batch written by a worker; a partially updated view; stale seed assumptions after manual DB edits |
 
@@ -61,7 +61,7 @@ here:
 | **Codebase identity continuity** | guaranteed | git history + GHCR image tags; every deploy is a named, recoverable artifact | CI (GitHub Actions) |
 | **Retry of failed feeds** | best-effort | `error_count`/`last_error` recorded per spec; the sweep retries next interval — but there is no exponential backoff or dead-letter | `wos` collector |
 | **Joint work tracking (RQ)** | best-effort | Redis queues `pkts`/`pwts` are ephemeral; correctness relies on the CouchDB reconciliation above, not on Redis durability | `pkts/tasks.py`, `pkts/worker.py` |
-| **Ephemeral sub-system state** (AWES sessions, in-memory caches) | absent (by design) | AWES sessions are in-memory; a restart resets them — accepted, since they are exploratory mock environments | `ate/tool/awes` |
+| **Ephemeral sub-system state** (CES sessions, in-memory caches) | absent (by design) | CES sessions are in-memory; a restart resets them — accepted, since they are exploratory mock environments | `ate/tool/ces` |
 
 ## Joint-continuity today
 
@@ -73,7 +73,7 @@ container infrastructure each hold part of the ongoing process.
 | **collector daemon → server** (`GET /api/sources`, `POST /api/poll`) | best-effort: the daemon sweeps on a timer and re-asks every cycle, so a missed sweep self-heals; but the daemon itself is **hand-started and unsupervised** (see gaps) |
 | **desktop collectors → ingest** (PKTS/PWTS batches) | best-effort: push over HTTP; if the server is down *at push time* the batch is lost — there is no store-and-forward on the collector side |
 | **server → RQ workers** | guaranteed via CouchDB reconciliation (above); Redis is an optimization, not a source of truth |
-| **AWES → AOOS / PBS** (result posts) | **absent** — fire-and-forget POSTs with no acknowledgment, retry, or record. If the receiver is down, the result vanishes: a live joint-continuity gap |
+| **CES → AOOS / PBS** (result posts) | **absent** — fire-and-forget POSTs with no acknowledgment, retry, or record. If the receiver is down, the result vanishes: a live joint-continuity gap |
 | **operator → deployment** (`make deploy-*`, CI) | guaranteed: images are rebuilt from git; the running system is always reproducible from the repository |
 
 ## Known discontinuities
@@ -85,7 +85,7 @@ Honest gaps — what the system does **not** yet guarantee, with the roadmap:
 | **No CouchDB backups** | host/volume loss destroys the whole corpus (observations, cursors, batches) — the one unrecoverable artifact | periodic `couchdb-dump`/replication to a second location; restore runbook |
 | **Single-node CouchDB** | no replication, no failover; DB downtime = degraded mode for every store-backed sub-system | 2-node replication or scheduled snapshot restore drill |
 | **Unsupervised collectors** | the WOS collector (and desktop collectors) are hand-started; a host reboot silently stops perception until noticed | systemd units / supervised processes with health reporting into WOS itself |
-| **No ack/retry on result feeds** (AWES → AOOS/PBS) | joint-continuity break: delegated results can vanish silently | durable result documents + retry, or route results through CouchDB instead of POSTs |
+| **No ack/retry on result feeds** (CES → AOOS/PBS) | joint-continuity break: delegated results can vanish silently | durable result documents + retry, or route results through CouchDB instead of POSTs |
 | **Collector push without store-and-forward** | PKTS/PWTS batches generated while the server is down are lost at the source | local spool on the collector; drain on reconnect |
 | **No backoff / dead-letter for failing feeds** | a dead mirror is retried every sweep at full cost | backoff policy in the cursor; dead-letter state |
 

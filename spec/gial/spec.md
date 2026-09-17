@@ -12,10 +12,10 @@
 > Within the Autoregia Personal Viable System Model (PVSM), GIAL is not an organ
 > of the control loop: it is a tool of the **Agent Toolbox Ecosystem (ATE)**,
 > mounted at `/ate/tool/gial/`. It extends the reach of two stages at once —
-> **Execution** (where AWES acts on the world through computational environments,
+> **Execution** (where CES acts on the world through computational environments,
 > GIAL acts through the APIs of external systems) and **Perception** (external
 > observations arrive through the same doors). It is deliberately *not* a
-> workflow engine: orchestration — chaining actions into sequences — is AWES
+> workflow engine: orchestration — chaining actions into sequences — is CES
 > territory. GIAL is the connection layer the rest of the toolbox orchestrates
 > over.
 
@@ -85,7 +85,7 @@ Connection status depends on the scheme:
 Every run is logged: connection, action, params, status (`ok | error`), HTTP
 status code, `duration_ms`, a request summary (method + URL), the response body
 **truncated to 4 KiB** with a selected header subset, and any error text.
-Executions are GIAL's evidence trail — the analogue of AWES sessions and PBS
+Executions are GIAL's evidence trail — the analogue of CES sessions and PBS
 records.
 
 ## Conventions
@@ -198,4 +198,4 @@ feed XML, mock token endpoint).
   <https://zapier.com/apps/google-drive/integrations>
 - n8n — the workflow orchestrator GIAL deliberately is not:
   <https://docs.n8n.io>
-- The sibling execution tool this layer complements: [AWES](../awes/)
+- The sibling execution tool this layer complements: [CES](../ces/)
