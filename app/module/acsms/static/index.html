@@ -6,8 +6,8 @@
   <title>ACSMS — Agent Capability Self Management System</title>
   <style>
     :root {
-      --ink: #1c1916; --ink-soft: #4a443d; --muted: #7a736a;
-      --rule: #d8d0c4; --paper: #FAFAF6; --parchment: var(--paper); --surface: #fffdf8;
+      --ink: #2C2A26; --ink-soft: #44413B; --muted: #6B665B;
+      --rule: #E2DED4; --paper: #FAFAF6; --parchment: var(--paper); --surface: #FFFFFF;
       --accent: #7A1A2A; --gold: #A8854A;
       --serif: "Spectral","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
       --sans: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -48,7 +48,7 @@
     .flow{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:26px 18px;margin:10px 0 6px;text-align:center}
     .flow-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 4px}
     .flow-node{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink-soft);border:1px solid var(--rule);border-radius:5px;padding:6px 10px;background:var(--parchment)}
-    .flow-node.core{color:#fffdf8;background:var(--accent);border-color:var(--accent);font-weight:600}
+    .flow-node.core{color:#FFFFFF;background:var(--accent);border-color:var(--accent);font-weight:600}
     .flow-arrow{font-family:var(--mono);color:var(--gold);font-size:14px;padding:6px 2px}
     .flow-caption{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:14px}
     .stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 10px}
@@ -114,9 +114,9 @@
         <span class="flow-node">GIS · gaps</span>
         <span class="flow-node">AGS · values</span>
       </div>
-      <div class="flow-arrow">▼</div>
+      <div class="flow-arrow"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
       <div class="flow-row"><span class="flow-node core">ACSMS</span></div>
-      <div class="flow-arrow">▼</div>
+      <div class="flow-arrow"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
       <div class="flow-row">
         <span class="flow-node">AIAS · improvement intents</span>
         <span class="flow-node">AGS / GIS · capability updates</span>

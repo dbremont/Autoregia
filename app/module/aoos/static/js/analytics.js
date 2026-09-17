@@ -15,7 +15,8 @@ AO._echartsTheme = function () {
     ink: tok('--ink-1', '#2C2A26'), muted: tok('--color-text-muted', '#8C877B'),
     faint: tok('--color-text-faint', '#A7A296'), border: tok('--color-border', '#E2DED4'),
     surface: tok('--color-surface', '#FFFFFF'), surface2: tok('--color-surface-2', '#F4F1EA'),
-    paper: tok('--paper', '#FAFAF6'), oxford: tok('--oxford', '#7A1A2A'),
+    paper: tok('--paper', '#FAFAF6'), paperOnAccent: tok('--paper-on-accent', '#FAF1E6'),
+    oxford: tok('--oxford', '#7A1A2A'),
     gold: tok('--gold', '#A8854A'), success: tok('--color-success', '#3F6E50'),
     warning: tok('--color-warning', '#B4742A'), danger: tok('--color-danger', '#A33434'),
     info: tok('--color-info', '#3F6092'),
@@ -154,7 +155,7 @@ AO.Analytics.render = async function () {
     }
     AO.Analytics._paint(D);
   } catch (e) {
-    body.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠</div>' +
+    body.innerHTML = '<div class="empty-state"><div class="empty-icon">' + AO.icon('alert-triangle', 30) + '</div>' +
       '<h3>Could not load analytics</h3><p>' + AO.esc(e.message) + '</p></div>';
   }
 };
@@ -451,7 +452,7 @@ AO.Analytics._chartMarkovMatrix = function (data) {
     series: [{
       type: 'heatmap', data: heatData,
       label: { show: true, formatter: p => p.value[2] >= 0.005 ? (p.value[2] * 100).toFixed(0) + (p.value[2] >= 0.1 ? '%' : '') : '',
-        color: p => p.value[2] > maxV * 0.55 ? '#FAF1E6' : t.ink, fontSize: 9, fontFamily: t.mono },
+        color: p => p.value[2] > maxV * 0.55 ? t.paperOnAccent : t.ink, fontSize: 9, fontFamily: t.mono },
       itemStyle: { borderRadius: 3, borderColor: t.surface, borderWidth: 2 },
       emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(122,26,42,0.3)' } },
     }],
@@ -536,7 +537,8 @@ AO._contrastText = function (hex) {
   if (h.length !== 6) return '#FFFFFF';
   const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
   const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return lum > 0.62 ? '#1E1C19' : '#FAF1E6';
+  return lum > 0.62 ? '#1E1C19'
+    : (getComputedStyle(document.documentElement).getPropertyValue('--paper-on-accent').trim() || '#FAF1E6');
 };
 
 /* ── Component G — Goal Tracking analytics ─────────────────── */

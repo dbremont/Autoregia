@@ -1,4 +1,4 @@
-# Decision Log
+# Log
 
 > A guide that connect reality ([Nature](https://app.notion.com/p/Nature-554701ca10264f4091f1e9e8fd7aec04?pvs=21) ) -  with its representation ([Modelado](https://app.notion.com/p/Modelado-a6727ea210124fb9a00ff6bb5bcf7cd5?pvs=21), [Computacion](https://app.notion.com/p/Computacion-d20204a3de774ceca5cdc90a12e469ef?pvs=21),  [Formal System](https://app.notion.com/p/Formal-System-41d02881d0544314b0e7ad3e6ada608a?pvs=21), [Algorithm](https://app.notion.com/p/Algorithm-617ee00b46ea444799ea7a4945d72921?pvs=21),  [Observer](https://app.notion.com/p/Observer-24bc0f5171ec8060b8f3d55b4b766042?pvs=21) and [Representation](https://app.notion.com/p/Representation-4afbffa763ec46eeb10d8c87c248edf1?pvs=21) )
 

@@ -235,7 +235,8 @@ AO.Session._renderChart = function (seven) {
       itemStyle: { color: '#A8854A', borderRadius: [3, 3, 0, 0] },
       emphasis: { itemStyle: { color: '#7A1A2A' } } }],
     tooltip: { trigger: 'axis', formatter: function (p) { return p[0].name + ' · ' + AO.Session._fmtShort(p[0].value * 60000); },
-      backgroundColor: '#1E1C19', borderColor: '#1E1C19', textStyle: { color: '#FAF1E6' } }
+      backgroundColor: '#1E1C19', borderColor: '#1E1C19',
+      textStyle: { color: getComputedStyle(document.documentElement).getPropertyValue('--paper-on-accent').trim() || '#FAF1E6' } }
   });
 };
 

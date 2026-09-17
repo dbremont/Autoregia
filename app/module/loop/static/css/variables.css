@@ -17,6 +17,7 @@
   --ink-9:  #EEEAE0;   /* light borders */
   --ink-10: #F4F1EA;   /* surface-warm tint */
   --paper:  #FAFAF6;   /* page background */
+  --paper-on-accent: #FAF1E6;   /* text/icons on oxford & ink fills (ui.spec §10.1) */
 
   /* ── Surfaces (tonal layering) ──────────────────────────── */
   --color-bg:           var(--paper);

@@ -20,7 +20,7 @@ AO._GOAL_STATUS_COLOR = {
   'on-track': '#3F6E50', 'at-risk': '#B4742A', 'off-track': '#A33434',
   'achieved': '#3F6E50', 'dormant': '#8C877B',
 };
-AO._GOAL_MOMENTUM_GLYPH = { advancing: '▲', stalled: '▶', regressing: '▼' };
+AO._GOAL_MOMENTUM_ICON = { advancing: 'trending-up', stalled: 'arrow-right', regressing: 'trending-down' };
 
 AO._goalPill = function (text, color) {
   return '<span class="badge" style="background:' + color + '22;color:' + color + ';border-color:' + color + '44">' + AO.esc(text) + '</span>';
@@ -64,7 +64,7 @@ AO.renderGoals = async function () {
 
 AO._goalCard = function (g) {
   const sc = AO._GOAL_STATUS_COLOR[g.status] || '#8C877B';
-  const mg = AO._GOAL_MOMENTUM_GLYPH[g.momentum] || '▶';
+  const mg = AO.icon(AO._GOAL_MOMENTUM_ICON[g.momentum] || 'arrow-right', 11);
   const mc = g.momentum === 'advancing' ? '#3F6E50' : g.momentum === 'regressing' ? '#A33434' : '#B4742A';
   const dir = (g.target || {}).direction === 'lte' ? '≤' : '≥';
   const tval = (g.target || {}).value, tunit = (g.target || {}).unit || '';

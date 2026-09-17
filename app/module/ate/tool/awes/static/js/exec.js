@@ -68,7 +68,9 @@ async function run() {
         payload: document.getElementById("payload").value,
       }),
     });
-    status.textContent = result.status === "completed" ? "✓ Done" : `✗ ${result.status}`;
+    const okSvg = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M20 6 9 17l-5-5"/></svg>';
+    const koSvg = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+    status.innerHTML = result.status === "completed" ? okSvg + "Done" : koSvg + result.status;
     await loadEnvironments();
     await loadSessions();
   } catch (e) {

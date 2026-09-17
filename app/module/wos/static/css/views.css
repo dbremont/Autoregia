@@ -240,7 +240,7 @@
 /* ── Toast ───────────────────────────────────────────── */
 .wm-toast {
   position: fixed; bottom: var(--space-6); right: var(--space-6); z-index: var(--z-toast);
-  background: var(--ink-0); color: #FAF1E6; padding: var(--space-3) var(--space-5);
+  background: var(--ink-0); color: var(--paper-on-accent); padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
   font-size: var(--text-sm); opacity: 0; transform: translateY(8px);
   transition: opacity var(--transition-normal), transform var(--transition-normal);

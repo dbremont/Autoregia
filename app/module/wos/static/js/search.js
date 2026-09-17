@@ -27,10 +27,10 @@ WOS.Search = (() => {
   function chipBar(){
     const st = WOS.Store.getState();
     const chips = [];
-    if(st.source) chips.push(`<span class="filter-chip" data-clear="source">${st.source} ✕</span>`);
-    if(st.cluster) chips.push(`<span class="filter-chip" data-clear="cluster">${st.cluster} ✕</span>`);
-    if(st.q) chips.push(`<span class="filter-chip" data-clear="q">“${WOS.esc(st.q)}” ✕</span>`);
-    if(st.term) chips.push(`<span class="filter-chip" data-clear="term">${st.term} ✕</span>`);
+    if(st.source) chips.push(`<span class="filter-chip" data-clear="source">${st.source} ${WOS.icon('x',11)}</span>`);
+    if(st.cluster) chips.push(`<span class="filter-chip" data-clear="cluster">${st.cluster} ${WOS.icon('x',11)}</span>`);
+    if(st.q) chips.push(`<span class="filter-chip" data-clear="q">“${WOS.esc(st.q)}” ${WOS.icon('x',11)}</span>`);
+    if(st.term) chips.push(`<span class="filter-chip" data-clear="term">${st.term} ${WOS.icon('x',11)}</span>`);
     if(!chips.length) return '';
     return `<div class="filter-chips">${chips.join('')}
       <button class="btn btn-ghost btn-sm" id="clearAll">${WOS.icon('refresh',13)} clear all</button>
@@ -43,7 +43,7 @@ WOS.Search = (() => {
     const read = WOS.Store.isRead(o.id) ? 'read' : '';
     const title = o.title || o.body.slice(0,80) || '(no title)';
     const body = o.body && o.body.length>0 ? `<div class="read-body">${WOS.Store.highlight(o.body.slice(0,280))}${o.body.length>280?'…':''}</div>` : '';
-    const score = (o.score!=null) ? `<span class="text-faint">★ ${o.score}</span>` : '';
+    const score = (o.score!=null) ? `<span class="text-faint">${WOS.icon('star',11)} ${o.score}</span>` : '';
     const more = o._more ? `<span class="pill gold">+${o._more} more in thread</span>` : '';
     const dot = read ? '' : '<span class="unread-dot" title="unread"></span>';
     return `<div class="read-item ${read} ${tcls}" data-id="${o.id}">
@@ -94,7 +94,7 @@ WOS.Search = (() => {
         <div class="search-input-wrap">
           <span class="search-icon">${WOS.icon('search',16)}</span>
           <input type="search" id="searchInput" placeholder="Search titles, bodies, authors…" autocomplete="off" value="${WOS.esc(st.q||'')}">
-          <button type="button" class="search-clear" id="searchClear" title="clear query" ${st.q?'':'hidden'}>✕</button>
+          <button type="button" class="search-clear" id="searchClear" title="clear query" aria-label="Clear query" ${st.q?'':'hidden'}>${WOS.icon('x',12)}</button>
         </div>
         <button type="submit" class="btn btn-primary">${WOS.icon('search',15)} Search</button>
       </form>

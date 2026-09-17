@@ -128,11 +128,11 @@
     font-size: .85rem;
     margin-bottom: .75rem;
   }
-  select:focus, textarea:focus, input:focus { outline: 2px solid var(--gold-soft); outline-offset: -1px; }
+  select:focus, textarea:focus, input:focus { outline: 2px solid var(--oxford); outline-offset: -1px; }
   textarea { min-height: 120px; resize: vertical; }
   button {
     background: var(--oxford);
-    color: #fffdf8;
+    color: #FAF1E6;
     border: none;
     border-radius: 6px;
     padding: .6rem 1.2rem;
@@ -219,7 +219,7 @@
     <label for="payload">Payload</label>
     <textarea id="payload" placeholder="echo hello"></textarea>
     <div class="actions">
-      <button id="run-btn" onclick="run()">▶ Run</button>
+      <button id="run-btn" onclick="run()"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px;margin-right:5px"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run</button>
       <span id="run-status" style="font-size:0.85rem;color:var(--muted)"></span>
       <span class="spacer"></span>
       <button class="danger" onclick="clearSessions()">Clear History</button>

@@ -149,7 +149,7 @@
   .finder{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(14px);width:min(620px,92vw);background:var(--surface);border:1px solid var(--rule);border-radius:12px;box-shadow:0 30px 70px -30px rgba(30,28,25,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
   .finder.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
   .finder .bar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--rule-soft)}
-  .finder .bar::before{content:"❯";font-family:var(--mono);color:var(--gold);font-size:14px}
+  .finder .bar svg{flex:0 0 auto}
   .finder input{flex:1;border:none;background:none;outline:none;font-family:var(--mono);font-size:13.5px;color:var(--ink-0)}
   .finder input::placeholder{color:var(--ink-6)}
   .finder .esc{font-family:var(--mono);font-size:9.5px;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:2px 7px;background:var(--paper)}
@@ -194,8 +194,8 @@
       <a href="#loop">Systems</a>
       <button class="sit-link" id="sitBtn" type="button">Situation</button>
       <a id="sitLink" href="#situation">Situation</a>
-      <a href="about.html">About ↗</a>
-      <a href="docs.html">Docs ↗</a>
+      <a href="about.html">About <svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:0;margin-left:2px"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+      <a href="docs.html">Docs <svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:0;margin-left:2px"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
     </div>
   </div>
 </nav>
@@ -409,10 +409,10 @@
       <span class="sh-gloss">the exercise of agency, at a glance</span>
     </div>
     <div class="sit-card">
-      <button class="sit-close" id="sitClose" type="button" aria-label="Close">✕</button>
+      <button class="sit-close" id="sitClose" type="button" aria-label="Close"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       <div class="sit-head">
         <span class="sit-eyebrow">Situation Model · Thu 4 Jul · evening</span>
-        <span class="sit-posture warn">⚠ attention needed</span>
+        <span class="sit-posture warn"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>attention needed</span>
       </div>
       <p class="syn">On track for this week's objective — <strong>ship the Situation Model</strong> — but you're over-committed by ~5h and the <strong>sleep floor</strong> is at risk. Pull back one evening session before Friday; the rest is regulating well.</p>
 
@@ -468,6 +468,7 @@
 <!-- ═══ search float ═══ -->
 <div class="finder" id="finder">
   <div class="bar">
+    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A8854A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <input type="search" id="q" placeholder="find across records · policies · deliberations · catalog" autocomplete="off">
     <span class="esc">esc</span>
   </div>

@@ -18,7 +18,7 @@ WOS.Charts = (() => {
       grid: { left: 48, right: 18, top: 24, bottom: 36, containLabel: true },
       tooltip: {
         backgroundColor: css('--ink-0')||'#1E1C19', borderColor: 'transparent',
-        textStyle: { color: '#FAF1E6', fontFamily: 'IBM Plex Mono, monospace', fontSize: 11 },
+        textStyle: { color: css('--paper-on-accent')||'#FAF1E6', fontFamily: 'IBM Plex Mono, monospace', fontSize: 11 },
         padding: [6,10], extraCssText: 'border-radius:5px; box-shadow:0 6px 18px rgba(30,28,25,.25);'
       },
       legend: { textStyle: { color: css('--ink-3')||'#5B574E', fontSize: 11 }, icon: 'roundRect', itemWidth: 12, itemHeight: 8, top: 0 },
@@ -140,7 +140,7 @@ WOS.Charts = (() => {
       tooltip:{ formatter:(p)=> `${p.name}: <b>${p.value}</b>` },
       series:[{ type:'treemap', roam:false, nodeClick:false,
         breadcrumb:{ show:false }, left:6, right:6, top:6, bottom:6,
-        label:{ show:true, color:'#FAF1E6', fontFamily:'Inter', fontSize:11, formatter:(p)=> p.value>2?p.name:'' },
+        label:{ show:true, color:css('--paper-on-accent')||'#FAF1E6', fontFamily:'Inter', fontSize:11, formatter:(p)=> p.value>2?p.name:'' },
         upperLabel:{ show:false },
         itemStyle:{ borderColor: css('--color-surface')||'#fff', borderWidth:2, gapWidth:2 },
         levels:[ { itemStyle:{ borderColor: css('--color-surface-2')||'#F4F1EA', borderWidth:2, gapWidth:2 } } ],
