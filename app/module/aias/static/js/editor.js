@@ -2,28 +2,7 @@
    AIAS Editor — capture · edit · detail · transitions · notes
    ════════════════════════════════════════════════════════════ */
 window.AI = window.AI || {};
-AI.app.confirmDialog = function (opts) {
-  return new Promise(function (resolve) {
-    const ov = document.createElement('div');
-    ov.className = 'modal-overlay';
-    ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true" style="max-width:420px">' +
-      '<div class="modal-header"><h2>' + AI.app.esc(opts.title) + '</h2>' +
-      '<button class="btn-icon" aria-label="Close" data-x="no">' + AI.icon('x', 17) + '</button></div>' +
-      '<div class="modal-body"><p>' + AI.app.esc(opts.message) + '</p></div>' +
-      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" data-x="no">Cancel</button>' +
-      '<button class="btn btn-danger btn-sm" data-x="yes">' + AI.app.esc(opts.confirmText || 'Confirm') + '</button></div></div>';
-    const done = function (v) { document.removeEventListener('keydown', onKey); ov.remove(); resolve(v); };
-    const onKey = function (e) { if (e.key === 'Escape') done(false); };
-    ov.addEventListener('click', function (e) {
-      if (e.target === ov) { done(false); return; }
-      const b = e.target.closest('[data-x]');
-      if (b) done(b.getAttribute('data-x') === 'yes');
-    });
-    document.addEventListener('keydown', onKey);
-    document.body.appendChild(ov);
-    ov.querySelector('[data-x="yes"]').focus();
-  });
-};
+AI.app.confirmDialog = function (opts) { return AUTOREGIA.confirmDialog(opts); };
 AI.Editor = (() => {
   const DEF = {
     sources: ['Problem', 'Opportunity', 'Commitment', 'Request', 'Identity', 'Habit', 'Curiosity'],

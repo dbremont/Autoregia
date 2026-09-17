@@ -169,13 +169,13 @@ textarea { resize: vertical; min-height: 80px; line-height: var(--leading-relaxe
 .tag-chip {
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--gold-tint); color: var(--gold);
-  font-size: var(--text-xs); padding: 2px 8px; border-radius: var(--radius-pill);
+  font-size: var(--text-xs); padding: 2px var(--space-2); border-radius: var(--radius-pill);
   font-weight: 500; border: var(--hairline) solid var(--rule-gold);
 }
 .tag-chip .remove-tag { cursor: pointer; opacity: 0.6; font-weight: bold; }
 .tag-chip .remove-tag:hover { opacity: 1; }
 .tag-input-container input {
-  border: none; background: transparent; padding: 4px; flex: 1;
+  border: none; background: transparent; padding: var(--space-1); flex: 1;
   min-width: 100px; outline: none; font-size: var(--text-sm); box-shadow: none;
 }
 .tag-input-container input:focus { box-shadow: none; border-color: transparent; }

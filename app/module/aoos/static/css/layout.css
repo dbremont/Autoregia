@@ -59,7 +59,7 @@
 }
 .header-search input {
   width: 100%;
-  padding: var(--space-2) var(--space-4); padding-left: 36px;
+  padding: var(--space-2) var(--space-4); padding-left: var(--space-8);
   border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface-2);

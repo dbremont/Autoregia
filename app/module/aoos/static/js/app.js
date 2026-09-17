@@ -192,37 +192,11 @@ AO.ExportView = function () {
 
 AO.esc = function (s) { if (s == null) return ''; const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
 
-AO.confirmDialog = function (opts) {
-  return new Promise(function (resolve) {
-    const ov = document.createElement('div');
-    ov.className = 'modal-overlay';
-    ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true" style="max-width:420px">' +
-      '<div class="modal-header"><h2>' + AO.esc(opts.title) + '</h2>' +
-      '<button class="btn-icon" aria-label="Close" data-x="no"><ao-icon name="x" size="17"></ao-icon></button></div>' +
-      '<div class="modal-body"><p>' + AO.esc(opts.message) + '</p></div>' +
-      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" data-x="no">Cancel</button>' +
-      '<button class="btn btn-primary btn-sm" style="background:var(--color-danger,#A33434);border-color:var(--color-danger,#A33434)" data-x="yes">' +
-      AO.esc(opts.confirmText || 'Confirm') + '</button></div></div>';
-    const done = function (v) { document.removeEventListener('keydown', onKey); ov.remove(); resolve(v); };
-    const onKey = function (e) { if (e.key === 'Escape') done(false); };
-    ov.addEventListener('click', function (e) {
-      if (e.target === ov) { done(false); return; }
-      const b = e.target.closest('[data-x]');
-      if (b) done(b.getAttribute('data-x') === 'yes');
-    });
-    document.addEventListener('keydown', onKey);
-    document.body.appendChild(ov);
-    ov.querySelector('[data-x="yes"]').focus();
-  });
-};
+AO.confirmDialog = function (opts) { return AUTOREGIA.confirmDialog(opts); };
 AO.kindColor = function (k) { return AO.KIND_COLORS[k] || '#9A9589'; };
 AO.prettyEnum = function (s) {
   if (s == null) return '—'; return String(s).replace(/[-_]/g, ' ').replace(/(?:^|\s)\S/g, c => c.toUpperCase());
 };
-AO.toast = function (msg) {
-  const t = document.getElementById('toast'); if (!t) return;
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(AO._toastTimer); AO._toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-};
+AO.toast = function (msg) { AUTOREGIA.toast(msg); };
 AO.badge = function (cls, text) { return '<span class="badge ' + cls + '">' + AO.esc(text) + '</span>'; };
 AO.fmtDate = function (iso) { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); };

@@ -56,7 +56,7 @@
 }
 .header-search input[type="search"] {
   width: 100%;
-  padding: var(--space-2) var(--space-4); padding-left: 36px;
+  padding: var(--space-2) var(--space-4); padding-left: var(--space-8);
   border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius-md);
   background-color: var(--color-surface-2);

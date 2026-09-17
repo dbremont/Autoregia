@@ -92,7 +92,7 @@
   padding: var(--space-3); border-radius: var(--radius-md);
   border: var(--hairline) solid var(--color-border-light);
 }
-.kb-row { display: flex; gap: 4px; margin-bottom: 4px; }
+.kb-row { display: flex; gap: 4px; margin-bottom: var(--space-1); }
 .kb-row:last-child { margin-bottom: 0; }
 .kb-key {
   width: 34px; height: 34px; border-radius: var(--radius-sm);

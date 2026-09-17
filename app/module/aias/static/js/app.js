@@ -117,12 +117,7 @@ AI.app = (() => {
     toast('Exported the Intent Store');
   }
 
-  let toastTimer;
-  function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-  }
+  function toast(msg) { AUTOREGIA.toast(msg); }
 
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function slug(s) { return String(s || '').toLowerCase(); }

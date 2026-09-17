@@ -186,33 +186,7 @@ PT.prettySystem = function (s) {
 };
 PT.esc = function (s) { if (s == null) return ''; const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
 
-PT.confirmDialog = function (opts) {
-  return new Promise(function (resolve) {
-    const ov = document.createElement('div');
-    ov.className = 'modal-overlay';
-    ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true" style="max-width:420px">' +
-      '<div class="modal-header"><h2>' + PT.esc(opts.title) + '</h2>' +
-      '<button class="btn-icon" aria-label="Close" data-x="no"><pt-icon name="x" size="17"></pt-icon></button></div>' +
-      '<div class="modal-body"><p>' + PT.esc(opts.message) + '</p></div>' +
-      '<div class="modal-footer"><button class="btn btn-secondary btn-sm" data-x="no">Cancel</button>' +
-      '<button class="btn btn-primary btn-sm" style="background:var(--color-danger,#A33434);border-color:var(--color-danger,#A33434)" data-x="yes">' +
-      PT.esc(opts.confirmText || 'Confirm') + '</button></div></div>';
-    const done = function (v) { document.removeEventListener('keydown', onKey); ov.remove(); resolve(v); };
-    const onKey = function (e) { if (e.key === 'Escape') done(false); };
-    ov.addEventListener('click', function (e) {
-      if (e.target === ov) { done(false); return; }
-      const b = e.target.closest('[data-x]');
-      if (b) done(b.getAttribute('data-x') === 'yes');
-    });
-    document.addEventListener('keydown', onKey);
-    document.body.appendChild(ov);
-    ov.querySelector('[data-x="yes"]').focus();
-  });
-};
+PT.confirmDialog = function (opts) { return AUTOREGIA.confirmDialog(opts); };
 PT.kindColor = function (k) { return PT.KIND_COLORS[k] || '#9A9589'; };
-PT.toast = function (msg) {
-  const t = document.getElementById('toast'); if (!t) return;
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(PT._toastTimer); PT._toastTimer = setTimeout(function () { t.classList.remove('show'); }, 2600);
-};
+PT.toast = function (msg) { AUTOREGIA.toast(msg); };
 PT.badge = function (cls, text) { return '<span class="badge ' + cls + '">' + PT.esc(text) + '</span>'; };
