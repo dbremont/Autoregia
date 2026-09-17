@@ -1,0 +1,152 @@
+Act as a senior web designer, UX/UI designer, information architect, and design systems specialist.
+
+Perform a rigorous visual and UX audit of the website shown in the provided screenshot(s).
+
+Do NOT redesign it immediately. First diagnose what is working, what is weak, and why.
+
+Evaluate the interface across these dimensions:
+
+1. VISUAL HIERARCHY
+- Is the primary purpose immediately clear?
+- Is attention directed to the right elements?
+- Are headings, sections, controls, and content properly prioritized?
+- Is there too much or too little visual hierarchy?
+
+2. COMPOSITION & LAYOUT
+- Alignment
+- Spacing
+- Density
+- Grid structure
+- Proportion
+- Balance
+- Rhythm
+- Use of whitespace
+- Relationship between major sections
+
+3. TYPOGRAPHY
+- Font choice
+- Scale
+- Weight
+- Line height
+- Letter spacing
+- Readability
+- Hierarchy
+- Consistency
+
+4. COLOR & CONTRAST
+- Color palette
+- Contrast
+- Accent usage
+- Background/foreground relationships
+- Visual emphasis
+- Accessibility concerns
+
+5. COMPONENT DESIGN
+- Buttons
+- Cards
+- Navigation
+- Inputs
+- Tables
+- Tabs
+- Modals
+- Status indicators
+- Icons
+- Repeated UI patterns
+
+Assess consistency and whether components communicate their function clearly.
+
+6. INFORMATION ARCHITECTURE
+- Is the organization of information intuitive?
+- Are sections named appropriately?
+- Is information grouped according to user mental models?
+- Are there redundant or unnecessary elements?
+- What important relationships are difficult to perceive?
+
+7. UX / INTERACTION
+- What can the user understand immediately?
+- What requires unnecessary cognitive effort?
+- Are important actions discoverable?
+- Are states and transitions clear?
+- Are there ambiguous controls or interactions?
+
+8. CONTENT PRESENTATION
+- Is the amount of information appropriate?
+- Does the interface make complex information intelligible?
+- Are long blocks of information handled well?
+- Are summaries, details, and context appropriately layered?
+
+9. DENSITY
+Explicitly assess whether the interface is:
+- too sparse
+- too dense
+- appropriately dense
+
+Explain where density should increase or decrease rather than assuming that "more whitespace = better design."
+
+10. VISUAL CHARACTER
+Evaluate:
+- Distinctiveness
+- Memorability
+- Sophistication
+- Coherence
+- Visual energy
+- Emotional tone
+- Whether the design feels generic or intentional
+
+11. RESPONSIVENESS
+Infer potential problems on:
+- Desktop
+- Tablet
+- Mobile
+
+12. ACCESSIBILITY
+Identify obvious issues involving:
+- Contrast
+- Text size
+- Focus states
+- Target sizes
+- Semantic hierarchy
+- Color dependence
+
+For every significant problem, provide:
+
+PROBLEM:
+What is wrong?
+
+EVIDENCE:
+What specifically in the screenshot indicates the problem?
+
+WHY IT MATTERS:
+What effect does it have on comprehension, aesthetics, or usability?
+
+RECOMMENDATION:
+What should change?
+
+PRIORITY:
+Critical / High / Medium / Low
+
+Then produce:
+
+A. OVERALL DIAGNOSIS
+Describe the fundamental design problem(s) in 3–5 sentences.
+
+B. TOP 10 IMPROVEMENTS
+List the ten highest-impact changes in implementation order.
+
+C. QUICK WINS
+Changes that can substantially improve the design without restructuring the page.
+
+D. STRUCTURAL CHANGES
+Changes that require modifying layout, information architecture, or interaction patterns.
+
+E. DESIGN PRINCIPLES
+Extract 5–8 principles that should guide the redesign.
+
+F. REDESIGN DIRECTION
+Describe what the improved interface should feel and look like, while preserving the underlying product/functionality.
+
+Be specific and concrete. Avoid generic advice such as "make it cleaner," "add whitespace," or "improve hierarchy" unless you explain exactly how.
+
+Do not praise the design merely to be polite. Be critical, but distinguish objective usability problems from subjective aesthetic preferences.
+
+Most importantly: optimize for INFORMATION INTELLIGIBILITY, not decoration. The goal is to make the underlying structure of the information easier to perceive while maintaining a compelling visual experience.
