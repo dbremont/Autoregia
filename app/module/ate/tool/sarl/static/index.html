@@ -4,26 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SARL — Sistema Asistencia de Revisión Lingüística</title>
-  <style>
-    /* Self-hosted typefaces — Spectral · Inter · IBM Plex Mono (relative copies) */
-    @font-face{font-family:'Spectral';font-style:normal;font-weight:300;font-display:swap;src:url('/pbs/fonts/spectral-300.woff2') format('woff2')}
-    @font-face{font-family:'Spectral';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400.woff2') format('woff2')}
-    @font-face{font-family:'Spectral';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/spectral-500.woff2') format('woff2')}
-    @font-face{font-family:'Spectral';font-style:italic;font-weight:400;font-display:swap;src:url('/pbs/fonts/spectral-400i.woff2') format('woff2')}
-    @font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/inter-400.woff2') format('woff2')}
-    @font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/inter-500.woff2') format('woff2')}
-    @font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/pbs/fonts/inter-600.woff2') format('woff2')}
-    @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/pbs/fonts/plexmono-400.woff2') format('woff2')}
-    @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/pbs/fonts/plexmono-500.woff2') format('woff2')}
+    <link rel="stylesheet" href="/ui/css/tokens.css?v=20260916">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260916">
+  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260916">
+<style>
 
-    :root{
-      --ink:#1c1916; --ink-soft:#4a443d; --muted:#7a736a;
-      --rule:#d8d0c4; --paper:#FAFAF6; --surface:#fffdf8;
-      --accent:#7A1A2A; --gold:#A8854A;
-      --serif:"Spectral","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
-      --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      --mono:"IBM Plex Mono","SF Mono",Consolas,monospace;
-    }
+    
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
     .wrap{max-width:880px;margin:0 auto;padding:0 28px}

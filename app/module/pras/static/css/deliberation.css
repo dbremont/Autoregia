@@ -2,30 +2,16 @@
    PRAS — Deliberation styling (Autoregia warm-parchment aesthetic)
    Self-contained tokens; the deliberation pages are standalone HTML.
    ════════════════════════════════════════════════════════════ */
+@import url('/ui/css/tokens.css');
+@import url('/ui/css/fonts.css');
+@import url('/ui/css/standalone.css');
+
 :root {
-  --ink: #2C2A26;
-  --ink-soft: #44413B;
-  --muted: #6B665B;
-  --faint: #8C877B;
-  --rule: #E2DED4;
-  --rule-soft: #EEEAE0;
-  --paper: #FAFAF6;
-  --surface: #FFFFFF;
-  --surface-warm: #FBF9F4;
-  --oxford: #7A1A2A;
-  --oxford-deep: #641020;
-  --gold: #A8854A;
-  --gold-soft: #C7A972;
-  --gold-tint: #F6EFE1;
-  --built: #3F6E50;
-  --built-bg: #ECF3EE;
-  --partial: #B4742A;
-  --partial-bg: #FBF1E3;
-  --info: #3F6092;
-  --info-bg: #EAEFF6;
-  --serif: "Spectral", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+  --built-bg: var(--color-success-light);
+  --partial: var(--color-warning);
+  --partial-bg: var(--color-warning-light);
+  --info: var(--color-info);
+  --info-bg: var(--color-info-light);
 }
 
 * { box-sizing: border-box; }

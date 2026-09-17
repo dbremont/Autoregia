@@ -848,7 +848,7 @@ def scratch_share_create():
     grant = {"token": token, "permission": permission, "created_at": now_iso()}
     doc["shares"].append(grant)
     store.put(doc)
-    url = request.url_root.rstrip('/') + '/share/' + token
+    url = request.url_root.rstrip('/') + '/aoos/share/' + token
     return jsonify({"token": token, "permission": permission,
                     "created_at": grant["created_at"], "url": url}), 201
 
@@ -2707,6 +2707,13 @@ def import_data():
 @app.route("/docs")
 def docs_page():
     return send_from_directory(app.static_folder, "docs.html")
+
+
+@app.route("/share/<token>")
+def share_page(token):
+    # Shared scratchpad link target (see scratch_share_create): the page
+    # reads the token from location.pathname after '/share/'.
+    return send_from_directory(app.static_folder, "share.html")
 
 
 # ============================================================================
