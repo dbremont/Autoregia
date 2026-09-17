@@ -430,18 +430,6 @@ def dashboard_stats():
     })
 
 
-@app.route("/api/export", methods=["GET"])
-def export_data():
-    skills = _skills_joined()
-    practices = [d for d in store.all() if d.get("doc_type") == "practice"]
-    practices.sort(key=lambda d: d.get("practiced_at_ms") or 0, reverse=True)
-    return jsonify({
-        "generated_at": now_iso(),
-        "skills": skills,
-        "practices": practices,
-    })
-
-
 # ── UI ───────────────────────────────────────────────────────────────────────
 @app.route("/")
 def index():

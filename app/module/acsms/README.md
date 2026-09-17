@@ -52,6 +52,5 @@ CouchDB db `acsms` (subject to `COUCHDB_DB_PREFIX`), via the shared
 | `/api/practices` | GET, POST | stream (`skill_id`, `q`, `since_ms`, paging) / self-report |
 | `/api/practices/<id>` | DELETE | remove a report |
 | `/api/dashboard/stats` | GET | totals, state tallies, attention queue, recent |
-| `/api/export` | GET | skills + practices as JSON |
 
 Skill query filters: `?status=`, `?state=` (the computed practice state).

@@ -231,7 +231,7 @@ def test_state_lifecycle_beats_tracking(client):
     assert client.get(f"/api/skills/{s['id']}").get_json()["practice_state"] == "retired"
 
 
-# ── dashboard & export ──────────────────────────────────────────────────────
+# ── dashboard & health ──────────────────────────────────────────────────────
 def test_dashboard_stats_and_attention_queue(client):
     fresh = make_skill(client, name="Fresh", target_per_week=1)
     stale = make_skill(client, name="Stale", target_per_week=1)
@@ -248,14 +248,12 @@ def test_dashboard_stats_and_attention_queue(client):
     assert st["recent"][0]["skill_id"] == fresh["id"]
 
 
-def test_export_and_health(client):
+def test_health(client):
     s = make_skill(client)
     make_practice(client, s["id"])
-    ex = client.get("/api/export").get_json()
-    assert len(ex["skills"]) == 1 and len(ex["practices"]) == 1
-    assert ex["generated_at"].endswith("Z")
     h = client.get("/api/health").get_json()
     assert h["ok"] and h["skills"] == 1 and h["practices"] == 1
+    assert client.get("/api/export").status_code == 404
 
 
 # ── seed catalog ─────────────────────────────────────────────────────────────

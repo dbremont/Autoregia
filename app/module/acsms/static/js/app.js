@@ -15,13 +15,7 @@ ACSMS.VIEWS = [
 
   { id: 'documentation', label: 'Documentation', icon: 'book-open', group: 'System', desc: 'about this dashboard' },
   { id: 'about', label: 'About', icon: 'info', group: 'System', desc: 'what ACSMS is' },
-  { id: 'export', label: 'Export', icon: 'download', group: 'System', desc: 'download skills + practices as JSON', action: 'export' },
 ];
-
-// Sidebar items that trigger chrome instead of navigating to a view.
-ACSMS.runAction = function (name) {
-  if (name === 'export') ACSMS.exportData();
-};
 
 ACSMS.init = async function () {
   try { await ACSMS.Store.load(); } catch (e) { console.error('load failed', e); }
@@ -48,14 +42,10 @@ ACSMS.renderSidebar = function () {
       (s.name ? `<div class="sidebar-sublabel">${s.name}</div>` : '') +
       s.views.map(v => {
         const inner = `<span class="nav-icon">${ACSMS.icon(v.icon, 16)}</span><span>${v.label}</span>`;
-        return v.action
-          ? `<a href="#" data-action="${v.action}">${inner}</a>`
-          : `<a href="#${v.id}" data-view="${v.id}">${inner}</a>`;
+        return `<a href="#${v.id}" data-view="${v.id}">${inner}</a>`;
       }).join('')
     ).join('')
   ).join('');
-  nav.querySelectorAll('a[data-action]').forEach(a =>
-    a.addEventListener('click', (e) => { e.preventDefault(); ACSMS.runAction(a.dataset.action); }));
 };
 
 ACSMS.setupRouter = function () {
@@ -64,8 +54,6 @@ ACSMS.setupRouter = function () {
 ACSMS.getHash = () => location.hash.slice(1);
 
 ACSMS.navigate = function (view) {
-  const def = ACSMS.VIEWS.find(v => v.id === view);
-  if (def && def.action) { ACSMS.runAction(def.action); return; }   // chrome, not a view
   this.current = view; location.hash = '#' + view;
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.view === view));
   const c = document.getElementById('appContent');
@@ -103,15 +91,6 @@ ACSMS.setupHeader = function () {
       ACSMS.Store.applyFilter({ q: gs.value.trim() }).then(() => { ACSMS.navigate('practice'); });
     }
   });
-};
-
-ACSMS.exportData = async function () {
-  try {
-    const data = await (await fetch('./api/export')).json();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'acsms_export.json'; a.click();
-    ACSMS.toast('Exported skills + practices');
-  } catch (e) { ACSMS.toast('Export failed: ' + e.message); }
 };
 
 // ── shared helpers ──

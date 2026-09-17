@@ -17,11 +17,10 @@ ACSMS.CommandPalette = {
     const q = (query || '').toLowerCase();
     const navCmds = ACSMS.VIEWS.map(t => ({
       icon: t.icon, title: t.label, sub: `Go to ${t.label} — ${t.desc}`,
-      action: () => { this.close(); t.action ? ACSMS.runAction(t.action) : ACSMS.navigate(t.id); }
+      action: () => { this.close(); ACSMS.navigate(t.id); }
     }));
     const commands = [
       { icon: 'plus', title: 'Log practice', sub: 'Quick-capture a self-reported session', action: () => { this.close(); ACSMS.capture.open(); } },
-      { icon: 'download', title: 'Export', sub: 'Download skills + practices as JSON', action: () => { this.close(); ACSMS.exportData(); } },
       { icon: 'book-open', title: 'Documentation', sub: 'About this dashboard', action: () => { this.close(); ACSMS.navigate('documentation'); } },
       { icon: 'search', title: 'Focus Search', sub: 'Filter the practice stream from the header', action: () => { this.close(); document.getElementById('globalSearch')?.focus(); } },
       ...navCmds,
