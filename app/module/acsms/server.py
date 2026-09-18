@@ -609,6 +609,98 @@ def activity():
 
 
 # ── dashboard ────────────────────────────────────────────────────────────────
+def _next_practice(skills: list[dict], paths_joined: list[dict], now: int) -> dict | None:
+    """The most-due active skill, with the derived reasons that recommend it.
+
+    Due-ness = time since last practice (or definition) divided by the
+    skill's target interval; the highest ratio wins. Reasons are generated,
+    never stored — the recommendation is always consistent with the
+    practice stream.
+    """
+    active = [s for s in skills if (s.get("status") or "active") == "active"]
+    best, best_ratio = None, -1.0
+    for s in active:
+        target = float(s.get("target_per_week") or 1) or 1.0
+        cadence = WEEK_MS / target
+        anchor = s.get("last_practiced_ms") or s.get("created_at_ms") or now
+        ratio = (now - anchor) / cadence
+        if ratio > best_ratio:
+            best, best_ratio = s, ratio
+    if best is None:
+        return None
+
+    s = best
+    target = float(s.get("target_per_week") or 1) or 1.0
+    interval_days = round(WEEK_MS / target / 86_400_000, 1)
+    last = s.get("last_practiced_ms")
+    days_since = round((now - last) / 86_400_000) if last else None
+    path_names = [p["name"] for p in paths_joined
+                  if (p.get("status") or "active") == "active"
+                  and s["id"] in (p.get("skill_ids") or [])]
+
+    reasons: list[str] = []
+    if not s.get("practice_count"):
+        age = round((now - (s.get("created_at_ms") or now)) / 86_400_000)
+        reasons.append(f"Never practiced — defined {age}d ago")
+    elif days_since is not None and days_since > 2 * interval_days:
+        overdue = round(days_since - interval_days)
+        reasons.append(f"Target frequency is due — you're {overdue}d past your target")
+    if s.get("practice_state") == "neglected":
+        reasons.append("Flagged neglected by the tracking layer")
+    if path_names:
+        reasons.append(f"Connected to {len(path_names)} active skill "
+                       f"path{'s' if len(path_names) > 1 else ''} — "
+                       + ", ".join(path_names))
+    if (s.get("level") or 0) <= 2:
+        reasons.append(f"Low mastery — level {s.get('level', 0)}/5")
+
+    return {
+        "id": s["id"], "name": s["name"],
+        "description": s.get("description"),
+        "domain": s.get("domain"), "level": s.get("level", 0),
+        "practice_state": s["practice_state"],
+        "target_per_week": s.get("target_per_week"),
+        "last_practiced_ms": last,
+        "practice_count": s.get("practice_count"),
+        "due_ratio": round(best_ratio, 2),
+        "days_since_last": days_since,
+        "interval_days": interval_days,
+        "path_names": path_names,
+        "reasons": reasons,
+    }
+
+
+def _trajectory(practices: list[dict], active_total: int, now: int,
+                weeks: int = 12) -> list[dict]:
+    """Weekly buckets for the improvement-trajectory chart (0–100 scales).
+
+    Consistency approximates each week independently: the share of the
+    *currently active* skill set practiced that week. Performance is the
+    average quality of that week's rated reports (null when unrated).
+    """
+    cur_start = now - (now % WEEK_MS)
+    first_start = cur_start - (weeks - 1) * WEEK_MS
+    buckets = [{"start_ms": first_start + i * WEEK_MS, "practices": 0,
+                "q_sum": 0, "q_n": 0, "skill_ids": set()} for i in range(weeks)]
+    for p in practices:
+        t = p.get("practiced_at_ms") or 0
+        w = (t - first_start) // WEEK_MS
+        if 0 <= w < weeks:
+            b = buckets[int(w)]
+            b["practices"] += 1
+            if p.get("quality") is not None:
+                b["q_sum"] += p["quality"]
+                b["q_n"] += 1
+            if p.get("skill_id"):
+                b["skill_ids"].add(p["skill_id"])
+    return [{
+        "start_ms": b["start_ms"],
+        "practices": b["practices"],
+        "consistency": round(100 * len(b["skill_ids"]) / active_total) if active_total else 0,
+        "performance": (round(20 * b["q_sum"] / b["q_n"]) if b["q_n"] else None),
+    } for b in buckets]
+
+
 @app.route("/api/dashboard/stats")
 def dashboard_stats():
     now = now_ms()
@@ -635,15 +727,30 @@ def dashboard_stats():
         dname = s.get("domain") or "General"
         agg = domains.setdefault(dname, {"domain": dname, "total": 0,
                                          "on-track": 0, "never-practiced": 0,
-                                         "neglected": 0, "paused": 0, "retired": 0})
+                                         "neglected": 0, "paused": 0, "retired": 0,
+                                         "level_sum": 0})
         agg["total"] += 1
+        agg["level_sum"] += (s.get("level") or 0)
         agg[s.get("practice_state")] = agg.get(s.get("practice_state"), 0) + 1
-    domain_list = sorted(domains.values(), key=lambda d: (-d["total"], d["domain"]))
+    domain_list = []
+    for d in sorted(domains.values(), key=lambda d: (-d["total"], d["domain"])):
+        d["level_pct"] = round(20 * d.pop("level_sum") / d["total"]) if d["total"] else 0
+        domain_list.append(d)
 
     # weekly milestone: share of active skills with fresh practice
     active_skills = [s for s in skills if (s.get("status") or "active") == "active"]
     practiced_week = sum(1 for s in active_skills
                          if (s.get("last_practiced_ms") or 0) >= week_ago)
+    two_weeks_ago = now - 2 * WEEK_MS
+    practiced_prev = sum(1 for s in active_skills
+                         if two_weeks_ago <= (s.get("last_practiced_ms") or 0) < week_ago)
+    held = [s for s in skills if (s.get("status") or "active") != "retired"]
+    overall_level_pct = (round(20 * sum(s.get("level") or 0 for s in held) / len(held))
+                         if held else 0)
+
+    paths_joined = _paths_joined()
+    prev_week_pct = (round(100 * practiced_prev / len(active_skills))
+                     if active_skills else 0)
 
     return jsonify({
         "generated_at": now_iso(),
@@ -657,14 +764,23 @@ def dashboard_stats():
             "total": len(practices),
             "last_7d": sum(1 for p in practices
                            if (p.get("practiced_at_ms") or 0) >= week_ago),
+            "prev_7d": sum(1 for p in practices
+                           if two_weeks_ago <= (p.get("practiced_at_ms") or 0) < week_ago),
         },
         "states": states,
         "domains": domain_list,
+        "overall_level_pct": overall_level_pct,
         "weekly": {
             "active_skills": len(active_skills),
             "practiced_skills": practiced_week,
             "pct": round(100 * practiced_week / len(active_skills)) if active_skills else 0,
         },
+        "weekly_prev": {
+            "practiced_skills": practiced_prev,
+            "pct": prev_week_pct,
+        },
+        "next_practice": _next_practice(skills, paths_joined, now),
+        "trajectory": _trajectory(practices, len(active_skills), now),
         "attention": [{
             "id": s["id"], "name": s["name"],
             "state": s["practice_state"],

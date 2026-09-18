@@ -273,6 +273,92 @@ def test_health(client):
     assert client.get("/api/export").status_code == 404
 
 
+# ── next-practice recommendation ─────────────────────────────────────────────
+def test_next_practice_picks_the_most_overdue(client):
+    fresh = make_skill(client, name="Fresh", target_per_week=1)
+    overdue = make_skill(client, name="Overdue", target_per_week=7)  # 1d interval
+    make_practice(client, fresh["id"], days_ago=0)
+    make_practice(client, overdue["id"], days_ago=3)
+
+    np = client.get("/api/dashboard/stats").get_json()["next_practice"]
+    assert np["id"] == overdue["id"]
+    assert np["days_since_last"] == 3
+    assert any("Target frequency is due" in r for r in np["reasons"])
+    assert any("Low mastery" in r for r in np["reasons"])
+
+
+def test_next_practice_excludes_non_active_and_mentions_paths(client):
+    active = make_skill(client, name="ActiveSkill", target_per_week=7)
+    make_practice(client, active["id"], days_ago=5)
+    retired = make_skill(client, name="RetiredSkill")
+    client.put(f"/api/skills/{retired['id']}", json={"status": "retired"})
+    client.post("/api/paths", json={"name": "Pway", "skill_ids": [active["id"]]})
+
+    np = client.get("/api/dashboard/stats").get_json()["next_practice"]
+    assert np["id"] == active["id"]
+    assert np["path_names"] == ["Pway"]
+    assert any("1 active skill path" in r for r in np["reasons"])
+
+
+def test_next_practice_never_practiced_reason(client):
+    s = make_skill(client, name="Ghosty")
+    np = client.get("/api/dashboard/stats").get_json()["next_practice"]
+    assert np["id"] == s["id"]
+    assert any(r.startswith("Never practiced") for r in np["reasons"])
+
+
+# ── trajectory buckets ───────────────────────────────────────────────────────
+def test_trajectory_buckets(client):
+    a = make_skill(client, name="TrajA")
+    b = make_skill(client, name="TrajB")
+    # anchor to week boundaries so the buckets are stable on any run day
+    now = srv.now_ms()
+    week_start = now - (now % srv.WEEK_MS)
+    def put(skill_id, offset, **kw):
+        r = client.post("/api/practices", json={"skill_id": skill_id,
+                                                "practiced_at_ms": week_start + offset, **kw})
+        assert r.status_code == 201, r.get_json()
+    put(a["id"], 3_600_000, quality=4)    # 1h into this week
+    put(a["id"], 7_200_000, quality=2)    # 2h into this week — avg 3
+    put(b["id"], -3_600_000, quality=5)   # 1h before the week — previous bucket
+
+    traj = client.get("/api/dashboard/stats").get_json()["trajectory"]
+    assert len(traj) == 12
+    this_week, prev_week = traj[-1], traj[-2]
+    assert this_week["practices"] == 2
+    assert this_week["consistency"] == 50                    # 1 of 2 active skills
+    assert this_week["performance"] == 60                    # avg 3 × 20
+    assert prev_week["practices"] == 1
+    assert prev_week["consistency"] == 50
+    assert prev_week["performance"] == 100
+    assert traj[0]["practices"] == 0 and traj[0]["performance"] is None
+
+
+def test_prev_week_counts_and_delta(client):
+    a = make_skill(client, name="NowSkill")
+    b = make_skill(client, name="PrevSkill")
+    make_practice(client, a["id"], days_ago=0)
+    make_practice(client, b["id"], days_ago=10)
+
+    st = client.get("/api/dashboard/stats").get_json()
+    assert st["practices"]["last_7d"] == 1 and st["practices"]["prev_7d"] == 1
+    assert st["weekly"]["practiced_skills"] == 1
+    assert st["weekly_prev"]["practiced_skills"] == 1
+    assert st["weekly"]["pct"] == 50 and st["weekly_prev"]["pct"] == 50
+
+
+def test_domain_level_pct_and_overall(client):
+    make_skill(client, name="L4", domain="Dom", level=4)
+    make_skill(client, name="L2", domain="Dom", level=2)
+    make_skill(client, name="Away", domain="Dom", level=5, status="retired")
+
+    st = client.get("/api/dashboard/stats").get_json()
+    dom = next(d for d in st["domains"] if d["domain"] == "Dom")
+    assert dom["level_pct"] == 73            # round(20 * avg(4, 2, 5)) — all skills
+    # overall excludes retired: avg(4, 2)/5 over held skills
+    assert st["overall_level_pct"] == 60
+
+
 # ── seed catalog ─────────────────────────────────────────────────────────────
 def test_seed_applies_only_to_empty_db(client):
     # fixture wiped the DB; a fresh Store re-seeds from data/skills.json
