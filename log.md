@@ -29,6 +29,52 @@ TODO:
 
 ## Index
 
+### 2026 — ACSMS catalogs: domains, mastery levels, change logs, and skill paths
+
+**Question.** The first ACSMS build tracked practice against a flat skill
+list. How should the catalog grow into a *perfect skill tracking system* —
+grouping skills, expressing progress, recording provenance — without
+inventing state the practice stream cannot support?
+
+**Decision.**
+
+1. **Domains are a first-class field, tags stay tags.** A single free-form
+   `domain` (fallback `General`) groups skills for the catalog's filter
+   chips and the rail's per-domain rollup; multi-dimensional `tags` remain
+   orthogonal labels.
+2. **Progress is a self-assessed `level` 0–5**, edited in the define/edit
+   modal and shown as the catalog bar. It is *mastery* ("how capable am
+   I"), deliberately separate from the computed `practice_state` ("what
+   does recent practice say") — a skill can be level 4 and neglected.
+3. **Every skill carries an embedded changelog**: one entry per update with
+   field-level from → to diffs; a status change names the entry after the
+   lifecycle event (`paused`/`activated`/`retired`). Capped at 100 entries.
+   This is provenance for the Review/Cull stages, not an audit fixture.
+4. **Skill paths are ordered curricula over existing skills**: a `path`
+   stores an ordered `skill_ids` list (validated, deduped, ≤ 20). All path
+   progress is derived, never stored: completion = share of members with
+   practice; the *current step* is the first member that is never-practiced
+   or neglected. Deleting a path never touches skills; deleting a skill
+   just removes it from the rendered stepper.
+
+**Rationale.** Derived-only path progress keeps a single source of truth
+(the practice stream) — a path cannot claim progress its members' history
+does not show, mirroring the evidence-over-exposure rule. Level is the one
+field the stream *cannot* derive (practice frequency ≠ mastery), so it is
+explicit, bounded (0–5), and self-assessed. The changelog rides on the
+skill doc (no second store) because its lifetime is exactly the skill's.
+
+**Trade-offs accepted.** Domains are single-valued (a skill lives in one
+domain; tags cover the rest); level drifts without practice (the state
+pill exposes exactly that tension); path steps silently skip deleted
+skills (displayed sequence stays truthful); changelog diffs rewrite the
+whole skill doc on each edit (small documents, acceptable write volume).
+
+**Implements.** `app/module/acsms/` (catalog + right rail + `#skills/<id>`
+detail with statistics, practice history, and change log; `#paths` stepper
+view), [`spec/acsms/README.md`](spec/acsms/README.md)
+(Deliberate/Review stages).
+
 ### 2026 — ACSMS practice tracking: validated self-reports and computed practice states
 
 **Question.** The ACSMS mount was a static prototype plate. Building the

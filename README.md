@@ -59,9 +59,9 @@ Autoregia/
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (plate only)
     │   ├── acsms/       # Agent Capability Self Management System
     │   │   ├── README.md
-    │   │   ├── server.py       # Flask API + CouchDB persistence (skills, practice self-reports, tracking)
-    │   │   ├── data/skills.json# seed catalog (applies only when the DB is empty)
-    │   │   ├── static/         # WOS-style shell: dashboard, skills, practice log
+    │   │   ├── server.py       # Flask API + CouchDB persistence (skills, practice self-reports, paths, tracking)
+    │   │   ├── data/           # seed skills + paths (applies only when the DB is empty)
+    │   │   ├── static/         # WOS-style shell: dashboard, catalog + rail, skill detail, paths
     │   │   └── test_acsms.py
     │   └── ...          # gis, aias, aoos, pras, loop, pwos
     └── support/         # everything that supports the modules
