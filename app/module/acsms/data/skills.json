@@ -1,0 +1,138 @@
+[
+  {
+    "id": "SKILL-systems-thinking",
+    "doc_type": "skill",
+    "name": "Systems thinking",
+    "description": "Model situations as stocks, flows and feedback loops; see second-order effects before committing to a change.",
+    "tags": [
+      "reasoning",
+      "models"
+    ],
+    "domain": "Reasoning",
+    "status": "active",
+    "target_per_week": 2,
+    "level": 2,
+    "created_at_ms": 1781911510428,
+    "updated_at_ms": 1781911510428,
+    "changes": [
+      {
+        "at_ms": 1781911510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "SKILL-technical-writing",
+    "doc_type": "skill",
+    "name": "Technical writing",
+    "description": "Produce precise, skimmable documents: specs, decision records, READMEs. Evidence is a reader acting correctly on the text alone.",
+    "tags": [
+      "communication",
+      "writing"
+    ],
+    "domain": "Technical",
+    "status": "active",
+    "target_per_week": 3,
+    "level": 3,
+    "created_at_ms": 1779319510428,
+    "updated_at_ms": 1779319510428,
+    "changes": [
+      {
+        "at_ms": 1779319510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "SKILL-couchdb-data-modeling",
+    "doc_type": "skill",
+    "name": "CouchDB data modeling",
+    "description": "Design document kinds, view maps and Mango indexes so queries execute inside the database, never as full scans.",
+    "tags": [
+      "engineering",
+      "data"
+    ],
+    "domain": "Data & Analytics",
+    "status": "active",
+    "target_per_week": 1,
+    "level": 3,
+    "created_at_ms": 1784503510428,
+    "updated_at_ms": 1784503510428,
+    "changes": [
+      {
+        "at_ms": 1784503510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "SKILL-deliberate-practice-design",
+    "doc_type": "skill",
+    "name": "Designing practice regimes",
+    "description": "Turn a capability gap into a schedulable regime: cadence, difficulty curve, and output-based evidence.",
+    "tags": [
+      "meta",
+      "learning"
+    ],
+    "domain": "Learning",
+    "status": "active",
+    "target_per_week": 1,
+    "level": 1,
+    "created_at_ms": 1787095510428,
+    "updated_at_ms": 1787095510428,
+    "changes": [
+      {
+        "at_ms": 1787095510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "SKILL-spanish-conversation",
+    "doc_type": "skill",
+    "name": "Spanish conversation",
+    "description": "Hold a 20-minute unscripted conversation; comprehension of native-rate speech. Evidence: recorded sessions.",
+    "tags": [
+      "language"
+    ],
+    "domain": "Language",
+    "status": "paused",
+    "target_per_week": 3,
+    "level": 2,
+    "created_at_ms": 1772407510428,
+    "updated_at_ms": 1772407510428,
+    "changes": [
+      {
+        "at_ms": 1772407510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  },
+  {
+    "id": "SKILL-watercolor-plein-air",
+    "doc_type": "skill",
+    "name": "Watercolor plein-air",
+    "description": "Retired after a season: the cull decision (2026-06) \u2014 low alignment with current values; revisitable.",
+    "tags": [
+      "art"
+    ],
+    "domain": "Art",
+    "status": "retired",
+    "target_per_week": 1,
+    "level": 1,
+    "created_at_ms": 1763767510428,
+    "updated_at_ms": 1763767510428,
+    "changes": [
+      {
+        "at_ms": 1763767510428,
+        "event": "created",
+        "changes": []
+      }
+    ]
+  }
+]

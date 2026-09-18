@@ -29,6 +29,98 @@ TODO:
 
 ## Index
 
+### 2026 — ACSMS catalogs: domains, mastery levels, change logs, and skill paths
+
+**Question.** The first ACSMS build tracked practice against a flat skill
+list. How should the catalog grow into a *perfect skill tracking system* —
+grouping skills, expressing progress, recording provenance — without
+inventing state the practice stream cannot support?
+
+**Decision.**
+
+1. **Domains are a first-class field, tags stay tags.** A single free-form
+   `domain` (fallback `General`) groups skills for the catalog's filter
+   chips and the rail's per-domain rollup; multi-dimensional `tags` remain
+   orthogonal labels.
+2. **Progress is a self-assessed `level` 0–5**, edited in the define/edit
+   modal and shown as the catalog bar. It is *mastery* ("how capable am
+   I"), deliberately separate from the computed `practice_state` ("what
+   does recent practice say") — a skill can be level 4 and neglected.
+3. **Every skill carries an embedded changelog**: one entry per update with
+   field-level from → to diffs; a status change names the entry after the
+   lifecycle event (`paused`/`activated`/`retired`). Capped at 100 entries.
+   This is provenance for the Review/Cull stages, not an audit fixture.
+4. **Skill paths are ordered curricula over existing skills**: a `path`
+   stores an ordered `skill_ids` list (validated, deduped, ≤ 20). All path
+   progress is derived, never stored: completion = share of members with
+   practice; the *current step* is the first member that is never-practiced
+   or neglected. Deleting a path never touches skills; deleting a skill
+   just removes it from the rendered stepper.
+
+**Rationale.** Derived-only path progress keeps a single source of truth
+(the practice stream) — a path cannot claim progress its members' history
+does not show, mirroring the evidence-over-exposure rule. Level is the one
+field the stream *cannot* derive (practice frequency ≠ mastery), so it is
+explicit, bounded (0–5), and self-assessed. The changelog rides on the
+skill doc (no second store) because its lifetime is exactly the skill's.
+
+**Trade-offs accepted.** Domains are single-valued (a skill lives in one
+domain; tags cover the rest); level drifts without practice (the state
+pill exposes exactly that tension); path steps silently skip deleted
+skills (displayed sequence stays truthful); changelog diffs rewrite the
+whole skill doc on each edit (small documents, acceptable write volume).
+
+**Implements.** `app/module/acsms/` (catalog + right rail + `#skills/<id>`
+detail with statistics, practice history, and change log; `#paths` stepper
+view), [`spec/acsms/README.md`](spec/acsms/README.md)
+(Deliberate/Review stages).
+
+### 2026 — ACSMS practice tracking: validated self-reports and computed practice states
+
+**Question.** The ACSMS mount was a static prototype plate. Building the
+skill-tracking system raised a modeling question: practice is *self-reported*
+(human-entered), so what keeps the tracking honest — and what does the system
+do about the skills that never receive any practice at all?
+
+**Decision.**
+
+1. **Practices are bound to existing skills.** A practice document carries a
+   `skill_id`; the server validates it against the catalog and rejects
+   unknown skills (400) and retired skills (400). You cannot self-report
+   practice on a skill that does not exist — the form offers only defined
+   skills, and the API enforces what the UI suggests.
+2. **The inverse gap is tracked automatically.** Every skill carries a
+   computed `practice_state` derived from its practice history and its
+   `target_per_week` cadence: `never-practiced`, `on-track`, `neglected`
+   (last practice older than 2× the target interval), plus the lifecycle
+   states `paused`/`retired`. Flagged active skills surface in the
+   dashboard's attention queue — the Review/Cull stages of the improvement
+   lifecycle, materialized.
+3. **Practiced skills leave through the lifecycle, not through DELETE.**
+   Hard delete is allowed only while a skill has zero practice history;
+   otherwise the API answers 409 and the path is retirement
+   (`PUT {status: "retired"}`), so the cull decision is recorded and the
+   practice history is preserved.
+4. **Two doc kinds, one store** (`acsms` db via the shared `Store`):
+   `skill` (catalog) and `practice` (self-report stream). Practice docs
+   denormalize `skill_name`, kept in sync on rename. Seed catalog in
+   `data/skills.json`, applied only when the DB is empty.
+
+**Rationale.** Self-report data is only as trustworthy as its constraints:
+requiring an existing skill anchors every report to a definition, and
+computing state server-side from history (rather than asking the user
+"are you keeping up?") makes the feedback automated and unfakeable. The
+neglected detector uses 2× the target interval — a tolerant, explicit
+form of "the cadence slipped" that needs no per-skill tuning.
+
+**Trade-offs accepted.** Self-reported quality/confidence remain subjective
+(evidence URLs are optional, not verified); renames rewrite historical
+practice docs (small writes, truthful snapshots); deleting a practiced
+skill is impossible by design — retiring it is the recorded decision.
+
+**Implements.** [`spec/acsms/README.md`](spec/acsms/README.md)
+(Practice/Evidence/Review/Cull stages),
+`app/module/acsms/` (server API, shell UI, seed, tests).
 ### 2026 — CTES phase 2 app shell: manager, specs, audit, self-monitoring
 
 **Question.** Phase 1 proved the execution path but shipped a bare plate —
