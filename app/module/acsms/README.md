@@ -34,8 +34,10 @@ data/skills.json seed catalog (applied only when the DB is empty)
 data/paths.json  seed paths (same rule)
 static/          WOS-style shell: hash router with sub-routes (#skills/<id>),
                  command palette (Ctrl+K), quick-capture overlay
-                 (Ctrl+Shift+N), dashboard / catalog + right rail / skill
-                 detail / paths views
+                 (Ctrl+Shift+N); dashboard (greeting, stat cards, Next
+                 Practice recommendation with derived reasons, 12-week
+                 trajectory chart, recent activity, capability gaps, right
+                 rail), catalog + right rail, skill detail, skill paths
 test_acsms.py    pytest suite (needs CouchDB on 127.0.0.1:5984; uses the
                  acsms_test_ DB prefix)
 ```
