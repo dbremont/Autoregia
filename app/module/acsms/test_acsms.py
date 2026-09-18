@@ -164,6 +164,35 @@ def test_practice_create_defaults_and_validation(client):
         assert r.status_code == 400, bad
 
 
+def test_practice_structured_data_roundtrip(client):
+    s = make_skill(client, name="Typing")
+    payload = {"skill": "typing", "wpm": 52.4, "raw": 58.1, "acc": 0.963,
+               "cons": 88.0, "c": 262, "i": 6, "x": 1, "m": 4,
+               "sec": [{"w": 48.0, "r": 54.0, "e": 1}, {"w": 55.2, "r": 60.1, "e": 0}],
+               "ke": {"e": {"p": 12, "e": 2}}, "ty": {"e": {"r": 2}}}
+    p = make_practice(client, s["id"], notes="Training camp — 30 sec",
+                      duration_min=1, data=payload)
+    assert p["data"] == payload
+    got = client.get(f"/api/practices?skill_id={s['id']}").get_json()["items"][0]
+    assert got["data"] == payload
+
+
+def test_practice_data_absent_stores_null(client):
+    s = make_skill(client)
+    p = make_practice(client, s["id"])
+    assert p["data"] is None
+
+
+def test_practice_data_validation(client):
+    s = make_skill(client)
+    r = client.post("/api/practices",
+                    json={"skill_id": s["id"], "data": [1, 2, 3]})
+    assert r.status_code == 400 and "JSON object" in r.get_json()["error"]
+    r = client.post("/api/practices",
+                    json={"skill_id": s["id"], "data": {"big": "x" * 20_000}})
+    assert r.status_code == 400 and "16 KB" in r.get_json()["error"]
+
+
 def test_practice_stream_filters_and_paging(client):
     a = make_skill(client, name="Alpha")
     b = make_skill(client, name="Beta")

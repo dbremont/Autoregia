@@ -28,10 +28,12 @@ const STATE_SORT = { 'neglected': 0, 'never-practiced': 1, 'on-track': 2, 'pause
 ACSMS.Skills = {
   // ── router entry ──
   render(sub) {
+    if (sub && sub.endsWith('/practice')) return this.renderPractice(sub.slice(0, -'practice'.length - 1));
     if (sub) return this.renderDetail(sub);
     return this.renderCatalog();
   },
   afterRender(sub) {
+    if (sub && sub.endsWith('/practice')) { this.afterRenderPractice(sub.slice(0, -'practice'.length - 1)); return; }
     if (sub) this.afterRenderDetail(sub);
     else this.afterRenderCatalog();
   },
@@ -368,6 +370,7 @@ ACSMS.Skills = {
         </div>
         <div class="detail-hero-actions">
           <button class="btn btn-primary btn-sm" id="detailLogBtn" ${retired ? 'disabled title="Skill is retired"' : ''}>${ACSMS.icon('plus', 15)} Log practice</button>
+          ${skillId === 'SKILL-typing' && !retired ? `<button class="btn btn-secondary btn-sm" id="detailPracticeBtn" title="Open the practice surface">${ACSMS.icon('play', 14)} Practice</button>` : ''}
           <button class="btn btn-secondary btn-sm" id="detailEditBtn">${ACSMS.icon('pencil', 14)} Edit</button>
           <button class="btn-icon" id="detailKebab" aria-label="More actions">${ACSMS.icon('ellipsis', 15)}</button>
         </div>
@@ -448,6 +451,13 @@ ACSMS.Skills = {
       feed.innerHTML = practices.length
         ? practices.map(ACSMS.Practice.practiceCard).join('')
         : `<div class="empty-state"><h3>No practice reported</h3><p>Log the first session — the tracking layer needs history.</p></div>`;
+      feed.querySelectorAll('.record-card[data-open]').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('[data-del], a')) return;
+          const doc = practices.find(p => p.id === card.dataset.open);
+          if (doc) ACSMS.Practice.showSessionModal(doc);
+        });
+      });
       feed.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
         const ok = await AUTOREGIA.confirmDialog({
           title: 'Delete practice report?',
@@ -487,10 +497,89 @@ ACSMS.Skills = {
     const s = ACSMS.Store.skillById(skillId);
     if (!s) return;
     document.getElementById('detailLogBtn')?.addEventListener('click', () => ACSMS.capture.open(skillId));
+    document.getElementById('detailPracticeBtn')?.addEventListener('click', () => ACSMS.navigate(`skills/${skillId}/practice`));
     document.getElementById('detailEditBtn')?.addEventListener('click', () => this.openModal(s));
     document.getElementById('detailKebab')?.addEventListener('click', (e) => this.openKebab(e, skillId));
     // full history for this skill (the store only pages the global stream)
     ACSMS.Store.loadSkillPractices(skillId).then(practices => this.renderDetailData(skillId, practices));
+  },
+
+  // ══ Practice surface (#skills/<id>/practice — the training shell) ══
+  // The training camp is an independent page (training/typing/) embedded
+  // flush beneath the app chrome — the tabs live in the view header and
+  // drive the frame via postMessage. Completed sessions arrive as
+  // 'training-session-complete' messages; when auto-record (Settings) is
+  // on, the shell turns each one into a practice report on the skill's
+  // log, carrying the shared session structure + the skill's data payload.
+  AUTO_REC_KEY: 'acsms.training.autorecord',
+
+  renderPractice(skillId) {
+    const s = ACSMS.Store.skillById(skillId);
+    if (!s) return `<div class="animate-in">${ACSMS.view.header('Practice')}
+      <div class="empty-state"><h3>Skill not found</h3><p><a href="#skills">← Back to the catalog</a></p></div></div>`;
+    const tabs = `<div class="training-tabs" role="tablist" aria-label="Training views">
+      <button class="training-tab on" data-tview="practice" role="tab" aria-selected="true">Practice</button>
+      <button class="training-tab" data-tview="feedback" role="tab" aria-selected="false">Feedback</button>
+    </div>`;
+    return `<div class="animate-in">
+      <a class="back-link" href="#skills/${skillId}">← ${ACSMS.esc(s.name)}</a>
+      ${ACSMS.view.header(`${ACSMS.esc(s.name)} | Practice`, tabs)}
+      <iframe class="training-frame" src="./training/typing/index.html" title="${ACSMS.esc(s.name)} training camp"></iframe>
+    </div>`;
+  },
+
+  afterRenderPractice(skillId) {
+    const s = ACSMS.Store.skillById(skillId);
+    if (!s) return;
+    document.querySelectorAll('.training-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.training-tab').forEach(t => {
+          t.classList.toggle('on', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        this.postToFrame({ type: 'training:set-view', view: tab.dataset.tview });
+      });
+    });
+    this.bindTrainingMessages();
+  },
+
+  postToFrame(msg) {
+    const frame = document.querySelector('.training-frame');
+    try { frame && frame.contentWindow && frame.contentWindow.postMessage(msg, window.location.origin); } catch (e) {}
+  },
+
+  // bound once per page life — the SPA re-renders around it
+  bindTrainingMessages() {
+    if (ACSMS._trainingMsgBound) return;
+    ACSMS._trainingMsgBound = true;
+    window.addEventListener('message', (e) => {
+      if (e.origin !== window.location.origin) return;
+      if (!e.data || e.data.type !== 'training-session-complete') return;
+      let auto = true;
+      try { auto = localStorage.getItem(ACSMS.Skills.AUTO_REC_KEY) !== '0'; } catch (err) {}
+      if (!auto) return;
+      const skill = ACSMS.Store.skillById('SKILL-typing');
+      if (!skill || skill.status === 'retired') return;
+      const session = e.data.session || {};
+      const data = e.data.data || {};
+      const wpm = Math.round(data.wpm || 0);
+      const notes = `Training camp — ${session.mode || 'session'} · net ${wpm} wpm`
+        + ` · raw ${Math.round(data.raw || 0)} wpm · acc ${((data.acc || 0) * 100).toFixed(1)}%`;
+      ACSMS.Store.createPractice({
+        skill_id: skill.id,
+        practiced_at_ms: session.ts,
+        duration_min: Math.max(1, Math.round((session.dur || 0) / 60)),
+        notes,
+        // the skill-specific assessment payload, stored structured —
+        // each skill's view owns its shape (typing: wpm/raw/acc/cons,
+        // per-second series, key report)
+        data: Object.assign({ skill: 'typing' }, data),
+      }).then(async () => {
+        await ACSMS.Store.refresh();
+        ACSMS.updateFooter();
+        ACSMS.toast(`Practice recorded — ${wpm} wpm`);
+      }).catch(err => ACSMS.toast('Could not record practice: ' + err.message));
+    });
   },
 
   // ══ Define / edit modal ══════════════════════════════════

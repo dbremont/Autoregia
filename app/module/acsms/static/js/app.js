@@ -12,11 +12,12 @@ const ACSMS = window.ACSMS;
 ACSMS.VIEWS = [
   { id: 'dashboard', label: 'Dashboard', icon: 'gauge', group: 'Overview', desc: 'practice health, attention queue, recent activity' },
 
-  { id: 'skills', label: 'Skills', icon: 'layers', group: 'Catalog', desc: 'the skill catalog — define, edit, retire' },
+  { id: 'skills', label: 'Skill Set', icon: 'layers', group: 'Catalog', desc: 'the skill catalog — define, edit, retire' },
   { id: 'paths', label: 'Skill Paths', icon: 'route', group: 'Catalog', desc: 'ordered curricula that sequence skills into programs' },
 
-  { id: 'documentation', label: 'Documentation', icon: 'book-open', group: 'System', desc: 'about this dashboard' },
   { id: 'about', label: 'About', icon: 'info', group: 'System', desc: 'what ACSMS is' },
+  { id: 'settings', label: 'Settings', icon: 'settings', group: 'System', desc: 'training recording preference' },
+  { id: 'documentation', label: 'Documentation', icon: 'book-open', group: 'System', desc: 'about this dashboard' },
 ];
 
 ACSMS.init = async function () {

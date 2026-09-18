@@ -134,5 +134,28 @@
         "changes": []
       }
     ]
+  },
+  {
+    "id": "SKILL-typing",
+    "doc_type": "skill",
+    "name": "Typing",
+    "description": "Touch-typing fluency — speed and accuracy at the keyboard. Evidence: WPM/accuracy runs.",
+    "tags": [
+      "keyboard",
+      "motor"
+    ],
+    "domain": "Technical",
+    "status": "active",
+    "target_per_week": 5,
+    "level": 2,
+    "created_at_ms": 1789689600000,
+    "updated_at_ms": 1789689600000,
+    "changes": [
+      {
+        "at_ms": 1789689600000,
+        "event": "created",
+        "changes": []
+      }
+    ]
   }
 ]

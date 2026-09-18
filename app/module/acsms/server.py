@@ -24,6 +24,7 @@ Mounted under ``/acsms/`` by the unified dispatcher (``app.py``).
 Run:   python3 app.py                    (unified dispatcher, port 8080/8081)
 Open:  http://localhost:8081/acsms/
 """
+import json
 import os
 import re
 import sys
@@ -415,6 +416,25 @@ def create_practice():
     if data.get("duration_min") not in (None, "") and duration is None:
         return _err("duration_min must be an integer 0–1440")
 
+    # structured assessment payload — optional; each skill kind owns its
+    # shape (the typing training camp posts wpm/acc/cons, the per-second
+    # series and the key report here). Stored verbatim so the skill's view
+    # can render the full session detail from the log.
+    extra = data.get("data")
+    if extra is None or extra == "":
+        extra = None
+    elif not isinstance(extra, dict):
+        return _err("data must be a JSON object — the skill-specific "
+                    "assessment payload")
+    else:
+        try:
+            blob = json.dumps(extra)
+        except (TypeError, ValueError):
+            return _err("data must be JSON-serializable")
+        if len(blob) > 16 * 1024:
+            return _err("data too large — the assessment payload is capped "
+                        "at 16 KB serialized")
+
     doc = {
         "id": f"PRACTICE-{uuid.uuid4().hex[:12]}",
         "doc_type": "practice",
@@ -426,6 +446,7 @@ def create_practice():
         "quality": quality,
         "confidence": confidence,
         "evidence_url": _clean_str(data.get("evidence_url") or "", 500),
+        "data": extra,
         "created_at_ms": now_ms(),
     }
     store.put(doc)

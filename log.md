@@ -29,6 +29,54 @@ TODO:
 
 ## Index
 
+### 2026 — The ACSMS training camp: an independent trainer behind a seamless shell
+
+**Question.** The Typing skill needs a real deliberate-practice surface
+(a typing trainer with sessions, feedback and key-level assessment), not a
+form. Should the trainer be built into the ACSMS shell, and how does a
+completed test become a *practice record* the tracking layer can assess?
+
+**Decision.**
+
+1. **The trainer is an independent file** (`training/typing/index.html`),
+   embedded by the skill practice view in a borderless iframe — a
+   "training shell". The trainer carries the session engine and its own
+   local ledger; the shell owns all chrome: the Practice/Feedback tabs
+   (driving the frame via `postMessage`) and the back link.
+2. **Two views only — Practice and Feedback.** A run leaves a brief
+   feedback strip under the passage (until the next test starts); the
+   complete assessment (per-second chart, key heatmap, trouble list) and
+   the training log — each row opening a session-detail modal — live in
+   Feedback. Session controls (kind, length, punctuation, key sounds)
+   belong to the practice surface itself and persist in the browser;
+   the only shell-side setting is **Auto Log Practice**.
+3. **Recording is structured, not just narrated**: `POST /api/practices`
+   accepts an optional `data` object (capped at 16 KB) stored verbatim on
+   the practice doc. The trainer announces every completed test as
+   `{session, data}` — shared structure (ts, duration, mode) plus the
+   skill kind's payload (typing: wpm/raw/acc/cons, series, key report) —
+   and the shell files it on the skill's log when Auto Log Practice is on.
+   Each skill's view owns its payload shape; record-cards in the skill log
+   open a session modal rendering that payload.
+
+**Rationale.** An independent file keeps the trainer offline-first,
+self-contained and testable outside the app, while the iframe shell keeps
+the user inside the app's identity (project tokens only, no trainer
+chrome, no CDN fonts). Structured recording is what turns a "very complete
+log" into an assessable one: the assessment surface renders from the
+record, not from a re-run or from prose notes.
+
+**Trade-offs accepted.** The ledger is per-browser (the structured record
+on the skill log is the durable copy); the trainer stays dormant config on
+other clients until re-mounted; one old-format code path (fallback modal)
+remains for records without `data`; modal renderers are per-skill-kind,
+so a new skill kind means a new renderer.
+
+**Implements.** [app/module/acsms/static/training/typing/index.html](app/module/acsms/static/training/typing/index.html),
+[app/module/acsms/static/js/skills.js](app/module/acsms/static/js/skills.js),
+[app/module/acsms/static/js/practice.js](app/module/acsms/static/js/practice.js),
+[app/module/acsms/server.py](app/module/acsms/server.py)
+
 ### 2026 — ACSMS catalogs: domains, mastery levels, change logs, and skill paths
 
 **Question.** The first ACSMS build tracked practice against a flat skill

@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training Camp — Typing | ACSMS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 .8S3.4 6.7 3.4 9.9a4.6 4.6 0 0 0 9.2 0C12.6 6.7 8 .8 8 .8z' fill='%237A1A2A'/%3E%3C/svg%3E">
+<!-- project design system — tokens, self-hosted fonts, base (spec/ui.spec; never CDN fonts) -->
+<link rel="stylesheet" href="/ui/css/tokens.css?v=20260918">
+<link rel="stylesheet" href="/ui/css/fonts.css?v=20260918">
+<link rel="stylesheet" href="/ui/css/base.css?v=20260918">
+<style>
+/* ── Training Camp — typing, measured. Independent practice surface,
+   embedded by the ACSMS skill shell (skills.js → .training-frame).
+   Chrome (tabs, config) belongs to the shell: this page renders only
+   the two views — Practice and Feedback — and is driven via postMessage
+   ('training:set-view'). All colors/typography/
+   spacing come from the /ui token layer. ── */
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-mono);font-size:var(--text-sm);line-height:var(--leading-normal);-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:3px;background:var(--oxford);z-index:70}
+::selection{background:var(--oxford);color:var(--paper-on-accent)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible{outline:2px solid var(--oxford);outline-offset:3px}
+canvas{display:block}
+kbd{font-family:var(--font-mono);font-size:var(--text-2xs);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:1px 6px;background:var(--color-surface-2)}
+
+main{max-width:940px;margin:0 auto;padding:var(--space-5) var(--space-8) var(--space-10)}
+.view{animation:fadeUp .5s var(--ease-out-expo)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}}
+.view-head{display:flex;align-items:baseline;gap:var(--space-4);margin-top:var(--space-4);flex-wrap:wrap}
+.view-head h2{font-family:var(--font-display);font-weight:600;font-size:var(--text-xl);letter-spacing:var(--tracking-tight);color:var(--color-text)}
+.vh-sub{font-size:var(--text-xs);color:var(--color-text-muted);letter-spacing:var(--tracking-wide)}
+.vh-streak{margin-left:auto;display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-2sm);font-weight:700;color:var(--color-text)}
+.vh-streak svg{width:11px;height:11px;fill:var(--gold-ink)}
+
+/* dimming while typing */
+body.typing .cfg,body.typing .kbd-hint{opacity:.22;transition:opacity .45s}
+.cfg,.kbd-hint{transition:opacity .45s}
+
+/* session controls — they belong to the practice surface (persisted) */
+.cfg{display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap;margin-top:var(--space-4)}
+.cfg-group{display:flex;align-items:center;gap:var(--space-1)}
+.cfg-group.dim{opacity:.35}
+.cfg-name{font-size:var(--text-2xs);letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--color-text-muted);margin-right:var(--space-2);cursor:pointer}
+.cfg .val{font-size:var(--text-2sm);padding:var(--space-1) var(--space-3);border-radius:var(--radius-sm);color:var(--color-text-muted)}
+.cfg .val:hover{color:var(--color-text)}
+.cfg .val.on{background:var(--ink-1);color:var(--paper-on-accent);font-weight:700}
+.cfg-sep{width:1px;height:18px;background:var(--color-border)}
+.punct-toggle{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-2sm);color:var(--color-text-muted);padding:var(--space-1) var(--space-3);border:1px dashed var(--color-border);border-radius:var(--radius-sm)}
+.punct-toggle:hover{color:var(--color-text)}
+.punct-toggle.on{color:var(--color-text);border-style:solid;border-color:var(--ink-1)}
+.punct-toggle .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-7)}
+.punct-toggle.on .dot{background:var(--oxford)}
+.cfg-end{margin-left:auto;display:flex;align-items:center;gap:var(--space-2)}
+.cfg-reset,.icon-btn{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--color-border);border-radius:var(--radius-sm);color:var(--color-text-muted)}
+.cfg-reset:hover,.icon-btn:hover{color:var(--color-text);border-color:var(--ink-1)}
+.icon-btn{border-radius:var(--radius-pill)}
+.icon-btn.on{color:var(--oxford);border-color:var(--oxford)}
+#soundBtn .w1,#soundBtn .w2{display:none}
+#soundBtn.on .w1,#soundBtn.on .w2{display:block}
+#soundBtn.on .mute{display:none}
+
+/* ── Practice ── */
+.typing-block{position:relative;margin-top:var(--space-4)}
+.progress{height:2px;background:var(--ink-9)}
+.progress i{display:block;height:100%;width:0;background:var(--oxford);transition:width .18s linear}
+.passage{padding:var(--space-4) 0 var(--space-1);cursor:text}
+.words-window{overflow:hidden;height:138px}
+.words{position:relative;padding:0 2px;font-size:25px;line-height:2.875rem;font-weight:500;user-select:none;transition:transform .16s var(--ease-out-soft)}
+.word{display:inline-block;margin-right:17px;border-bottom:1.5px solid transparent}
+.word.err{border-bottom-color:var(--oxford)}
+.letter{color:var(--ink-6)}
+.letter.ok{color:var(--ink-1)}
+.letter.bad{color:var(--oxford);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px;text-decoration-color:var(--oxford)}
+.letter.extra{text-decoration:line-through;text-decoration-thickness:1.5px}
+.letter.miss{color:var(--ink-8)}
+.caret{position:absolute;left:0;top:0;width:2.5px;height:31px;background:var(--ink-1);border-radius:var(--radius-xs);z-index:2;
+  transition:transform .07s linear;animation:blink 1.1s infinite}
+.caret.solid{animation:none}
+@keyframes blink{0%,55%{opacity:1}56%,100%{opacity:0}}
+
+.live{display:flex;align-items:center;gap:var(--space-8);border-top:1px solid var(--color-border);margin-top:var(--space-3);padding-top:var(--space-3);min-height:58px}
+.ls{display:flex;align-items:baseline;gap:var(--space-2)}
+.ls b{font-family:var(--font-display);font-weight:600;font-size:var(--text-xl);font-variant-numeric:lining-nums;min-width:2ch;color:var(--color-text)}
+.ls span{font-size:var(--text-2xs);letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--color-text-muted)}
+#spark{flex:1 1 0;height:44px;min-width:60px}
+
+/* brief post-run feedback — stays until the next test starts */
+.run-strip{display:flex;align-items:baseline;gap:var(--space-4);flex-wrap:wrap;border-top:1px solid var(--color-border);margin-top:var(--space-3);padding:var(--space-3) 2px var(--space-2)}
+.run-strip b{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);font-variant-numeric:lining-nums;color:var(--color-text)}
+.run-strip .rs-lbl{font-size:var(--text-2xs);letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--color-text-muted)}
+.run-strip .rs-delta.up{color:var(--color-success)}
+.run-strip .rs-delta.dn{color:var(--color-danger)}
+.run-strip .rs-hint{margin-left:auto;font-size:var(--text-2sm);color:var(--color-text-muted)}
+.kbd-hint{margin-top:var(--space-5);font-size:var(--text-2sm);color:var(--color-text-muted);display:flex;gap:var(--space-5);flex-wrap:wrap;align-items:center}
+.touch-tip{display:none}
+@media (hover:none){.touch-tip{display:inline}}
+
+/* ── Feedback ── */
+.empty{padding:var(--space-16) 0 var(--space-10);text-align:center;color:var(--color-text-muted)}
+.empty .em-big{font-family:var(--font-display);font-style:italic;font-size:var(--text-lg);color:var(--color-text-secondary)}
+.empty .em-sub{margin:var(--space-3) auto 0;max-width:420px;font-size:var(--text-2sm)}
+.empty svg{display:block;margin:0 auto var(--space-3);color:var(--ink-5)}
+.fb-block{margin-top:var(--space-10);border-top:1px solid var(--color-border);padding-top:var(--space-4)}
+.fb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);gap:var(--space-3);flex-wrap:wrap}
+.fb-head>span:first-child{font-size:var(--text-2xs);letter-spacing:var(--tracking-widest);text-transform:uppercase;font-weight:700;color:var(--color-text)}
+.fb-sub{font-size:var(--text-2xs);color:var(--color-text-muted)}
+.res-hero{display:grid;grid-template-columns:minmax(230px,1fr) minmax(0,1.3fr);gap:var(--space-10);align-items:center}
+.lbl{font-size:var(--text-2xs);letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--color-text-muted);font-weight:500}
+.big{display:flex;align-items:baseline;gap:var(--space-4);margin-top:var(--space-1)}
+.big span{font-family:var(--font-display);font-weight:600;font-size:clamp(72px,12vw,128px);line-height:.95;letter-spacing:var(--tracking-tight);font-variant-numeric:lining-nums;color:var(--color-text)}
+.big em{font-style:normal;font-size:var(--text-2xs);color:var(--color-text-muted);letter-spacing:var(--tracking-widest);text-transform:uppercase}
+.rep-sub{margin-top:var(--space-4);font-size:var(--text-2sm);color:var(--color-text-muted)}
+.pb-banner{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:var(--text-lg);color:var(--oxford);margin-top:var(--space-3)}
+.res-cells{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--color-border);border:1px solid var(--color-border)}
+.cell{background:var(--color-surface);padding:var(--space-3) var(--space-4)}
+.cell b{display:block;font-family:var(--font-display);font-weight:600;font-size:var(--text-xl);margin-top:var(--space-1);font-variant-numeric:lining-nums;color:var(--color-text)}
+.cell .sub{font-size:var(--text-2xs);color:var(--color-text-muted);margin-top:var(--space-1)}
+.legend{font-size:var(--text-2xs);color:var(--color-text-muted);display:flex;align-items:center}
+.legend i{display:inline-block;width:14px;height:2px;margin:0 var(--space-2) 0 var(--space-4);vertical-align:middle}
+.l-ink{background:var(--ink-1)}.l-mut{background:var(--ink-5)}.l-red{background:var(--oxford)}
+.rep-chart{width:100%;height:230px}
+
+/* keyboard heatmap */
+.kbd{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);padding:var(--space-2) 0 2px}
+.kbd-row{display:flex;gap:var(--space-2)}
+.key{width:46px;height:50px;border:1px solid var(--color-border);border-radius:var(--radius-md);position:relative;display:grid;place-items:center;
+  font-size:var(--text-sm);font-weight:600;background:var(--color-surface);cursor:default;transition:transform .12s,border-color .12s;color:var(--color-text)}
+.key:hover{transform:translateY(-2px);border-color:var(--ink-1)}
+.key .n{position:absolute;right:5px;bottom:3px;font-size:var(--text-2xs);font-weight:700;color:var(--oxford)}
+.trouble{margin-top:var(--space-6)}
+.t-row{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) 2px;border-bottom:1px solid var(--color-border-light)}
+.t-key{width:34px;height:34px;border:1.5px solid var(--ink-1);border-radius:var(--radius-sm);display:grid;place-items:center;font-weight:700;font-size:var(--text-base);flex:none;color:var(--color-text)}
+.t-desc{font-size:var(--text-2sm);color:var(--color-text-secondary)}
+.t-desc b{color:var(--oxford)}
+.t-acc{margin-left:auto;text-align:right;font-weight:700;font-size:var(--text-base);color:var(--color-text)}
+.t-acc span{display:block;font-size:var(--text-2xs);color:var(--color-text-muted);font-weight:400;letter-spacing:var(--tracking-wide);text-transform:uppercase}
+.t-empty{padding:var(--space-4) 2px;font-family:var(--font-display);font-style:italic;font-size:var(--text-md);color:var(--color-text-secondary)}
+
+/* training log table */
+.tbl-scroll{max-height:430px;overflow:auto;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:var(--text-2sm)}
+th{font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--color-text-muted);text-align:left;padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--color-border-strong);font-weight:700;position:sticky;top:0;background:var(--color-bg)}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--color-border-light);white-space:nowrap;color:var(--color-text)}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--color-surface-2)}
+.pb-mark{color:var(--oxford);font-weight:700;margin-left:var(--space-1)}
+.statline{margin-top:var(--space-4);font-size:var(--text-2sm);color:var(--color-text-secondary)}
+.statline b{color:var(--oxford)}
+
+/* session detail modal */
+.modal-overlay{position:fixed;inset:0;z-index:var(--z-modal);background:rgba(30,28,25,.45);display:grid;place-items:center;padding:var(--space-6)}
+.session-modal{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-xl);
+  width:min(880px,100%);max-height:88vh;overflow:auto;padding:var(--space-6)}
+.sm-head{display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:var(--space-5)}
+.sm-head h3{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);color:var(--color-text)}
+.sm-head .sm-mode{font-size:var(--text-2xs);color:var(--color-text-muted);letter-spacing:var(--tracking-wide)}
+.sm-close{margin-left:auto;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--color-border);border-radius:var(--radius-pill);color:var(--color-text-muted)}
+.sm-close:hover{color:var(--color-text);border-color:var(--ink-1)}
+
+/* toasts */
+#toasts{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:var(--z-toast);display:flex;flex-direction:column;gap:var(--space-2);align-items:center}
+.toast{background:var(--ink-1);color:var(--paper-on-accent);padding:var(--space-3) var(--space-4);font-size:var(--text-2sm);border-radius:var(--radius-sm);border-left:3px solid var(--oxford);animation:toastIn .35s var(--ease-out-expo)}
+.toast.out{opacity:0;transform:translateY(8px);transition:.3s}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}}
+
+#ghost{position:fixed;bottom:0;left:0;width:2px;height:2px;opacity:0;border:none;padding:0;font-size:var(--text-base);background:none;color:transparent;caret-color:transparent;pointer-events:none;z-index:-1}
+
+@media (max-width:720px){
+  main{padding:var(--space-4) var(--space-4) var(--space-8)}
+  .words{font-size:20px;line-height:2.375rem}
+  .words-window{height:114px}
+  .live{gap:var(--space-4)}
+  .res-hero{grid-template-columns:1fr;gap:var(--space-6)}
+  .res-cells{grid-template-columns:repeat(2,1fr)}
+  .key{width:clamp(27px,8.2vw,46px);height:clamp(32px,9.8vw,50px);font-size:var(--text-2sm)}
+  .key .n{right:3px;bottom:1px}
+}
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- ================= PRACTICE ================= -->
+  <section class="view" id="viewPractice">
+    <div class="cfg" id="cfg">
+      <div class="cfg-group" data-g="time">
+        <span class="cfg-name">time</span>
+        <button class="val" data-v="15">15</button>
+        <button class="val on" data-v="30">30</button>
+        <button class="val" data-v="60">60</button>
+      </div>
+      <div class="cfg-sep"></div>
+      <div class="cfg-group dim" data-g="words">
+        <span class="cfg-name">words</span>
+        <button class="val" data-v="10">10</button>
+        <button class="val on" data-v="25">25</button>
+        <button class="val" data-v="50">50</button>
+      </div>
+      <div class="cfg-sep"></div>
+      <button class="punct-toggle" id="punctBtn"><i class="dot"></i>punctuation</button>
+      <div class="cfg-end">
+        <button id="soundBtn" class="icon-btn" title="key sounds" aria-label="toggle key sounds">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2.5 6v4h2.8L9 13V3L5.3 6H2.5z" fill="currentColor" stroke="none"/>
+            <path class="w1" d="M11 5.6a3.3 3.3 0 0 1 0 4.8"/>
+            <path class="w2" d="M12.8 3.9a5.9 5.9 0 0 1 0 8.2"/>
+            <line class="mute" x1="2.5" y1="13.5" x2="13.5" y2="2.5"/>
+          </svg>
+        </button>
+        <button class="cfg-reset" id="resetBtn" title="restart — esc" aria-label="restart test">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13.2 8A5.2 5.2 0 1 1 11 3.8"/>
+            <path d="M11.3 1.2 11 3.9l2.6.3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="typingArea">
+      <div class="typing-block">
+        <div class="progress"><i id="progressBar"></i></div>
+        <div class="passage" id="passage">
+          <div class="words-window" id="wordsWindow">
+            <div class="words" id="words"><div class="caret" id="caret"></div></div>
+          </div>
+        </div>
+        <div class="live">
+          <span class="ls"><b id="liveWpm">0</b><span>wpm</span></span>
+          <span class="ls"><b id="liveAcc">100</b><span>%</span></span>
+          <span class="ls"><b id="liveTime">30</b><span id="liveTimeLbl">left</span></span>
+          <canvas id="spark"></canvas>
+        </div>
+      </div>
+      <div class="run-strip" id="runStrip" hidden></div>
+      <div class="kbd-hint">
+        <span><kbd>tab</kbd> new test</span>
+        <span><kbd>esc</kbd> restart</span>
+        <span>the clock starts on your first keystroke</span>
+        <span class="touch-tip"><kbd>tap the text</kbd> to raise the keyboard</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEEDBACK ================= -->
+  <section class="view" id="viewFeedback" hidden>
+    <div class="view-head"><h2>Feedback</h2><span class="vh-sub">every keystroke, assessed</span>
+      <span class="vh-streak" id="streakWrap" hidden>
+        <svg viewBox="0 0 16 16"><path d="M8.6.8c.3 2.6 3.9 4 3.9 8a4.1 4.1 0 0 1-8.2 0c0-1.8.8-3 1.8-4 .2 1 .8 1.6 1.6 1.7C7.2 5 7.9 2.8 8.6.8z"/></svg>
+        <span id="streakVal">0</span>&nbsp;day streak
+      </span>
+    </div>
+
+    <div class="empty" id="fbEmpty">
+      <svg viewBox="0 0 90 70" width="86" height="66" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M84 66C62 60 34 46 16 16"/>
+        <path d="M13 29 15.5 13.5 30 17"/>
+      </svg>
+      <div class="em-big">Nothing to assess yet.</div>
+      <div class="em-sub">Finish a run in Practice — the complete feedback for your latest session, the full training log, and the lifetime key report gather here.</div>
+    </div>
+
+    <div id="fbBody" hidden>
+      <!-- last session — the complete report -->
+      <div class="fb-block" id="lastBlock">
+        <div class="fb-head"><span>last session</span><span class="fb-sub" id="lastMeta"></span></div>
+        <div class="res-hero">
+          <div>
+            <div class="lbl">net speed</div>
+            <div class="big"><span id="bigWpm">0</span><em>wpm</em></div>
+            <div class="rep-sub" id="lastSub"></div>
+            <div class="pb-banner" id="pbBanner" hidden>— new personal best —</div>
+          </div>
+          <div class="res-cells">
+            <div class="cell"><div class="lbl">raw speed</div><b id="cRaw">–</b><div class="sub">every keystroke counted</div></div>
+            <div class="cell"><div class="lbl">accuracy</div><b id="cAcc">–</b><div class="sub" id="cAccSub"></div></div>
+            <div class="cell"><div class="lbl">consistency</div><b id="cCons">–</b><div class="sub">steadiness of rhythm</div></div>
+            <div class="cell"><div class="lbl">characters</div><b id="cChars">–</b><div class="sub" id="cCharsSub"></div></div>
+            <div class="cell"><div class="lbl">errors</div><b id="cErr">–</b><div class="sub">wrong keys + skipped letters</div></div>
+            <div class="cell"><div class="lbl">duration</div><b id="cTime">–</b><div class="sub" id="cTimeSub"></div></div>
+          </div>
+        </div>
+        <div class="fb-block" style="margin-top:var(--space-8)">
+          <div class="fb-head"><span>speed, second by second</span>
+            <span class="legend"><i class="l-ink"></i>net wpm<i class="l-mut"></i>raw wpm<i class="l-red"></i>errors</span></div>
+          <canvas id="lastChart" class="rep-chart"></canvas>
+        </div>
+        <div class="fb-block" style="margin-top:var(--space-8)">
+          <div class="fb-head"><span>key report</span><span class="fb-sub" id="lastKeysSummary"></span></div>
+          <div class="kbd" id="lastKbd"></div>
+          <div class="trouble" id="lastTrouble"></div>
+        </div>
+      </div>
+
+      <!-- training log -->
+      <div class="fb-block">
+        <div class="fb-head"><span>training log</span><span class="fb-sub" id="logCount"></span></div>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>#</th><th>when</th><th>mode</th><th class="num">wpm</th><th class="num">raw</th><th class="num">acc</th><th class="num">cons</th></tr></thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- lifetime keys -->
+      <div class="fb-block">
+        <div class="fb-head"><span>keys — lifetime</span><span class="fb-sub">darker = more misses · hover a key for detail</span></div>
+        <div class="statline" id="aggStatLine"></div>
+        <div class="kbd" id="aggKbd"></div>
+        <div class="trouble" id="aggTrouble"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toasts" aria-live="polite"></div>
+<input id="ghost" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-hidden="true">
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════
+   Training Camp — typing, measured.
+   Organizing abstractions:
+   · training session — the passage + input engine (Practice view)
+   · feedback         — brief strip after each run (Practice); the
+                        complete assessment lives in the Feedback view:
+                        last session report, the training log (click a
+                        row for the session modal), lifetime keys
+   · recording        — this ledger stays local; each completed test is
+                        announced to the embedding shell via postMessage
+                        ('training-session-complete' with the shared
+                        session structure + the skill-specific data
+                        payload), which records it on the skill's log.
+   Chrome (tabs, configuration) belongs to the shell — this page is
+   driven by 'training:set-view' messages; session controls live here.
+   ════════════════════════════════════════════════════════════ */
+
+/* ================= corpus ================= */
+const WORDS = ("the be of and a to in he have it that for they with as not on she at by this we you do but from or which one would all will there say who make when can more if no man out other so what time up go about than into could state only new year some take come these know see use get like then first any work now may such give over think most even find day also after way many must look before great back through long where much should well people down own just because good each those feel seem how high too place little world very still nation hand old life tell write become here show house both between need mean call under last right move thing general school never same another begin while number part turn real leave might want point form off child few small since against ask late home interest large person end open public follow during present without again hold around possible head consider word program problem however lead system set order eye plan run keep face fact group play stand increase early course change help line city put close case force meet once water upon war build hear light unite live every country bring center let side try provide continue name certain power pay result question study woman member until far night always service away report something company week church toward start social room figure nature though young less enough almost read include nothing yet better big boy cost business value second why clear expect family complete act sense mind experience art next near direct car law industry important girl several matter usual rather per often kind among white reason action return foot care simple within love human along appear doctor believe speak active student month drive concern best door hope example inform body ever least probable understand reach effect different idea whole control condition field pass fall note special talk particular today measure walk teach low hour type carry rate remain full street easy although record sit determine level local sure receive thus moment spirit train college religion perhaps music grow free cause serve age book board recent sound office cut step class true history position above strong friend necessary add court deal tax support party either land section north south east west future past stone iron glass wave cloud storm rain wind leaf root seed soil grain farm horse sheep wolf bear deer bird fish river lake shore island valley forest meadow garden winter summer autumn spring copper silver golden amber cedar willow raven sparrow frost tide anchor compass canvas ribbon lantern pocket ticket bundle pebble shadow mirror coffee silence rhythm echo poem radio spoke sum").split(/\s+/).filter(Boolean);
+const CONTR = "don't it's you're can't we're they're isn't won't i'm that's what's let's there's he'd she's couldn't shouldn't".split(" ");
+
+/* ================= persistent store (local ledger) ================= */
+const LS = 'training.typing.v1';
+const LS_CFG = 'training.typing.cfg';
+const LS_SOUND = 'training.typing.sound';
+const store = { tests: [] };
+try { const raw = localStorage.getItem(LS); if (raw) { const d = JSON.parse(raw); if (d && Array.isArray(d.tests)) store.tests = d.tests; } } catch(e) {}
+function persist(){ try { localStorage.setItem(LS, JSON.stringify(store)); } catch(e) {} }
+function loadCfg(){
+  const dflt = { kind:'time', time:30, words:25, punct:false };
+  try { const raw = localStorage.getItem(LS_CFG); if (raw){ const c = JSON.parse(raw);
+    if (c && (c.kind==='time'||c.kind==='words')) return { kind:c.kind, time:+c.time||30, words:+c.words||25, punct:!!c.punct }; } } catch(e) {}
+  return dflt;
+}
+let soundOn = false;
+try { soundOn = localStorage.getItem(LS_SOUND) === '1'; } catch(e) {}
+
+/* ================= helpers ================= */
+/* Canvas palette — hex mirrors of the /ui token layer (matches the
+   project's chart convention of pinning token hexes in draw code). */
+const INK='#2C2A26', MUT='#8C877B', RED='#7A1A2A', HAIR='rgba(44,42,38,.12)';
+const $ = id => document.getElementById(id);
+const fmtDate = ts => new Date(ts).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+const fmtDateFull = ts => fmtDate(ts)+', '+new Date(ts).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+const dayKey = ts => { const d=new Date(ts); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); };
+const modeStr = t => (t.kind==='time' ? t.time+' sec' : t.words+' words') + (t.punct?' · punctuation':'');
+const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+function niceStep(max){ for (const s of [5,10,20,25,50,100]) if (max/s<=6) return s; return 100; }
+function calcStreak(){
+  const days = new Set(store.tests.map(t=>dayKey(t.ts)));
+  const d = new Date(); let s=0;
+  if (!days.has(dayKey(d))) d.setDate(d.getDate()-1);
+  while (days.has(dayKey(d))) { s++; d.setDate(d.getDate()-1); }
+  return s;
+}
+const sameConf = t => t.kind===cfg.kind && t.time===cfg.time && t.words===cfg.words && t.punct===cfg.punct;
+
+/* ================= config & test state ================= */
+let cfg = loadCfg();
+let T = null, ticker = null, blinkTimer = null, kdTs = 0, userEngaged = false;
+let activeView = 'practice', modalOpen = false;
+
+const wordsEl = $('words'), caretEl = $('caret'), ghost = $('ghost');
+
+function genWords(n, punct){
+  const ws = [];
+  while (ws.length < n){
+    let w = WORDS[(Math.random()*WORDS.length)|0];
+    if (punct && Math.random() < .05) w = CONTR[(Math.random()*CONTR.length)|0];
+    ws.push(w);
+  }
+  if (!punct) return ws;
+  let cap = true;
+  return ws.map((w,i)=>{
+    let s = w;
+    if (cap){ cap = false; s = s[0].toUpperCase()+s.slice(1); }
+    const r = Math.random();
+    if (i < ws.length-1){
+      if (r<.06) s += ',';
+      else if (r<.11){ s += '.'; cap = true; }
+      else if (r<.125){ s += '?'; cap = true; }
+      else if (r<.135) s += ';';
+    } else s += '.';
+    return s;
+  });
+}
+
+function appendWords(n){
+  for (const w of genWords(n, cfg.punct)){
+    const wd = document.createElement('div'); wd.className='word';
+    const arr = [];
+    for (const ch of w){ const s=document.createElement('span'); s.className='letter'; s.textContent=ch; wd.appendChild(s); arr.push(s); }
+    wordsEl.appendChild(wd); T.words.push(w); T.els.push(arr); T.wordEls.push(wd);
+  }
+}
+
+function buildPassage(){
+  wordsEl.innerHTML = '';
+  T.els = []; T.wordEls = [];
+  const frag = document.createDocumentFragment();
+  for (const w of T.words){
+    const wd = document.createElement('div'); wd.className='word';
+    const arr = [];
+    for (const ch of w){ const s=document.createElement('span'); s.className='letter'; s.textContent=ch; wd.appendChild(s); arr.push(s); }
+    frag.appendChild(wd); T.wordEls.push(wd); T.els.push(arr);
+  }
+  wordsEl.appendChild(frag);
+  wordsEl.appendChild(caretEl); // keep the persistent caret element alive
+  wordsEl.style.transform = 'translateY(0)';
+  const lh = parseFloat(getComputedStyle(wordsEl).lineHeight) || 46;
+  T.lh = lh;
+  caretEl.style.height = Math.max(20, lh-16) + 'px';
+  placeCaret();
+}
+
+function placeCaret(){
+  const wEl = T.wordEls[T.wi], letters = T.els[T.wi];
+  let x, y;
+  if (letters && letters.length){
+    if (T.li < letters.length){ const el = letters[T.li]; x = el.offsetLeft; y = el.offsetTop; }
+    else { const el = letters[letters.length-1]; x = el.offsetLeft + el.offsetWidth; y = el.offsetTop; }
+  } else { x = wEl.offsetLeft; y = wEl.offsetTop; }
+  const ch = caretEl.offsetHeight || 31, lh = T.lh || 46;
+  caretEl.style.transform = `translate(${x}px,${y+(lh-ch)/2}px)`;
+  const line = Math.round(y/lh);
+  wordsEl.style.transform = `translateY(${line>=2 ? -(line-1)*lh : 0}px)`;
+}
+
+function caretPulse(){
+  caretEl.classList.add('solid');
+  clearTimeout(blinkTimer);
+  blinkTimer = setTimeout(()=>caretEl.classList.remove('solid'), 480);
+}
+
+/* ================= typing engine ================= */
+function keyStat(ch){ let s=T.keyErr[ch]; if(!s){ s={p:0,e:0}; T.keyErr[ch]=s; } return s; }
+function addTypo(exp,got){ (T.typos[exp]=T.typos[exp]||{}); T.typos[exp][got]=(T.typos[exp][got]||0)+1; }
+
+function doChar(ch){
+  if (!T || T.done) return;
+  const word = T.words[T.wi], letters = T.els[T.wi], wEl = T.wordEls[T.wi];
+  if (T.li < word.length){
+    startTest();
+    const exp = word[T.li], el = letters[T.li];
+    if (ch === exp){ el.className='letter ok'; T.correct++; keyStat(exp).p++; }
+    else {
+      el.className='letter bad'; T.incorrect++;
+      const s = keyStat(exp); s.p++; s.e++; addTypo(exp, ch);
+    }
+    T.li++;
+    const wasLast = cfg.kind==='words' && T.wi===T.words.length-1 && T.li===word.length;
+    if (wasLast && ch===exp){ ping(false); placeCaret(); endTest(); return; }
+  } else {
+    startTest();
+    const s = document.createElement('span'); s.className='letter bad extra'; s.textContent=ch;
+    wEl.appendChild(s); letters.push(s);
+    T.li++; T.incorrect++; T.extra++;
+  }
+  ping(false); caretPulse(); placeCaret(); updateLiveNums();
+}
+
+function doSpace(){
+  if (!T || T.done) return;
+  if (T.li === 0) return; // ignore leading spaces
+  startTest();
+  const word = T.words[T.wi], wEl = T.wordEls[T.wi], letters = T.els[T.wi];
+  const skipped = T.li < word.length;
+  if (skipped){
+    for (let k=T.li; k<word.length; k++){
+      letters[k].className = 'letter miss';
+      const s = keyStat(word[k]); s.p++; s.e++;
+    }
+    wEl.classList.add('err');
+    T.missed += word.length - T.li;
+    T.incorrect++; // the premature space itself
+    T.typedCount++;
+  } else {
+    T.correct++; T.typedCount++;
+  }
+  ping(skipped); caretPulse();
+  T.wi++; T.li = 0;
+  if (T.wi >= T.words.length){
+    if (cfg.kind === 'words'){ endTest(); return; }
+    appendWords(50);
+  } else if (cfg.kind === 'time' && T.wi > T.words.length - 25){
+    appendWords(50);
+  }
+  placeCaret(); updateLiveNums();
+}
+
+function doBackspace(){
+  if (!T || T.done || !T.started) return;
+  const letters = T.els[T.wi];
+  if (T.li > 0){
+    const el = letters[T.li-1];
+    if (el.classList.contains('extra')){ el.remove(); letters.pop(); T.li = letters.length; }
+    else { el.className = 'letter'; T.li--; }
+  } else if (T.wi > 0){
+    const prev = T.els[T.wi-1];
+    let typed = 0;
+    while (typed < prev.length){ const c = prev[typed].className; if (c==='letter' || c==='letter miss') break; typed++; }
+    if (typed === 0){ return; }
+    T.wi--; T.li = typed;
+  } else return;
+  ping(false); caretPulse(); placeCaret(); updateLiveNums();
+}
+
+function startTest(){
+  if (T.started) return;
+  T.started = true; T.startTs = performance.now();
+  T.lastSec = 0; T.snap = {c:0,i:0,m:0,t:0};
+  document.body.classList.add('typing');
+  ticker = setInterval(tick, 100);
+  tick();
+}
+
+function tick(){
+  if (!T || T.done) return;
+  const el = (performance.now() - T.startTs) / 1000;
+  while (T.lastSec < Math.floor(el) && T.lastSec < 2000){
+    T.lastSec++;
+    const c=T.correct-T.snap.c, i=T.incorrect-T.snap.i, m=T.missed-T.snap.m, ty=T.typedCount-T.snap.t;
+    T.sec.push({ w:(c/5)*60, r:(ty/5)*60, e:i+m });
+    T.snap = {c:T.correct, i:T.incorrect, m:T.missed, t:T.typedCount};
+  }
+  if (cfg.kind === 'time'){
+    const rem = Math.max(0, cfg.time - el);
+    $('liveTime').textContent = Math.ceil(rem);
+    $('progressBar').style.width = Math.min(100, el/cfg.time*100) + '%';
+    if (el >= cfg.time){ endTest(); return; }
+  }
+  updateLiveNums();
+  drawSpark();
+}
+
+function updateLiveNums(){
+  if (!T) return;
+  const el = T.started ? (performance.now()-T.startTs)/1000 : 0;
+  $('liveWpm').textContent = Math.round(el > .4 ? (T.correct/5)/(el/60) : 0);
+  const tot = T.correct + T.incorrect + T.missed;
+  $('liveAcc').textContent = tot ? Math.round(100*T.correct/tot) : 100;
+  if (cfg.kind === 'words'){
+    $('liveTime').textContent = Math.round(el);
+    $('progressBar').style.width = (T.wi/cfg.words*100) + '%';
+  }
+}
+
+function consistency(sec){
+  const rs = sec.map(s=>s.r);
+  if (rs.length < 3) return null;
+  const m = avg(rs);
+  if (!m) return null;
+  const sd = Math.sqrt(rs.reduce((a,b)=>a+(b-m)*(b-m),0)/rs.length);
+  return Math.max(0, Math.min(100, 100 - (sd/m)*100));
+}
+
+function endTest(){
+  if (!T || T.done) return;
+  T.done = true;
+  clearInterval(ticker); ticker = null;
+  document.body.classList.remove('typing');
+  const el = (performance.now()-T.startTs)/1000;
+  const dur = cfg.kind==='time' ? Math.max(cfg.time, .5) : Math.max(el, .5);
+  if (dur - T.lastSec > .25){
+    const c=T.correct-T.snap.c, i=T.incorrect-T.snap.i, m=T.missed-T.snap.m, t=T.typedCount-T.snap.t;
+    if (t>0 || i+m>0) T.sec.push({w:(c/5)*60, r:(t/5)*60, e:i+m});
+  }
+  const min = dur/60;
+  const rec = {
+    ts: Date.now(), kind: cfg.kind, time: cfg.time, words: cfg.words, punct: cfg.punct,
+    wpm: (T.correct/5)/min, raw: (T.typedCount/5)/min,
+    acc: (T.correct+T.incorrect+T.missed) ? T.correct/(T.correct+T.incorrect+T.missed) : 1,
+    cons: consistency(T.sec), dur,
+    c: T.correct, i: T.incorrect, x: T.extra, m: T.missed,
+    sec: T.sec, ke: T.keyErr, ty: T.typos
+  };
+  const prior = store.tests.filter(sameConf);
+  const pb = prior.length > 0 && rec.wpm > Math.max(...prior.map(t=>t.wpm));
+  const prev = prior.length ? prior[prior.length-1] : null;
+  store.tests.push(rec);
+  if (store.tests.length > 200) store.tests = store.tests.slice(-200);
+  persist();
+  announceSession(rec);
+  showRunStrip(rec, prev);
+  if (activeView === 'feedback') renderFeedback();
+  pingDone();
+  toast(`test #${store.tests.length} — ${Math.round(rec.wpm)} wpm`);
+}
+
+/* automated recording — announce the completed session to the shell.
+   `session` is the shared structure (time, mode, duration); `data` is
+   the skill-specific assessment payload (typing: wpm/raw/acc/cons,
+   per-second series, key report). */
+function announceSession(rec){
+  try {
+    if (window.parent && window.parent !== window){
+      window.parent.postMessage({
+        type: 'training-session-complete',
+        session: { ts: rec.ts, dur: rec.dur, mode: modeStr(rec), skill: 'typing' },
+        data: { wpm: rec.wpm, raw: rec.raw, acc: rec.acc, cons: rec.cons,
+                c: rec.c, i: rec.i, x: rec.x, m: rec.m, sec: rec.sec, ke: rec.ke, ty: rec.ty },
+      }, window.location.origin);
+    }
+  } catch(e) {}
+}
+
+/* brief post-run feedback — stays until the next test starts */
+function showRunStrip(rec, prev){
+  const strip = $('runStrip');
+  let delta = '';
+  if (prev){
+    const d = rec.wpm - prev.wpm;
+    delta = `<span class="rs-delta ${d>=0?'up':'dn'}">${d>=0?'+':''}${d.toFixed(1)} wpm vs previous</span>`;
+  }
+  strip.innerHTML = `
+    <span><b>${Math.round(rec.wpm)}</b> <span class="rs-lbl">net wpm</span></span>
+    <span><b>${(rec.acc*100).toFixed(1)}%</b> <span class="rs-lbl">acc</span></span>
+    ${delta}
+    <span class="rs-hint"><kbd>tab</kbd> new test · full feedback → Feedback tab</span>`;
+  strip.hidden = false;
+}
+
+function newTest(){
+  clearInterval(ticker); ticker = null;
+  document.body.classList.remove('typing');
+  $('runStrip').hidden = true;
+  T = {
+    words: genWords(cfg.kind==='words' ? cfg.words : 100, cfg.punct),
+    wi:0, li:0, started:false, done:false, startTs:0, lh:46,
+    correct:0, incorrect:0, extra:0, missed:0, typedCount:0,
+    keyErr:{}, typos:{}, sec:[], lastSec:0, snap:{c:0,i:0,m:0,t:0}
+  };
+  buildPassage();
+  $('liveWpm').textContent='0'; $('liveAcc').textContent='100';
+  $('liveTimeLbl').textContent = cfg.kind==='time' ? 'left' : 'elapsed';
+  $('liveTime').textContent = cfg.kind==='time' ? cfg.time : '0';
+  $('progressBar').style.width='0';
+  drawSpark();
+  if (userEngaged) { try { ghost.focus({preventScroll:true}); } catch(e){} }
+}
+
+function applyConfig(c){
+  if (!c) return;
+  if (c.kind==='time' || c.kind==='words') cfg.kind = c.kind;
+  if (c.time) cfg.time = +c.time;
+  if (c.words) cfg.words = +c.words;
+  cfg.punct = !!c.punct;
+  try { localStorage.setItem(LS_CFG, JSON.stringify(cfg)); } catch(e) {}
+  refreshCfg();
+  newTest();
+}
+
+/* ================= shell messages ================= */
+window.addEventListener('message', (e) => {
+  if (e.origin !== window.location.origin) return;
+  const m = e.data || {};
+  if (m.type === 'training:set-view'){
+    showView(m.view === 'feedback' ? 'feedback' : 'practice');
+  }
+});
+
+/* ================= session control wiring ================= */
+function refreshCfg(){
+  document.querySelectorAll('.cfg-group').forEach(g=>{
+    const isKind = g.dataset.g === cfg.kind;
+    g.classList.toggle('dim', !isKind);
+    const cur = g.dataset.g==='time' ? cfg.time : cfg.words;
+    g.querySelectorAll('.val').forEach(b=>b.classList.toggle('on', isKind && +b.dataset.v===cur));
+  });
+  $('punctBtn').classList.toggle('on', cfg.punct);
+  $('soundBtn').classList.toggle('on', soundOn);
+}
+document.querySelectorAll('.cfg .val').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const g = b.closest('.cfg-group').dataset.g;
+    if (g==='time') cfg.time = +b.dataset.v; else cfg.words = +b.dataset.v;
+    cfg.kind = g;
+    applyConfig(cfg);
+  });
+});
+document.querySelectorAll('.cfg-name').forEach(n=>{
+  n.addEventListener('click', ()=>{
+    cfg.kind = n.closest('.cfg-group').dataset.g;
+    applyConfig(cfg);
+  });
+});
+$('punctBtn').onclick = ()=>{ cfg.punct = !cfg.punct; applyConfig(cfg); };
+$('resetBtn').onclick = ()=>newTest();
+$('soundBtn').onclick = ()=>{
+  soundOn = !soundOn;
+  $('soundBtn').classList.toggle('on', soundOn);
+  try{ localStorage.setItem(LS_SOUND, soundOn?'1':'0'); }catch(e){}
+  toast(soundOn ? 'key sounds on' : 'key sounds off');
+};
+
+/* ================= input routing (desktop + mobile) ================= */
+document.addEventListener('keydown', e => {
+  if (modalOpen){
+    if (e.key === 'Escape'){ e.preventDefault(); closeSessionModal(); }
+    return;
+  }
+  if (e.key === 'Tab'){
+    if (activeView === 'practice'){ e.preventDefault(); newTest(); }
+    return;
+  }
+  if (activeView !== 'practice' || !T) return;
+  if (e.isComposing || e.key === 'Process') return;
+  if (T.done){
+    if (e.key === 'Enter' || e.key === 'Escape'){ newTest(); return; }
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){ newTest(); return; }
+    return;
+  }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === 'Escape'){ e.preventDefault(); newTest(); return; }
+  if (e.key === 'Backspace'){ e.preventDefault(); kdTs = performance.now(); doBackspace(); return; }
+  if (e.key === ' '){ e.preventDefault(); kdTs = performance.now(); doSpace(); return; }
+  if (e.key.length === 1){ e.preventDefault(); kdTs = performance.now(); doChar(e.key); }
+});
+
+ghost.addEventListener('input', e => {
+  if (performance.now() - kdTs < 25){ ghost.value=''; return; } // already handled by keydown
+  if (e.data && T && !T.done){
+    for (const ch of e.data){ if (ch===' ') doSpace(); else doChar(ch); }
+  }
+  ghost.value = '';
+});
+ghost.addEventListener('beforeinput', e => {
+  if (e.inputType === 'deleteContentBackward' && performance.now() - kdTs > 25){
+    e.preventDefault(); doBackspace();
+  }
+});
+window.addEventListener('pointerdown', ()=>{ userEngaged = true; }, { once:true });
+$('passage').addEventListener('click', ()=>{ try{ ghost.focus({preventScroll:true}); }catch(e){} });
+
+/* ================= sound (synthesized, no assets) ================= */
+let AC = null, noiseBuf = null;
+function ping(err){
+  if (!soundOn) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    if (!noiseBuf){
+      const n = AC.sampleRate * .08 | 0;
+      noiseBuf = AC.createBuffer(1, n, AC.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i=0;i<n;i++) d[i] = Math.random()*2-1;
+    }
+    const t = AC.currentTime;
+    const src = AC.createBufferSource(); src.buffer = noiseBuf;
+    src.playbackRate.value = .9 + Math.random()*.3;
+    const f = AC.createBiquadFilter(); f.type='bandpass';
+    f.frequency.value = err ? 380 : 2400 + Math.random()*700; f.Q.value = err ? 5 : 1.2;
+    const g = AC.createGain();
+    g.gain.setValueAtTime(err ? .55 : .4, t);
+    g.gain.exponentialRampToValueAtTime(.001, t + (err ? .1 : .05));
+    src.connect(f); f.connect(g); g.connect(AC.destination);
+    src.start(t); src.stop(t + .09);
+  }catch(e){}
+}
+function pingDone(){
+  if (!soundOn) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const t = AC.currentTime;
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(1046, t);
+    o.frequency.exponentialRampToValueAtTime(1568, t+.09);
+    g.gain.setValueAtTime(.001, t);
+    g.gain.exponentialRampToValueAtTime(.12, t+.02);
+    g.gain.exponentialRampToValueAtTime(.0001, t+.35);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+.4);
+  }catch(e){}
+}
+
+/* ================= canvas helpers ================= */
+function prep(cv, h){
+  const w = cv.clientWidth || cv.parentElement.clientWidth || 300;
+  const dpr = window.devicePixelRatio || 1;
+  if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)){
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+  }
+  cv.style.height = h + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  return { ctx, w, h };
+}
+
+function drawSpark(){
+  const cv = $('spark');
+  if (!cv || activeView !== 'practice') return;
+  const { ctx, w, h } = prep(cv, 44);
+  ctx.strokeStyle = HAIR; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, h-8.5); ctx.lineTo(w, h-8.5); ctx.stroke();
+  ctx.fillStyle = MUT; ctx.font = '500 8px "IBM Plex Mono", monospace';
+  ctx.textAlign = 'left'; ctx.fillText('RAW / S', 6, 12);
+  if (!T || !T.sec.length) return;
+  const pts = T.sec.map(s=>s.r);
+  const max = Math.max(50, ...pts);
+  const X = i => 6 + (i/Math.max(pts.length-1,1)) * (w-12);
+  const Y = v => (h-16) * (1 - v/max) + 9;
+  ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.lineJoin='round';
+  ctx.beginPath();
+  pts.forEach((v,i)=>{ i ? ctx.lineTo(X(i),Y(v)) : ctx.moveTo(X(i),Y(v)); });
+  ctx.stroke();
+  ctx.fillStyle = RED;
+  ctx.beginPath(); ctx.arc(X(pts.length-1), Y(pts[pts.length-1]), 2.6, 0, 7); ctx.fill();
+}
+
+function drawResultChart(cv, sec, animate=true){
+  const { ctx, w, h } = prep(cv, 230);
+  if (cv._anim) cancelAnimationFrame(cv._anim);
+  const P = { l:46, r:14, t:18, b:30 };
+  const n = Math.max(sec.length, 2);
+  const maxV = Math.max(20, ...sec.map(s=>Math.max(s.w, s.r)));
+  const yMax = Math.ceil(maxV*1.15/10)*10;
+  const X = i => P.l + (i/(n-1)) * (w-P.l-P.r);
+  const Y = v => P.t + (1 - v/yMax) * (h-P.t-P.b);
+  const t0 = performance.now(), dur = animate ? 850 : 1;
+  function draw(now){
+    const p = animate ? Math.min(1, (now-t0)/dur) : 1;
+    const e = 1 - Math.pow(1-p, 3);
+    ctx.clearRect(0,0,w,h);
+    // grid
+    ctx.lineWidth = 1; ctx.strokeStyle = HAIR; ctx.fillStyle = MUT;
+    ctx.font = '500 9px "IBM Plex Mono", monospace'; ctx.textAlign='right';
+    const step = niceStep(yMax);
+    for (let v=step; v<=yMax; v+=step){
+      const y = Math.round(Y(v)) + .5;
+      ctx.beginPath(); ctx.moveTo(P.l, y); ctx.lineTo(w-P.r, y); ctx.stroke();
+      ctx.fillText(v, P.l-8, y+3);
+    }
+    ctx.textAlign='center';
+    const xs = Math.max(1, Math.ceil(n/9));
+    for (let i=0;i<sec.length;i+=xs) ctx.fillText((i+1)+'s', X(i), h-10);
+    // baseline
+    ctx.strokeStyle = HAIR;
+    ctx.beginPath(); ctx.moveTo(P.l, h-P.b+.5); ctx.lineTo(w-P.r, h-P.b+.5); ctx.stroke();
+    // clipped progressive draw
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, P.l + (w-P.l-P.r)*e + 2, h); ctx.clip();
+    ctx.strokeStyle = MUT; ctx.lineWidth = 1.4; ctx.beginPath();
+    sec.forEach((s,i)=>{ i?ctx.lineTo(X(i),Y(s.r)):ctx.moveTo(X(i),Y(s.r)); }); ctx.stroke();
+    ctx.strokeStyle = INK; ctx.lineWidth = 2.2; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.beginPath();
+    sec.forEach((s,i)=>{ i?ctx.lineTo(X(i),Y(s.w)):ctx.moveTo(X(i),Y(s.w)); }); ctx.stroke();
+    ctx.fillStyle = INK;
+    sec.forEach((s,i)=>{ ctx.beginPath(); ctx.arc(X(i), Y(s.w), 2.2, 0, 7); ctx.fill(); });
+    ctx.fillStyle = RED;
+    sec.forEach((s,i)=>{ if (s.e>0){ const bh = Math.min(16, 3+s.e*3); ctx.fillRect(X(i)-1.5, h-P.b-bh, 3, bh); } });
+    ctx.restore();
+    if (animate && p < 1) cv._anim = requestAnimationFrame(draw);
+  }
+  if (animate) cv._anim = requestAnimationFrame(draw); else draw(performance.now());
+}
+
+/* ================= results rendering (shared by feedback + modal) ================= */
+function countUp(el, to, dur, fmt){
+  const t0 = performance.now();
+  (function f(t){
+    const p = Math.min(1, (t-t0)/dur);
+    const e = 1 - Math.pow(1-p, 3);
+    el.textContent = fmt(to*e);
+    if (p<1) requestAnimationFrame(f);
+  })(t0);
+}
+
+function renderReportInto(root, rec, opts){
+  const animate = !!(opts && opts.animate);
+  const pb = !!(opts && opts.pb);
+  countUp(root.querySelector('.big span'), rec.wpm, 950, v=>Math.round(v));
+  root.querySelector('.rep-sub').textContent = `${modeStr(rec)} · ${fmtDateFull(rec.ts)}`;
+  const banner = root.querySelector('.pb-banner');
+  if (banner) banner.hidden = !pb;
+  root.querySelector('[data-c="raw"]').textContent = Math.round(rec.raw);
+  root.querySelector('[data-c="acc"]').textContent = (rec.acc*100).toFixed(1)+'%';
+  root.querySelector('[data-c="accsub"]').textContent = `across ${rec.c+rec.i+rec.m} keystrokes`;
+  root.querySelector('[data-c="cons"]').textContent = rec.cons==null ? '—' : Math.round(rec.cons)+'%';
+  root.querySelector('[data-c="chars"]').textContent = rec.c;
+  root.querySelector('[data-c="charssub"]').textContent = `${rec.i} wrong · ${rec.m} missed · ${rec.x} extra`;
+  root.querySelector('[data-c="err"]').textContent = rec.i + rec.m;
+  root.querySelector('[data-c="time"]').textContent = rec.dur.toFixed(1)+'s';
+  root.querySelector('[data-c="timesub"]').textContent = modeStr(rec);
+  drawResultChart(root.querySelector('.rep-chart'), rec.sec || [], animate);
+  const presses = Object.values(rec.ke || {}).reduce((a,s)=>a+s.p,0);
+  const errs = Object.values(rec.ke || {}).reduce((a,s)=>a+s.e,0);
+  const sum = root.querySelector('[data-keys-summary]');
+  if (sum) sum.textContent = presses ? `${presses} key presses · ${errs} misses` : '';
+  renderKbd(root.querySelector('[data-kbd]'), rec.ke || {});
+  renderTrouble(root.querySelector('[data-trouble]'), rec.ke || {}, rec.ty || {}, 5);
+}
+
+/* ================= keyboard heatmap & trouble list ================= */
+const ROWS = ['qwertyuiop','asdfghjkl','zxcvbnm'];
+function renderKbd(container, ke){
+  container.innerHTML = '';
+  for (const row of ROWS){
+    const r = document.createElement('div'); r.className='kbd-row';
+    for (const ch of row){
+      const s = ke[ch] || {p:0,e:0};
+      const k = document.createElement('div'); k.className='key';
+      const rate = s.p ? s.e/s.p : 0;
+      if (s.e > 0){
+        const a = Math.min(.85, .15 + rate*2.2);
+        k.style.background = `rgba(122,26,42,${a})`;
+        k.style.borderColor = 'rgba(122,26,42,.55)';
+        if (a > .45) k.style.color = '#FAF1E6';
+        const n = document.createElement('span'); n.className='n'; n.textContent = s.e;
+        k.appendChild(n);
+      }
+      k.appendChild(document.createTextNode(ch.toUpperCase()));
+      k.title = `${ch} — ${s.p} presses · ${s.e} misses · ${(100*(1-rate)).toFixed(1)}% key accuracy`;
+      r.appendChild(k);
+    }
+    container.appendChild(r);
+  }
+}
+
+function renderTrouble(container, ke, ty, top){
+  const rows = [];
+  for (const ch in ke){
+    if (!/[a-z]/.test(ch)) continue;
+    if (ke[ch].e > 0) rows.push({ch, s:ke[ch]});
+  }
+  rows.sort((a,b)=>b.s.e - a.s.e);
+  container.innerHTML = '';
+  if (!rows.length){
+    container.innerHTML = '<div class="t-empty">flawless — not a single wrong key.</div>';
+    return;
+  }
+  for (const {ch, s} of rows.slice(0, top)){
+    const rate = 100 * (1 - s.e/s.p);
+    let wrong = null, wc = 0;
+    if (ty && ty[ch]) for (const g in ty[ch]) if (ty[ch][g] > wc){ wc = ty[ch][g]; wrong = g; }
+    const wrongHtml = wrong ? ` · usually hit <b>${wrong===' '?'␣':wrong}</b> instead (${wc}×)` : '';
+    const div = document.createElement('div'); div.className='t-row';
+    div.innerHTML = `<span class="t-key">${ch}</span>
+      <div class="t-desc"><b>${s.e}</b> ${s.e===1?'miss':'misses'}${wrongHtml}</div>
+      <div class="t-acc">${rate.toFixed(0)}%<span>key acc</span></div>`;
+    container.appendChild(div);
+  }
+}
+
+/* ================= feedback view ================= */
+function renderFeedback(){
+  const tests = store.tests;
+  $('fbEmpty').hidden = tests.length > 0;
+  $('fbBody').hidden = tests.length === 0;
+  const s = calcStreak();
+  $('streakWrap').hidden = !s;
+  $('streakVal').textContent = s;
+  if (!tests.length) return;
+  // last session — the complete report
+  const last = tests[tests.length-1];
+  const same = tests.filter(t=>t.kind===last.kind && t.time===last.time && t.words===last.words && t.punct===last.punct && t.ts!==last.ts);
+  const pb = same.length > 0 && last.wpm > Math.max(...same.map(t=>t.wpm));
+  $('lastMeta').textContent = tests.length ? `test #${tests.length} of the ledger` : '';
+  renderReportInto($('lastBlock'), last, { animate:true, pb });
+  // training log — newest first; click a row for the session modal
+  const best = Math.max(...tests.map(t=>t.wpm));
+  const tb = $('logBody'); tb.innerHTML = '';
+  $('logCount').textContent = `${tests.length} session${tests.length===1?'':'s'} — click a row for the full assessment`;
+  [...tests].reverse().forEach((t, ri)=>{
+    const idx = tests.length - ri;
+    const tr = document.createElement('tr');
+    tr.dataset.idx = String(idx - 1);
+    tr.innerHTML = `<td>${idx}</td><td>${fmtDateFull(t.ts)}</td>
+      <td>${t.kind==='time'? t.time+'s' : t.words+' words'}${t.punct?' · p':''}</td>
+      <td class="num">${Math.round(t.wpm)}${t.wpm===best?'<span class="pb-mark">pb</span>':''}</td>
+      <td class="num">${Math.round(t.raw)}</td>
+      <td class="num">${(t.acc*100).toFixed(1)}%</td>
+      <td class="num">${t.cons==null?'—':Math.round(t.cons)+'%'}</td>`;
+    tr.addEventListener('click', ()=>openSessionModal(idx - 1));
+    tb.appendChild(tr);
+  });
+  // lifetime keys
+  const { ke, ty } = aggregate();
+  const presses = Object.values(ke).reduce((a,s)=>a+s.p,0);
+  const errs = Object.values(ke).reduce((a,s)=>a+s.e,0);
+  if (presses > 0){
+    $('aggStatLine').innerHTML = `${presses.toLocaleString()} letter keystrokes · <b>${errs}</b> misses · ${(100*(1-errs/presses)).toFixed(1)}% lifetime letter accuracy`;
+    renderKbd($('aggKbd'), ke);
+    renderTrouble($('aggTrouble'), ke, ty, 8);
+  } else {
+    $('aggStatLine').textContent = '';
+    $('aggKbd').innerHTML = ''; $('aggTrouble').innerHTML = '';
+  }
+}
+
+function aggregate(){
+  const ke = {}, ty = {};
+  for (const t of store.tests){
+    for (const k in (t.ke||{})){
+      ke[k] = ke[k] || {p:0,e:0};
+      ke[k].p += t.ke[k].p; ke[k].e += t.ke[k].e;
+    }
+    for (const k in (t.ty||{})){
+      ty[k] = ty[k] || {};
+      for (const g in t.ty[k]) ty[k][g] = (ty[k][g]||0) + t.ty[k][g];
+    }
+  }
+  return { ke, ty };
+}
+
+/* ================= session detail modal ================= */
+const REPORT_CELLS = `
+  <div class="res-cells">
+    <div class="cell"><div class="lbl">raw speed</div><b data-c="raw">–</b><div class="sub">every keystroke counted</div></div>
+    <div class="cell"><div class="lbl">accuracy</div><b data-c="acc">–</b><div class="sub" data-c="accsub"></div></div>
+    <div class="cell"><div class="lbl">consistency</div><b data-c="cons">–</b><div class="sub">steadiness of rhythm</div></div>
+    <div class="cell"><div class="lbl">characters</div><b data-c="chars">–</b><div class="sub" data-c="charssub"></div></div>
+    <div class="cell"><div class="lbl">errors</div><b data-c="err">–</b><div class="sub">wrong keys + skipped letters</div></div>
+    <div class="cell"><div class="lbl">duration</div><b data-c="time">–</b><div class="sub" data-c="timesub"></div></div>
+  </div>`;
+
+function openSessionModal(idx){
+  const rec = store.tests[idx];
+  if (!rec) return;
+  closeSessionModal();
+  const ov = document.createElement('div');
+  ov.className = 'modal-overlay'; ov.id = 'sessionModal';
+  ov.innerHTML = `<div class="session-modal" role="dialog" aria-modal="true" aria-label="Training session detail">
+    <div class="sm-head">
+      <h3>Training session</h3>
+      <span class="sm-mode">${modeStr(rec)} · ${fmtDateFull(rec.ts)}</span>
+      <button class="sm-close" aria-label="Close" title="close — esc">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+      </button>
+    </div>
+    <div class="res-hero">
+      <div>
+        <div class="lbl">net speed</div>
+        <div class="big"><span>0</span><em>wpm</em></div>
+        <div class="rep-sub"></div>
+      </div>
+      ${REPORT_CELLS}
+    </div>
+    <div class="fb-block" style="margin-top:var(--space-8)">
+      <div class="fb-head"><span>speed, second by second</span>
+        <span class="legend"><i class="l-ink"></i>net wpm<i class="l-mut"></i>raw wpm<i class="l-red"></i>errors</span></div>
+      <canvas class="rep-chart"></canvas>
+    </div>
+    <div class="fb-block" style="margin-top:var(--space-8)">
+      <div class="fb-head"><span>key report</span><span class="fb-sub" data-keys-summary></span></div>
+      <div class="kbd" data-kbd></div>
+      <div class="trouble" data-trouble></div>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  modalOpen = true;
+  ov.addEventListener('click', (e)=>{ if (e.target === ov) closeSessionModal(); });
+  ov.querySelector('.sm-close').addEventListener('click', closeSessionModal);
+  renderReportInto(ov.querySelector('.session-modal'), rec, { animate:true, pb:false });
+}
+
+function closeSessionModal(){
+  const m = $('sessionModal');
+  if (m) m.remove();
+  modalOpen = false;
+  if (activeView === 'practice' && userEngaged){ try { ghost.focus({preventScroll:true}); } catch(e){} }
+}
+
+/* ================= views, toasts ================= */
+function showView(v){
+  activeView = v;
+  $('viewPractice').hidden = v!=='practice';
+  $('viewFeedback').hidden = v!=='feedback';
+  if (v==='feedback') renderFeedback();
+  if (v==='practice'){ drawSpark(); if (T && !T.done) placeCaret(); }
+}
+
+function toast(msg){
+  const t = document.createElement('div'); t.className='toast'; t.textContent = msg;
+  $('toasts').appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 2500);
+}
+
+/* ================= resize & init ================= */
+let rzT;
+window.addEventListener('resize', ()=>{
+  clearTimeout(rzT);
+  rzT = setTimeout(()=>{
+    if (activeView==='practice' && T && !T.done){
+      T.lh = parseFloat(getComputedStyle(wordsEl).lineHeight) || 46;
+      caretEl.style.height = Math.max(20, T.lh-16)+'px';
+      placeCaret();
+    }
+    drawSpark();
+    if (activeView==='feedback' && !$('viewFeedback').hidden && store.tests.length) renderFeedback();
+  }, 150);
+});
+
+refreshCfg();
+newTest();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>drawSpark());
+</script>
+</body>
+</html>

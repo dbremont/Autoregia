@@ -32,12 +32,17 @@ tracking system:
 server.py        Flask app: API + UI  (mounted at /acsms/ by app/app.py)
 data/skills.json seed catalog (applied only when the DB is empty)
 data/paths.json  seed paths (same rule)
-static/          WOS-style shell: hash router with sub-routes (#skills/<id>),
-                 command palette (Ctrl+K), quick-capture overlay
-                 (Ctrl+Shift+N); dashboard (greeting, stat cards, Next
-                 Practice recommendation with derived reasons, 12-week
-                 trajectory chart, recent activity, capability gaps, right
-                 rail), catalog + right rail, skill detail, skill paths
+static/          WOS-style shell: hash router with sub-routes (#skills/<id>,
+                 #skills/<id>/practice), command palette (Ctrl+K),
+                 quick-capture overlay (Ctrl+Shift+N); dashboard (greeting,
+                 stat cards, Next Practice recommendation with derived
+                 reasons, 12-week trajectory chart, recent activity,
+                 capability gaps, right rail), catalog + right rail, skill
+                 detail, skill paths, settings
+training/typing/ independent typing training camp (iframe-embedded by the
+                 skill practice shell; chrome-free, config on the practice
+                 surface, completed tests → practice records with the
+                 structured assessment payload)
 test_acsms.py    pytest suite (needs CouchDB on 127.0.0.1:5984; uses the
                  acsms_test_ DB prefix)
 ```
@@ -52,7 +57,10 @@ CouchDB db `acsms` (subject to `COUCHDB_DB_PREFIX`), via the shared
   `created_at_ms`, `updated_at_ms`.
 - `practice` — `id` (`PRACTICE-…`), `skill_id`, denormalized `skill_name`
   (kept in sync on rename), `practiced_at_ms`, `duration_min`, `notes`,
-  `quality`, `confidence`, `evidence_url`, `created_at_ms`.
+  `quality`, `confidence`, `evidence_url`, `data` (optional structured
+  assessment payload — each skill kind owns its shape; typing stores
+  wpm/raw/acc/cons, the per-second series and the key report; capped at
+  16 KB), `created_at_ms`.
 - `path` — `id` (`PATH-…`), `name`, `description`, `skill_ids[]` (ordered),
   `status` (`active`/`archived`), `created_at_ms`, `updated_at_ms`.
 
@@ -63,7 +71,7 @@ CouchDB db `acsms` (subject to `COUCHDB_DB_PREFIX`), via the shared
 | `/api/health` | GET | db reachability + counts |
 | `/api/skills` | GET, POST | catalog (joined with tracking fields) / define |
 | `/api/skills/<id>` | GET, PUT, DELETE | detail / edit (diff → changelog) / delete (409 if practiced) |
-| `/api/practices` | GET, POST | stream (`skill_id`, `q`, `since_ms`, paging) / self-report |
+| `/api/practices` | GET, POST | stream (`skill_id`, `q`, `since_ms`, paging) / self-report (optional structured `data` payload) |
 | `/api/practices/<id>` | DELETE | remove a report |
 | `/api/paths` | GET, POST | paths with joined member stats / define |
 | `/api/paths/<id>` | GET, PUT, DELETE | detail / edit (reorder via `skill_ids`) / delete |
