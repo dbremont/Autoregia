@@ -108,7 +108,6 @@ WOS.Sources = (() => {
         ${act('srcPollAll', 'refresh', 'Poll all sources')}
         ${act('srcViewFailed', 'alert-triangle', 'View failed sources')}
         ${act('srcAddSource', 'plus', 'Add source')}
-        ${act('srcExportLog', 'download', 'Export observation log')}
       </div>
     </section>`;
   }
@@ -444,7 +443,6 @@ WOS.Sources = (() => {
     });
     document.getElementById('srcAddSource')?.addEventListener('click',
       () => WOS.toast('Sources are seed-managed — edit config/seed.json'));
-    document.getElementById('srcExportLog')?.addEventListener('click', () => WOS.exportData());
 
     bindRowMenu();
     loadStatus();

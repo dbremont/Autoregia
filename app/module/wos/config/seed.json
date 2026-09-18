@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-17T00:00:00Z",
+  "updated_at": "2026-09-18T00:00:00Z",
   "description": "WOS seed — plain poll specs (source + query). Topic assignment happens downstream in the processing pipeline, not at collection time. Resolution: WOS_SOURCES_FILE env > this file.",
   "settings": {
     "nitter_instances": [
@@ -1267,6 +1267,13 @@
       "id": "rss-jvns",
       "source": "rss",
       "query": "https://jvns.ca/atom.xml",
+      "interval_s": 0,
+      "enabled": true
+    },
+    {
+      "id": "rss-martinfowler",
+      "source": "rss",
+      "query": "https://martinfowler.com/feed.atom",
       "interval_s": 0,
       "enabled": true
     }

@@ -799,18 +799,6 @@ def get_self_tasks():
     return jsonify(_self_tasks_blob())
 
 
-@app.route("/api/export", methods=["GET"])
-def export_data():
-    docs = store.all()
-    obs = [d for d in docs if d.get("doc_type") == "observation"]
-    obs.sort(key=lambda d: d.get("observed_at_ms") or 0, reverse=True)
-    return jsonify({
-        "generated_at": now_iso(),
-        "sources": _specs(),
-        "observations": obs,
-    })
-
-
 # ── UI ───────────────────────────────────────────────────────────────────────
 @app.route("/")
 def index():

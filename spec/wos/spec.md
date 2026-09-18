@@ -269,8 +269,7 @@ WOS exposes four functional layers over its store:
   `config/seed.json`), `GET /api/source-types` (the adapter registry),
   `GET /api/health`, `GET /api/dashboard/stats`.
 - **Observations (read)** — `GET /api/observations` with filters `source`,
-  `cluster`, `since_ms`, `q`, `limit`. `GET /api/export` for the full
-  dump.
+  `cluster`, `since_ms`, `q`, `limit`.
 - **Observations (write)** — `POST /api/ingest` (collector → store, with
   dedup/merge); `POST /api/poll` `{"id": ...}` for on-demand or daemon-driven
   polls that fetch + persist + advance the cursor in one call.

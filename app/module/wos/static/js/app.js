@@ -18,7 +18,6 @@ WOS.VIEWS = [
   { id:'documentation', label:'Documentation', icon:'book-open', group:'System',      desc:'about this dashboard' },
   { id:'about',         label:'About',         icon:'info',      group:'System',      desc:'what WOS is' },
   { id:'settings',      label:'Settings',      icon:'settings',  group:'System',      desc:'read-only demo', action:'settings' },
-  { id:'export',        label:'Export',        icon:'download',  group:'System',      desc:'download the corpus as JSON', action:'export' },
   { id:'self-monitoring', label:'Self Monitoring', icon:'gauge', group:'System',      desc:'the system observing itself' },
 ];
 
@@ -37,7 +36,6 @@ WOS._ALIASES = {
 // Sidebar items that trigger chrome instead of navigating to a view.
 WOS.runAction = function (name) {
   if (name === 'settings') WOS.toast('Settings — this build is read-only');
-  else if (name === 'export') WOS.exportData();
 };
 
 WOS.init = async function () {
@@ -139,11 +137,6 @@ WOS.setupWindow = function () {
     // reload analytics for the new window, then re-render
     WOS.Store.loadAnalytics().then(()=>{ WOS.Store.loadObservations().then(()=>{ WOS.navigate(WOS.current); WOS.renderSidebar(); }).catch(()=>WOS.toast('Could not refresh observations')); }).catch(()=>WOS.toast('Could not refresh analytics'));
   });
-};
-
-WOS.exportData = function () {
-  const blob = new Blob([JSON.stringify({analytics:WOS.Store.analytics(), observations:WOS.Store.observations(), sources:WOS.Store.sources()}, null, 2)], {type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='wos_export.json'; a.click();
 };
 
 // Documentation — a page (rendered in appContent), not a modal.

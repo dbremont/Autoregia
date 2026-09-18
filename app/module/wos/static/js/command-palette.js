@@ -17,7 +17,6 @@ WOS.CommandPalette = {
     const navCmds=WOS.VIEWS.map(t=>({icon:t.icon,title:t.label,sub:`Go to ${t.label} — ${t.desc}`,action:()=>{this.close(); t.action?WOS.runAction(t.action):WOS.navigate(t.id);}}));
     const commands=[
       {icon:'refresh',title:'Recompute Clusters',sub:'Re-run the topic clustering over the corpus',action:async()=>{this.close();WOS.toast('Clustering… (first run downloads the model)');try{await WOS.Store.recomputeClusters();await WOS.Store.loadAnalytics();WOS.navigate(WOS.current);WOS.toast('Clusters updated');}catch(e){WOS.toast('Clustering failed: '+e);}}},
-      {icon:'download',title:'Export',sub:'Download analytics + observations as JSON',action:()=>{this.close();WOS.exportData();}},
       {icon:'book-open',title:'Documentation',sub:'About this dashboard',action:()=>{this.close();WOS.navigate('documentation');}},
       {icon:'search',title:'Focus Search',sub:'Filter the stream from the header',action:()=>{this.close();document.getElementById('globalSearch')?.focus();}},
       ...navCmds,

@@ -51,7 +51,7 @@ WOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 > and skips failures, so a healthy mirror keeps the sense organ operational.
 > Click-through `native_url`s are rewritten to `twitter.com`. The watched
 > sources live in the seed file
-> [`config/seed.json`](config/seed.json) (128 poll specs; policy spec:
+> [`config/seed.json`](config/seed.json) (181 poll specs; policy spec:
 > [`spec/wos/policy.md`](../../../spec/wos/policy.md)). Topic assignment does
 > **not** happen at collection time — observations are stored unclassified;
 > that is the downstream processing pipeline's job.
