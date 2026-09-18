@@ -19,7 +19,7 @@ ACSMS.Documentation = {
       <h4>The change log</h4>
       <p>Every definition, edit, and lifecycle decision is recorded on the skill as a field-level from → to entry, surfaced on the skill's detail view and merged with practice events into the catalog's Recent Activity feed.</p>
       <h4>Self-reporting</h4>
-      <p>The form lives on Practice (and in the quick-capture overlay, <span class="kbd">Ctrl</span> <span class="kbd">⇧</span> <span class="kbd">N</span>). Record what was done and what was produced — exposure is not acquisition; output is the test.</p>
+      <p>There is no standalone log page — practice is registered where it belongs: the quick-capture overlay (<span class="kbd">Ctrl</span> <span class="kbd">⇧</span> <span class="kbd">N</span>), the <em>Log practice</em> button on each skill's detail view, the dashboard header, or the current step of a path. History is read through the skills too: each detail view holds its full practice log, and the dashboard's practice feed aggregates the stream (show all for the full history). Record what was done and what was produced — exposure is not acquisition; output is the test.</p>
       <h4>Navigation</h4><div class="kbd-grid">${binds}</div>
       <h4>Shortcuts</h4>
       <div class="kbd-grid">
@@ -41,9 +41,9 @@ ACSMS.About = {
       <h4>The analogy</h4>
       <p>An <strong>athlete's training regime</strong> or an organization's <strong>R&amp;D function</strong>. Performance today is produced by the current capability set; the regime exists to change that set deliberately — identifying weaknesses, scheduling practice, demanding evidence, and retiring what no longer serves.</p>
       <h4>This build</h4>
-      <p>This dashboard materializes the <em>Practice → Evidence → Review → Cull</em> span of the improvement lifecycle: a skill catalog, a validated self-report practice stream, and the automated tracking layer that flags skills without practice. Upstream systems (PTOCS gap analysis, PRAS adaptations, AIAS commitments) will feed the Detect → Deliberate → Commit stages.</p>
+      <p>This dashboard materializes the <em>Practice → Evidence → Review → Cull</em> span of the improvement lifecycle: a skill catalog with per-skill detail views, a validated self-report practice stream (registered in place — quick capture, detail views, path steppers), skill paths, and the automated tracking layer that flags skills without practice. Upstream systems (PTOCS gap analysis, PRAS adaptations, AIAS commitments) will feed the Detect → Deliberate → Commit stages.</p>
       <h4>Storage</h4>
-      <p>Skills and practices persist as documents in CouchDB (db <code class="text-mono">acsms</code>), seeded from <code class="text-mono">data/skills.json</code> on first run.</p>
+      <p>Skills, practices, and paths persist as documents in CouchDB (db <code class="text-mono">acsms</code>), seeded from <code class="text-mono">data/skills.json</code> and <code class="text-mono">data/paths.json</code> on first run.</p>
       <h4>Further reading</h4>
       <div class="kbd-grid">
         <div class="kbd-row"><span>Specification</span><span><code class="text-mono text-xs">spec/acsms/README.md</code></span></div>

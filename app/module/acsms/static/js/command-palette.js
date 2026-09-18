@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    ACSMS Command Palette — Ctrl+K. Navigation + skill jump:
-   typing filters the catalog; picking a skill opens the practice
-   log filtered to it.
+   typing filters the catalog; picking a skill opens its detail
+   view (where its practice log lives).
    ════════════════════════════════════════════════════════════ */
 window.ACSMS = window.ACSMS || {};
 ACSMS.CommandPalette = {
@@ -22,7 +22,7 @@ ACSMS.CommandPalette = {
     const commands = [
       { icon: 'plus', title: 'Log practice', sub: 'Quick-capture a self-reported session', action: () => { this.close(); ACSMS.capture.open(); } },
       { icon: 'book-open', title: 'Documentation', sub: 'About this dashboard', action: () => { this.close(); ACSMS.navigate('documentation'); } },
-      { icon: 'search', title: 'Focus Search', sub: 'Filter the practice stream from the header', action: () => { this.close(); document.getElementById('globalSearch')?.focus(); } },
+      { icon: 'search', title: 'Focus Search', sub: 'Filter the skill catalog from the header', action: () => { this.close(); document.getElementById('globalSearch')?.focus(); } },
       ...navCmds,
     ];
     let html = '<div class="cmd-group-label">Commands</div>';

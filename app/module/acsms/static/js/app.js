@@ -1,15 +1,16 @@
 /* ════════════════════════════════════════════════════════════
    ACSMS App — sidebar router, keyboard, chrome.
-   The header search filters the practice stream; the command
+   The header search filters the skill catalog; the command
    palette navigates and jumps to skills; quick capture
    (Ctrl+Shift+N) self-reports a practice session from anywhere.
+   Practice history lives in the skill detail views and the
+   dashboard feed — there is no standalone log page.
    ════════════════════════════════════════════════════════════ */
 window.ACSMS = window.ACSMS || {};
 const ACSMS = window.ACSMS;
 
 ACSMS.VIEWS = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'gauge', group: 'Practice', desc: 'practice health, attention queue, recent activity' },
-  { id: 'practice', label: 'Practice Log', icon: 'activity', group: 'Practice', desc: 'the self-reported practice stream' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'gauge', group: 'Overview', desc: 'practice health, attention queue, recent activity' },
 
   { id: 'skills', label: 'Skills', icon: 'layers', group: 'Catalog', desc: 'the skill catalog — define, edit, retire' },
   { id: 'paths', label: 'Skill Paths', icon: 'route', group: 'Catalog', desc: 'ordered curricula that sequence skills into programs' },
@@ -71,10 +72,7 @@ ACSMS.updateFooter = function () {
   const fm = document.getElementById('footerMeta');
   if (!fm) return;
   const st = ACSMS.Store.stats();
-  const parts = [];
-  if (st) parts.push(`${st.skills.total} skills · ${st.practices.total} practices`);
-  const s = ACSMS.Store.filterSummary();
-  fm.textContent = parts.join(' · ') + (s ? ` · filter: ${s}` : '');
+  fm.textContent = st ? `${st.skills.total} skills · ${st.practices.total} practices` : '';
 };
 
 ACSMS.setupKeyboard = function () {
@@ -93,7 +91,11 @@ ACSMS.setupHeader = function () {
   gs?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      ACSMS.Store.applyFilter({ q: gs.value.trim() }).then(() => { ACSMS.navigate('practice'); });
+      // the header search filters the skill catalog (name/description/tags)
+      ACSMS.Catalog.q = gs.value.trim();
+      ACSMS.Catalog.domain = null;
+      ACSMS.Catalog.page = 0;
+      ACSMS.navigate('skills');
     }
   });
 };

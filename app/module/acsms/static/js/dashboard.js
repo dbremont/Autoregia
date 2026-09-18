@@ -1,10 +1,15 @@
 /* ════════════════════════════════════════════════════════════
    ACSMS Dashboard — practice health at a glance.
    Stats, the attention queue (skills the tracking layer flagged:
-   never-practiced / neglected), and the recent practice stream.
+   never-practiced / neglected), and the cross-skill practice
+   feed (recent 8; "show all" fetches the full stream on demand).
+   With the standalone practice-log view gone, this feed and the
+   skill-detail histories are where practice is read.
    ════════════════════════════════════════════════════════════ */
 window.ACSMS = window.ACSMS || {};
 ACSMS.Dashboard = {
+  feedExpanded: false,   // survives re-renders within a session
+
   render() {
     return `<div class="animate-in">${ACSMS.view.header('Dashboard', `<button class="btn btn-primary btn-sm" id="dashLogBtn">${ACSMS.icon('plus', 15)} Log practice</button>`)}</div>
       <div class="stat-row animate-in delay-1" id="dashStats"></div>
@@ -15,8 +20,11 @@ ACSMS.Dashboard = {
             'Skills the tracking layer flagged — no practice yet, or stale beyond twice the target cadence.')}
         </div>
         <div class="animate-in delay-3">
-          ${ACSMS.view.card('Stream', 'Recent practice',
-            `<div class="practice-feed" id="recentFeed"></div>`)}
+          ${ACSMS.view.card('Stream', 'Practice feed',
+            `<div class="practice-feed" id="dashFeed"></div>
+             <div style="display:flex;justify-content:center;padding-top:var(--space-3)">
+               <button class="btn btn-secondary btn-sm" id="feedToggle"></button>
+             </div>`)}
         </div>
       </div>`;
   },
@@ -55,11 +63,36 @@ ACSMS.Dashboard = {
       q.innerHTML = `<div class="empty-state" style="padding:var(--space-8) var(--space-4)"><h3>Nothing flagged</h3><p>Every active skill has fresh practice — the tracking layer is quiet.</p></div>`;
     }
 
-    const feed = document.getElementById('recentFeed');
-    const recent = stats.recent || [];
-    feed.innerHTML = recent.length
-      ? recent.map(ACSMS.Practice.practiceCard).join('')
+    this.renderFeed(stats);
+    document.getElementById('feedToggle')?.addEventListener('click', async () => {
+      if (!this.feedExpanded) {
+        try {
+          this._all = await ACSMS.Store.loadPracticeFeed();
+          this.feedExpanded = true;
+        } catch (e) { ACSMS.toast('Could not load the feed: ' + e.message); return; }
+      } else {
+        this.feedExpanded = false;
+      }
+      this.renderFeed(ACSMS.Store.stats());
+    });
+  },
+
+  renderFeed(stats) {
+    const feed = document.getElementById('dashFeed');
+    if (!feed) return;
+    const items = this.feedExpanded ? (this._all || []) : (stats.recent || []);
+    feed.innerHTML = items.length
+      ? items.map(ACSMS.Practice.practiceCard).join('')
       : `<div class="empty-state" style="padding:var(--space-8) var(--space-4)"><h3>No practice yet</h3><p>Self-report the first session to start the history.</p></div>`;
+    this.bindFeedDeletes(feed);
+    const toggle = document.getElementById('feedToggle');
+    if (toggle) {
+      toggle.textContent = this.feedExpanded ? 'Show less' : 'Show all';
+      toggle.style.visibility = (this.feedExpanded || (stats.recent || []).length) ? 'visible' : 'hidden';
+    }
+  },
+
+  bindFeedDeletes(feed) {
     feed.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
       const ok = await AUTOREGIA.confirmDialog({
         title: 'Delete practice report?',
@@ -70,7 +103,10 @@ ACSMS.Dashboard = {
       try {
         await ACSMS.Store.deletePractice(b.dataset.del);
         await ACSMS.Store.refresh();
-        ACSMS.navigate('dashboard'); ACSMS.updateFooter();
+        if (this.feedExpanded) this._all = await ACSMS.Store.loadPracticeFeed();
+        this.renderFeed(ACSMS.Store.stats());
+        ACSMS.updateFooter();
+        ACSMS.toast('Practice report deleted');
       } catch (e) { ACSMS.toast('Could not delete: ' + e.message); }
     }));
   },
