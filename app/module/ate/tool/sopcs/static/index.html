@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoregia — Standard Operating Procedures (SOPCS)</title>
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260919g">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260919g">
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260919g">
+  <link rel="stylesheet" href="css/layout.css?v=20260919g">
+  <link rel="stylesheet" href="css/components.css?v=20260919g">
+  <link rel="stylesheet" href="css/views.css?v=20260919g">
+  <link rel="stylesheet" href="css/command-palette.css?v=20260919g">
+  <link rel="stylesheet" href="css/sopcs.css?v=20260919g">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span>
+      <span class="brand-wordmark">Standard Operating <em>Procedures</em></span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><sopcs-icon name="search" size="16"></sopcs-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search procedures…  ( Ctrl K )" aria-label="Search the procedure catalog" autocomplete="off">
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">“Procedure is memory made operative.”</div>
+      <div class="colophon-meta">— SOPCS · Autoregia</div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═══ -->
+  <main class="app-main" id="appContent"></main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="app-footer">
+    <div class="footer-rule"></div>
+    <div class="footer-title">SOPCS — the procedure catalog of the toolbox</div>
+    <span class="pill gold">procedures</span>
+    <div class="footer-meta"><span id="footerDocs">—</span> · <span id="footerFilter">no filter</span></div>
+  </footer>
+
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmd-palette-search">
+      <span><sopcs-icon name="search" size="18"></sopcs-icon></span>
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command, or search the catalog…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
+  </div>
+</div>
+
+<!-- ═══ Toast ═══ -->
+<div id="toast" class="wm-toast" role="status" aria-live="polite"></div>
+
+<!-- ═══ Scripts ═══ -->
+<script src="js/vendor/echarts.min.js?v=20260919g"></script>
+<script src="/ui/js/ui.js?v=20260919b"></script>
+<script src="/ui/js/icons.js?v=20260919b"></script>
+<script src="/ui/js/md.js?v=20260919b"></script>
+
+<script src="js/store.js?v=20260919g"></script>
+<script src="js/icons.js?v=20260919g"></script>
+<script src="js/dashboard.js?v=20260919g"></script>
+<script src="js/library.js?v=20260919g"></script>
+<script src="js/reader.js?v=20260919g"></script>
+<script src="js/editor.js?v=20260919g"></script>
+<script src="js/history.js?v=20260919g"></script>
+<script src="js/app.js?v=20260919g"></script>
+<script src="js/command-palette.js?v=20260919g"></script>
+
+</body>
+</html>

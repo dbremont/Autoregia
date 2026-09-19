@@ -29,6 +29,184 @@ TODO:
 
 ## Index
 
+### 2026 — SOPCS topic graph: the catalog clustered by meaning, batch-computed
+
+**Question.** The dashboard showed the catalog's *shape* (counts, activity,
+staleness) but not its *structure* — which procedures talk about the same
+things, and how the topics group. WOS already solves semantic grouping for
+observations; what is the honest version of that for a small, slowly
+changing catalog whose embeddings may not even exist yet?
+
+**Decision.**
+
+1. **Cluster the stored, not the source.** `sopcs/clustering.py` mirrors
+   the WOS machinery (spherical k-means, deterministic PCA, lexical
+   TF-IDF fallback) but takes its primary vectors from the *stored
+   embedding side-docs* — no model call at cluster time; the map can
+   never disagree with what reindex actually produced.
+2. **Batch, never on read.** `POST /api/clusters` computes and stores one
+   `CLUSTERS-current` document; `GET` returns it; `/api/reindex` refreshes
+   it so the map never lags its vectors. k = `max(2, min(8, √(n/2)))`;
+   labels are the top non-ubiquitous tokens of each cluster's documents;
+   edges are per-node top-2 k-NN cosine links (≥ 0.2).
+3. **The dashboard graph is a true map, not an animation**: ECharts
+   `layout: 'none'` on PCA coordinates (vendored `echarts.min.js`, the
+   sanctioned data-rich-surface library), nodes sized by words, colored
+   by cluster, opened in the reader on click. Degrades by cause — not
+   computed (with a Compute button), too few SOPs, or no numpy/fastembed
+   (with an install hint) — never silently empty.
+
+**Rationale.** Recomputing per dashboard load would make the overview's
+latency depend on numpy and matrix math for a catalog that changes a few
+times a day; one stored map refreshed alongside reindex keeps reads free
+and the semantics consistent. Reusing WOS's algorithms rather than its
+module keeps the tools decoupled while the behaviour stays familiar.
+
+**Trade-offs accepted.** The map is stale between computes (bounded: every
+reindex and every explicit compute refreshes it); PCA on tiny corpora is
+unstable run-to-run by design (deterministic seed, not meaningful
+axes); the lexical fallback clusters shallower than embeddings.
+
+**Implements.** [`spec/sopcs/spec.md`](spec/sopcs/spec.md) (§3.8),
+[`app/module/ate/tool/sopcs/clustering.py`](app/module/ate/tool/sopcs/clustering.py),
+dashboard `drawClusters`, tests in `make test`.
+
+### 2026 — SOPCS history and overview: snapshot versions, forward-only restore, a landing dashboard
+
+**Question.** SOPCS's audit trail recorded that mutations *happened* but
+not *what changed* — CouchDB keeps no readable history of superseded
+documents, so a botched edit was unrecoverable and a procedure's evolution
+was invisible. What is the honest version-history mechanism for a
+CouchDB document store, and what does an overview of the catalog owe the
+operator at a glance?
+
+**Decision.**
+
+1. **Full-snapshot revision documents, never patches.** Every content
+   change (body, title, summary, tags, or status; a no-change save
+   snapshots nothing) writes the whole document as `type: "revision"`
+   (`rev-<sop_id>-<seq>`, per-SOP monotonic seq, optional note) via a
+   design-doc `[sop_id, seq]` view; the SOP doc carries its latest seq.
+   Full snapshots over stored diffs: bodies are KB-scale, patch chains
+   are fragile, and snapshots make diff/restore/deletion trivial.
+   Retention: forever.
+2. **Diffs are computed on read** (stdlib `difflib.unified_diff`), always
+   older → newer so additions render `+`; a revision's default diff is
+   predecessor → itself, rev 1 diffs against empty, `?against=latest`
+   compares to the current doc. Diff inputs get a guaranteed trailing
+   newline so a final unterminated line cannot fuse a `-` line with the
+   following `+`.
+3. **Restore is forward-only** — an old snapshot's content becomes a
+   *new* revision (audit `sop.restore` with the source seq). History is
+   never rewritten; undo is restoring forward.
+4. **The reader gains a History panel** (per-tool modal, shared dialog
+   contract): revision list left, red/green-tinted unified diff right,
+   restore behind a confirm. `PUT` accepts an optional `comment` — the
+   API records notes, the editor stays lean.
+5. **A dashboard becomes the landing view**, fed by one `GET
+   /api/overview` payload: status shape, totals, top tags, recently
+   updated, **stale actives (90+ days) as the review queue**, latest
+   revisions, a 30-day edit-activity histogram, figures, and retrieval
+   health (embeddings indexed vs sops — the visible `/api/reindex` lag).
+   Rendered with token-colored CSS bars — no vendor chart library for
+   what is, in the end, lists and proportions.
+
+**Rationale.** Notion-style history on CouchDB requires explicit
+snapshots — the database's `_rev` bookkeeping is not a history API.
+Choosing full snapshots over patches trades storage (trivial at personal
+scale, retention forever by the same argument) for immutability of every
+operation that matters. Diffs-on-read keep the write path one put. The
+forward-only restore rule is what makes offering restore safe at all:
+nothing is destroyed, so the confirm dialog is a courtesy, not a
+guardrail. The dashboard's stale-active list is deliberately dumb — a
+date comparison, not a review workflow — because the first honest version
+of "what needs my attention" is a date comparison.
+
+**Trade-offs accepted.** Snapshot-on-save doubles write volume (bodies
+are small; CouchDB does far more work per view update than per put).
+No word-level highlighting inside changed lines (v2). The stale list has
+no snooze/ownership workflow yet. Dashboard bars are static proportions —
+no interactive charts, deliberately.
+
+**Implements.** [`spec/sopcs/spec.md`](spec/sopcs/spec.md) (§3.5–3.6),
+[`app/module/ate/tool/sopcs/`](app/module/ate/tool/sopcs/) (server
+revisions/overview + `history.js`/`dashboard.js`), tests in `make test`.
+
+### 2026 — SOPCS: the procedure catalog, with search that degrades honestly
+
+**Question.** An agent's repeatable work lives in habit and chat history —
+unauditable and unretrievable. The toolbox needed a place where the *how*
+of recurring work becomes a first-class document: stored, browsable,
+full-text and semantically retrievable, lifecycle-tracked, and illustrated.
+Where should such a catalog live, how should retrieval work without
+shipping a search engine, and where do uploaded figures persist when the
+container is recreated on every deploy?
+
+**Decision.**
+
+1. **A new ATE tool, `sopcs`**, in the WOS-style app shell (the CTES copy
+   of the house grammar — relative URLs, sidebar router, command palette).
+   One CouchDB DB (`sopcs`): `type: "sop"` documents (slug, title,
+   summary, tags, `draft → active → deprecated` lifecycle, markdown body)
+   plus `embedding`, `image`, and `audit` side docs.
+2. **Retrieval in two honest tiers.** Lexical: the WOS token-view pattern
+   — a design-doc inverted index queried inside CouchDB by per-token
+   prefix ranges, AND-composed by intersecting per-token doc-id sets
+   (occurrence counts as score, recency as tiebreak). Semantic: fastembed
+   BGE-small embeddings written on save in a background thread plus
+   `POST /api/reindex`, cosine over stored vectors — never a requirements
+   entry (the WOS clustering convention); absent → `mode=semantic`
+   answers 501 with the reason, `mode=auto` falls back to lexical, the
+   UI disables the toggle.
+3. **Derived reading aids are computed on save** — reading time (200 wpm)
+   and the heading outline — so the catalog view is a metadata projection
+   and never fetches bodies. The TOC anchor contract is global: one
+   counter over ALL ATX headings produces `h-<n>`; the shared renderer
+   stamps exactly those ids, so server outline and client anchors cannot
+   diverge.
+4. **Figures persist in CouchDB, not on disk.** The shared `Store` gained
+   a public attachment API (`put_attachment`/`get_attachment`); editor
+   uploads (picker, clipboard paste, drag-and-drop) become `type: image`
+   docs with the bytes attached, served with immutable cache headers and
+   inserted as *relative* markdown (`![alt](api/images/<id>)`) valid
+   under any mount. Disk uploads would vanish on every `make deploy-local`
+   recreate; CouchDB rides the `couchdb_data` volume.
+5. **The markdown renderer joined the shared layer.** AOOS's XSS-safe
+   escape-then-render renderer became `AUTOREGIA.Markdown` at
+   `/ui/js/md.js` (extended with images, heading anchors, pipe tables,
+   an `outline()` helper; URL whitelist for href/src), with AOOS as a
+   thin aliasing consumer — two renderers under one contract beat two
+   forks.
+6. **Seeds normalize themselves**: a public `Store.seed()` seeds
+   unconditionally by id (the old emptiness guard counted design docs
+   and silently refused to reseed a wiped-but-indexed DB), and the server
+   backfills derived fields onto raw fixtures at boot.
+
+**Rationale.** The toolbox slot was the natural home — procedures are
+tools for doing, and ATE already owns mounting, registry, and the shell
+grammar. Two-tier retrieval keeps v1 honest: lexical search runs inside
+CouchDB with zero extra machinery, and semantic search arrives exactly
+when fastembed does, never pretending (a 501 with the reason, not silent
+wrongness). Attachments over the filesystem was forced by the deployment
+shape: the container is recreated on every deploy and only CouchDB has a
+volume. Promoting the renderer paid for itself immediately — the TOC
+anchor contract needed renderer-side ids anyway.
+
+**Trade-offs accepted.** Semantic search needs an out-of-band
+`pip install fastembed` plus a reindex before it works. Catalog listing
+filters/sorts in Python over a projected metadata window (personal
+scale) — the CouchDB-resident rule is kept where it matters (search).
+Deleting a SOP deletes its embedding but keeps its images (they may be
+shared, and orphans are visible in self-monitoring). No version history
+yet — CouchDB revisions exist but are not surfaced; procedure review
+cadence and stale-SOP surfacing remain future work.
+
+**Implements.** [`spec/sopcs/spec.md`](spec/sopcs/spec.md),
+[`app/module/ate/tool/sopcs/`](app/module/ate/tool/sopcs/) (server, shell,
+tests in `make test`), [`app/support/storage/`](app/support/storage/)
+(attachment API, public `seed`), [`app/support/ui/js/md.js`](app/support/ui/js/md.js)
+(shared renderer; AOOS alias at `app/module/aoos/static/js/md.js`).
+
 ### 2026 — The ACSMS training camp: an independent trainer behind a seamless shell
 
 **Question.** The Typing skill needs a real deliberate-practice surface

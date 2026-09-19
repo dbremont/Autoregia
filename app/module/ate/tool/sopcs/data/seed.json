@@ -1,0 +1,35 @@
+[
+  {
+    "id": "deploy-autoregia",
+    "type": "sop",
+    "title": "Deploying Autoregia",
+    "summary": "Build and run the unified container locally, verify the mount matrix, and read the logs — the standard local deployment path.",
+    "tags": ["deployment", "docker", "operations"],
+    "status": "active",
+    "created_at": "2026-09-01T09:00:00Z",
+    "updated_at": "2026-09-15T09:00:00Z",
+    "body": "# Deploying Autoregia\n\nThe whole system is one Flask server in one container. Deployment means\nrebuilding the image and recreating `autoregia` — never editing inside the\nrunning container.\n\n## Prerequisites\n\n- Docker running on the host.\n- CouchDB up on `127.0.0.1:5984` (container `couchdb`, volume `couchdb_data`).\n- `.env` present at the repository root (git-ignored; see `.env.example`).\n\n## Build and run\n\n```sh\nmake deploy-local\n```\n\nThe target builds `autoregia:local` from the repository and recreates the\ncontainer with `--network host`, mounting `.env` read-only at `/srv/.env`.\nThe port comes from `AUTOREGIA_PORT` in `.env` (8081 on this host).\n\n> Production uses `make deploy-server`, which pulls the GHCR image CI\n> publishes. That path is reserved for the human operator.\n\n## Verify\n\n1. `curl` the mount matrix — every sub-system prefix answers 200.\n2. `docker logs autoregia` — no tracebacks, all mounts registered.\n3. Spot-check one write path (e.g. create a PBS entry).\n\n| Check            | Command                              |\n|------------------|--------------------------------------|\n| Mount matrix     | `curl -s -o /dev/null -w '%{http_code}' localhost:8081/pbs/` |\n| Toolbox registry | `curl localhost:8081/ate/api/tools`  |\n| Container health | `docker ps --filter name=autoregia`  |\n\n## Rollback\n\nRe-deploy the previous commit (`git checkout <sha>` then `make deploy-local`).\nCouchDB state is **not** rolled back — schema-drifting changes need a\nmigration note before they ship."
+  },
+  {
+    "id": "commit-workflow",
+    "type": "sop",
+    "title": "Commit Workflow (Hooked Git)",
+    "summary": "The staged-set ritual: authorize with xattr marks, clear the annotation and encoding policies, commit through the hooks, then set the real message.",
+    "tags": ["git", "workflow", "quality"],
+    "status": "active",
+    "created_at": "2026-09-02T10:00:00Z",
+    "updated_at": "2026-09-16T10:00:00Z",
+    "body": "# Commit Workflow (Hooked Git)\n\nGlobal hooks (`core.hooksPath`) gate every commit: authorization marks,\nan annotation policy, and an encoding policy. The workflow is a ritual —\nrun it the same way every time.\n\n## 1. Inspect and stage\n\n```sh\ngit status && git diff && git log --oneline -5\ngit add <paths>          # never blanket `git add .`\n```\n\n## 2. Authorize the staged set\n\nEvery added or modified file needs the `user.checkin` xattr:\n\n```sh\ngit diff --cached --name-only | xargs mark-for-commit\n```\n\nDeletions and rename sources are exempt; `mark-for-commit` printing\n`Not found` for them is harmless.\n\n## 3. Pre-flight the policies\n\n- **Annotations** — `@WORKING`, `@FIXME`, `@QUESTION`, `@VERIFY` in staged\n  sources reject the commit. Reword or resolve before staging.\n- **Encoding** — UTF-8, no BOM, LF line endings. `dos2unix <file>` fixes CRLF.\n\n## 4. Commit, then set the real message\n\nThe `prepare-commit-msg` hook rewrites `-m` messages, so commit loosely and\namend past the hook:\n\n```sh\ngit commit -m \"wip\"\ngit -c core.hooksPath=/dev/null commit --amend -m \"feat(sopcs): catalog shell\"\n```\n\n- [x] Stage only intended files\n- [x] Mark the staged set\n- [x] Annotation and encoding policies pass\n- [ ] `git log --oneline -1` shows the real message\n\n## Why the amend step exists\n\nWith `-m`, the hook sees `COMMIT_SOURCE=message` and overwrites the text —\nthere is no exemption flag. A plain `--amend -m` is rewritten too; only\nbypassing `core.hooksPath` for the amend survives."
+  },
+  {
+    "id": "couchdb-reseed",
+    "type": "sop",
+    "title": "Re-seeding a CouchDB Database",
+    "summary": "Seeds apply only when a database is empty — regenerating a fixture never refreshes a running DB. Drop the database, restart, verify.",
+    "tags": ["couchdb", "data", "maintenance"],
+    "status": "draft",
+    "created_at": "2026-09-03T11:00:00Z",
+    "updated_at": "2026-09-14T11:00:00Z",
+    "body": "# Re-seeding a CouchDB Database\n\nEach sub-system's `Store` seeds its database from local `data/*.json`\nfixtures **only when the database is empty**. Regenerating a seed file\ndoes not touch a running database.\n\n## When to re-seed\n\n- A fixture was regenerated and the running data must match it.\n- The database is corrupted or drifted beyond repair.\n\nCheck for non-seed entries first — dropping the database destroys them.\n\n## Steps\n\n1. Inspect what would be lost:\n\n   ```sh\n   curl -s 'http://admin:<password>@127.0.0.1:5984/<db>/_all_docs' | head\n   ```\n\n2. Drop the database:\n\n   ```sh\n   curl -X DELETE 'http://admin:<password>@127.0.0.1:5984/<db>'\n   ```\n\n3. Restart the owning module (or the unified server) — the `Store`\n   re-creates and re-seeds the database on first use.\n\n4. Verify the document count and spot-read one document.\n\n## Cautions\n\n- Test databases live behind `COUCHDB_DB_PREFIX` prefixes (`wos_test_`,\n  `gis_test_`, `sopcs_test_`) — drop those freely, they are re-seeded on\n  every test run.\n- Design documents and Mango indexes are re-created idempotently at\n  startup; dropping them is safe."
+  }
+]

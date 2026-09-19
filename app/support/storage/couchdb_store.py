@@ -86,14 +86,15 @@ class Store:
         self._maybe_seed(seed_paths)
 
     # ── seeding ──────────────────────────────────────────────────────────────
-    def _maybe_seed(self, seed_paths):
-        """Seed an empty DB from local JSON fixtures (idempotent)."""
-        if not seed_paths:
-            return
-        if self.count() > 0:
-            return
+    def seed(self, seed_paths):
+        """Seed from local JSON fixtures (idempotent by document id).
+
+        Unlike :meth:`_maybe_seed` this runs unconditionally — it is the
+        path to use after wiping a database that still holds design
+        documents (whose presence makes ``count() > 0``).
+        """
         seeded = 0
-        for path in seed_paths:
+        for path in seed_paths or []:
             if not path or not os.path.exists(path):
                 continue
             with open(path, "r", encoding="utf-8") as fh:
@@ -105,6 +106,15 @@ class Store:
                         seeded += 1
         if seeded:
             print(f"[couchdb] seeded {self.db_name}: {seeded} docs from fixtures")
+        return seeded
+
+    def _maybe_seed(self, seed_paths):
+        """Seed an *empty* DB from local JSON fixtures (idempotent)."""
+        if not seed_paths:
+            return
+        if self.count() > 0:
+            return
+        self.seed(seed_paths)
 
     # ── internals ────────────────────────────────────────────────────────────
     @staticmethod
@@ -151,6 +161,30 @@ class Store:
         if doc:
             del self.db[doc_id]
         return doc is not None
+
+    def put_attachment(self, doc_id, filename, content, content_type):
+        """Attach binary content to an existing document (upsert).
+
+        Returns the new revision id. Raises ``KeyError`` when the document
+        does not exist. Binary blobs (e.g. uploaded images) persist with the
+        document inside CouchDB instead of the server's filesystem.
+        """
+        doc = self.db.get(doc_id)
+        if doc is None:
+            raise KeyError(doc_id)
+        res = self.db.put_attachment(doc, content, filename=filename,
+                                     content_type=content_type)
+        return res.get("_rev") if isinstance(res, dict) else None
+
+    def get_attachment(self, doc_id, filename):
+        """Return the attachment's bytes, or ``None`` when absent."""
+        att = self.db.get_attachment(doc_id, filename)
+        if att is None:
+            return None
+        try:
+            return att.read()
+        finally:
+            att.close()
 
     def count(self):
         return int(self.db.info().get("doc_count", 0))

@@ -66,6 +66,17 @@ TOOLS = [
         "href": "/ate/tool/ctes/",
     },
     {
+        "id": "sopcs",
+        "name": "Standard Operating Procedure Catalog System",
+        "summary": ("The catalog of written procedure: markdown SOPs with a "
+                    "lifecycle (draft → active → deprecated), full-text and "
+                    "semantic search, reading time and heading outlines, and "
+                    "figures stored as CouchDB attachments. Every mutation "
+                    "audited."),
+        "vsm": "Toolbox — Procedure Knowledge",
+        "href": "/ate/tool/sopcs/",
+    },
+    {
         "id": "gial",
         "name": "General Integration Abstraction Layer",
         "summary": ("One abstraction for connections to external systems — "
