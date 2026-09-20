@@ -2,7 +2,7 @@
 
 > AOOS is the **Agent Operation Organization System** — an Autoregia sub-project
 > within the **Operations System** (VSM System 1 – Operations). It lifts the
-> action-bearing states recorded in the PBS into a steerable, dependency-aware,
+> action-bearing states recorded in the MAD into a steerable, dependency-aware,
 > capacity-checked, and calendar-coordinated execution structure, and it keeps
 > that structure synchronized with the platforms the agent actually operates
 > through.
@@ -20,7 +20,7 @@
   store. This is *"what's on my mind, right now."*
 - **[A] Work Organization & Registration** — the action hierarchy. Manages *action
   constructs* (tasks, projects, routines, commitments, initiatives, objectives)
-  and their dependency graph. Operates **over** PBS records (the single source of
+  and their dependency graph. Operates **over** MAD records (the single source of
   truth) plus a thin operational extension (dependencies, effort estimates,
   scheduling state). This is *"what to do."*
 - **[B] Work Calendarization** — the **calendar system**. Takes the logical action
@@ -70,9 +70,9 @@ or `calendar.readonly` for a read-only deployment.
 - **Parent:** [Autoregia](../../README.md) — a Personal Viable System Model (PVSM).
 - **Role:** **Operations System** (VSM System 1 – Operations) — organizes and
   executes the agent's operative action.
-- **Storage substrate:** [PBS](../../pbs/) — AOOS operates over PBS records; it is
+- **Storage substrate:** [MAD](../../mad/) — AOOS operates over MAD records; it is
   not a competing record store.
-- **Sibling sub-projects:** [PBS](../../pbs/), [PKTS](../../pkts/), [PTOCS](../../ptocs/), [AGS](/about.html#elements).
+- **Sibling sub-projects:** [MAD](../../mad/), [PKTS](../../pkts/), [PTOCS](../../ptocs/), [AGS](/about.html#elements).
 - **Shared UI standard:** [`../ui.spec`](../ui.spec).
 - **Decision log:** [`../../log.md`](../../log.md).
 

@@ -259,7 +259,7 @@ Design-plate content lives in the spec and the
 
 ## References
 
-- Sibling tools: [CES](../ces/) · [GIAL](../gial/) · [SARL](../sarl/)
+- Sibling tools: [CES](../ces/) · [GCAL](../gcal/) · [SARL](../sarl/)
 - [Dependability — Fault Tolerance & Continuity](../dependability.md)
 - Temporal · Apache Airflow · Celery — workflow/job execution references
 - Agent System entry, Dependability case-study table (task/context state so the

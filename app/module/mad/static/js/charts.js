@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Charts — Simple SVG Bar & Donut Charts
+   MAD Charts — Simple SVG Bar & Donut Charts
    ════════════════════════════════════════════════════════════ */
-PBS.Charts = {
+MAD.Charts = {
   bar(containerId, data) {
     const el = document.getElementById(containerId);
     if (!el) return;

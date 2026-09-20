@@ -3,7 +3,7 @@
 Deterministic whole-loop mock dataset generator for the Autoregia
 Control-Loop Dashboard ("The Loop").
 
-It synthesizes the cooperating organs' substance — PBS records, AOOS
+It synthesizes the cooperating organs' substance — MAD records, AOOS
 action constructs + sessions, CES executions, PRAS deliberations, the
 PEB event stream, AGS consistency violations, and the agent's
 essential variables — woven into causally-linked chains so every
@@ -47,7 +47,7 @@ PEB_TYPES = ["RecordCreated", "ActionRegistered", "ActionScheduled", "ActionComp
              "ExecutionFinished", "AdaptationEnacted", "ReactionFired", "ReactionSucceeded",
              "ReactionFailed", "ReactionSuppressed", "BlockConflictDetected",
              "KeywordThresholdCrossed", "PolicyChanged"]
-ORG_ORIGIN = {"RecordCreated": "PBS", "ActionRegistered": "AOOS", "ActionScheduled": "AOOS",
+ORG_ORIGIN = {"RecordCreated": "MAD", "ActionRegistered": "AOOS", "ActionScheduled": "AOOS",
               "ActionCompleted": "AOOS", "ExecutionFinished": "CES",
               "AdaptationEnacted": "PRAS", "ReactionFired": "PEB", "ReactionSucceeded": "PEB",
               "ReactionFailed": "PEB", "ReactionSuppressed": "PEB",
@@ -58,7 +58,7 @@ DELIB_DOMAINS = ["Method", "Work", "Health", "Learning", "Conduct", "Identity"]
 FEEDS = ["ags", "aoos", "pbs", "ptocs"]
 
 SUBJECTS = {
-    "Software Engineering": ["PBS prototype", "AOOS calendarization", "Loop dashboard", "PEB dispatcher", "search index", "schema migration"],
+    "Software Engineering": ["MAD prototype", "AOOS calendarization", "Loop dashboard", "PEB dispatcher", "search index", "schema migration"],
     "Research": ["attention economics", "control-theory review", "embedding drift", "causal inference primer"],
     "Health": ["sleep schedule", "cardio baseline", "nutrition logging"],
     "Finance": ["monthly close", "subscription audit", "tax estimate"],
@@ -151,7 +151,7 @@ def gen():
             events.append({
                 "event_id": stable_id("EVT", evc),
                 "type": "RecordCreated",
-                "origin": "PBS",
+                "origin": "MAD",
                 "occurred_at": iso(created),
                 "causal_id": None,
                 "correlation_id": None,
@@ -290,7 +290,7 @@ def gen():
                         "correlation_id": corr,
                         "started_at": rec["created_at"],
                         "perception": {"id": rec["id"], "type": rec["record_type"],
-                                       "title": rec["content"], "organ": "PBS"},
+                                       "title": rec["content"], "organ": "MAD"},
                         "decision": {"id": act["id"], "kind": act["kind"],
                                      "title": act["project"], "organ": "AOOS"},
                         "execution": {"id": sess["id"], "duration_min": sess["duration_min"],
@@ -500,7 +500,7 @@ def weighted_band():
 
 
 ORGS = {
-    "PBS":   {"name": "Personal Binnacle System",      "vsm": "S3", "stage": "Perception",       "color": "#3F6092"},
+    "MAD":   {"name": "Memory Aid System",      "vsm": "S3", "stage": "Perception",       "color": "#3F6092"},
     "PKTS":  {"name": "Personal Keyword Tracking",      "vsm": "S3", "stage": "Perception",       "color": "#B4742A"},
     "AGS":  {"name": "Agent Self-Representation",      "vsm": "S5", "stage": "Substrate",        "color": "#5C4E78"},
     "PTOCS": {"name": "Personal Technical Object Catalog","vsm":"S4","stage": "Situation Model",  "color": "#2D6A4F"},
@@ -514,7 +514,7 @@ ORGS = {
 VSM_LEVELS = [
     {"code": "S5",  "name": "Policy",        "orgs": ["AGS", "AGS"]},
     {"code": "S4",  "name": "Intelligence",  "orgs": ["PRAS", "PTOCS"]},
-    {"code": "S3",  "name": "Control / Audit","orgs": ["PBS", "PKTS"]},
+    {"code": "S3",  "name": "Control / Audit","orgs": ["MAD", "PKTS"]},
     {"code": "S2",  "name": "Coordination",  "orgs": ["PEB"]},
     {"code": "S1",  "name": "Operations",    "orgs": ["AOOS", "CES"]},
 ]
@@ -527,7 +527,7 @@ VSM_LEVELS = [
 # trigger (time/condition-based), observational (a reading the agent takes).
 ENTITY_KINDS = ["Person", "Project", "Tool", "Place", "Organization", "Topic", "Resource"]
 ENTITY_NAMES = {
-    "Software Engineering": ["PBS repo", "AOOS repo", "Loop dashboard", "Spectral", "ECharts", "Flask", "Search Index", "CouchDB"],
+    "Software Engineering": ["MAD repo", "AOOS repo", "Loop dashboard", "Spectral", "ECharts", "Flask", "Search Index", "CouchDB"],
     "Research": ["R. Seth", "J. Pearl", "Attention Lab", "Embedding Drift", "Causal Inference"],
     "Health": ["Dr. Vega", "Cardio Plan", "Sleep Schedule", "Nutrition Log"],
     "Finance": ["Bank Stub", "Brokerage", "Tax Estimate", "Subscription Ledger"],

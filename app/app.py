@@ -1,7 +1,7 @@
 """
 Autoregia — unified application server.
 
-A single entry point that composes every sub-system (PBS, PKTS, PTOCS, AGS,
+A single entry point that composes every sub-system (MAD, PKTS, PTOCS, AGS,
 AOOS) under path prefixes on one port. Each sub-system keeps its own Flask
 app and static assets; this module loads them and mounts them via a small
 WSGI dispatcher, and serves the Autoregia landing page plus a unified API
@@ -9,7 +9,7 @@ index at the root.
 
     /            landing page (Autoregia index)
     /api/        unified index of sub-systems
-    /pbs/...     Personal Binnacle System         (VSM System 1 — Perception)
+    /mad/...     Memory Aid System (MAD)           (VSM System 1 — Perception)
     /pkts/...    Personal Keyword Tracking System  (Perception / audit)
     /pwts/...   Personal Workstation Tracking System  (Accounting / audit)
     /wos/...   World Observation System  (Perception — external world)
@@ -70,7 +70,7 @@ def _load_app(module_name, server_rel_path):
 # tool's static assets, so renaming one here requires re-running the asset
 # prefixing pass (see support/tools/prefix_assets.py).
 SUBSYSTEMS = [
-    ("pbs", "Personal Binnacle System", "module/pbs/server.py"),
+    ("mad", "Memory Aid System", "module/mad/server.py"),
     ("pkts", "Personal Keyword Tracking System", "module/pkts/server.py"),
     ("pwts", "Personal Workstation Tracking System", "module/pwts/server.py"),
     ("wos", "World Observation System", "module/wos/server.py"),
@@ -185,7 +185,7 @@ def docs():
 class _SubsystemMount:
     """Mount sub-apps at path prefixes.
 
-    A bare prefix (``/pbs``) is redirected to ``/pbs/`` so that the sub-app's
+    A bare prefix (``/mad``) is redirected to ``/mad/`` so that the sub-app's
     page is served at a directory URL; this keeps any relative references
     inside the tool resolving against ``/<prefix>/``.
     """

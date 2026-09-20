@@ -1,11 +1,11 @@
 """
-Personal Binnacle System — API Server.
+Memory Aid System (MAD) — API Server.
 
-Flask backend persisting PBS records in CouchDB (db ``pbs``). The public API
+Flask backend persisting MAD records in CouchDB (db ``mad``). The public API
 shape is unchanged from the earlier mock prototype; records are seeded from
 data/mock_records.json on first run against an empty database.
 
-Run:   python3 pbs/server.py
+Run:   python3 mad/server.py
 Open:  http://localhost:5000
 """
 
@@ -18,7 +18,7 @@ from support.storage import Store
 
 app = Flask(__name__, static_folder="static")
 SEED_PATH = os.path.join(os.path.dirname(__file__), "data", "mock_records.json")
-store = Store("pbs", seed_paths=[SEED_PATH])
+store = Store("mad", seed_paths=[SEED_PATH])
 
 
 def load_records():
@@ -154,7 +154,7 @@ def search_records():
 @app.route("/api/export", methods=["GET"])
 def export_data():
     records = load_records()
-    response = Response(json.dumps(records, indent=2, default=str), mimetype="application/json", headers={"Content-Disposition": "attachment;filename=pbs_export.json"})
+    response = Response(json.dumps(records, indent=2, default=str), mimetype="application/json", headers={"Content-Disposition": "attachment;filename=mad_export.json"})
     return response
 
 

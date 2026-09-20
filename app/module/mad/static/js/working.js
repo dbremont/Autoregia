@@ -1,20 +1,26 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Working Memory — Browser-only working area (Todos + Notes).
+   MAD Working Memory — Browser-only working area (Todos + Notes).
    Generation captures the DELTA between the current working state
    and the last-logged baseline, producing ONE summary log record.
    The baseline is the only extra state stored to compute deltas.
    Flow is user-mediated: generate → review → approve / discard.
    ════════════════════════════════════════════════════════════ */
-PBS.Working = (() => {
-  const TODO_KEY = 'pbs_working_todos';
-  const NOTE_KEY = 'pbs_working_notes';
-  const BASELINE_KEY = 'pbs_working_baseline';
+MAD.Working = (() => {
+  const TODO_KEY = 'mad_working_todos';
+  const NOTE_KEY = 'mad_working_notes';
+  const BASELINE_KEY = 'mad_working_baseline';
   let noteSaveTimer = null;
   let pending = null;         // proposed summary record awaiting approval
   let reviewModal = null;
 
   /* ── Persistence (browser only) ─────────────────────── */
-  const get = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+  const get = k => {
+    try {
+      const v = localStorage.getItem(k)
+        ?? (k.startsWith('mad_') ? localStorage.getItem('pbs_' + k.slice(4)) : null);
+      return v == null ? null : JSON.parse(v);
+    } catch { return null; }
+  };
   const setKV = (k, v) => localStorage.setItem(k, JSON.stringify(v));
   const loadTodos = () => get(TODO_KEY) || [];
   const saveTodos = t => setKV(TODO_KEY, t);
@@ -52,9 +58,9 @@ PBS.Working = (() => {
     const t = loadTodos();
     el.innerHTML = t.length ? t.map(x => `
       <div class="wm-todo ${x.done ? 'done' : ''}" data-id="${x.id}">
-        <button class="wm-check" onclick="PBS.Working.toggleTodo('${x.id}')" aria-label="Toggle complete">${x.done ? PBS.icon('check', 13) : ''}</button>
+        <button class="wm-check" onclick="MAD.Working.toggleTodo('${x.id}')" aria-label="Toggle complete">${x.done ? MAD.icon('check', 13) : ''}</button>
         <span class="wm-todo-text">${esc(x.text)}</span>
-        <button class="wm-del" onclick="PBS.Working.removeTodo('${x.id}')" aria-label="Delete todo">${PBS.icon('x', 13)}</button>
+        <button class="wm-del" onclick="MAD.Working.removeTodo('${x.id}')" aria-label="Delete todo">${MAD.icon('x', 13)}</button>
       </div>`).join('') : '<div class="wm-empty">No todos yet — add one above.</div>';
     const c = counts();
     const s = document.getElementById('wmTodoStat');
@@ -150,14 +156,14 @@ PBS.Working = (() => {
 
   async function approve() {
     if (!pending) { closeReview(); return; }
-    await PBS.Store.add({ ...pending });   // commit the reviewed delta summary
+    await MAD.Store.add({ ...pending });   // commit the reviewed delta summary
     saveBaseline(snapshot());              // advance baseline → next delta is relative to now
     closeReview(); renderTodos(); renderActions();
     flash('Log record created; baseline advanced.');
   }
 
   /* ── Tiny toast (shared layer) ──────────────────────── */
-  function flash(msg) { PBS.toast(msg); }
+  function flash(msg) { MAD.toast(msg); }
 
   function renderActions() {
     const n = computeDelta().size;
@@ -175,8 +181,8 @@ PBS.Working = (() => {
       <div class="content-header">
         <div><span class="eyebrow">Working Area</span><h1>Working Memory</h1></div>
         <div class="actions">
-          <button class="btn btn-primary btn-sm" id="wmGenBtn" onclick="PBS.Working.generate()">
-            ${PBS.icon('inbox', 15)} Generate Log Record
+          <button class="btn btn-primary btn-sm" id="wmGenBtn" onclick="MAD.Working.generate()">
+            ${MAD.icon('inbox', 15)} Generate Log Record
             <span class="wm-gen-count" id="wmGenCount"></span>
           </button>
         </div>
@@ -189,24 +195,24 @@ PBS.Working = (() => {
       <div class="grid-2 wm-grid animate-in">
         <div class="card wm-card">
           <div class="card-header">
-            <h3>${PBS.icon('list', 16)} Todos</h3>
+            <h3>${MAD.icon('list', 16)} Todos</h3>
             <span class="wm-stat" id="wmTodoStat">${c.open} open · ${c.done} done</span>
           </div>
           <div class="wm-todo-add">
-            <input type="text" id="wmTodoInput" placeholder="Add a todo, press Enter…" onkeydown="if(event.key==='Enter'){event.preventDefault();PBS.Working.addTodo();}">
-            <button class="btn btn-secondary btn-sm" onclick="PBS.Working.addTodo()">${PBS.icon('plus', 14)} Add</button>
+            <input type="text" id="wmTodoInput" placeholder="Add a todo, press Enter…" onkeydown="if(event.key==='Enter'){event.preventDefault();MAD.Working.addTodo();}">
+            <button class="btn btn-secondary btn-sm" onclick="MAD.Working.addTodo()">${MAD.icon('plus', 14)} Add</button>
           </div>
           <div class="wm-todo-list" id="wmTodoList"></div>
           <div class="wm-card-footer">
-            <button class="btn btn-ghost btn-sm" onclick="PBS.Working.clearCompleted()">${PBS.icon('x', 13)} Clear completed</button>
+            <button class="btn btn-ghost btn-sm" onclick="MAD.Working.clearCompleted()">${MAD.icon('x', 13)} Clear completed</button>
           </div>
         </div>
         <div class="card wm-card">
           <div class="card-header">
-            <h3>${PBS.icon('file-text', 16)} Working Notes</h3>
+            <h3>${MAD.icon('file-text', 16)} Working Notes</h3>
             <span class="wm-stat" id="wmNoteStatus">${note.updated_at ? 'saved ' + new Date(note.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'empty'}</span>
           </div>
-          <textarea id="wmNoteText" class="wm-note" placeholder="Jot working thoughts, fragments, context… autosaved to this browser." oninput="PBS.Working.onNoteInput()">${esc(note.text || '')}</textarea>
+          <textarea id="wmNoteText" class="wm-note" placeholder="Jot working thoughts, fragments, context… autosaved to this browser." oninput="MAD.Working.onNoteInput()">${esc(note.text || '')}</textarea>
         </div>
       </div>
 `;

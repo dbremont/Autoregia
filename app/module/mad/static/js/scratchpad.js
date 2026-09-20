@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Scratchpad — Quick Capture (Ctrl+Shift+N)
+   MAD Scratchpad — Quick Capture (Ctrl+Shift+N)
    ════════════════════════════════════════════════════════════ */
-PBS.scratchpad = {
+MAD.scratchpad = {
   open() {
     const ov = document.getElementById('scratchpadOverlay');
     ov.classList.remove('hidden');
@@ -25,7 +25,7 @@ PBS.scratchpad = {
     else if (/^OBSERV|NOTICED?|^SAW /i.test(text)) type = 'Observation';
     else if (/^\?|^QUESTION/i.test(text)) type = 'Question';
     
-    await PBS.Store.add({
+    await MAD.Store.add({
       content: text.split('\n')[0].replace(/^(TODO|TASK|DECISION?|DECIDED|GOAL|OBJECTIVE|OBSERV|NOTICED?|SAW |\?)\s*/i,''),
       detail: text.split('\n').slice(1).join('\n').trim(),
       record_type: type,
@@ -35,6 +35,6 @@ PBS.scratchpad = {
       tags: ['quick-capture']
     });
     this.close();
-    PBS.navigate(PBS.currentView);
+    MAD.navigate(MAD.currentView);
   }
 };

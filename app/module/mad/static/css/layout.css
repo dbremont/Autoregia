@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Layout — App Shell, Sidebar, Grid
+   MAD Layout — App Shell, Sidebar, Grid
    Editorial rhythm · gold-key active state · monogram brand
    ════════════════════════════════════════════════════════════ */
 
@@ -185,5 +185,5 @@
 }
 
 /* ── Tool icon element ────────────────────────────────── */
-.pbs-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
-pbs-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+.mad-icon { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+mad-icon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }

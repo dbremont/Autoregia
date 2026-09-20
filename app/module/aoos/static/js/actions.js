@@ -66,7 +66,7 @@ AO.Action.openEditor = function (existing) {
   body.innerHTML =
     '<div class="form-grid">' +
     '<label class="form-field"><span>Kind</span><select class="select" id="f_kind">' + opts(AO.ENUMS.kind, a.kind || 'Task') + '</select></label>' +
-    '<label class="form-field"><span>PBS Record Id</span><input class="input" id="f_record" value="' + AO.esc(a.record_id || '') + '" placeholder="REC-2026-…"></label>' +
+    '<label class="form-field"><span>MAD Record Id</span><input class="input" id="f_record" value="' + AO.esc(a.record_id || '') + '" placeholder="REC-2026-…"></label>' +
     '<label class="form-field"><span>Scheduling State</span><select class="select" id="f_sched">' + opts(AO.ENUMS.scheduling_state, a.scheduling_state || 'unscheduled') + '</select></label>' +
     '<label class="form-field"><span>Project</span><input class="input" id="f_project" value="' + AO.esc((a.strategic || {}).project || '') + '" placeholder="P-…"></label>' +
     '<label class="form-field"><span>Objective</span><input class="input" id="f_objective" value="' + AO.esc((a.strategic || {}).objective || '') + '" placeholder="O-…"></label>' +
@@ -113,7 +113,7 @@ AO.Action.showDetail = function (id) {
     (a.pinned ? '<span class="badge badge-warn">pinned</span>' : '') +
     '<span class="text-muted mono text-sm" style="margin-left:8px">' + a.id + '</span></div>' +
     '<div class="detail-grid">' +
-    '<div class="detail-field"><label>PBS Record</label><span class="mono">' + AO.esc(a.record_id) + '</span></div>' +
+    '<div class="detail-field"><label>MAD Record</label><span class="mono">' + AO.esc(a.record_id) + '</span></div>' +
     '<div class="detail-field"><label>Effort Estimate</label><span>' + eff + '</span></div>' +
     '<div class="detail-field"><label>Project</label><span>' + AO.esc((a.strategic || {}).project || '—') + '</span></div>' +
     '<div class="detail-field"><label>Objective</label><span>' + AO.esc((a.strategic || {}).objective || '—') + '</span></div>' +

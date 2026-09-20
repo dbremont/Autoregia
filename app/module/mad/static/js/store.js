@@ -1,12 +1,13 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Store — Data Layer (localStorage + API)
+   MAD Store — Data Layer (localStorage + API)
    ════════════════════════════════════════════════════════════ */
-// Ensure the PBS namespace exists before the first use.
-// This file is loaded before app.js (which declares `const PBS`),
-// so we seed window.PBS here. Idempotent and order-independent.
-window.PBS = window.PBS || {};
-PBS.Store = (() => {
-  const KEY = 'pbs_records';
+// Ensure the MAD namespace exists before the first use.
+// This file is loaded before app.js (which declares `const MAD`),
+// so we seed window.MAD here. Idempotent and order-independent.
+window.MAD = window.MAD || {};
+MAD.Store = (() => {
+  const KEY = 'mad_records';
+  const LEGACY_KEY = 'pbs_records';  // pre-rename cache — read-only fallback
   let records = [];
   let listeners = [];
   let syncListeners = [];
@@ -24,8 +25,8 @@ PBS.Store = (() => {
     notifySync();
   }
 
-  PBS.Store_syncState = () => ({ ...sync });
-  PBS.Store_onSync = (fn) => { syncListeners.push(fn); return () => { syncListeners = syncListeners.filter(f => f !== fn); }; };
+  MAD.Store_syncState = () => ({ ...sync });
+  MAD.Store_onSync = (fn) => { syncListeners.push(fn); return () => { syncListeners = syncListeners.filter(f => f !== fn); }; };
 
   // Write-through: local mutation is optimistic; the server write is
   // attempted in the background and its outcome is reported honestly.
@@ -47,7 +48,12 @@ PBS.Store = (() => {
 
   // Load from localStorage or seed from API
   async function load() {
-    const stored = localStorage.getItem(KEY);
+    let stored = localStorage.getItem(KEY);
+    if (!stored) {
+      // legacy pre-rename cache — adopt it once, then persist under KEY
+      stored = localStorage.getItem(LEGACY_KEY);
+      if (stored) localStorage.setItem(KEY, stored);
+    }
     if (stored) {
       try { records = JSON.parse(stored); } catch { records = []; }
     }
@@ -60,7 +66,7 @@ PBS.Store = (() => {
 
   async function fetchFromAPI() {
     try {
-      const res = await fetch('/pbs/api/records');
+      const res = await fetch('/mad/api/records');
       if (res.ok) {
         records = await res.json();
         saveLocal();
@@ -97,7 +103,7 @@ PBS.Store = (() => {
     records.unshift(rec);
     saveLocal();
     notify();
-    const ok = await pushToAPI('POST', '/pbs/api/records', rec);
+    const ok = await pushToAPI('POST', '/mad/api/records', rec);
     return { ...rec, _persisted: ok };
   }
 
@@ -107,7 +113,7 @@ PBS.Store = (() => {
     records[idx] = { ...records[idx], ...updates, updated_at: new Date().toISOString() };
     saveLocal();
     notify();
-    const ok = await pushToAPI('PUT', '/pbs/api/records/' + encodeURIComponent(id), updates);
+    const ok = await pushToAPI('PUT', '/mad/api/records/' + encodeURIComponent(id), updates);
     return { ...records[idx], _persisted: ok };
   }
 
@@ -129,7 +135,7 @@ PBS.Store = (() => {
     rec.updated_at = new Date().toISOString();
     saveLocal();
     notify();
-    pushToAPI('POST', '/pbs/api/records/' + encodeURIComponent(id) + '/annotations', ann);
+    pushToAPI('POST', '/mad/api/records/' + encodeURIComponent(id) + '/annotations', ann);
     return ann;
   }
 

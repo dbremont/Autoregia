@@ -25,7 +25,7 @@
 - **Parent:** [Autoregia](../../README.md) — a Personal Viable System Model (PVSM).
 - **Role:** **Intelligence System** (VSM System 4 – Intelligence) — scans, indexes, and reasons over the agent's available technical capabilities. Also feeds the **Inventory System** (resource visibility).
 - **Sibling sub-projects:**
-  - [PBS](../../README.md) — the recording system for externalized state.
+  - [MAD](../../README.md) — the recording system for externalized state.
   - [PKTS](../../README.md) — keyword/attention accounting.
 - **Shared UI standard:** [`spec/ui.spec`](../ui.spec) — the canonical, project-wide UI specification every Autoregia tool must converge on.
 - **Decision log:** [`log.md`](../../log.md) — conceptual and design rationale.
@@ -41,7 +41,7 @@ PTOCS addresses the **capability indexing & discovery** dimension of self-manage
 - Record relationships between objects (`depends-on`, `integrates-with`, `alternative-to`, `complements`, `supersedes`, …).
 - Enable efficient discovery of the capabilities available to the agent for a given task or objective.
 - Provide a **Statistical Overlay** that reveals coverage gaps, redundant capabilities, dependency exposure, and ecosystem health — feeding the Intelligence System's review and adaptation.
-- Stay focused on *cataloging tools/objects*; daily links, papers, and notes belong to the [PBS](../../README.md).
+- Stay focused on *cataloging tools/objects*; daily links, papers, and notes belong to the [MAD](../../README.md).
 
 ## Planned Structure
 

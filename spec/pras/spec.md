@@ -37,11 +37,11 @@ The objective is not exhaustive journaling but **selective persistence of operat
 | `status` | Lifecycle state (see below). |
 | `date` | ISO date the deliberation was opened. |
 | `tags` | Free-form keyword list. |
-| `feeds` | Destination system(s) for the adaptation — subset of `ags, aoos, pbs, ptocs`. |
+| `feeds` | Destination system(s) for the adaptation — subset of `ags, aoos, mad, ptocs`. |
 | `observation` | What was noticed (the trigger of the deliberation). |
 | `deliberation` | The reasoning: why it happened, what it means. |
 | `adaptation` | The proposed change, and where it should be enacted. |
-| `links` | References to records (PBS), policies (AGS), actions (AOOS), capabilities (PTOCS). |
+| `links` | References to records (MAD), policies (AGS), actions (AOOS), capabilities (PTOCS). |
 
 ### Deliberation Types
 
@@ -92,8 +92,8 @@ Each deliberation renders as a manuscript with:
 
 - **Stack:** Flask + vanilla HTML/CSS/JS, conforming to the [Autoregia UI Specification](../ui.spec).
 - **Documents are the data:** no database, no schema file, no separate record store. The `pra-*` `<meta>` tags are the structured surface the server indexes; the body is the prose.
-- **Mounting:** under the unified `app.py` at the `/pras/` prefix (distinct from the Recording System's `/pbs/`).
-- **Feeds (future):** once the [ISCB](../iscb/spec.md) event bus exists, an `enacted` deliberation emits an event (`AdaptationEnacted`) carrying its destination, so AGS / AOOS / PBS / PTOCS can react without hard-coupling.
+- **Mounting:** under the unified `app.py` at the `/pras/` prefix (distinct from the Recording System's `/mad/`).
+- **Feeds (future):** once the [ISCB](../iscb/spec.md) event bus exists, an `enacted` deliberation emits an event (`AdaptationEnacted`) carrying its destination, so AGS / AOOS / MAD / PTOCS can react without hard-coupling.
 
 ## References
 

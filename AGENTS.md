@@ -16,7 +16,7 @@ app/                 the application
 │                    dispatcher, plate-only routes)
 ├── index.html       landing plate     (about.html and docs.html beside it)
 ├── module/          the sub-systems — 11 mounted in SUBSYSTEMS:
-│                    pbs, pkts, pwts, wos, gis, aias, aoos, ate, pras,
+│                    mad, pkts, pwts, wos, gis, aias, aoos, ate, pras,
 │                    acsms, loop
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
 │       ags/ gwob/ pks/        plate-only (index.html; ags adds policies/):
@@ -25,7 +25,7 @@ app/                 the application
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── ces/  a tool (own Flask app, mounted at /ate/tool/ces/)
 │         └── ctes/  a tool — WOS-style app shell: handle register + task specs + runs + audit (spec/ctes/)
-│         └── gial/  a tool — design plate only, unimplemented (spec/gial/)
+│         └── gcal/  a tool — design plate only, unimplemented (spec/gcal/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/,
@@ -99,7 +99,7 @@ everything else runs out-of-band:
   first, enqueue failures are caught, and a worker drains all unprocessed
   batches on its next run.
 - **CES result feed** — fire-and-forget POSTs to `CES_AOOS_URL` /
-  `CES_PBS_URL` (defaults are stale standalone ports, :5005/:5000).
+  `CES_MAD_URL` (falls back to the legacy `CES_PBS_URL`; defaults are stale standalone ports, :5005/:5000).
 - **AOOS Google Calendar sync** — optional; needs an OAuth client secret at
   `app/module/aoos/config/client_secret.json` (or `AOOS_GC_CLIENT_SECRET`),
   writes `config/token.json` on connect; status machine
@@ -122,7 +122,7 @@ everything else runs out-of-band:
 
   | module | DBs |
   |---|---|
-  | pbs | `pbs` |
+  | mad | `mad` (migrated from `pbs` — old DB kept as backup) |
   | gis | `ptocs` + `ptocs_activity` |
   | aias | `aias` |
   | aoos | `aoos` (falls back to `data/*.json` files when CouchDB is down) |
@@ -169,7 +169,7 @@ everything else runs out-of-band:
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
   (`/ui/fonts/`) — never add CDN links. Normative spec: `spec/ui.spec`;
-  reference implementation: `app/module/pbs/static/`.
+  reference implementation: `app/module/mad/static/`.
 - **Shared design-system layer:** tokens, fonts, base (and the standalone
   alias layer) live ONLY in `app/support/ui/`, served by the `/ui/` route
   in `app/app.py`. Never re-declare tokens/fonts per surface — link

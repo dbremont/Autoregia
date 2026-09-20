@@ -200,7 +200,7 @@ WOS.docsHTML = function () {
     ]],
     ['Record-keeping', [
       ['format+post', 'log / audit records — failing mirrors, self-audit summaries', 'seconds'],
-      ['normalize+put', 'execution artifacts folded into PBS records', 'sub-minute'],
+      ['normalize+put', 'execution artifacts folded into MAD records', 'sub-minute'],
     ]],
   ];
   const catalog = TASK_CATALOG.map(([group, rows]) =>

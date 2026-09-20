@@ -1,10 +1,10 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Heatmap — GitHub-style Activity Heatmap (SVG)
+   MAD Heatmap — GitHub-style Activity Heatmap (SVG)
    ════════════════════════════════════════════════════════════ */
-PBS.Heatmap = {
+MAD.Heatmap = {
   render() {
-    const records = PBS.Store.getAll();
-    const stats = PBS.Store.getStats();
+    const records = MAD.Store.getAll();
+    const stats = MAD.Store.getStats();
     return `
     <div class="content-header">
       <div><span class="eyebrow">Rhythm</span><h1>Activity Heatmap</h1></div>
@@ -15,10 +15,10 @@ PBS.Heatmap = {
 };
 
 // Render after DOM insertion
-PBS.Heatmap.renderSVG = function() {
+MAD.Heatmap.renderSVG = function() {
   const el = document.getElementById('heatmapEl');
   if (!el) return;
-  const records = PBS.Store.getAll();
+  const records = MAD.Store.getAll();
   // Build day counts for last ~6 months
   const now = new Date();
   const daysAgo = 180;
@@ -66,4 +66,4 @@ PBS.Heatmap.renderSVG = function() {
   svg += `</svg>`;
   el.innerHTML = svg;
 };
-setTimeout(PBS.Heatmap.renderSVG, 50);
+setTimeout(MAD.Heatmap.renderSVG, 50);

@@ -6,8 +6,8 @@
 
 **Normative source:** [`spec/ui.spec`](spec/ui.spec) — tokens, typography,
 components, interaction, deviation policy.
-**Reference implementation:** [`app/module/pbs/static/`](app/module/pbs/static/) — when in doubt,
-the PBS implementation wins over prose.
+**Reference implementation:** [`app/module/mad/static/`](app/module/mad/static/) — when in doubt,
+the MAD implementation wins over prose.
 
 ---
 
@@ -103,7 +103,7 @@ no per-module copies of tokens or fonts (ui.spec §11.2). The tool's
 `layout.css` carries the app shell (header, sidebar, grids) and its own
 `<x-icon>` element rule; `views.css` is view-specific.
 
-Users of this archetype: `pbs`, `pkts`, `pwts` (shares pkts's shell +
+Users of this archetype: `mad`, `pkts`, `pwts` (shares pkts's shell +
 `pwts.css`), `wos` (+`wos.css`), `gis`, `aias`, `aoos`, `loop`.
 
 The shell's sticky header and sidebar — closed by the `.sidebar-colophon` —
@@ -163,7 +163,7 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 
 | Surface                            | Archetype | Status |
 | ---------------------------------- | --------- | ------ |
-| `pbs`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `ctes`, `gial`, `sarl` | app shell / standalone | ✅ conforms (token set; aias dialect noted, motion+focus guards added 2026-09) |
+| `mad`, `pkts`, `pwts`, `aias`, `ate` — toolbox index, `ctes`, `gcal`, `sarl` | app shell / standalone | ✅ conforms (token set; aias dialect noted, motion+focus guards added 2026-09) |
 | `wos`, `gis`, `aoos`, `loop` | app shell | ✅ conforms (paper-on-accent token, Lucide icons, contrast — 2026-09) |
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
@@ -176,18 +176,18 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 the 2026-09 audit items were re-tested against WCAG 2.2 AA / APG /
 Nielsen practice and the following were found outstanding and are now
 **fixed in this pass**: silent localStorage fallbacks reporting success
-(pbs/pkts/aias/gis stores now write through to the API and report
+(mad/pkts/aias/gis stores now write through to the API and report
 "saved locally — sync pending" honestly), broken `<label>` association
-in JS-generated forms (gis/pbs/aias helpers emit `for=`), missing modal
+in JS-generated forms (gis/mad/aias helpers emit `for=`), missing modal
 APG contract (all modals/palettes wire `AUTOREGIA.dialog`: `role="dialog"`,
 `aria-modal`, focus trap, restore-to-invoker), AOOS Space-key hijack of
 button activation, single-char shortcuts firing with modifiers held,
 unlabeled icon-only buttons and selects, contrast failures (informative
 `--ink-6`/`--faint` text swept to passing steps; gold-as-text now uses
 `--gold-ink` `#8A6A2F`), sub-24px chip-remove targets, palette search
-focus visibility, native `alert()` in pbs, unhandled fetch failures
+focus visibility, native `alert()` in mad, unhandled fetch failures
 (ces/wos/pwts/pras), pure-black shadows, off-token chart hues
-(pbs private palette, purple/pink/brown/light-blue converging onto §3
+(mad private palette, purple/pink/brown/light-blue converging onto §3
 values via `AUTOREGIA.CHART`), dead per-tool `css/{fonts,base}.css`
 links, missing `↑/↓` navigation in the AOOS palette, missing palettes
 on pwts and ces, missing `<main>` on standalone plates, missing
@@ -197,7 +197,7 @@ Known remaining deviations: AOOS `docs.html` dark code-block pair
 document plates keep their layout px (§5.1) — raw radii/spacing there
 are grandfathered; ECharts canvas `fontSize` numerics remain (canvas
 cannot consume CSS vars — palettes/colors are token-derived via
-`AUTOREGIA.CHART`); pbs delete is client-side only (no server DELETE
+`AUTOREGIA.CHART`); mad delete is client-side only (no server DELETE
 endpoint) and is reported as unpersisted.
 
 Derived SVG tints in the Fig. 1 control-loop plate (`#f7f0df`, `#f3ecdb`,
@@ -233,7 +233,7 @@ and may converge onto token-derived values progressively.
 
 - [`spec/ui.spec`](spec/ui.spec) — normative specification (§3 tokens, §4
   typography, §7 component catalog, §11 implementation conventions).
-- [`app/module/pbs/static/css/variables.css`](app/module/pbs/static/css/variables.css) — canonical
-  token file (extended ramp).
+- [`app/support/ui/css/tokens.css`](app/support/ui/css/tokens.css) — canonical
+  token file (single source of truth; the shared `/ui/` layer).
 - [`app/module/ags/static/css/policy.css`](app/module/ags/static/css/policy.css) — canonical
   standalone token block.

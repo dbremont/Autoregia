@@ -4,7 +4,7 @@
   "role": {
     "vsm_level": "System 4 - Intelligence",
     "parent": "Autoregia",
-    "siblings": ["PBS", "PKTS"]
+    "siblings": ["MAD", "PKTS"]
   },
   "purpose": "Provide a centralized index of available technical objects and their capabilities, enabling efficient discovery of the capabilities available to the agent and exposing gaps, redundancy, and dependency exposure through a statistical overlay.",
 
@@ -40,7 +40,7 @@
       "auto-import from tool manifests",
       "documentation fetching and link health checks",
       "LLM-assisted entry extraction and enrichment",
-      "PBS integration (adoption/retirement decisions, entry linking)",
+      "MAD integration (adoption/retirement decisions, entry linking)",
       "cost and license monitoring; renewal reminders"
     ]
   },
@@ -86,7 +86,7 @@
   "references": [
     { "label": "csiglab/Index", "url": "https://github.com/csiglab/Index" },
     { "label": "Autoregia", "url": "../../README.md" },
-    { "label": "PBS spec", "url": "../pbs/spec.md" },
+    { "label": "MAD spec", "url": "../mad/spec.md" },
     { "label": "Autoregia UI Specification", "url": "../ui.spec" },
     { "label": "Personal Viable System Model (PVSM)", "url": "https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link" },
     { "label": "Self-Management", "url": "https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link" }

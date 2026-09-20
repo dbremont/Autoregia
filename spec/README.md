@@ -100,7 +100,7 @@ Feedback
 World: Environment | Internal Environment
       │
       ▼
-  Perception: Personal Binnacle System        (internal events)
+  Perception: Memory Aid System (MAD)        (internal events)
             | General World and Self Observation System (external events: WOS)
          -> Null.
          -> Task Regitry Mechanism -> Documentation

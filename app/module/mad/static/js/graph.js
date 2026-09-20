@@ -1,9 +1,9 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Graph — Record Relationship Graph (SVG)
+   MAD Graph — Record Relationship Graph (SVG)
    ════════════════════════════════════════════════════════════ */
-PBS.Graph = {
+MAD.Graph = {
   render() {
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const links = records.filter(r=>r.links&&r.links.length);
     return `
     <div class="content-header"><div><span class="eyebrow">Topology</span><h1>Relationship Graph</h1></div>
@@ -13,10 +13,10 @@ PBS.Graph = {
   }
 };
 
-PBS.Graph.renderSVG = function() {
+MAD.Graph.renderSVG = function() {
   const el = document.getElementById('graphEl');
   if (!el) return;
-  const records = PBS.Store.getAll();
+  const records = MAD.Store.getAll();
   // Build nodes and edges from links
   const nodeIds = new Set();
   const edges = [];
@@ -26,7 +26,7 @@ PBS.Graph.renderSVG = function() {
       if (l.target) { edges.push({source:r.id, target:l.target, type:l.type}); nodeIds.add(l.target); }
     });
   });
-  const nodes = [...nodeIds].map(id => ({id, rec:PBS.Store.getById(id)})).filter(n=>n.rec);
+  const nodes = [...nodeIds].map(id => ({id, rec:MAD.Store.getById(id)})).filter(n=>n.rec);
   
   // Simple force-directed layout
   const W=el.clientWidth||700, H=400;
@@ -57,7 +57,7 @@ PBS.Graph.renderSVG = function() {
     const p=positions[n.id];
     if(!p)return;
     const tc=TYPE_COLORS[n.rec.record_type]||'#888';
-    svg += `<g class="graph-node" onclick="PBS.record.showDetail('${n.id}')">
+    svg += `<g class="graph-node" onclick="MAD.record.showDetail('${n.id}')">
       <circle cx="${p.x}" cy="${p.y}" r="22" fill="${tc}22" stroke="${tc}" stroke-width="2"/>
       <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="9" fill="#333"
         style="pointer-events:none;font-weight:600;">${n.rec.record_type.substring(0,3)}</text>
@@ -68,4 +68,4 @@ PBS.Graph.renderSVG = function() {
   svg += `</svg>`;
   el.innerHTML = svg;
 };
-setTimeout(PBS.Graph.renderSVG, 100);
+setTimeout(MAD.Graph.renderSVG, 100);

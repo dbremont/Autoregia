@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Components — Buttons, Cards, Badges, Forms, Modals
+   MAD Components — Buttons, Cards, Badges, Forms, Modals
    Hairline borders · ambient shadows · refined detailing
    ════════════════════════════════════════════════════════════ */
 
@@ -29,7 +29,7 @@
 .btn-ghost:hover { background: var(--color-surface-2); color: var(--ink-1); }
 .btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-xs); }
 .btn-lg { padding: var(--space-3) var(--space-6); font-size: var(--text-base); }
-.btn .pbs-icon { opacity: 0.85; }
+.btn .mad-icon { opacity: 0.85; }
 
 .btn-icon {
   padding: var(--space-2); width: 32px; height: 32px;
@@ -101,7 +101,7 @@
   font-size: var(--text-xs); color: var(--color-text-muted);
 }
 .rc-domain { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--color-text-secondary); }
-.rc-domain .pbs-icon { color: var(--color-text-muted); }
+.rc-domain .mad-icon { color: var(--color-text-muted); }
 .rc-tag { color: var(--color-text-secondary); font-family: var(--font-mono); font-size: var(--text-2xs); }
 
 /* ── Badges & Seals ──────────────────────────────────── */
@@ -133,7 +133,7 @@
   width: 20px; height: 20px; border-radius: var(--radius-pill);
   border: var(--hairline) solid currentColor; flex-shrink: 0;
 }
-.seal .pbs-icon { width: 11px; height: 11px; }
+.seal .mad-icon { width: 11px; height: 11px; }
 
 /* ── Form Elements ───────────────────────────────────── */
 .form-group { margin-bottom: var(--space-4); }

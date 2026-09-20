@@ -1,9 +1,9 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Timeline — Vertical Chronological Record Timeline
+   MAD Timeline — Vertical Chronological Record Timeline
    ════════════════════════════════════════════════════════════ */
-PBS.Timeline = {
+MAD.Timeline = {
   render() {
-    const records = [...PBS.Store.getAll()].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    const records = [...MAD.Store.getAll()].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
     return `
     <div class="content-header"><div><span class="eyebrow">Chronology</span><h1>Timeline</h1></div>
       <div class="actions"><span class="text-sm text-muted">${records.length} records, chronological</span></div>
@@ -14,7 +14,7 @@ PBS.Timeline = {
         return `<div class="timeline-node">
           <div class="timeline-dot" style="border-color:${tc};background:${tc}22;"></div>
           <div class="timeline-date">${new Date(r.created_at).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}</div>
-          <div class="timeline-content" onclick="PBS.record.showDetail('${r.id}')">
+          <div class="timeline-content" onclick="MAD.record.showDetail('${r.id}')">
             <span class="rc-type" style="background:${tc}15;color:${tc};font-size:var(--text-2xs);">${r.record_type}</span>
             <strong>${this.esc(r.content)}</strong>
             <p class="text-xs text-muted" style="margin-top:4px;">${r.id} · ${r.status}</p>

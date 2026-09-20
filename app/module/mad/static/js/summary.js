@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Summary — Record Summary (Daily / Weekly / Monthly / Annual)
+   MAD Summary — Record Summary (Daily / Weekly / Monthly / Annual)
    ════════════════════════════════════════════════════════════ */
-PBS.Summary = {
+MAD.Summary = {
   period: 'daily',
   esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML;},
 
@@ -9,7 +9,7 @@ PBS.Summary = {
     const periods = [['daily','Daily'],['weekly','Weekly'],['monthly','Monthly'],['annual','Annual']];
     const today = new Date().toISOString().slice(0,10);
     const bar = periods.map(([k,label])=>
-      `<button class="study-tab ${k===this.period?'active':''}" data-period="${k}" onclick="PBS.Summary.setPeriod('${k}')">${label}</button>`
+      `<button class="study-tab ${k===this.period?'active':''}" data-period="${k}" onclick="MAD.Summary.setPeriod('${k}')">${label}</button>`
     ).join('');
     return `
     <div class="content-header"><div><span class="eyebrow">Digest</span><h1>Record Summary</h1></div>
@@ -18,7 +18,7 @@ PBS.Summary = {
     <div class="study-tabs">${bar}</div>
     <div class="summary-controls">
       <label class="text-sm text-muted">Anchor date</label>
-      <input type="date" id="summaryAnchor" value="${today}" onchange="PBS.Summary.renderBody()">
+      <input type="date" id="summaryAnchor" value="${today}" onchange="MAD.Summary.renderBody()">
     </div>
     <div id="summaryBody" class="animate-in"></div>`;
   },
@@ -66,7 +66,7 @@ PBS.Summary = {
 
   /* ── shared digest card ─────────────────────────────── */
   _digest(period, rangeLabel, inRange) {
-    const stats = PBS.Store.getStats();
+    const stats = MAD.Store.getStats();
     const topTypes = this._topBy(inRange,'record_type');
     const topDomains = this._topBy(inRange,'domain');
     const topTags = this._topBy(inRange,'tags');
@@ -105,7 +105,7 @@ PBS.Summary = {
         <h4 class="summary-h4" style="margin-top:var(--space-5);">Highlights</h4>
         <div class="summary-highlights">
           ${highlights.length ? highlights.map(r=>`
-            <div class="summary-hl" onclick="PBS.record.showDetail('${r.id}')">
+            <div class="summary-hl" onclick="MAD.record.showDetail('${r.id}')">
               <span class="summary-hl-dot" style="background:${TYPE_COLORS[r.record_type]||'#999'};"></span>
               <div>
                 <div class="summary-hl-title">${this.esc((r.content||'').slice(0,80))}</div>
@@ -121,25 +121,25 @@ PBS.Summary = {
   /* ── periods ────────────────────────────────────────── */
   renderDaily(anchor) {
     const [s,e] = this._range(anchor,'daily');
-    const inRange = this._inRange(PBS.Store.getAll(), s, e);
+    const inRange = this._inRange(MAD.Store.getAll(), s, e);
     const label = new Date(anchor).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
     return this._digest('daily', `Daily Digest — ${label}`, inRange);
   },
   renderWeekly(anchor) {
     const [s,e] = this._range(anchor,'weekly');
-    const inRange = this._inRange(PBS.Store.getAll(), s, e);
+    const inRange = this._inRange(MAD.Store.getAll(), s, e);
     const fmt = (d)=>d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
     return this._digest('weekly', `Weekly Digest — ${fmt(s)} to ${fmt(e)}`, inRange);
   },
   renderMonthly(anchor) {
     const [s,e] = this._range(anchor,'monthly');
-    const inRange = this._inRange(PBS.Store.getAll(), s, e);
+    const inRange = this._inRange(MAD.Store.getAll(), s, e);
     const label = new Date(anchor).toLocaleDateString('en-US',{year:'numeric',month:'long'});
     return this._digest('monthly', `Monthly Digest — ${label}`, inRange);
   },
   renderAnnual(anchor) {
     const [s,e] = this._range(anchor,'annual');
-    const inRange = this._inRange(PBS.Store.getAll(), s, e);
+    const inRange = this._inRange(MAD.Store.getAll(), s, e);
     const year = new Date(anchor).getFullYear();
     return this._digest('annual', `Annual Digest — ${year}`, inRange);
   }

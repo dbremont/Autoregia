@@ -1,6 +1,6 @@
 # Personal Keyword Tracking System (PKTS)
 
-> PKTS is the **Personal Keyword Tracking System** — an Autoregia sub-project within the **Accounting System** (VSM System 3 – Audit / Accounting). It tracks resource usage and keyword attention over time, complementing the [Personal Binnacle System (PBS)](../pbs/README.md).
+> PKTS is the **Personal Keyword Tracking System** — an Autoregia sub-project within the **Accounting System** (VSM System 3 – Audit / Accounting). It tracks resource usage and keyword attention over time, complementing the [Memory Aid System (MAD) (MAD)](../mad/README.md).
 
 > This sub-project is currently a skeleton. Conceptual foundations, architecture, and implementation are to be developed here.
 
@@ -13,8 +13,8 @@ Parts:
 ## Relation to Autoregia
 
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
-- **Sibling sub-project:** [PBS](../pbs/README.md) — the recording system for externalized state.
-- **Shared schema:** [`records_schema.json`](../records_schema.json) — the atomic record unit shared across PBS and PKTS.
+- **Sibling sub-project:** [MAD](../mad/README.md) — the recording system for externalized state.
+- **Shared schema:** [`records_schema.json`](../records_schema.json) — the atomic record unit shared across MAD and PKTS.
 - **Decision log:** [`log.md`](../../log.md) — conceptual and design rationale.
 - **Project index:** [`index.html`](../index.html) — the Autoregia landing page.
 

@@ -353,7 +353,7 @@ Principal couplings:
 
 | Neighbor | Relation |
 | --- | --- |
-| [PBS](../pbs/) | Perceived events, records, and observational state feed candidate generation. |
+| [MAD](../mad/) | Perceived events, records, and observational state feed candidate generation. |
 | [AGS](/about.html#elements) | Policy supplies the values, principles, and constraints against which intents are evaluated. |
 | [AGS](/about.html#elements) / AGS | Internal state, capabilities, and resources bound what is feasible. |
 | [AOOS](../aoos/) | The Active Intent Set directs planning and action selection. |
@@ -398,7 +398,7 @@ An implementation should satisfy these architectural principles:
 
 ### Functionality Set
 
-- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from PBS / WOS / PWTS events, external requests, reflective notes).
+- **Capture** — quick capture of intent candidates from any source (scratchpad, ingestion from MAD / WOS / PWTS events, external requests, reflective notes).
 - **Triage queue** — a review surface for newly generated candidates awaiting evaluation.
 - **Intent editor** — progressive disclosure over the full intent record (fields, constraints, dependencies, review schedule, termination condition).
 - **Active Intent Set view** — the authoritative current commitments, ordered by priority and deadline.

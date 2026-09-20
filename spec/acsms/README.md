@@ -2,7 +2,7 @@
 
 > This document establishes the conceptual foundations of an **Agent Capability Self Management System (ACSMS)**. An ACSMS is a technical object engineered to `manage the deliberate growth of the agent's own capabilities` — continuously detecting capability gaps, maturing them into committed improvement programs, and consolidating demonstrated capability back into the agent's self-model and catalog.
 
-Where the [Personal Binnacle System (PBS)](../pbs/) externalizes **state** and the [Agency Grounding System (AGS)](/about.html#elements) externalizes **direction**, ACSMS externalizes **development**: the standing function through which the agent increases what it can do. It is the inward-facing counterpart of external adaptation — the agent treating *itself* as the primary system worth improving.
+Where the [Memory Aid System (MAD) (MAD)](../mad/) externalizes **state** and the [Agency Grounding System (AGS)](/about.html#elements) externalizes **direction**, ACSMS externalizes **development**: the standing function through which the agent increases what it can do. It is the inward-facing counterpart of external adaptation — the agent treating *itself* as the primary system worth improving.
 
 ## Formulation
 

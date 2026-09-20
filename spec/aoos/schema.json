@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://autoregia.local/aoos_schema.json",
   "title": "AOOS Data Models",
-  "description": "JSON Schemas for the Agent Operation Organization System (AOOS). AOOS extends PBS action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), Dependency edges, Work Sessions (execution actuals), and the Scratchpad (a single markdown working document). snake_case naming. Enums match spec/aoos/spec.md.",
+  "description": "JSON Schemas for the Agent Operation Organization System (AOOS). AOOS extends MAD action-bearing records with an operational layer: Action Constructs (effort estimates, scheduling state, external mappings), Calendar Blocks (concrete temporal placements), Dependency edges, Work Sessions (execution actuals), and the Scratchpad (a single markdown working document). snake_case naming. Enums match spec/aoos/spec.md.",
 
   "$defs": {
     "actionKindEnum": { "type": "string", "enum": ["Routine", "Task", "Project", "Commitment", "Initiative", "Objective"] },
@@ -129,12 +129,12 @@
     },
 
     "actionConstruct": {
-      "$comment": "Atomic unit of Component A. Operates over a PBS record (record_id) plus the AOOS operational extension.",
+      "$comment": "Atomic unit of Component A. Operates over a MAD record (record_id) plus the AOOS operational extension.",
       "type": "object", "additionalProperties": false,
       "required": ["id", "record_id", "kind", "scheduling_state", "created_at", "updated_at"],
       "properties": {
         "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "description": "AOOS action id, e.g. 'ACT-2026-00042'." },
-        "record_id": { "type": "string", "description": "The underlying PBS record id this action manages." },
+        "record_id": { "type": "string", "description": "The underlying MAD record id this action manages." },
         "kind": { "$ref": "#/$defs/actionKindEnum" },
         "scheduling_state": { "$ref": "#/$defs/schedulingStateEnum" },
         "effort_estimate": { "oneOf": [{ "$ref": "#/$defs/effortEstimate" }, { "type": "null" }] },

@@ -55,7 +55,7 @@ CES — Computation Execution System  (VSM System 1 – Execution)
  |
  +-- [R] Result Feed
  |     \_ Pushes execution results into the feedback loop: writes a AOOS session
- |        (actuals), creates a PBS record (durable trace), signals PRAS (outcome
+ |        (actuals), creates a MAD record (durable trace), signals PRAS (outcome
  |        for adaptation).
 ```
 
@@ -63,8 +63,8 @@ CES — Computation Execution System  (VSM System 1 – Execution)
 | --- | --- | --- | --- |
 | **[E] Environment Manager** | Environment lifecycle — "where to run" | Environment registry, provisioning, lifecycle, capability declarations | The work itself (that is [T]'s job) |
 | **[T] Task Runner** | Work dispatch — "run this" | Work unit queue, dispatch, monitoring, timeout enforcement, result collection | The environment runtime (that is [E]'s job) |
-| **[A] Artifact Capture** | Result preservation — "what came out" | Execution logs (stdout/stderr), exit codes, file artifacts, metadata | The durable event stream (PBS owns that) |
-| **[R] Result Feed** | Feedback integration — "tell the agent" | AOOS session creation, PBS record linking, PRAS signal emission | The execution itself (that is [T]'s job) |
+| **[A] Artifact Capture** | Result preservation — "what came out" | Execution logs (stdout/stderr), exit codes, file artifacts, metadata | The durable event stream (MAD owns that) |
+| **[R] Result Feed** | Feedback integration — "tell the agent" | AOOS session creation, MAD record linking, PRAS signal emission | The execution itself (that is [T]'s job) |
 
 ## Formulation
 
@@ -101,7 +101,7 @@ action may produce different work units on different execution attempts.
 | Case | Description | Example |
 | --- | --- | --- |
 | Headless execution | Run a script without opening a terminal | `POST /api/execute` with a Python script body |
-| Scheduled computation | A AOOS routine triggers a daily report | CES pulls data, runs analysis, posts to PBS |
+| Scheduled computation | A AOOS routine triggers a daily report | CES pulls data, runs analysis, posts to MAD |
 | Interactive exploration | A Jupyter notebook kernel managed by CES | CES provisions a kernel, the agent works through the UI, CES captures the session |
 | CI-style pipeline | A series of dependent work units | CES runs lint -> test -> build, each step consuming the previous artifact |
 | Reproducible audit | Re-run a past computation to verify a result | CES replays a session in the same environment |
@@ -213,7 +213,7 @@ production deployment.
 ## References
 
 - [AOOS — spec](../aoos/spec.md) — the operations system CES feeds into
-- [PBS — spec](../pbs/spec.md) — durable event stream for execution traces
+- [MAD — spec](../mad/spec.md) — durable event stream for execution traces
 - [PRAS — spec](../pras/spec.md) — reflection and adaptation on execution outcomes
 - [Autoregia UI Specification](../ui.spec) — shared UI standard
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6)

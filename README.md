@@ -30,7 +30,7 @@ Autoregia/
     ├── docs.html        # documentation plate
     ├── ags/, gwob/, pks/ # landing plates: AGS + policies, GWOB gateway, PKS (conceived)
     ├── module/          # all materialized sub-systems
-    │   ├── pbs/         # Personal Binnacle System
+    │   ├── mad/         # Memory Aid System (MAD) — formerly PBS
     │   │   ├── README.md
     │   │   ├── spec.md
     │   │   ├── server.py
@@ -56,7 +56,7 @@ Autoregia/
     │   │       ├── ces/  #   Computation Execution System
     │   │       ├── ctes/  #   Computation Task Execution System (WOS-style shell: handle register, task specs, runs, audit)
     │   │       ├── sopcs/ #   Standard Operating Procedure Catalog System (markdown SOPs, full-text + semantic search, figures as CouchDB attachments)
-    │   │       ├── gial/  #   General Integration Abstraction Layer (plate only)
+    │   │       ├── gcal/  #   General Connector Abstraction Layer (plate only)
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (WOS-style shell: text edition tasks, rule packs, glossaries, phrase catalog, audit)
     │   ├── acsms/       # Agent Capability Self Management System
     │   │   ├── README.md
@@ -78,7 +78,7 @@ Autoregia/
 
 - Information Catalog System: Source, Document
 - Agency Grounding System (AGS)
-- Note: The dayly - links - papers - etc- should be handdle by the PBS.
+- Note: The dayly - links - papers - etc- should be handdle by the MAD.
 - ...
 
 | **Part** | **Description** | **Level (VSM)** | **Implementation** |
@@ -87,7 +87,7 @@ Autoregia/
 | **Intelligence System** | Scans environment, synthesizes information, learns, anticipates, and adapts strategies. | **System 4 – Intelligence** | General Index System (GIS),  Research Notes, Learning Pipeline, Annual Review, **Documentation System** |
 | **Documentation System** | Stores explicit knowledge, processes, references, and decision records; forms the agent's external memory. | **System 4 – Intelligence** | Notion, Obsidian, Logseq |
 | **Control System** | Priority-setting, scheduling, load management, and day-to-day steering of behavior. | **System 3 – Control** | Daily Planner, Weekly Review, Time-Blocking Sheet |
-| **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **PBS**, **PKTS**, **PWTS** |
+| **Accounting System** | Tracks resource usage (time, money, energy, attention) and monitors constraints. | **System 3 – Audit / Accounting** | Quicken, Time-Tracking Apps, Energy Logs, **MAD**, **PKTS**, **PWTS** |
 | **Audit System** | Performs diagnostic checks, detects deviations, evaluates performance, and ensures compliance with standards. | **System 3 – Audit** | Monthly Review Template, Error Logs, KPIs |
 | **Task Management Assistance System** (Agential Operating Management System) | Organizes Action Constructs (projects, tasks, routines), maintains the work inventory, and supports execution. | **System 1 – Operations** | Trello, Todoist, Asana |
 | **Notification System** | Ensures timely external triggers for commitments, reminders, and events. | **System 2 – Coordination** | Google Calendar, Alarms |
@@ -101,13 +101,13 @@ Autoregia/
 
 The sub-systems developed within this workspace:
 
-- **[Personal Binnacle System (PBS)](app/module/pbs/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the PBS [specification](app/module/pbs/spec.md) and [implementation](app/module/pbs/README.md#prototype).
+- **[Memory Aid System (MAD)](app/module/mad/README.md)** — the Accounting System component; a technical object that externalizes relevant states for persistent recording, discovery, and retrieval. See the MAD [specification](spec/mad/spec.md) and [implementation](app/module/mad/).
 - **[Personal Keyword Tracking System (PKTS)](app/module/pkts/README.md)** — a sibling accounting component tracking resource usage and keyword attention.
 - **[Personal Workstation Tracking System (PWTS)](app/module/pwts/README.md)** — a sibling accounting component recording mouse/focus interaction and joining it with PKTS keystrokes to surface application-interaction analytics (time-per-app, click-rate, app-switch frequency, focus fragmentation). Shares [`app/support/shared/focus_watcher.py`](app/support/shared/) as the single source of truth for the focused window with PKTS.
-- **[World Observation System (WOS)](app/module/wos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): polls a configured set of free, no-auth public feeds (Nitter/X, Hacker News, Lobsters, Reddit, Mastodon, GDELT, paper feeds) and persists each item as an unclassified `observational` event in CouchDB (topic assignment happens downstream), with batch semantic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of PBS. Aggregated, with PKTS and PWTS, under the **[General World and Self Observation System (GWOB)](/gwob/)** gateway. See the WOS [specification](spec/wos/spec.md) and [implementation](app/module/wos/README.md#run).
+- **[World Observation System (WOS)](app/module/wos/README.md)** — the **Perception** sub-system (VSM System 4 – Intelligence): polls a configured set of free, no-auth public feeds (Nitter/X, Hacker News, Lobsters, Reddit, Mastodon, GDELT, paper feeds) and persists each item as an unclassified `observational` event in CouchDB (topic assignment happens downstream), with batch semantic clustering and a sense-making analytics overlay (volume, spikes, trending, tone). The external-world complement of MAD. Aggregated, with PKTS and PWTS, under the **[General World and Self Observation System (GWOB)](/gwob/)** gateway. See the WOS [specification](spec/wos/spec.md) and [implementation](app/module/wos/README.md#run).
 - **[General Index System (GIS)](app/module/gis/README.md)** — the Intelligence System component; a general index of everything the agent knows and uses — each entry a point → element pair pointing into the systems or out to the world (GitHub projects, documents, services). The entry point to everything.
 - **[Agency Grounding System (AGS)](app/ags/index.html)** — the grounding substrate (in the model, not yet built): binds the World boundary, the Self Model, and Policy into one coherent stance. Its **policy corpus** is live — [charter](app/ags/policies/charter.html), principles, values, commitments, and domain policies (health, learning, conduct) under `app/ags/policies/`, served at `/ags/policies/…`.
-- **[Agent Operation Organization System (AOOS)](app/module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over PBS records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
+- **[Agent Operation Organization System (AOOS)](app/module/aoos/README.md)** — the Operations System component (VSM System 1); organizes action constructs (tasks, projects, routines, commitments) over MAD records, with a dependency graph, calendarization (conflict detection, workload), and Google Calendar two-way sync. Includes a working prototype.
 
 > The design rationale and decision log live in [`log.md`](log.md).
 

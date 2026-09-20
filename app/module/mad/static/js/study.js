@@ -1,10 +1,10 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Study — Record Study (Analysis) Mocks
+   MAD Study — Record Study (Analysis) Mocks
    Record Time Reference Evolution · Record Time Line ·
    Activity Heat Map · Topic Landscape Evolution ·
    Record Embedding Graph · Recurrence Map
    ════════════════════════════════════════════════════════════ */
-PBS.Study = {
+MAD.Study = {
   // Active sub-analysis tab
   tab: 'time-reference',
   esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML;},
@@ -19,7 +19,7 @@ PBS.Study = {
       ['recurrence',     'Recurrence Map', 'refresh-cw'],
     ];
     const bar = tabs.map(([k,label,ic]) =>
-      `<button class="study-tab ${k===this.tab?'active':''}" data-tab="${k}" onclick="PBS.Study.switch('${k}')">${PBS.icon(ic,14)} ${label}</button>`
+      `<button class="study-tab ${k===this.tab?'active':''}" data-tab="${k}" onclick="MAD.Study.switch('${k}')">${MAD.icon(ic,14)} ${label}</button>`
     ).join('');
     return `
     <div class="content-header"><div><span class="eyebrow">Analysis</span><h1>Record Study</h1></div>
@@ -63,7 +63,7 @@ PBS.Study = {
   /* ── 1. Time Reference Evolution ────────────────────── */
   drawTimeReference() {
     const el = document.getElementById('studyTR'); if (!el) return;
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const months = [...new Set(records.map(r=>(r.created_at||'').slice(0,7)).filter(Boolean))].sort();
     const series = { Horizon:{} };
     records.forEach(r=>{
@@ -111,7 +111,7 @@ PBS.Study = {
   },
   drawTimeLine() {
     const el = document.getElementById('studyTL'); if (!el) return;
-    const records = PBS.Store.getAll().filter(r=>r.created_at);
+    const records = MAD.Store.getAll().filter(r=>r.created_at);
     const times = records.map(r=>new Date(r.created_at).getTime()).filter(t=>!isNaN(t));
     if (!times.length) { el.innerHTML='<p class="text-xs text-muted">No timestamped records.</p>'; return; }
     const minT = Math.min(...times), maxT = Math.max(...times);
@@ -141,7 +141,7 @@ PBS.Study = {
       const x=xT(t);
       const y=padT+(hour/24)*plotH;
       const color=TYPE_COLORS[r.record_type]||'#999';
-      svg+=`<circle class="graph-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${color}" opacity="0.85" onclick="PBS.record.showDetail('${r.id}')"><title>${this.esc((r.content||'').slice(0,50))} · ${r.record_type} · ${new Date(r.created_at).toISOString().slice(0,16)}</title></circle>`;
+      svg+=`<circle class="graph-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${color}" opacity="0.85" onclick="MAD.record.showDetail('${r.id}')"><title>${this.esc((r.content||'').slice(0,50))} · ${r.record_type} · ${new Date(r.created_at).toISOString().slice(0,16)}</title></circle>`;
     });
     svg+=`</svg>`;
     el.innerHTML=svg;
@@ -156,7 +156,7 @@ PBS.Study = {
   },
   drawHeatMap() {
     const el = document.getElementById('studyHM'); if (!el) return;
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const now = new Date(); const daysAgo = 180; const dayCounts = {};
     for (let i = daysAgo; i >= 0; i--) { const d = new Date(now); d.setDate(d.getDate()-i); dayCounts[d.toISOString().split('T')[0]] = 0; }
     records.forEach(r => { if (r.created_at) { const d = r.created_at.split('T')[0]; if (dayCounts[d]!==undefined) dayCounts[d]++; } });
@@ -198,7 +198,7 @@ PBS.Study = {
   },
   drawTopicLandscape() {
     const el = document.getElementById('studyTL2'); if (!el) return;
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const domains = {};
     records.forEach(r=>{const d=r.domain||'General'; domains[d]=(domains[d]||0)+1;});
     const entries = Object.entries(domains).sort((a,b)=>b[1]-a[1]);
@@ -237,7 +237,7 @@ PBS.Study = {
   },
   drawEmbedding() {
     const el = document.getElementById('studyEMB'); if (!el) return;
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const domains = [...new Set(records.map(r=>r.domain||'General'))];
     const W=el.clientWidth||700, H=340;
     const palette=['#7A1A2A','#2D6A4F','#B4742A','#3F6092','#A8854A','#2D6A4F','#5C4E78','#8C877B'];
@@ -254,7 +254,7 @@ PBS.Study = {
       const seed = (r.id||'').split('').reduce((a,ch)=>a+ch.charCodeAt(0),0);
       const a=(seed%360)*Math.PI/180; const rad=10+(seed%45);
       const x=c.x+rad*Math.cos(a), y=c.y+rad*Math.sin(a);
-      svg+=`<circle class="graph-node" cx="${x}" cy="${y}" r="4" fill="${c.color}" opacity="0.85" onclick="PBS.record.showDetail('${r.id}')"><title>${this.esc((r.content||'').slice(0,40))}</title></circle>`;
+      svg+=`<circle class="graph-node" cx="${x}" cy="${y}" r="4" fill="${c.color}" opacity="0.85" onclick="MAD.record.showDetail('${r.id}')"><title>${this.esc((r.content||'').slice(0,40))}</title></circle>`;
     });
     svg+=`</svg>`;
     el.innerHTML=svg;
@@ -272,7 +272,7 @@ PBS.Study = {
   },
   drawRecurrence() {
     const el = document.getElementById('studyREC'); if (!el) return;
-    const records = PBS.Store.getAll();
+    const records = MAD.Store.getAll();
     const cadences = ['Daily','Weekly','Monthly','Yearly','Custom'];
     const groups = {}; cadences.forEach(c=>groups[c]=records.filter(r=>(r.recurrence||'None')===c));
     const W=el.clientWidth||700, H=320, cx=W/2, cy=H/2;
@@ -290,7 +290,7 @@ PBS.Study = {
         const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
         const color=palette[ci];
         svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${color}" stroke-width="1" opacity="0.4"/>`;
-        svg+=`<circle class="graph-node" cx="${x}" cy="${y}" r="5" fill="${color}" onclick="PBS.record.showDetail('${it.id}')"><title>${this.esc((it.content||'').slice(0,40))} (${c})</title></circle>`;
+        svg+=`<circle class="graph-node" cx="${x}" cy="${y}" r="5" fill="${color}" onclick="MAD.record.showDetail('${it.id}')"><title>${this.esc((it.content||'').slice(0,40))} (${c})</title></circle>`;
       });
     });
     svg+=`<circle cx="${cx}" cy="${cy}" r="8" fill="#7A1A2A"/>`;

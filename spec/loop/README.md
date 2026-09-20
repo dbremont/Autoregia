@@ -68,6 +68,6 @@ loop/
 
 - **Parent:** [Autoregia](../../README.md).
 - **Model basis:** the **agent** and the **agent control loop** ([`spec/about.md`](../about.md)), not the VSM system map.
-- **Reads from (the agent's data):** [PBS](../pbs/) records (perception, beliefs, commitments), the environment event stream, [AOOS](../aoos/) sessions (actions/execution), [PKTS](../pkts/) accounting (attention/resources), [PRAS](../pras/) reflection.
+- **Reads from (the agent's data):** [MAD](../mad/) records (perception, beliefs, commitments), the environment event stream, [AOOS](../aoos/) sessions (actions/execution), [PKTS](../pkts/) accounting (attention/resources), [PRAS](../pras/) reflection.
 - **Decision log:** [`log.md`](../../log.md).
 - **Full specification:** [`spec.md`](spec.md).

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://autoregia.local/records_schema.json",
-  "title": "PBS Record",
-  "description": "JSON Schema for an Autoregia record (Personal Binnacle System / Personal Keyword Tracking System). A record is the atomic unit of externalized state, composed of a primary content payload together with metadata categories: Temporal, Contextual, Epistemic, Operational, Lifecycle, Relational, and Classification, plus an append-only Annotation Log. Field naming follows snake_case to match the codebase conventions. All enums are constrained to the allowed value sets defined in pbs/spec.md.",
+  "title": "MAD Record",
+  "description": "JSON Schema for an Autoregia record (Memory Aid System (MAD) / Personal Keyword Tracking System). A record is the atomic unit of externalized state, composed of a primary content payload together with metadata categories: Temporal, Contextual, Epistemic, Operational, Lifecycle, Relational, and Classification, plus an append-only Annotation Log. Field naming follows snake_case to match the codebase conventions. All enums are constrained to the allowed value sets defined in mad/spec.md.",
   "type": "object",
   "additionalProperties": false,
 

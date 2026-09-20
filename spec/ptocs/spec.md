@@ -203,7 +203,7 @@ Conversely, an object should generally not be cataloged when it is:
   - Auto-import from existing tool manifests (package managers, browser, subscriptions, receipts).
   - Documentation fetching & link health checks (`docs_url`).
   - LLM-assisted entry extraction and enrichment (classify, summarize, propose relations).
-  - PBS integration — record adoption/retirement decisions; link catalog entries to PBS records.
+  - MAD integration — record adoption/retirement decisions; link catalog entries to MAD records.
   - Cost & license monitoring; renewal reminders (via notification system).
 
 ### Technical Element Set
@@ -243,7 +243,7 @@ Conversely, an object should generally not be cataloged when it is:
 
 - [csiglab/Index](https://github.com/csiglab/Index) — the originating "Tool Index" concept and reference spec.
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
-- [PBS — spec](../pbs/spec.md) / [schema](../pbs/schema.json) — sibling recording system; shared metadata conventions.
+- [MAD — spec](../mad/spec.md) / [schema](../mad/schema.json) — sibling recording system; shared metadata conventions.
 - [Autoregia UI Specification](../ui.spec) — canonical, project-wide UI standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)
 - [Self-Management](https://app.notion.com/p/Self-Management-2a6c0f5171ec80e5bd2dfa83993a3c84?source=copy_link)

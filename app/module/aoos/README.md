@@ -44,7 +44,7 @@ python3 server.py
 # open http://localhost:5005
 ```
 
-The server listens on **port 5005** (PBS → 5000, PKTS → 5001, PTOCS → 5003,
+The server listens on **port 5005** (MAD → 5000, PKTS → 5001, PTOCS → 5003,
 AGS → 5004). Override with the `AOOS_PORT` environment variable.
 
 To regenerate the seed data:
@@ -132,7 +132,7 @@ Scope: `https://www.googleapis.com/auth/calendar` (read/write) for two-way sync.
 ### UI / UX
 
 The interface follows the **Autoregia UI specification** — warm-parchment Oxford
-aesthetic, shared design tokens (copied verbatim from the PBS reference
+aesthetic, shared design tokens (copied verbatim from the MAD reference
 implementation), the Spectral/Inter/IBM Plex Mono type system, self-hosted
 Lucide icons (`<ao-icon>`), a command palette (`Ctrl/Cmd+K`), keyboard shortcuts
 (`N` for new action, `Esc` to close), and offline-first fonts.
@@ -154,7 +154,7 @@ aoos/
 ├── config/                # (gitignored) client_secret.json + token.json
 └── static/
     ├── index.html         # app-shell: header, sidebar, views, modals, command palette
-    ├── css/               # design tokens & components (mirrors PBS/PTOCS)
+    ├── css/               # design tokens & components (mirrors MAD/PTOCS)
     ├── fonts/             # self-hosted Spectral / Inter / IBM Plex Mono
     ├── katex/             # self-hosted KaTeX (js + css + woff2 fonts) — LaTeX math
     ├── share.html         # standalone public share page (/aoos/share/<token>)
@@ -183,9 +183,9 @@ aoos/
 - **Spec:** [`../spec/aoos/spec.md`](../spec/aoos/spec.md) ·
   [`../spec/aoos/schema.json`](../spec/aoos/schema.json) ·
   [`../spec/aoos/analytics.md`](../spec/aoos/analytics.md).
-- **Storage substrate:** [PBS](../pbs/) — AOOS operates over PBS records; it is
+- **Storage substrate:** [MAD](../mad/) — AOOS operates over MAD records; it is
   not a competing record store.
-- **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/), [PTOCS](../ptocs/), [AGS](/about.html#elements).
+- **Sibling sub-projects:** [MAD](../mad/), [PKTS](../pkts/), [PTOCS](../ptocs/), [AGS](/about.html#elements).
 - **Decision log:** [`../log.md`](../../../log.md).
 
 ## References

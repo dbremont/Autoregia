@@ -13,7 +13,7 @@
 > restricted to the *external* half of the `World = (External, Internal)`
 > boundary. It maps to **VSM System 4 – Intelligence**: it is the input surface
 > that scans the environment so that the rest of the system can synthesize,
-> anticipate, and adapt. Where the [PBS](../pbs/) records *internal* events (what
+> anticipate, and adapt. Where the [MAD](../mad/) records *internal* events (what
 > the agent itself does, thinks, decides), WOS records *external* events (what
 > other agents publish about the world).
 
@@ -116,7 +116,7 @@ extended agency:
 Conversely, an item should generally *not* be collected when it is:
 
 - **Internal to the agent** — the agent's own thoughts, decisions, and actions
-  belong to the [PBS](../pbs/), not WOS.
+  belong to the [MAD](../mad/), not WOS.
 - **Unwatched** — WOS only collects what a declared source spec matches; it is not an
   ambient firehose.
 - **Behind a paywall or authenticated-only API** — sources must be free and
@@ -283,7 +283,7 @@ WOS exposes four functional layers over its store:
 
 | Layer | Choice | Notes |
 | --- | --- | --- |
-| Storage | CouchDB | DB `wos` (shared with PBS / PKTS / PWTS); doc-type discrimination; natural dedup by doc id |
+| Storage | CouchDB | DB `wos` (shared with MAD / PKTS / PWTS); doc-type discrimination; natural dedup by doc id |
 | API | Python Flask | Mounted under `/wos/` by `app.py`; only process that touches CouchDB |
 | Collector | `wos/collector.py` | Long-running poller daemon; pure HTTP client of the API; sweep every `WOS_SWEEP_S` seconds |
 | Sources | `wos/sources/` | One module per feed implementing the `Source` protocol; explicit registry in `sources/__init__.py` |
@@ -328,7 +328,7 @@ python3 -m pytest wos/test_wos.py -v
 
 1. **Slot.** WOS realizes the **Perception** stage of the agent control loop on
    the *external* half of the `World` boundary, and maps to **VSM System 4 –
-   Intelligence** (the sensing / scanning input surface). The [PBS](../pbs/) is
+   Intelligence** (the sensing / scanning input surface). The [MAD](../mad/) is
    its complement on the *internal* half.
 2. **Event type.** Every observation is persisted with `event_type =
    "observational"` — the [AGS](/about.html#elements) `observational` event-type
@@ -384,7 +384,7 @@ python3 -m pytest wos/test_wos.py -v
 
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
 - [PVSM — Specification](../README.md) — agent control loop & VSM framing.
-- [PBS — spec](../pbs/spec.md) — the *internal*-events complement; WOS records
+- [MAD — spec](../mad/spec.md) — the *internal*-events complement; WOS records
   the *external* half. Same store, sibling event types.
 - [AGS](/about.html#elements) — the grounding substrate (in the model); origin of
   the `observational` event type.

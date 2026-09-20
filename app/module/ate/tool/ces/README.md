@@ -68,6 +68,6 @@ ces/
 - **Parent:** [Autoregia](../README.md)
 - **Role:** VSM System 1 – Operations (Execution)
 - **Spec:** [`../spec/ces/spec.md`](../spec/ces/spec.md)
-- **Sibling sub-projects:** [PBS](../pbs/), [PKTS](../pkts/),
+- **Sibling sub-projects:** [MAD](../mad/), [PKTS](../pkts/),
   [PTOCS](../ptocs/), [AGS](/about.html#elements), [AOOS](../aoos/), [PRAS](../pras/)
 - **Decision log:** [`../log.md`](../../../../../log.md)

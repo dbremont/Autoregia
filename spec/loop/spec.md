@@ -154,7 +154,7 @@ An Agency Dashboard is evaluated against:
 
 Prototype on a deterministic mock substrate. The information architecture and the
 analytical grammar are fixed; the metrics become real as the organs' feeds come
-online (PBS records, the environment event stream, PKTS attention accounting, AOOS
+online (MAD records, the environment event stream, PKTS attention accounting, AOOS
 sessions). Aspects whose feeds are not yet real render as the shape of the real
 thing on mock data.
 
@@ -162,4 +162,4 @@ thing on mock data.
 
 - [`spec/about.md`](../about.md) — the agent, the agent control loop, the environment & internal-environment reconceptions.
 - [`spec/ui.spec`](../ui.spec) — canonical UI standard.
-- [PBS spec](../pbs/spec.md), [AOOS spec](../aoos/spec.md), [PKTS](../pkts/README.md), [PRAS spec](../pras/spec.md) — the organs whose data the dashboard reads.
+- [MAD spec](../mad/spec.md), [AOOS spec](../aoos/spec.md), [PKTS](../pkts/README.md), [PRAS spec](../pras/spec.md) — the organs whose data the dashboard reads.

@@ -1,10 +1,10 @@
 /* ════════════════════════════════════════════════════════════
-   PBS Icons — thin adapter over the shared registry (/ui/js/icons.js).
+   MAD Icons — thin adapter over the shared registry (/ui/js/icons.js).
    The registry holds the merged Lucide set; this file only binds the
-   PBS namespace and its <pbs-icon> element.
+   MAD namespace and its <mad-icon> element.
    ════════════════════════════════════════════════════════════ */
-window.PBS = window.PBS || {};
+window.MAD = window.MAD || {};
 
-PBS.icon = function (name, size) { return AUTOREGIA.icon(name, size, 'pbs-icon'); };
-PBS._icons = AUTOREGIA.ICONS;
-AUTOREGIA.defineIconElement('pbs-icon', 'pbs-icon');
+MAD.icon = function (name, size) { return AUTOREGIA.icon(name, size, 'mad-icon'); };
+MAD._icons = AUTOREGIA.ICONS;
+AUTOREGIA.defineIconElement('mad-icon', 'mad-icon');

@@ -38,7 +38,7 @@ python3 pras/server.py
 # open http://localhost:5006
 ```
 
-> **Note on the URL prefix.** PRAS mounts at `/pras/` — distinct from the Recording System's `/pbs/`. The full names disambiguate them in the UI.
+> **Note on the URL prefix.** PRAS mounts at `/pras/` — distinct from the Recording System's `/mad/`. The full names disambiguate them in the UI.
 
 ## To add a deliberation
 
@@ -49,6 +49,6 @@ Drop an `.html` file into `pras/deliberations/` with the `pra-*` meta tags (`tit
 - **Parent:** [Autoregia](../README.md) — a Personal Viable System Model (PVSM).
 - **Loop stage:** Feedback (outer arc).
 - **VSM level:** System 4 – Intelligence (deviation detection overlaps S3\* Audit).
-- **Reads from:** [PBS](../pbs), [AOOS](../aoos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
-- **Feeds:** [AGS](../ags) (policy amendments), [AOOS](../aoos) (corrective actions), [PBS](../pbs) (records), [PTOCS](../ptocs) (capability revisions).
+- **Reads from:** [MAD](../pbs), [AOOS](../aoos) analytics, [PTOCS](../ptocs), [PKTS](../pkts).
+- **Feeds:** [AGS](../ags) (policy amendments), [AOOS](../aoos) (corrective actions), [MAD](../pbs) (records), [PTOCS](../ptocs) (capability revisions).
 - **Specification:** [`../spec/pras/`](../spec/pras).

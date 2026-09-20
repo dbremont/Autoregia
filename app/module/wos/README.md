@@ -7,12 +7,12 @@
 > defined as *"a reading the agent actively takes."*
 
 > It is the **external-world sense organ** of the agent. Where the
-> [PBS](../pbs/) records *internal* events (what the agent itself does, thinks,
+> [MAD](../mad/) records *internal* events (what the agent itself does, thinks,
 > decides), WOS records *external* events (what other agents publish about the
 > world). Together they feed the Situation Model.
 
 ```
-PBS  ←  internal events    (the agent's own states)
+MAD  ←  internal events    (the agent's own states)
 WOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 ```
 
@@ -24,7 +24,7 @@ WOS ←  external events    (what HN, Reddit, Mastodon, GDELT, Lobsters say)
 - **Loop stage:** **Perception** (restricted to the *external* half of the
   `World = (External, Internal)` boundary).
 - **VSM level:** **System 4 – Intelligence** (environment scanning).
-- **Complement:** [PBS](../pbs/) — the *internal*-events recording system.
+- **Complement:** [MAD](../mad/) — the *internal*-events recording system.
 - **Specification:** see [`spec/wos/spec.md`](../spec/wos/spec.md) for the
   conceptual foundations, data model, evaluation, and decisions.
 
@@ -146,7 +146,7 @@ by mocking the HTTP helpers.
 
 - [WOS — specification](../spec/wos/spec.md) — conceptual foundations, data model, evaluation, decisions.
 - [Autoregia](../README.md) — workspace overview & VSM mapping.
-- [PBS — spec](../spec/pbs/spec.md) — the *internal*-events complement.
+- [MAD — spec](../spec/mad/spec.md) — the *internal*-events complement.
 - [AGS](/about.html#elements) — origin of the `observational` event type.
 - [Autoregia UI Specification](../spec/ui.spec) — canonical UI standard.
 - [Personal Viable System Model (PVSM)](https://app.notion.com/p/Personal-Viable-System-Model-PVSM-2bcc0f5171ec80878d83d041ea5723f6?source=copy_link)

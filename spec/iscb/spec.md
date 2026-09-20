@@ -8,11 +8,11 @@
 > in one system into the *consequence that should follow* in another, without
 > hard-coupling those systems to each other.
 
-> Where the sibling systems each externalize a **substance** — the PBS
+> Where the sibling systems each externalize a **substance** — the MAD
 > externalizes records, the AOOS externalizes action, the AGS externalizes
 > policy, the PTOCS externalizes capabilities, the PKTS externalizes attention —
 > the PEB externalizes the **control flow** *between* them. A recording in the
-> PBS is not, by itself, a task; but it may *signal* that a task should be
+> MAD is not, by itself, a task; but it may *signal* that a task should be
 > registered in the AOOS. The PEB is what turns that "may" into a declared,
 > inspectable, reversible reaction: an event crosses the bus, a rule fires, a
 > task appears.
@@ -62,7 +62,7 @@ externalizing **the cross-system control flow** to scaffold extended agency:
 Conversely, a reaction should generally *not* live on the bus when it is:
 
 - **Internal to a single system** — pure record-to-record derivation inside the
-  PBS, or pure dependency-graph computation inside the AOOS, belongs to that
+  MAD, or pure dependency-graph computation inside the AOOS, belongs to that
   system, not to the coordination layer.
 - **Trivial and local** — a UI re-render or a cache invalidation is plumbing,
   not coordination.
@@ -94,8 +94,8 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
   |
   +-- [1] Event Log  (the substance the bus carries)
   |     \_ The append-only stream of facts: "X happened, at T, caused-by Y."
-  |        Canonical home: PBS records of type Event / Observation
-  |        (PBS remains the single source of truth).
+  |        Canonical home: MAD records of type Event / Observation
+  |        (MAD remains the single source of truth).
   |
   +-- [2] Dispatcher  (the medium)
   |     \_ Accepts an event, matches it against the route table, and delivers
@@ -129,8 +129,8 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
 
 | Field | Description | Example |
 | --- | --- | --- |
-| **Event Id** | Globally unique identifier; if events are PBS records, this is the record id. | `REC-2026-00124` |
-| **Origin** | The system and operation that produced it. | `{system: PBS, op: record.create}` |
+| **Event Id** | Globally unique identifier; if events are MAD records, this is the record id. | `REC-2026-00124` |
+| **Origin** | The system and operation that produced it. | `{system: MAD, op: record.create}` |
 | **Type** | The event kind within a typed vocabulary (see Event Taxonomy). | `RecordCreated` |
 | **Payload** | The structured detail of what changed (references, not copies, of substance). | `{record_id, record_type, ...}` |
 | **Occurred At** | When the change happened in the originating system. | ISO 8601 timestamp |
@@ -138,10 +138,10 @@ PEB — Personal Event Bus  (VSM System 2 – Coordination)
 | **Correlation Id** | Groups a cascade of events into one deliberative thread. | `thr-2026-06-28-007` |
 
 > Two design notes carry over from the sibling specs. First, events **reference**
-> substance rather than embedding it (the PBS record is the source of truth; the
+> substance rather than embedding it (the MAD record is the source of truth; the
 > event points at it). Second, **causal lineage is first-class**: every effect
 > records the event that triggered it, so any cascade is an inspectable DAG —
-> the same `causes` / `spawned-from` / `historically-caused` vocabulary the PBS
+> the same `causes` / `spawned-from` / `historically-caused` vocabulary the MAD
 > already defines.
 
 ### Producer
@@ -151,7 +151,7 @@ becomes a producer by instrumenting its write paths to append an event to the lo
 
 | Producer | Emits (seed) |
 | --- | --- |
-| **PBS** | `RecordCreated`, `RecordAnnotated`, `RecordStatusChanged`, `RecordDeadlineSet`, `RecordLinked` |
+| **MAD** | `RecordCreated`, `RecordAnnotated`, `RecordStatusChanged`, `RecordDeadlineSet`, `RecordLinked` |
 | **AOOS** | `ActionRegistered`, `ActionScheduled`, `ActionCompleted`, `BlockConflictDetected`, `SyncDriftDetected` |
 | **AGS** | `PolicyChanged`, `PolicyViolated` |
 | **PTOCS** | `CapabilityAdded`, `CapabilityDeprecated` |
@@ -200,10 +200,10 @@ patching systems.
 > The seed scenario: **a recording triggers an entry into the task registry.**
 
 ```
-Agent captures a commitment ("Deliver draft by Friday") in the PBS.
+Agent captures a commitment ("Deliver draft by Friday") in the MAD.
    │
    ▼
-PBS appends  RecordCreated { record_id: REC-124, type: Commitment, deadline: Fri }
+MAD appends  RecordCreated { record_id: REC-124, type: Commitment, deadline: Fri }
    │
    ▼
 PEB Dispatcher matches route.commitment-to-action
@@ -282,7 +282,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 | Layer | Recommendation |
 | --- | --- |
-| Event Log | PBS records of type `Event` / `Observation` (single source of truth) |
+| Event Log | MAD records of type `Event` / `Observation` (single source of truth) |
 | Dispatcher | Small Python process; matches events against the route table |
 | Route Table | Declarative (data), stored in SQLite; editable through a managed surface |
 | Reactions | Registered handlers calling each system's existing internal API |
@@ -302,10 +302,10 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 1. **Name & slot.** **PEB** — Personal Event Bus — realizing the **VSM System 2 –
    Coordination** function. The *bus* is the mechanism; *Coordination* is the role.
-2. **Event log.** **Events are PBS records of type `Event` / `Observation`.** PBS
+2. **Event log.** **Events are MAD records of type `Event` / `Observation`.** MAD
    remains the single source of truth; the PEB reuses the existing causal-link
    vocabulary (`causes`, `spawned-from`, `historically-caused`). Any cascade is an
-   inspectable subgraph of the PBS record graph.
+   inspectable subgraph of the MAD record graph.
 3. **v1 execution model.** **Asynchronous, in-process, at-least-once**, with a
    dispatcher library the systems import and a durable (SQLite-backed) queue.
    Correctness rests on reaction idempotency, not exactly-once delivery.
@@ -328,9 +328,9 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
    to the agent, or both? How are stuck reactions drained?
 5. **Back-reactions and loops.** How do we prevent / detect cycles (`A→B→A`)?
    Causal id + a visited-set per correlation id is the obvious guard — confirm.
-6. **Event schema location.** Since events are PBS records, does the event-type
-   vocabulary (`RecordCreated`, `ActionRegistered`, …) live in the PBS schema, in
-   a PEB schema, or in both? (Touches the PBS↔PEB ownership boundary.)
+6. **Event schema location.** Since events are MAD records, does the event-type
+   vocabulary (`RecordCreated`, `ActionRegistered`, …) live in the MAD schema, in
+   a PEB schema, or in both? (Touches the MAD↔PEB ownership boundary.)
 
 ---
 
@@ -338,7 +338,7 @@ projected block conflicted.* Nothing is hidden; nothing is only-in-someone's-hea
 
 - [Autoregia](../../README.md) — workspace overview & VSM mapping.
 - [PVSM — Specification](../README.md) — agent control loop & VSM framing.
-- [PBS — spec](../pbs/spec.md) — recording system; canonical home of the event log; source of the causal-link vocabulary.
+- [MAD — spec](../mad/spec.md) — recording system; canonical home of the event log; source of the causal-link vocabulary.
 - [AOOS — spec](../aoos/spec.md) — operations system; the primary reaction *target* (task registry) and a producer (`ActionRegistered`, …).
 - [AGS — README](/about.html#elements) — policy corpus; source of gating rules.
 - [PTOCS — spec](../ptocs/spec.md) — capability catalog; referenced by capability-bearing reactions.
