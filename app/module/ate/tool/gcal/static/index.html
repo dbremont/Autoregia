@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GIAL — General Integration Abstraction Layer</title>
+<title>GCAL — General Connector Abstraction Layer</title>
   <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
   <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
   <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
@@ -66,20 +66,20 @@
 <div class="wrap">
   <header class="masthead">
     <div class="eyebrow">ATE · Tool</div>
-    <h1 class="title">GIAL</h1>
-    <div class="subtitle">General Integration Abstraction Layer</div>
+    <h1 class="title">GCAL</h1>
+    <div class="subtitle">General Connector Abstraction Layer</div>
     <div class="gold-rule"></div>
-    <p class="lede">One uniform abstraction for connecting to the services the world runs on — Gmail, Google Drive, GitHub, or any HTTP API — in the tradition of Zapier and n8n: integrations, connections, actions, and logged executions. The connection layer the rest of the toolbox orchestrates over; deliberately not a workflow engine.</p>
+    <p class="lede">One uniform abstraction for connecting to the services the world runs on — Gmail, Google Drive, GitHub, or any HTTP API — in the tradition of Zapier and n8n: connectors, connections, actions, and logged executions. The connection layer the rest of the toolbox orchestrates over; deliberately not a workflow engine.</p>
     <div class="status">
       <span class="tag">designed — not yet implemented</span>
-      <span>The full design is written — concepts, taxonomy, authentication, adapters, API surface, storage, and the playground. This plate reserves GIAL's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/gial/</span>.</span>
+      <span>The full design is written — concepts, taxonomy, authentication, adapters, API surface, storage, and the playground. This plate reserves GCAL's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/gcal/</span>.</span>
     </div>
   </header>
 
   <div class="section-eyebrow">The Model</div>
   <div class="model-grid">
     <div class="model-card">
-      <div class="mc-code">INTEGRATION</div>
+      <div class="mc-code">CONNECTOR</div>
       <div class="mc-desc">A connector definition — one Python adapter per external system, declaring its auth scheme and action set. The unit of capability.</div>
     </div>
     <div class="model-card">
@@ -98,7 +98,7 @@
 
   <div class="section-eyebrow">Adapters · v1</div>
   <table class="matrix">
-    <tr><th>Integration</th><th>Auth</th><th>Status</th><th>Actions</th></tr>
+    <tr><th>Connector</th><th>Auth</th><th>Status</th><th>Actions</th></tr>
     <tr><td>http</td><td>bearer · basic · api-key</td><td class="st-live">live</td><td>request — the universal HTTP operation; the workhorse</td></tr>
     <tr><td>rss</td><td>none</td><td class="st-live">live</td><td>read — feed entries; the zero-config demo</td></tr>
     <tr><td>github</td><td>bearer (optional)</td><td class="st-live">live</td><td>list_repos, list_issues — public API; a PAT lifts rate limits</td></tr>
@@ -119,7 +119,7 @@
     <div class="step">
       <div class="n">01</div>
       <div class="t">Connect</div>
-      <div class="d">The Connect button opens the provider's consent screen — scopes declared by the integration.</div>
+      <div class="d">The Connect button opens the provider's consent screen — scopes declared by the connector.</div>
     </div>
     <div class="step">
       <div class="n">02</div>
@@ -129,13 +129,13 @@
     <div class="step">
       <div class="n">03</div>
       <div class="t">Exchange &amp; store</div>
-      <div class="d">GIAL stores the tokens server-side and refreshes them transparently on expiry.</div>
+      <div class="d">GCAL stores the tokens server-side and refreshes them transparently on expiry.</div>
     </div>
   </div>
 </div>
 
 <footer>
-  <div class="wrap"><span class="mono">Autoregia · GIAL — the connection layer of the toolbox</span></div>
+  <div class="wrap"><span class="mono">Autoregia · GCAL — the connection layer of the toolbox</span></div>
 </footer>
 
 </body>

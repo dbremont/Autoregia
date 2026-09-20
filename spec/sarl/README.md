@@ -19,4 +19,4 @@ phrase catalog, audit, settings, and the dormant LanguageTool adapter:
     /ate/tool/sarl/
 
 - Full design: [spec.md](spec.md)
-- Sibling tools: [CES](../ces/) · [GIAL](../gial/) · [CTES](../ctes/)
+- Sibling tools: [CES](../ces/) · [GCAL](../gcal/) · [CTES](../ctes/)

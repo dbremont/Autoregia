@@ -77,14 +77,14 @@ TOOLS = [
         "href": "/ate/tool/sopcs/",
     },
     {
-        "id": "gial",
-        "name": "General Integration Abstraction Layer",
+        "id": "gcal",
+        "name": "General Connector Abstraction Layer",
         "summary": ("One abstraction for connections to external systems — "
-                    "integrations, connections, actions, and logged "
+                    "connectors, connections, actions, and logged "
                     "executions, in the n8n / Zapier tradition. Designed; "
                     "plate only."),
-        "vsm": "Toolbox — Integration",
-        "href": "/ate/tool/gial/",
+        "vsm": "Toolbox — Connectors",
+        "href": "/ate/tool/gcal/",
     },
     {
         "id": "sarl",

@@ -1,42 +1,42 @@
-# General Integration Abstraction Layer
+# General Connector Abstraction Layer
 
 > This document establishes the conceptual foundations, data model, functionality,
-> and design of a **General Integration Abstraction Layer (GIAL)**. A GIAL is a
+> and design of a **General Connector Abstraction Layer (GCAL)**. A GCAL is a
 > technical object engineered to `integrate external systems` — it gives the agent
 > one uniform abstraction for connecting to the services the world runs on
 > (Gmail, Google Drive, GitHub, or any HTTP API), in the tradition of Zapier and
-> n8n: a registry of **integrations**, configured **connections** with managed
+> n8n: a registry of **connectors**, configured **connections** with managed
 > credentials, schema-described **actions**, and logged **executions**, with a
 > playground in which every connection can be opened, exercised, and observed.
 
-> Within the Autoregia Personal Viable System Model (PVSM), GIAL is not an organ
+> Within the Autoregia Personal Viable System Model (PVSM), GCAL is not an organ
 > of the control loop: it is a tool of the **Agent Toolbox Ecosystem (ATE)**,
-> mounted at `/ate/tool/gial/`. It extends the reach of two stages at once —
+> mounted at `/ate/tool/gcal/`. It extends the reach of two stages at once —
 > **Execution** (where CES acts on the world through computational environments,
-> GIAL acts through the APIs of external systems) and **Perception** (external
+> GCAL acts through the APIs of external systems) and **Perception** (external
 > observations arrive through the same doors). It is deliberately *not* a
 > workflow engine: orchestration — chaining actions into sequences — is CES
-> territory. GIAL is the connection layer the rest of the toolbox orchestrates
+> territory. GCAL is the connection layer the rest of the toolbox orchestrates
 > over.
 
-Fundamentally, a GIAL exists to make *reaching an external system* a uniform,
+Fundamentally, a GCAL exists to make *reaching an external system* a uniform,
 inspectable, repeatable operation. These include:
 
-- **Integrations** — the connector definitions: one per external system, each a
+- **Connectors** — the connector definitions: one per external system, each a
   Python adapter declaring its authentication scheme and its action set. The
   unit of capability.
-- **Actions** — the operations an integration exposes, each with a declared
+- **Actions** — the operations a connector exposes, each with a declared
   parameter schema (the unit of work the playground can render a form for).
-- **Connections** — configured instances of an integration: name, settings, and
+- **Connections** — configured instances of a connector: name, settings, and
   credentials held server-side. The unit of access.
 - **Executions** — logged runs of an action over a connection: request,
   response, status, latency. The unit of evidence.
 
 ## The Model
 
-### Integration
+### Connector
 
-An integration is a Python adapter module in the tool's `integrations/`
+A connector is a Python adapter module in the tool's `connectors/`
 package, subclassing a common base:
 
 | Field | Meaning |
@@ -47,12 +47,12 @@ package, subclassing a common base:
 | `actions()` | the action set, each with its parameter schema |
 | `test_connection(conn)` | health check behind the connection's Test button |
 
-The registry is discovered from the package — adding an integration is adding
+The registry is discovered from the package — adding a connector is adding
 one module; no central list to edit.
 
 ### Action
 
-An action is one operation on an integration: `execute(connection, params) →
+An action is one operation on a connector: `execute(connection, params) →
 result dict`, plus a declared parameter schema (`name, type, required, default,
 description`) from which the playground generates its run form.
 
@@ -68,7 +68,7 @@ per-app model:
 
 ### Connection
 
-A connection is a configured instance of an integration: name, settings
+A connection is a configured instance of a connector: name, settings
 (base URLs, defaults), and credentials. Credentials live server-side only —
 **every API response masks them to presence flags** (`{"bearer": "●●●"}`), so
 no secret ever crosses the API edge.
@@ -85,7 +85,7 @@ Connection status depends on the scheme:
 Every run is logged: connection, action, params, status (`ok | error`), HTTP
 status code, `duration_ms`, a request summary (method + URL), the response body
 **truncated to 4 KiB** with a selected header subset, and any error text.
-Executions are GIAL's evidence trail — the analogue of CES sessions and PBS
+Executions are GCAL's evidence trail — the analogue of CES sessions and MAD
 records.
 
 ## Conventions
@@ -118,11 +118,11 @@ platform escapes registering the app with the provider. Everything after that
 is automatic:
 
 1. **Connect** — the playground's Connect button opens the provider's consent
-   screen (scopes declared by the integration; `state` carries a CSRF token;
+   screen (scopes declared by the connector; `state` carries a CSRF token;
    PKCE where the provider supports it).
 2. **Consent** — the user clicks; the provider redirects back to
    `/auth/callback`.
-3. **Exchange & store** — GIAL exchanges the code for access + refresh tokens
+3. **Exchange & store** — GCAL exchanges the code for access + refresh tokens
    and stores them server-side, masked at the API edge.
 4. **Refresh** — actions go through the scheme: on expiry or 401 it refreshes
    once and retries transparently.
@@ -131,7 +131,7 @@ The user never sees, copies, or pastes a token.
 
 ## Adapters (v1)
 
-| Integration | Auth | Status | Actions |
+| Connector | Auth | Status | Actions |
 | --- | --- | --- | --- |
 | `http` | bearer · basic · api_key | **live** | `request` — the universal operation (method, url, query, headers, body); the n8n HTTP Request workhorse |
 | `rss` | none | **live** | `read` — feed entries via stdlib XML; the zero-config demo |
@@ -148,7 +148,7 @@ connection's `disconnected` state with setup copy, never as missing code.
 
 | Endpoint | Description |
 | --- | --- |
-| `GET /api/integrations` | registry: integrations, action schemas, kinds, availability |
+| `GET /api/connectors` | registry: connectors, action schemas, kinds, availability |
 | `POST /api/connections` | create a connection (credentials accepted once here) |
 | `GET /api/connections` | list connections, credentials masked |
 | `GET /api/connections/<id>` | connection detail |
@@ -163,18 +163,18 @@ connection's `disconnected` state with setup copy, never as missing code.
 
 ## Storage
 
-A single CouchDB database `gial` through the shared `support.storage.Store`,
+A single CouchDB database `gcal` through the shared `support.storage.Store`,
 seed-on-empty per house convention. Connection documents carry credentials and
 are masked at the API edge; execution documents are append-only evidence. Test
-suites use the isolated `gial_test_` prefix and never touch dev data.
+suites use the isolated `gcal_test_` prefix and never touch dev data.
 
 ## The Playground
 
 One plate, three zones, in the design language of the rest of the system
 (`design.md` tokens):
 
-- **Left** — integration cards (name, auth badge, action count) above the
-  connection manager: create per integration, masked credential fields, test
+- **Left** — connector cards (name, auth badge, action count) above the
+  connection manager: create per connector, masked credential fields, test
   and connect buttons, status chips.
 - **Right** — the runner: connection select → action select grouped by kind →
   the schema-generated parameter form (required first, `confirm` as checkbox) →
@@ -185,7 +185,7 @@ One plate, three zones, in the design language of the rest of the system
 ## Implementation Status
 
 **Designed — not implemented.** This document is the design; a design plate
-reserves the URL at `/ate/tool/gial/` and carries the model summary. The
+reserves the URL at `/ate/tool/gcal/` and carries the model summary. The
 implementation order when begun: `base.py` (model + auth schemes) → `http`,
 `rss`, `github` adapters → API + CouchDB storage → runner on the plate →
 oauth2 flow with `gmail` and `drive` → tests (mock HTTP echo server, fixture
@@ -196,6 +196,6 @@ feed XML, mock token endpoint).
 - Zapier's per-app operation model — triggers / write / search /
   find-or-create — the taxonomy adopted above:
   <https://zapier.com/apps/google-drive/integrations>
-- n8n — the workflow orchestrator GIAL deliberately is not:
+- n8n — the workflow orchestrator GCAL deliberately is not:
   <https://docs.n8n.io>
 - The sibling execution tool this layer complements: [CES](../ces/)
