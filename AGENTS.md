@@ -25,7 +25,7 @@ app/                 the application
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── ces/  a tool (own Flask app, mounted at /ate/tool/ces/)
 │         └── ctes/  a tool — WOS-style app shell: handle register + task specs + runs + audit (spec/ctes/)
-│         └── gcal/  a tool — design plate only, unimplemented (spec/gcal/)
+│         └── gcal/  a tool — wave 1 live: 6 connectors (http, rss, github, couchdb, files, smtp), connection lifecycle, execution gateway (spec/gcal/)
 │         └── sarl/  a tool — design plate only, unimplemented (spec/sarl/)
 └── support/         shared code: storage/ (CouchDB Store), shared/
                      (focus_watcher), tools/ (prefix_assets.py), bin/,

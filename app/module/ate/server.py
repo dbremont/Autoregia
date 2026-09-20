@@ -79,10 +79,12 @@ TOOLS = [
     {
         "id": "gcal",
         "name": "General Connector Abstraction Layer",
-        "summary": ("One abstraction for connections to external systems — "
-                    "connectors, connections, actions, and logged "
-                    "executions, in the n8n / Zapier tradition. Designed; "
-                    "plate only."),
+        "summary": ("The connector manager: a registry of connector "
+                    "definitions, the use-driven connection lifecycle "
+                    "(connect, test, disconnect, reconnect), and the "
+                    "execution gateway with per-run evidence. Six live "
+                    "connectors (http, rss, github, couchdb, files, smtp); "
+                    "OAuth2 and notion pending."),
         "vsm": "Toolbox — Connectors",
         "href": "/ate/tool/gcal/",
     },

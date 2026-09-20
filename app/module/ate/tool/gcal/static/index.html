@@ -1,142 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GCAL — General Connector Abstraction Layer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoregia — General Connector Abstraction Layer (GCAL)</title>
   <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
   <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
-  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
-<style>
-
-  
-  *{box-sizing:border-box;margin: 0;padding: 0}
-  body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:880px;margin: 0 auto;padding: 0 28px}
-  nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
-  nav.topnav .topnav-in{max-width:880px;margin: 0 auto;padding: 0 28px;display:flex;align-items:center;height:60px;gap: 18px}
-  nav.topnav .lockup{font-family:var(--serif);font-size:var(--text-lg);font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
-  nav.topnav .links{margin-left: auto;display:flex;gap: 26px}
-  nav.topnav .links a{font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);text-decoration:none;padding: var(--space-1) 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
-  nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
-  header.masthead{padding: 72px 0 0;text-align:center}
-  .eyebrow{font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom: var(--space-4)}
-  h1.title{font-size:clamp(52px,8vw,84px);font-weight:300;letter-spacing:-.02em;line-height:1;margin-bottom: 10px}
-  .subtitle{font-size:var(--text-lg);color:var(--ink-soft);font-style:italic}
-  .gold-rule{height:1px;background:var(--gold);width:64px;margin: 28px auto;opacity:.7}
-  p.lede{font-size:var(--text-md);color:var(--ink-soft);max-width:640px;margin: 0 auto;line-height:1.65}
-  .status{margin: 36px auto 0;max-width:640px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-5);font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);display:flex;gap: 14px;align-items:baseline;text-align:left}
-  .status .tag{font-family:var(--mono);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding: 2px 7px;white-space:nowrap}
-  .section-eyebrow{margin: 56px 0 0;font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
-  .model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap: 14px;margin: 14px 0 0}
-  .model-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: var(--space-4) 18px}
-  .mc-code{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.14em;color:var(--accent);font-weight:600}
-  .mc-desc{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 7px;line-height:1.55}
-  table.matrix{width:100%;border-collapse:collapse;margin: 14px 0 0;font-family:var(--sans);font-size:var(--text-sm)}
-  table.matrix th{font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding: var(--space-2) 10px;border-bottom:1px solid var(--rule)}
-  table.matrix td{padding: 10px;border-bottom:1px solid var(--rule);color:var(--ink-soft);vertical-align:top}
-  table.matrix td:first-child{font-family:var(--mono);font-size:var(--text-2sm);color:var(--ink);white-space:nowrap}
-  table.matrix .st-live{color:var(--accent);font-weight:600}
-  table.matrix .st-dormant{color:var(--gold);font-weight:600}
-  .auth-ladder{display:flex;flex-wrap:wrap;gap: 10px;margin: 14px 0 0}
-  .chip{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.08em;color:var(--ink-soft);border:1px solid var(--rule);border-radius:20px;padding: 5px 13px;background:var(--surface)}
-  .chip.hot{color:var(--accent);border-color:var(--gold)}
-  .consent-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap: 14px;margin: var(--space-4) 0 0}
-  .step{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-4)}
-  .step .n{font-family:var(--mono);font-size:var(--text-xs);color:var(--gold);font-weight:600;letter-spacing:.12em}
-  .step .t{font-family:var(--sans);font-size:var(--text-sm);font-weight:600;margin-top: var(--space-1)}
-  .step .d{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 5px;line-height:1.5}
-  .note{max-width:640px;font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 14px;line-height:1.6}
-  footer{border-top:1px solid var(--rule);margin-top: 72px;padding: var(--space-8) 0 56px;text-align:center}
-  footer .mono{font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted)}
-</style>
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260917">
+  <link rel="stylesheet" href="css/layout.css?v=20260917">
+  <link rel="stylesheet" href="css/components.css?v=20260917">
+  <link rel="stylesheet" href="css/views.css?v=20260917">
+  <link rel="stylesheet" href="css/command-palette.css?v=20260917">
+  <link rel="stylesheet" href="css/gcal.css?v=20260920">
 </head>
 <body>
 
-<nav class="topnav">
-  <div class="topnav-in">
-    <a class="lockup" href="/index.html">Autoregia</a>
-    <div class="links">
-      <a href="/ate/">Toolbox</a>
-      <a href="/about.html">About</a>
-    </div>
-  </div>
-</nav>
+<div class="app-shell">
 
-<div class="wrap">
-  <header class="masthead">
-    <div class="eyebrow">ATE · Tool</div>
-    <h1 class="title">GCAL</h1>
-    <div class="subtitle">General Connector Abstraction Layer</div>
-    <div class="gold-rule"></div>
-    <p class="lede">One uniform abstraction for connecting to the services the world runs on — Gmail, Google Drive, GitHub, or any HTTP API — in the tradition of Zapier and n8n: connectors, connections, actions, and logged executions. The connection layer the rest of the toolbox orchestrates over; deliberately not a workflow engine.</p>
-    <div class="status">
-      <span class="tag">designed — not yet implemented</span>
-      <span>The full design is written — concepts, taxonomy, authentication, adapters, API surface, storage, and the playground. This plate reserves GCAL's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/gcal/</span>.</span>
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg></span>
+      <span class="brand-wordmark">General <em>Connector</em> Abstraction Layer</span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><gcal-icon name="search" size="16"></gcal-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search executions…  ( Ctrl K )" aria-label="Search the execution log" autocomplete="off">
     </div>
   </header>
 
-  <div class="section-eyebrow">The Model</div>
-  <div class="model-grid">
-    <div class="model-card">
-      <div class="mc-code">CONNECTOR</div>
-      <div class="mc-desc">A connector definition — one Python adapter per external system, declaring its auth scheme and action set. The unit of capability.</div>
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">“One abstraction for every door to the outside.”</div>
+      <div class="colophon-meta">— GCAL · Autoregia</div>
     </div>
-    <div class="model-card">
-      <div class="mc-code">ACTION</div>
-      <div class="mc-desc">One operation with a declared parameter schema — write, search, find-or-create; triggers reserved. The unit of work.</div>
-    </div>
-    <div class="model-card">
-      <div class="mc-code">CONNECTION</div>
-      <div class="mc-desc">A configured instance — settings plus credentials held server-side, masked at every API edge. The unit of access.</div>
-    </div>
-    <div class="model-card">
-      <div class="mc-code">EXECUTION</div>
-      <div class="mc-desc">A logged run — request, response, status, latency. The unit of evidence.</div>
-    </div>
-  </div>
+  </aside>
 
-  <div class="section-eyebrow">Adapters · v1</div>
-  <table class="matrix">
-    <tr><th>Connector</th><th>Auth</th><th>Status</th><th>Actions</th></tr>
-    <tr><td>http</td><td>bearer · basic · api-key</td><td class="st-live">live</td><td>request — the universal HTTP operation; the workhorse</td></tr>
-    <tr><td>rss</td><td>none</td><td class="st-live">live</td><td>read — feed entries; the zero-config demo</td></tr>
-    <tr><td>github</td><td>bearer (optional)</td><td class="st-live">live</td><td>list_repos, list_issues — public API; a PAT lifts rate limits</td></tr>
-    <tr><td>gmail</td><td>oauth2</td><td class="st-dormant">flow-complete · dormant</td><td>send, list, find</td></tr>
-    <tr><td>drive</td><td>oauth2</td><td class="st-dormant">flow-complete · dormant</td><td>upload_file, create_folder, move_file, find_file, find_or_create_folder</td></tr>
-  </table>
-  <p class="note">Dormant means the code path — consent, exchange, refresh, actions — is complete and tested against a mock token endpoint; it wakes when a Google OAuth client is pasted once. OAuth2 is click-and-consent forever after: the user never handles keys or tokens.</p>
+  <!-- ═══ Main ═══ -->
+  <main class="app-main" id="appContent"></main>
 
-  <div class="section-eyebrow">Authentication</div>
-  <div class="auth-ladder">
-    <span class="chip">none</span>
-    <span class="chip">bearer</span>
-    <span class="chip">basic</span>
-    <span class="chip">api-key-header</span>
-    <span class="chip hot">oauth2 · click-consent</span>
-  </div>
-  <div class="consent-steps">
-    <div class="step">
-      <div class="n">01</div>
-      <div class="t">Connect</div>
-      <div class="d">The Connect button opens the provider's consent screen — scopes declared by the connector.</div>
+  <!-- ═══ Footer ═══ -->
+  <footer class="app-footer">
+    <div class="footer-rule"></div>
+    <div class="footer-title">GCAL — the connection layer of the toolbox</div>
+    <span class="pill gold">connectors</span>
+    <div class="footer-meta">connections: <span id="footerRegister">—</span> · <span id="footerFilter">no filter</span></div>
+  </footer>
+
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmd-palette-search">
+      <span><gcal-icon name="search" size="18"></gcal-icon></span>
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command, a connector, or a connection…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
     </div>
-    <div class="step">
-      <div class="n">02</div>
-      <div class="t">Consent</div>
-      <div class="d">One click from the user; the provider redirects back with a code.</div>
-    </div>
-    <div class="step">
-      <div class="n">03</div>
-      <div class="t">Exchange &amp; store</div>
-      <div class="d">GCAL stores the tokens server-side and refreshes them transparently on expiry.</div>
-    </div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
   </div>
 </div>
 
-<footer>
-  <div class="wrap"><span class="mono">Autoregia · GCAL — the connection layer of the toolbox</span></div>
-</footer>
+<!-- ═══ Modal ═══ -->
+<div class="modal-overlay hidden" id="modal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h2 id="modalTitle">—</h2>
+      <button class="btn-icon" id="modalClose" aria-label="Close dialog"><gcal-icon name="x" size="16"></gcal-icon></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ═══ Toast ═══ -->
+<div id="toast" class="wm-toast" role="status" aria-live="polite"></div>
+
+<!-- ═══ Scripts ═══ -->
+<script src="/ui/js/ui.js?v=20260917"></script>
+<script src="/ui/js/icons.js?v=20260917"></script>
+
+<script src="js/store.js?v=20260920"></script>
+<script src="js/icons.js?v=20260920"></script>
+<script src="js/views.js?v=20260920"></script>
+<script src="js/dashboard.js?v=20260920"></script>
+<script src="js/connectors.js?v=20260920"></script>
+<script src="js/connections.js?v=20260920"></script>
+<script src="js/runner.js?v=20260920"></script>
+<script src="js/executions.js?v=20260920"></script>
+<script src="js/audit.js?v=20260920"></script>
+<script src="js/self-monitoring.js?v=20260920"></script>
+<script src="js/settings.js?v=20260920"></script>
+<script src="js/app.js?v=20260920"></script>
+<script src="js/command-palette.js?v=20260920"></script>
 
 </body>
 </html>

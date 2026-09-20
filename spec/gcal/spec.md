@@ -68,17 +68,45 @@ per-app model:
 
 ### Connection
 
-A connection is a configured instance of a connector: name, settings
-(base URLs, defaults), and credentials. Credentials live server-side only —
-**every API response masks them to presence flags** (`{"bearer": "●●●"}`), so
-no secret ever crosses the API edge.
+A connection is a configured instance of a connector: name, settings, and
+credentials held server-side — **every API response masks them to presence
+flags** (`{"bearer": "●●●"}`), so no secret ever crosses the API edge.
 
-Connection status depends on the scheme:
+The manager is a **dispatching shell, not a fully abstract layer**: different
+systems have different connection models and different setup forms, so each
+connector ships a **handler** owning its specifics — its setup schema, its
+credential shape, its auth-flow details, its error mapping — behind the
+uniform handler contract (below). The manager resolves `connector_id →
+handler` and dispatches; it never knows what a Notion database picker or an
+SMTP TLS toggle is.
 
-- Key schemes (`bearer`, `basic`, `api_key_header`): `untested → ok | error`,
-  set by the Test button.
-- `oauth2`: `disconnected → awaiting_consent → connected`, driven by the
-  consent flow below; `connected` carries the granted scopes and token expiry.
+Connection lifecycle (use-driven, Zapier-shaped):
+
+```
+disconnected → awaiting_consent → connected ⇄ error
+                 (oauth2 only)        ↕ use
+```
+
+- **Connect**: create (key schemes) or the consent flow (oauth2). **Reconnect**
+  re-uses the kept settings — paste again or consent again.
+- **Disconnect** (`POST /api/connections/<id>/disconnect`) revokes access —
+  oauth2 attempts provider-side revocation best-effort, then drops tokens;
+  key schemes drop the secret — while **settings and execution history are
+  kept**, stamped with `last_connected_at`. (`DELETE` remains the hard
+  remove.)
+- **Health is driven by use**: every execution stamps `last_used_at`; the
+  handler classifies each outcome (below); consecutive failures trip `error`
+  after `max_consecutive_failures` (default 3); any success clears it. The
+  Test button can trip `error` too.
+- **Broken access is recoverable**: executing on a non-`connected`
+  connection returns **409 + a reconnect hint** (the exact next step for the
+  scheme), never a bare failure.
+- Statuses: key schemes `untested → ok | error` (set by Test);
+  `oauth2`: `disconnected → awaiting_consent → connected`, driven by the
+  consent flow; `connected` carries granted scopes and token expiry.
+
+The detail payload carries usage alongside health: `last_used_at`,
+`executions_24h`, `executions_total`, and the 5 most recent executions.
 
 ### Execution
 
@@ -87,6 +115,52 @@ status code, `duration_ms`, a request summary (method + URL), the response body
 **truncated to 4 KiB** with a selected header subset, and any error text.
 Executions are GCAL's evidence trail — the analogue of CES sessions and MAD
 records.
+
+## The handler contract
+
+The manager programs to one interface; every connector implements it:
+
+| Method | Contract |
+|---|---|
+| `setup_schema()` | JSON-schema-ish field list for the connection form (settings): `{name, type, required, default, description}` |
+| `credentials_schema()` | same shape, for secrets — rendered as masked inputs, stored vaulted |
+| `connect(settings, credentials)` | validate + establish; returns the stored connection body (credentials vaulted, never echoed) |
+| `test(connection)` | health check behind the Test button → `ok \| error` + detail |
+| `execute(connection, action_id, params)` | run one action → result dict |
+| `disconnect(connection)` | revoke (provider-side best-effort where applicable) + void credentials |
+| `refresh(connection)` | renew expiring credentials (oauth2; no-op otherwise) |
+| `classify(outcome)` | map a run outcome to `ok \| auth_failure \| retryable \| bad_params` (below) |
+| `reconnect_hint(connection)` | the exact next step for a 409: consent URL or "paste again" |
+
+## Error taxonomy
+
+The manager counts failures; the **handler classifies** them:
+
+| Class | Meaning | Manager behavior | Example |
+|---|---|---|---|
+| `ok` | ran clean | stamp `last_used_at`, clear failure counter | 200 with a body |
+| `auth_failure` | credentials dead | trip `error` at once, execution carries the reconnect hint | 401 on Gmail, revoked PAT |
+| `retryable` | transient provider trouble | count, no special handling | 429, 5xx, timeouts |
+| `bad_params` | caller error | no health impact | 422 on Notion, unknown action |
+
+## Connector types (the catalog)
+
+| Type | Family | Auth | Standard actions | First connectors |
+|---|---|---|---|---|
+| `universal-api` | Universal | api_key · bearer · basic | `request` (any method/URL/body) | http |
+| `feed-reader` | Feed | none | `read` (entries, bounded) | rss |
+| `git-host` | Hosted-git | bearer (optional) | `search` repos/issues, `action` dispatch/release | github |
+| `mailbox` | Mail | oauth2 | `search`, `action` send | gmail |
+| `mail-sender` | Mail | basic | `action` send | smtp |
+| `cloud-files` | Files | oauth2 | `search`, `action` upload/move, `find_or_create` folder | drive |
+| `local-files` | Files | none | `search` list/read under configured roots, read-only | files |
+| `schedule` | Schedule | oauth2 | `search`, `action` create/update/delete | calendar |
+| `document-store` | Substrate | basic | `search` (Mango), `action` put | couchdb |
+| `knowledge-base` | Knowledge | bearer | `search` pages/databases, `action` append | notion |
+
+Each type fixes its auth options, its standard action shapes (every `search`
+echoes the query and returns a list; every write takes `idempotency_key` and
+optional `confirm`), and its `test_connection` contract.
 
 ## Conventions
 
@@ -129,20 +203,30 @@ is automatic:
 
 The user never sees, copies, or pastes a token.
 
-## Adapters (v1)
+## Adapters (v1 — the 10)
 
-| Connector | Auth | Status | Actions |
-| --- | --- | --- | --- |
-| `http` | bearer · basic · api_key | **live** | `request` — the universal operation (method, url, query, headers, body); the n8n HTTP Request workhorse |
-| `rss` | none | **live** | `read` — feed entries via stdlib XML; the zero-config demo |
-| `github` | bearer (optional) | **live** | `list_repos`, `list_issues` — public API; a PAT only lifts rate limits |
-| `gmail` | oauth2 | **flow-complete, dormant** | `send`, `list`, `find` |
-| `drive` | oauth2 | **flow-complete, dormant** | `upload_file`, `create_folder`, `move_file`, `find_file`, `find_or_create_folder` — modeled on Zapier's Drive operation set |
+| Connector | Type | Auth | Status | Actions |
+| --- | --- | --- | --- | --- |
+| `http` | universal-api | bearer · basic · api_key | **live** | `request` — the universal operation (method, url, query, headers, body); the n8n HTTP Request workhorse |
+| `rss` | feed-reader | none | **live** | `read` — feed entries via stdlib XML; the zero-config demo |
+| `github` | git-host | bearer (optional) | **live** | `search` repos/issues, `action` release/dispatch — public API; a PAT lifts rate limits |
+| `couchdb` | document-store | basic | **live** | `search` (Mango find), `action` put — the system's own substrate, localhost |
+| `files` | local-files | none | **live** | `search` list/read under configured roots, read-only |
+| `smtp` | mail-sender | basic | **live** | `action` send — outbound mail without the OAuth ceremony |
+| `gmail` | mailbox | oauth2 | **flow-complete, dormant** | `send`, `list`, `find` |
+| `drive` | cloud-files | oauth2 | **flow-complete, dormant** | `upload_file`, `create_folder`, `move_file`, `find_file`, `find_or_create_folder` — modeled on Zapier's Drive operation set |
+| `calendar` | schedule | oauth2 | **flow-complete, dormant** | `list`, `create`, `update`, `delete` events — generalizes AOOS's proven sync; AOOS delegates later |
+| `notion` | knowledge-base | bearer | **live-capable** | `search` pages/databases, `action` append — needs the operator's integration token |
 
 *Dormant* means the code path is complete — exchange, refresh, actions — and
 tested against a mock token endpoint, but unexercisable against Google until a
 real OAuth client is pasted once. Dormancy is visible in the registry as the
 connection's `disconnected` state with setup copy, never as missing code.
+
+Explicitly out: chat-ops bots (no evidence; `http` covers the mechanics),
+IMAP (gmail covers), inbound webhooks/triggers (no scheduler — the kind stays
+reserved), WOS sources as actions (polling stays in the collectors), shell
+execution (CES territory), LLM APIs (harness-owned).
 
 ## API Surface
 
@@ -150,13 +234,14 @@ connection's `disconnected` state with setup copy, never as missing code.
 | --- | --- |
 | `GET /api/connectors` | registry: connectors, action schemas, kinds, availability |
 | `POST /api/connections` | create a connection (credentials accepted once here) |
-| `GET /api/connections` | list connections, credentials masked |
-| `GET /api/connections/<id>` | connection detail |
+| `GET /api/connections` | list connections, credentials masked, health + usage |
+| `GET /api/connections/<id>` | connection detail + 5 most recent executions |
 | `DELETE /api/connections/<id>` | remove connection + stored credentials |
-| `POST /api/connections/<id>/test` | health check |
+| `POST /api/connections/<id>/test` | health check (can trip `error`) |
+| `POST /api/connections/<id>/disconnect` | revoke + void credentials, keep settings + history |
 | `GET /api/connections/<id>/auth/start` | 302 to the provider consent screen (oauth2) |
 | `GET /api/connections/<id>/auth/callback` | code exchange, token store (oauth2) |
-| `POST /api/execute` | run `{connection_id, action, params}` — logs an execution |
+| `POST /api/execute` | run `{connection_id, action, params}` — logs an execution; non-`connected` → 409 + reconnect hint |
 | `GET /api/executions` | execution log |
 | `GET /api/executions/<id>` | execution detail |
 | `DELETE /api/executions` | clear the log |
@@ -164,9 +249,12 @@ connection's `disconnected` state with setup copy, never as missing code.
 ## Storage
 
 A single CouchDB database `gcal` through the shared `support.storage.Store`,
-seed-on-empty per house convention. Connection documents carry credentials and
-are masked at the API edge; execution documents are append-only evidence. Test
-suites use the isolated `gcal_test_` prefix and never touch dev data.
+seed-on-empty per house convention. Connection documents carry credentials in
+heterogeneous vault shapes (tokens+expiry+scopes, key strings, user/pass,
+host/port/TLS flags — whatever `credentials_schema()` declares) and are
+masked by shape at the API edge; exports never contain secrets. Execution
+documents are append-only evidence. Test suites use the isolated
+`gcal_test_` prefix and never touch dev data.
 
 ## The Playground
 
@@ -184,12 +272,21 @@ One plate, three zones, in the design language of the rest of the system
 
 ## Implementation Status
 
-**Designed — not implemented.** This document is the design; a design plate
-reserves the URL at `/ate/tool/gcal/` and carries the model summary. The
-implementation order when begun: `base.py` (model + auth schemes) → `http`,
-`rss`, `github` adapters → API + CouchDB storage → runner on the plate →
-oauth2 flow with `gmail` and `drive` → tests (mock HTTP echo server, fixture
-feed XML, mock token endpoint).
+**Wave 1 live** at `/ate/tool/gcal/`: `base.py` (handler contract, auth
+handlers, gateway, masking, health), the six live connectors (http, rss,
+github, couchdb, files, smtp), connections with the full lifecycle
+(connect/test/disconnect/reconnect), the execution gateway with 409
+reconnect hints, the WOS-style shell (connectors, connection manager,
+runner, execution log), audit, settings, and golden tests per connector
+(hermetic transports: local echo server, fixture feed XML, mock
+GitHub/CouchDB/SMTP endpoints, tmp fixtures).
+
+**Wave 2** (dormant): the oauth2 broker + gmail, drive, calendar —
+flow-complete against a mock token endpoint, waking when a Google client is
+pasted; AOOS keeps its bespoke calendar sync until it delegates.
+
+**Wave 3**: the notion connector (operator token), the full shell polish,
+and golden texts per remaining connector.
 
 ## References
 

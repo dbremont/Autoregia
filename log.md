@@ -29,6 +29,49 @@ TODO:
 
 ## Index
 
+### 2026 — GCAL wave 1: the connector manager goes live
+
+**Question.** The GCAL design (registry, lifecycle, gateway, dormant OAuth2)
+was complete but unimplemented. How should wave 1 land so the manager's
+generic machinery is proven before any OAuth complexity — and what proves
+the dispatch design is at the right level?
+
+**Decision.**
+
+1. **Manager shell + handler dispatch, not abstraction**: `base.py` holds
+   the handler contract (`setup/credentials schemas, connect, test,
+   execute, disconnect, refresh, classify, reconnect_hint`), auth helpers,
+   the bounded HTTP gateway, and shape-aware credential masking;
+   `connectors/` holds six handlers (http, rss, github, couchdb, files,
+   smtp) discovered by package scan. The server resolves `connector_id →
+   handler` and owns lifecycle state, health, and the log.
+2. **Use drives health**: executions stamp `last_used_at`; the *handler*
+   classifies outcomes (Github's quota-exhausted 403 is retryable, a 401 is
+   auth failure); consecutive failures trip `error`; non-`connected` runs
+   answer 409 with the handler's reconnect hint.
+3. **Hermetic tests**: injectable transports per handler (`transport=`,
+   `smtp_factory=`, `tmp_path`) plus a fixture RSS/Atom corpus — 34 tests,
+   zero network. The server suite patches one seam
+   (`base.default_transport`) for full-stack gateway coverage.
+4. **Disconnect is an operation**: revoke best-effort, void the vault, keep
+   settings + history; delete stays the hard remove.
+
+**Rationale.** Six live connectors with zero new secrets prove the
+machinery (including per-system specifics: Notion-style pickers are schema
+fields, SMTP's TLS coupling is setup validation, GitHub's keyless reads are
+a scheme choice) before the OAuth broker arrives in wave 2.
+
+**Trade-offs accepted.** `bad_params` from handlers answers 400 while
+unknown actions do too — consistent, but the 400/409/501/502 spread is now
+a small contract callers must read; the runner reads error bodies as JSON
+to preserve reconnect hints. localStorage has no role (all state is
+server-side, unlike MAD's offline cache).
+
+**Implements.** `app/module/ate/tool/gcal/` (`base.py`, `connectors/`,
+`server.py`, shell `static/`, `test_gcal.py` in `make test`);
+[spec/gcal/spec.md](spec/gcal/spec.md) (lifecycle, handler contract, error
+taxonomy, type catalog, 10-connector table).
+
 ### 2026 — SARL: the detail as a review pipeline
 
 **Question.** The task detail presented the process as one scrolling card —

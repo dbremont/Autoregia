@@ -56,7 +56,7 @@ Autoregia/
     │   │       ├── ces/  #   Computation Execution System
     │   │       ├── ctes/  #   Computation Task Execution System (WOS-style shell: handle register, task specs, runs, audit)
     │   │       ├── sopcs/ #   Standard Operating Procedure Catalog System (markdown SOPs, full-text + semantic search, figures as CouchDB attachments)
-    │   │       ├── gcal/  #   General Connector Abstraction Layer (plate only)
+    │   │       ├── gcal/  #   General Connector Abstraction Layer (wave 1 live: 6 connectors, lifecycle, gateway)
     │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (WOS-style shell: text edition tasks, rule packs, glossaries, phrase catalog, audit)
     │   ├── acsms/       # Agent Capability Self Management System
     │   │   ├── README.md
