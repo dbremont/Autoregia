@@ -384,6 +384,21 @@ class TestTaskLifecycle:
 # ── the document is markdown ─────────────────────────────────────────────────
 
 class TestMarkdownDocument:
+    def test_findings_carry_line_and_paragraph_anchors(self, client):
+        md = ('# Título\n\nPrimer párrafo con "comillas".\n\n'
+              'Segundo párrafo...\n\nTercero "final".')
+        task = _reviewed(client, md).get_json()
+        assert task["findings"], "expected findings"
+        for f in task["findings"]:
+            assert f["line"] == md.count("\n", 0, f["start"]) + 1
+            assert f["paragraph"] >= 1
+        quote = next(f for f in task["findings"] if f["start"] == 29)
+        assert quote["line"] == 3
+        assert quote["paragraph"] == 2
+        final = next(f for f in task["findings"] if f["start"] == 70)
+        assert final["line"] == 7
+        assert final["paragraph"] == 4
+
     def test_code_fence_is_protected(self, client):
         md = ('Prose with "quotes"...  here.\n\n'
               '```python\n'

@@ -30,6 +30,7 @@ Run (standalone):  python3 sarl/server.py
 Mounted (unified): /ate/tool/sarl/  (via ../server.py TOOLS)
 """
 import os
+import re
 import sys
 import time
 import uuid
@@ -170,6 +171,26 @@ def _review_counts(findings):
             "by_dimension": by_dimension, "by_severity": by_severity}
 
 
+def _paragraph_index(text, pos):
+    """1-based index of the blank-line-delimited block containing pos."""
+    idx = 1
+    for m in re.finditer(r"\n[ \t]*\n", text):
+        if m.end() <= pos:
+            idx += 1
+        else:
+            break
+    return idx
+
+
+def _annotate_anchors(text, findings):
+    """Give every finding its document anchors: 1-based line and
+    paragraph, computed on the raw markdown."""
+    for f in findings:
+        f["line"] = text.count("\n", 0, f["start"]) + 1
+        f["paragraph"] = _paragraph_index(text, f["start"])
+    return findings
+
+
 def _run_engine(content, language, register, glossary_ids, dimensions):
     """Engage the packs and return (findings with ids, packs_engaged)."""
     settings = get_settings()
@@ -184,6 +205,7 @@ def _run_engine(content, language, register, glossary_ids, dimensions):
     for i, f in enumerate(findings, 1):
         f["id"] = f"F{i}"
         f["disposition"] = "pending"
+    _annotate_anchors(content, findings)
     return findings, engaged
 
 

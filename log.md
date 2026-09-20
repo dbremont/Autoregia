@@ -29,6 +29,47 @@ TODO:
 
 ## Index
 
+### 2026 — SARL: the detail as a review pipeline
+
+**Question.** The task detail presented the process as one scrolling card —
+document, findings, and actions stacked in sequence. The reference practice
+(a copy editor's pass) reads better as a pipeline: stages across the top,
+the document at the center, resolutions on a rail. How far can that shape be
+adopted without inventing new backend states?
+
+**Decision.**
+
+1. **The stage tracker is a projection, not a state machine**: Intake →
+   Criteria → Review → Findings → Resolution → Verify → Complete, computed
+   from the existing lifecycle (`created`/`reviewed`/`applied`) plus
+   disposition counts. The contextual actions live in the tracker: Run
+   review, Complete review (Apply), Discard.
+2. **Three panes**: the task record + declared criteria on the left; the
+   document in the center with a **Read | Annotated** toggle (Read = the
+   rendered markdown; Annotated = the exact-span view with numbered,
+   severity-colored highlights — the span engine annotates raw offsets, so
+   marks live on the faithful view, never on the renderer's rewritten DOM);
+   the **resolution rail** on the right with severity/dimension filters and
+   **Apply / Ignore** per finding (the accepted/rejected dispositions,
+   renamed at the UI). Card ⇄ highlight selection is two-way; a pager steps
+   through the filtered findings.
+3. **Anchors**: every finding carries `line` and `paragraph` (computed on
+   the raw markdown at review time) so cards cite "L3 · ¶2" like a copy
+   editor's margin.
+
+**Rationale.** The pipeline shape separates *reading* (document), *judging*
+(resolution rail), and *bookkeeping* (stages, criteria) — the three things a
+reviewer does — without changing what the engine records.
+
+**Trade-offs accepted.** Marks do not sit on the rendered text (offset
+alignment across a markdown renderer is fragile); the tracker adds seven
+labels over three real states; Comments/Notes and multi-user affordances
+from the reference are out of scope (no backend).
+
+**Implements.** `app/module/ate/tool/sarl/static/js/review.js` (pipeline),
+`static/css/sarl.css`, `server.py` `_annotate_anchors`;
+[spec/sarl/spec.md](spec/sarl/spec.md) plate section.
+
 ### 2026 — SARL: the task is the workflow, not the pass
 
 **Question.** The first SARL build fused task definition and review into one

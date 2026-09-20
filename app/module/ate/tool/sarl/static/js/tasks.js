@@ -237,8 +237,9 @@ SARL.Tasks = (() => {
     SARL.ReviewDetail.bind(refreshDetail);
   }
 
-  async function refreshDetail() {
+  async function refreshDetail(opts) {
     if (!detail) { SARL.navigate('tasks'); return; }
+    const y = window.scrollY;
     try {
       detail = await SARL.Store.task_(detail.id);
       await SARL.Store.loadTasks();
@@ -247,6 +248,7 @@ SARL.Tasks = (() => {
     if (!root) { SARL.navigate('tasks'); return; }
     root.innerHTML = SARL.ReviewDetail.render(detail);
     SARL.ReviewDetail.bind(refreshDetail);
+    if (opts && opts.keepScroll) window.scrollTo(0, y);
   }
 
   function clearDetail() { detail = null; SARL.navigate('tasks'); }

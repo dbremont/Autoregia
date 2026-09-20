@@ -165,7 +165,7 @@ code path — submit, parse matches, map to findings with evidence spans — is
 specified and testable against a mock endpoint, but it wakes only when a
 LanguageTool server is configured. Dormancy is visible as the pack's
 `dormant` state with setup copy, never as missing design — the same doctrine as
-GIAL's dormant OAuth2 adapters.
+GCAL's dormant OAuth2 adapters.
 
 ## Rule Packs (v1)
 
@@ -245,16 +245,24 @@ A WOS-style application shell — the CTES copy of the house grammar
   severity, dispositions, most-fired rules, engine pack status, latest tasks.
 - **Tasks** — the set of review tasks, searchable (free text over title,
   content, and rules fired; state and language filters; paging). Defining a
-  task lives here — a **New Task** button opens the definition modal: a
-  **markdown editor** (Write | Preview over the shared renderer, insert
-  toolbar) plus title, language, register, dimension checkboxes, and
-  glossary toggles; there is no separate creation view in the aside. The
-  detail is its own route (`#tasks/<id>`) — the documented review process:
-  the workflow strip (created → reviewed → applied/discarded), the declared
-  criteria, the **Run review** step, the document with finding spans marked,
-  findings grouped by dimension and ordered by severity, accept/reject per
-  finding, Apply (corrected text beside its change log, raw or rendered),
-  and discard.
+  task lives here — a **New Task** button opens the definition view
+  (`#tasks/new`): a **markdown editor** (Write | Preview over the shared
+  renderer, insert toolbar) plus title, language, register, dimension
+  checkboxes, and glossary toggles; there is no separate creation view in
+  the aside.
+- **Task detail** (`#tasks/<id>`) — **the review pipeline**: a stage
+  tracker (Intake → Criteria → Review → Findings → Resolution → Verify →
+  Complete) projected from the task state, over three panes. Left: the task
+  record (id, state, title) with its declared **criteria** as a checklist
+  and the process history link. Center: **the document** — a Read |
+  Annotated toggle (Read = rendered markdown; Annotated = the exact-span
+  view with numbered, severity-colored highlights) and a findings pager.
+  Right: **the resolution rail** — finding cards with severity/dimension
+  filters, line and paragraph anchors, quoted evidence, explanation,
+  suggested replacement, and **Apply / Ignore** per finding (the
+  accepted/rejected dispositions). Card ⇄ highlight selection is two-way;
+  Verify shows the corrected text (raw or rendered) beside its change log;
+  **Complete review** is the Apply step.
 - **Glossaries · Phrase Catalog** — the two authorities, both full CRUD with
   modal editors; the phrase catalog's edits reach the engine live.
 - **Audit · Self Monitoring · Settings · Documentation · About · Export** —
@@ -279,5 +287,5 @@ mock LanguageTool run in `test_sarl.py` (listed in `make test`).
 - LanguageTool — the external engine, designed dormant:
   <https://languagetool.org/dev-reference>
 - The sibling tools this work complements: [CES](../ces/) (Execution) and
-  [GIAL](../gial/) (Integration) — the latter source of the dormant-adapter
+  [GCAL](../gcal/) (Connectors) — the latter source of the dormant-adapter
   doctrine
