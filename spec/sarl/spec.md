@@ -31,25 +31,34 @@ repeatable pass. These include:
   unit of evidence.
 - **Glossaries** — terminological authorities per language and domain: preferred
   terms, forbidden terms, aliases. The unit of terminology.
-- **Reviews** — one pass over a text: the dimensions requested, the findings
-  raised, the dispositions taken, and the corrected text with its change log.
-  The unit of a review session — the analogue of CES sessions and GIAL
-  executions.
+- **Phrase collections** — the engine's editable phrase lists (muletillas,
+  fillers) per language, consulted by the `estilística` rules at review time.
+  The unit of the phrase catalog.
+- **Text edition tasks** — the workflow of a linguistic review of a document
+  under a set of criteria: findings, dispositions, and the corrected text with
+  its change log, carried through an explicit lifecycle. The set of tasks is
+  the journal — searchable, append-only evidence; the analogue of CTES task
+  specs and runs.
 
 ## The Model
 
 ### Text
 
-A text is the object under review, submitted to `POST /api/reviews`:
+The document under review is **markdown**. Defining a task (`POST /api/tasks`)
+fixes it:
 
 | Field | Meaning |
 | --- | --- |
-| `content` | the raw text (markdown or plain) |
+| `title` | optional document name, shown in the journal |
+| `content` | the document, in markdown |
 | `language` | `es` (first-class) or `en` — selects the rule packs |
 | `register` | optional genre tag (`technical · formal · editorial · personal`) — tunes stylistic thresholds |
 | `glossary_ids` | optional terminological authorities to enforce |
 
-The text is **never mutated in place**: a review reads it; corrections are
+Because the document is markdown, the engine protects its non-prose regions:
+findings never fire inside fenced or indented code blocks, inline code spans,
+or link/autolink URLs — code, links, and markup are never "corrected". The
+document is **never mutated in place**: a review reads it; corrections are
 suggestions over spans, applied only by an explicit Apply (below).
 
 ### Rule
@@ -94,14 +103,45 @@ unpreferred aliases are raised as findings whose suggestion is the preferred
 form; unwarranted variation between equally valid aliases is flagged for
 consistency. One starter glossary (Spanish technical writing) seeds the store.
 
-### Review
+### Phrase catalog
 
-Every pass is logged as a review: the submitted text, language, register, the
-rule packs engaged, the full findings list, per-finding dispositions, summary
-counts by dimension and severity, and — after Apply — the **corrected text**
-with a **change log** (one entry per applied suggestion: span, rule, before →
-after). Reviews are append-only evidence; the log is SARL's analogue of the
-binnacle.
+The phrase catalog is the engine's phrase lists made editable: named
+**phrase collections**, each a language-tagged (`es` · `en` · `any`) set of
+phrases with a kind (`muletilla` · `filler` · `formulaic` · `other`), a note,
+and an `enabled` switch. The `estilística` muletilla rule consults the enabled
+collections matching the text's language at review time — no hard-coded lists.
+A phrase raised from the catalog suggests deletion; edits apply on the very
+next task. Starter collections seed the store.
+
+### Text edition task
+
+A task is **the documented representation of a linguistic review process** —
+the workflow of a review of one document under a set of criteria, recorded as
+evidence: not a single fused pass. The task carries the markdown
+document (title, content, language, register), its **criteria set** (the
+engaged dimensions + the attached glossaries), the rule packs engaged, the
+full findings list, per-finding dispositions, summary counts by dimension
+and severity, and — after Apply — the **corrected text** with a **change
+log** (one entry per applied suggestion: span, rule, before → after). Tasks
+are append-only evidence; the set of tasks is searchable (by title, content,
+or rule fired); the log is SARL's analogue of the binnacle.
+
+The workflow lifecycle is explicit:
+
+```
+Created → Reviewed → Applied
+              └─► Discarded
+```
+
+Defining a task journals it in `created` — document and criteria fixed, no
+findings yet. **Review is an explicit workflow step** (`POST
+/api/tasks/<id>/review`): the packs run synchronously (the live path is
+deterministic and instant) and the task moves to `reviewed`. Dispositions
+are only open while `reviewed`; `apply` and `discard` are the terminal
+paths (`discard` is also open to a `created` task — abandon before
+reviewing). Applying an accepted suggestion whose span overlaps another
+accepted one is refused at disposition time, so Apply composes right-to-left
+over disjoint spans — deterministic by construction.
 
 ## Dimensions
 
@@ -134,7 +174,7 @@ GIAL's dormant OAuth2 adapters.
 | `es-ortotipografia` | es | ortotipográfica | **live** — the zero-dependency workhorse |
 | `es-linguistica` | es | lingüística | **live** — word-list and pattern checks |
 | `en-orthotypography` | en | ortotipográfica | **live** |
-| `estilo` | es · en | estilística | **live** — bilingual muletilla and repetition lists |
+| `estilo` | es · en | estilística | **live** — consults the phrase catalog |
 | `terminologia` | es · en | terminológica | **live** — enforces any attached glossary |
 | `languagetool` | es · en | all | **flow-complete, dormant** — supplemental engine |
 
@@ -148,17 +188,29 @@ marked `engine: languagetool` so their provenance stays distinct.
 | Endpoint | Description |
 | --- | --- |
 | `GET /api/rules` | registry: packs, rules, dimensions, severities, pack status |
+| `POST /api/tasks` | define `{title?, content (markdown), language, register?, glossary_ids?, dimensions?}` → task in `created` |
+| `GET /api/tasks` | the task set — searchable (`q`: title, content, rule fired); filters `state`, `language`; offset paging |
+| `GET /api/tasks/<id>` | task detail: criteria, findings, dispositions, counts |
+| `POST /api/tasks/<id>/review` | run the review — the workflow step that raises the findings (`created` → `reviewed`) |
+| `POST /api/tasks/<id>/disposition` | `{finding_id, disposition}` — accept, reject, or reset |
+| `POST /api/tasks/<id>/apply` | apply accepted suggestions → corrected text + change log |
+| `POST /api/tasks/<id>/discard` | close the task without applying |
+| `DELETE /api/tasks` | clear the journal |
 | `GET /api/glossaries` | list glossaries |
 | `POST /api/glossaries` | create a glossary |
 | `GET /api/glossaries/<id>` | glossary detail |
 | `PUT /api/glossaries/<id>` | update entries |
 | `DELETE /api/glossaries/<id>` | remove a glossary |
-| `POST /api/reviews` | submit `{content, language, register?, glossary_ids?}` → review + findings |
-| `GET /api/reviews` | review log |
-| `GET /api/reviews/<id>` | review detail: findings, dispositions, counts |
-| `POST /api/reviews/<id>/disposition` | `{finding_id, disposition}` — accept or reject |
-| `POST /api/reviews/<id>/apply` | apply accepted suggestions → corrected text + change log |
-| `DELETE /api/reviews` | clear the log |
+| `GET /api/phrases` | the phrase catalog (collections) |
+| `POST /api/phrases` | create a collection |
+| `GET /api/phrases/<id>` | collection detail |
+| `PUT /api/phrases/<id>` | update phrases / toggle enabled |
+| `DELETE /api/phrases/<id>` | remove a collection |
+| `GET /api/overview` | the dashboard payload (counts, top rules, resources) |
+| `GET /api/audit` | audit trail (every mutation; never pruned) |
+| `GET/PUT /api/settings` | defaults: language, register, caps, LanguageTool URL |
+| `GET /api/self` | self monitoring: store, engine packs, timing |
+| `GET /api/export` | full JSON export |
 
 ## Conventions
 
@@ -176,32 +228,49 @@ marked `engine: languagetool` so their provenance stays distinct.
 
 A single CouchDB database `sarl` through the shared `support.storage.Store`,
 seed-on-empty per house convention — the seed carries the starter glossary and
-rule-pack metadata, never user data. Reviews are append-only evidence;
-dispositions and applies are recorded on the review document. Test suites use
-the isolated `sarl_test_` prefix and never touch dev data.
+the starter phrase collections, never user data. Typed documents: `task`,
+`glossary`, `phrase_collection`, `audit`, `settings`. Tasks are append-only
+evidence; dispositions and applies are recorded on the task document, and a
+retention setting prunes the journal. Test suites use the isolated
+`sarl_test_` prefix and never touch dev data.
 
 ## The Plate
 
-One plate, three zones, in the design language of the rest of the system
-(`design.md` tokens):
+A WOS-style application shell — the CTES copy of the house grammar
+(`spec/ui.spec` §5.2, §7): header search, sidebar router, command palette
+(Ctrl K), toast, shared icons — all relative URLs, all tokens from the shared
+`/ui/` layer. The views:
 
-- **Left** — the submission: text area, language select (`es` first), register
-  select, glossary toggles, dimension checkboxes, Review button.
-- **Right** — the findings: grouped by dimension, ordered by severity, each
-  card quoting its evidence with accept / reject buttons and the suggested
-  replacement; summary counts by dimension and severity above.
-- **Bottom** — the report: Apply composes the corrected text beside its change
-  log; below it, the review log with one row per pass, click through to full
-  detail.
+- **Dashboard** — the review practice at a glance: findings by dimension and
+  severity, dispositions, most-fired rules, engine pack status, latest tasks.
+- **Tasks** — the set of review tasks, searchable (free text over title,
+  content, and rules fired; state and language filters; paging). Defining a
+  task lives here — a **New Task** button opens the definition modal: a
+  **markdown editor** (Write | Preview over the shared renderer, insert
+  toolbar) plus title, language, register, dimension checkboxes, and
+  glossary toggles; there is no separate creation view in the aside. The
+  detail is its own route (`#tasks/<id>`) — the documented review process:
+  the workflow strip (created → reviewed → applied/discarded), the declared
+  criteria, the **Run review** step, the document with finding spans marked,
+  findings grouped by dimension and ordered by severity, accept/reject per
+  finding, Apply (corrected text beside its change log, raw or rendered),
+  and discard.
+- **Glossaries · Phrase Catalog** — the two authorities, both full CRUD with
+  modal editors; the phrase catalog's edits reach the engine live.
+- **Audit · Self Monitoring · Settings · Documentation · About · Export** —
+  the system views, in the standard register.
 
 ## Implementation Status
 
-**Designed — not implemented.** This document is the design; a design plate
-reserves the URL at `/ate/tool/sarl/` and carries the model summary. The
-implementation order when begun: rule-pack base + `es-ortotipografia` → review
-API + CouchDB storage → findings/dispositions on the plate → Apply + change
-log → remaining live packs → glossaries → LanguageTool adapter (dormant) →
-tests (golden texts per pack, mock LanguageTool endpoint).
+**Implemented — v1 live** at `/ate/tool/sarl/`. The deterministic engine (all
+five live packs, markdown-protected), text edition tasks as define → review →
+disposition → apply workflows over markdown documents, the searchable task
+set, glossaries, the phrase catalog, the WOS-style shell, audit, settings,
+self monitoring, overview, and export. The LanguageTool adapter ships
+flow-complete and **dormant**: it wakes only when `languagetool_url` is set
+in Settings, is tested against a mock endpoint, and tags its findings
+`engine: languagetool`. Golden texts per pack, markdown protection, and the
+mock LanguageTool run in `test_sarl.py` (listed in `make test`).
 
 ## References
 

@@ -89,10 +89,14 @@ TOOLS = [
     {
         "id": "sarl",
         "name": "Sistema Asistencia de Revisión Lingüística",
-        "summary": ("Verifies and corrects the linguistic, stylistic, "
-                    "terminological, and orthotypographic aspects of a text — "
-                    "evidence-cited findings, explicit dispositions, and a "
-                    "corrected text with a change log. Designed; plate only."),
+        "summary": ("The Text Correction Tool: tasks are workflows — a "
+                    "markdown document under a declared set of criteria, "
+                    "carried through an explicit review step that raises "
+                    "evidence-cited findings from the deterministic packs, "
+                    "then dispositions and an Apply that compose the "
+                    "corrected text beside a change log. Glossaries and an "
+                    "editable phrase catalog are the authorities; the "
+                    "LanguageTool engine stays dormant until configured."),
         "vsm": "Toolbox — Language Review",
         "href": "/ate/tool/sarl/",
     },

@@ -29,6 +29,104 @@ TODO:
 
 ## Index
 
+### 2026 — SARL: the task is the workflow, not the pass
+
+**Question.** The first SARL build fused task definition and review into one
+synchronous step — a "task" was born already reviewed — and sat task creation
+in its own sidebar view. What, then, is a task, and where does defining one
+belong?
+
+**Decision.**
+
+1. **A task is the workflow of a linguistic review of one document under a
+   set of criteria** (dimensions + attached glossaries). The lifecycle is
+   explicit: `created → reviewed → applied | discarded`. Defining a task
+   journals it in `created` with no findings; **the review is an explicit
+   workflow step** (`POST /api/tasks/<id>/review`) that runs the packs and
+   raises the findings; dispositions and apply remain `reviewed`-only;
+   `discard` may abandon a task before review.
+2. **The document is markdown.** The engine protects the document's
+   non-prose regions — fenced and indented code blocks, inline code spans,
+   link/autolink URLs — so code and markup are never "corrected"; one
+   post-filter in `run_review` covers every rule and the external engine
+   alike.
+3. **The task set is searchable**: free text matches title, content, and the
+   rule ids fired in the review; state and language filters unchanged.
+4. **No creation view in the aside**: defining a task lives inside the Tasks
+   view (a New Task button opening the definition modal, in the standard
+   editor pattern); tasks now carry an optional document `title`.
+
+**Rationale.** A review is a process with stages, not an event: fixing the
+document and the criteria first makes the review a step of a declared
+workflow (whose evidence is then attributable to a criteria set), and keeps
+the sidebar for the set of tasks rather than the act of creating one.
+Markdown protection removes the false-positive tax on exactly the texts the
+agent produces most.
+
+**Trade-offs accepted.** Two calls instead of one to reach findings (the
+price of an honest workflow); criteria are fixed at definition (changing
+them means a new task); markdown region detection is heuristic — exotic
+nesting could under-protect or over-protect.
+
+**Implements.** `app/module/ate/tool/sarl/` (`packs/base.py`
+`protected_spans`, `server.py` review endpoint + `created` state, `static/`
+Tasks-view creation and workflow strip); [spec/sarl/spec.md](spec/sarl/spec.md)
+updated to the workflow model.
+
+### 2026 — SARL v1: the copy editor's pass, reviews as text edition tasks
+
+**Question.** SARL was designed but unimplemented — a design plate reserving
+`/ate/tool/sarl/`. How should the review pass be modeled and built so the
+engine stays deterministic and the discipline stays explicit: what is the unit
+of work, where do the stylistic word lists live, and how does a pass become
+evidence rather than an overwrite?
+
+**Decision.**
+
+1. **Reviews become text edition tasks with an explicit lifecycle** —
+   `submitted → reviewed → applied | discarded` — journaled like CTES runs.
+   Submission and review are one synchronous step (the live path is
+   deterministic and instant); dispositions are only open while `reviewed`;
+   `apply` and `discard` are terminal. The API surface renames the spec's
+   original `/api/reviews` to `/api/tasks` accordingly.
+2. **The engine reads its authorities from the store, not from code.** The
+   phrase catalog (editable `phrase_collection` docs) feeds the estilística
+   muletilla rule; glossaries (preferred / forbidden / aliases) feed the
+   terminológica dimension. Edits apply on the very next task.
+3. **Deterministic first, external engine dormant.** All five live packs are
+   pure Python — regex, token matchers, word lists. The LanguageTool adapter
+   ships flow-complete but wakes only when `languagetool_url` is set in
+   settings; its findings carry `engine: languagetool`, never blended
+   silently. An external-engine failure is recorded as a finding, not hidden.
+4. **Apply is composition, not mutation.** The submitted text is immutable;
+   accepted suggestions compose the corrected text right-to-left over
+   disjoint spans (overlapping accepts are refused 409 at disposition time),
+   beside a change log (span, rule, before → after).
+5. **The shell is the CTES copy of the house grammar** — header search,
+   sidebar router, command palette, audit, settings, self monitoring — with
+   views for the journal, the submission, the two authorities (glossaries,
+   phrase catalog), and the dashboard projecting dispositions as the feedback
+   surface.
+
+**Rationale.** A review is only trustworthy if it is repeatable (determinism),
+reversible (non-destructive Apply), and improvable from evidence (dispositions
+as policy feedback). Modeling passes as tasks reuses the journal discipline
+the toolbox already has; making the word lists first-class authorities turns
+style from hidden code into editable policy — at personal scale the catalog is
+small, so live consultation costs nothing.
+
+**Trade-offs accepted.** The rename breaks the original spec's API paths
+(kept in one place — the spec); deterministic matchers cannot catch subtle
+grammar (the dormant adapter is the designed escape hatch, at the cost of a
+network dependency when woken); muletilla findings suggest deletion, which is
+advice rather than nuance; the capitalization rule suppresses any short
+abbreviation-like word before a period, accepting rare false negatives.
+
+**Implements.** `app/module/ate/tool/sarl/` (engine `packs/`, `server.py`,
+shell `static/`, `data/seed.json`, `test_sarl.py` in `make test`);
+[spec/sarl/spec.md](spec/sarl/spec.md) updated to the task model and live
+status.
+
 ### 2026 — SOPCS topic graph: the catalog clustered by meaning, batch-computed
 
 **Question.** The dashboard showed the catalog's *shape* (counts, activity,

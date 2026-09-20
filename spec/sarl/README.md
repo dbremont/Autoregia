@@ -12,9 +12,11 @@ textual outputs. It is deliberately not a writer and not a translator.
 
 ## Status
 
-**Designed — not implemented.** A design plate reserves the place:
+**Implemented — v1 live**: a WOS-style working app — text edition tasks with
+an explicit lifecycle, the deterministic rule packs, glossaries, the editable
+phrase catalog, audit, settings, and the dormant LanguageTool adapter:
 
     /ate/tool/sarl/
 
 - Full design: [spec.md](spec.md)
-- Sibling tools: [CES](../ces/) · [GIAL](../gial/)
+- Sibling tools: [CES](../ces/) · [GIAL](../gial/) · [CTES](../ctes/)

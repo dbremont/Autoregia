@@ -3,145 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SARL — Sistema Asistencia de Revisión Lingüística</title>
-    <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+  <title>Autoregia — Revisión Lingüística (SARL)</title>
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
   <link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
-  <link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
-<style>
-
-    
-    *{box-sizing:border-box;margin: 0;padding: 0}
-    body{font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
-    .wrap{max-width:880px;margin: 0 auto;padding: 0 28px}
-    nav.topnav{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
-    nav.topnav .topnav-in{max-width:880px;margin: 0 auto;padding: 0 28px;display:flex;align-items:center;height:60px;gap: 18px}
-    nav.topnav .lockup{font-family:var(--serif);font-size:var(--text-lg);font-weight:500;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
-    nav.topnav .links{margin-left: auto;display:flex;gap: 26px}
-    nav.topnav .links a{font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);text-decoration:none;padding: var(--space-1) 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
-    nav.topnav .links a:hover{color:var(--accent);border-bottom-color:var(--accent)}
-    header.masthead{padding: 72px 0 0;text-align:center}
-    .eyebrow{font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom: var(--space-4)}
-    h1.title{font-size:clamp(52px,8vw,84px);font-weight:300;letter-spacing:-.02em;line-height:1;margin-bottom: 10px}
-    .subtitle{font-size:var(--text-lg);color:var(--ink-soft);font-style:italic}
-    .gold-rule{height:1px;background:var(--gold);width:64px;margin: 28px auto;opacity:.7}
-    p.lede{font-size:var(--text-md);color:var(--ink-soft);max-width:640px;margin: 0 auto;line-height:1.65}
-    .status{margin: 36px auto 0;max-width:640px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-5);font-family:var(--sans);font-size:var(--text-sm);color:var(--muted);display:flex;gap: 14px;align-items:baseline;text-align:left}
-    .status .tag{font-family:var(--mono);font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding: 2px 7px;white-space:nowrap}
-    .section-eyebrow{margin: 56px 0 0;font-family:var(--sans);font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
-    .model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap: 14px;margin: 14px 0 0}
-    .model-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: var(--space-4) 18px}
-    .mc-code{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.14em;color:var(--accent);font-weight:600}
-    .mc-desc{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 7px;line-height:1.55}
-    table.matrix{width:100%;border-collapse:collapse;margin: 14px 0 0;font-family:var(--sans);font-size:var(--text-sm)}
-    table.matrix th{font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding: var(--space-2) 10px;border-bottom:1px solid var(--rule)}
-    table.matrix td{padding: 10px;border-bottom:1px solid var(--rule);color:var(--ink-soft);vertical-align:top}
-    table.matrix td:first-child{font-family:var(--mono);font-size:var(--text-2sm);color:var(--ink);white-space:nowrap}
-    table.matrix .st-live{color:var(--accent);font-weight:600}
-    table.matrix .st-dormant{color:var(--gold);font-weight:600}
-    .sev-ladder{display:flex;flex-wrap:wrap;gap: 10px;margin: 14px 0 0}
-    .chip{font-family:var(--mono);font-size:var(--text-xs);letter-spacing:.08em;color:var(--ink-soft);border:1px solid var(--rule);border-radius:20px;padding: 5px 13px;background:var(--surface)}
-    .chip.hot{color:var(--accent);border-color:var(--gold)}
-    .pass-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap: 14px;margin: var(--space-4) 0 0}
-    .step{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding: 14px var(--space-4)}
-    .step .n{font-family:var(--mono);font-size:var(--text-xs);color:var(--gold);font-weight:600;letter-spacing:.12em}
-    .step .t{font-family:var(--sans);font-size:var(--text-sm);font-weight:600;margin-top: var(--space-1)}
-    .step .d{font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 5px;line-height:1.5}
-    .note{max-width:640px;font-size:var(--text-base);color:var(--ink-soft);font-style:italic;margin-top: 14px;line-height:1.6}
-    footer{border-top:1px solid var(--rule);margin-top: 72px;padding: var(--space-8) 0 56px;text-align:center}
-    footer .mono{font-family:var(--mono);font-size:var(--text-2sm);color:var(--muted)}
-  </style>
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260917">
+  <link rel="stylesheet" href="css/layout.css?v=20260917">
+  <link rel="stylesheet" href="css/components.css?v=20260917">
+  <link rel="stylesheet" href="css/views.css?v=20260917">
+  <link rel="stylesheet" href="css/command-palette.css?v=20260917">
+  <link rel="stylesheet" href="css/sarl.css?v=20260919c">
 </head>
 <body>
 
-<nav class="topnav">
-  <div class="topnav-in">
-    <a class="lockup" href="/index.html">Autoregia</a>
-    <div class="links">
-      <a href="/ate/">Toolbox</a>
-      <a href="/about.html">About</a>
-    </div>
-  </div>
-</nav>
+<div class="app-shell">
 
-<div class="wrap">
-  <header class="masthead">
-    <div class="eyebrow">ATE · Tool</div>
-    <h1 class="title">SARL</h1>
-    <div class="subtitle">Sistema Asistencia de Revisión Lingüística</div>
-    <div class="gold-rule"></div>
-    <p class="lede">The copy editor's pass over the agent's texts: it verifies and corrects the linguistic, stylistic, terminological, and orthotypographic aspects of a submitted text — returning evidence-cited findings with suggestions, from which a corrected text is composed by explicit disposition. Deliberately not a writer and not a translator: it composes nothing; it verifies and corrects what already exists.</p>
-    <div class="status">
-      <span class="tag">designed — not yet implemented</span>
-      <span>The full design is written — model, dimensions, engine stance, rule packs, API surface, storage, and the plate. This plate reserves SARL's place in the toolbox; the spec lives at <span style="font-family:var(--mono)">spec/sarl/</span>.</span>
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-monogram" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/></svg></span>
+      <span class="brand-wordmark">Revisión <em>Lingüística</em></span>
+    </div>
+    <div class="header-search">
+      <span class="search-icon"><sarl-icon name="search" size="16"></sarl-icon></span>
+      <input type="search" id="globalSearch" placeholder="Search tasks…  ( Ctrl K )" aria-label="Search text edition tasks" autocomplete="off">
     </div>
   </header>
 
-  <div class="section-eyebrow">The Model</div>
-  <div class="model-grid">
-    <div class="model-card">
-      <div class="mc-code">TEXT</div>
-      <div class="mc-desc">The submitted work — content, language (Spanish first-class, English), register, glossaries to enforce. The unit of work, never mutated in place.</div>
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="app-sidebar">
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+    <div class="sidebar-colophon">
+      <div class="colophon-rule"></div>
+      <div class="colophon-title">“No compone nada: verifica y corrige lo que ya existe.”</div>
+      <div class="colophon-meta">— SARL · Autoregia</div>
     </div>
-    <div class="model-card">
-      <div class="mc-code">RULE</div>
-      <div class="mc-desc">One defect class — dimension, severity, deterministic matcher, message, suggestion strategy. The unit of criteria.</div>
-    </div>
-    <div class="model-card">
-      <div class="mc-code">FINDING</div>
-      <div class="mc-desc">One detected issue — exact span, quoted evidence, suggestion(s), and a disposition: pending, accepted, rejected. The unit of evidence.</div>
-    </div>
-    <div class="model-card">
-      <div class="mc-code">GLOSSARY</div>
-      <div class="mc-desc">A terminological authority — preferred terms, forbidden variants, aliases, per language and domain. The unit of terminology.</div>
-    </div>
-    <div class="model-card">
-      <div class="mc-code">REVIEW</div>
-      <div class="mc-desc">One logged pass — findings, dispositions, counts, and the corrected text with its change log. The unit of a review session.</div>
-    </div>
-  </div>
+  </aside>
 
-  <div class="section-eyebrow">Dimensions · Rule Packs</div>
-  <table class="matrix">
-    <tr><th>Pack</th><th>Language</th><th>Status</th><th>Scope</th></tr>
-    <tr><td>es-ortotipografia</td><td>es</td><td class="st-live">live</td><td>quotes «», hyphen vs. raya, ellipsis, capitals, abbreviation and number typography — the zero-dependency workhorse</td></tr>
-    <tr><td>es-linguistica</td><td>es</td><td class="st-live">live</td><td>agreement, accentuation, usage confusions — queísmo, dequeísmo, haber / a ver</td></tr>
-    <tr><td>en-orthotypography</td><td>en</td><td class="st-live">live</td><td>straight → curly quotes, double spaces, capitalization</td></tr>
-    <tr><td>estilo</td><td>es · en</td><td class="st-live">live</td><td>filler phrases (muletillas), repetition, sentence-length outliers, register breaks</td></tr>
-    <tr><td>terminologia</td><td>es · en</td><td class="st-live">live</td><td>glossary compliance — forbidden terms, unpreferred aliases, terminology drift</td></tr>
-    <tr><td>languagetool</td><td>es · en</td><td class="st-dormant">flow-complete · dormant</td><td>all dimensions — supplemental external engine, provenance-tagged</td></tr>
-  </table>
-  <p class="note">Dormant means the adapter is designed — request shape, match mapping, mock endpoint — but wakes only when a LanguageTool server is configured. The live path is pure deterministic rules: same text, same packs, same findings — no network, no models.</p>
+  <!-- ═══ Main ═══ -->
+  <main class="app-main" id="appContent"></main>
 
-  <div class="section-eyebrow">Severity</div>
-  <div class="sev-ladder">
-    <span class="chip hot">error</span>
-    <span class="chip">warning</span>
-    <span class="chip">suggestion</span>
-  </div>
+  <!-- ═══ Footer ═══ -->
+  <footer class="app-footer">
+    <div class="footer-rule"></div>
+    <div class="footer-title">SARL — the copy editor's pass of the toolbox</div>
+    <span class="pill gold">language review</span>
+    <div class="footer-meta">tasks: <span id="footerRegister">—</span> · <span id="footerFilter">no filter</span></div>
+  </footer>
 
-  <div class="section-eyebrow">The Pass</div>
-  <div class="pass-steps">
-    <div class="step">
-      <div class="n">01</div>
-      <div class="t">Review</div>
-      <div class="d">The text is submitted with its language, register, and dimensions; the live packs raise findings, each citing its exact span.</div>
+</div>
+
+<!-- ═══ Command Palette ═══ -->
+<div class="cmd-palette-overlay hidden" id="cmdPalette">
+  <div class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmd-palette-search">
+      <span><sarl-icon name="search" size="18"></sarl-icon></span>
+      <input type="text" id="cmdInput" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmdResults" aria-label="Search commands" placeholder="Type a command, a task, or a glossary…" autocomplete="off">
+      <span class="kbd-hint">ESC</span>
     </div>
-    <div class="step">
-      <div class="n">02</div>
-      <div class="t">Disposition</div>
-      <div class="d">Every suggestion is accepted or rejected by the agent; rejections are recorded — repeated ones retire or retune the rule.</div>
-    </div>
-    <div class="step">
-      <div class="n">03</div>
-      <div class="t">Apply</div>
-      <div class="d">Accepted suggestions compose the corrected text beside a change log — span, rule, before → after. Nothing is ever overwritten.</div>
-    </div>
+    <div class="cmd-results" id="cmdResults" role="listbox" aria-label="Command results"></div>
   </div>
 </div>
 
-<footer>
-  <div class="wrap"><span class="mono">Autoregia · SARL — the copy editor's pass of the toolbox</span></div>
-</footer>
+<!-- ═══ Modal ═══ -->
+<div class="modal-overlay hidden" id="modal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h2 id="modalTitle">—</h2>
+      <button class="btn-icon" id="modalClose" aria-label="Close dialog"><sarl-icon name="x" size="16"></sarl-icon></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ═══ Toast ═══ -->
+<div id="toast" class="wm-toast" role="status" aria-live="polite"></div>
+
+<!-- ═══ Scripts ═══ -->
+<script src="/ui/js/ui.js?v=20260917"></script>
+<script src="/ui/js/icons.js?v=20260917"></script>
+<script src="/ui/js/md.js?v=20260919b"></script>
+
+<script src="js/store.js?v=20260919b"></script>
+<script src="js/icons.js?v=20260917"></script>
+<script src="js/views.js?v=20260917"></script>
+<script src="js/dashboard.js?v=20260919b"></script>
+<script src="js/review.js?v=20260919b"></script>
+<script src="js/tasks.js?v=20260919c"></script>
+<script src="js/glossaries.js?v=20260917"></script>
+<script src="js/phrases.js?v=20260917"></script>
+<script src="js/audit.js?v=20260919b"></script>
+<script src="js/self-monitoring.js?v=20260917"></script>
+<script src="js/settings.js?v=20260917"></script>
+<script src="js/app.js?v=20260919b"></script>
+<script src="js/command-palette.js?v=20260919c"></script>
 
 </body>
 </html>

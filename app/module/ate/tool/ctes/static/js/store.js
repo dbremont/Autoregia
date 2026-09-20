@@ -147,3 +147,9 @@ CTES.Store = (() => {
     esc, fmtTime, fmtDur, fmtBytes,
   };
 })();
+
+// formatting helpers are namespace-level too — the views call CTES.esc etc.
+CTES.esc = CTES.Store.esc;
+CTES.fmtTime = CTES.Store.fmtTime;
+CTES.fmtDur = CTES.Store.fmtDur;
+CTES.fmtBytes = CTES.Store.fmtBytes;

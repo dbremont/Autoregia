@@ -57,7 +57,7 @@ Autoregia/
     │   │       ├── ctes/  #   Computation Task Execution System (WOS-style shell: handle register, task specs, runs, audit)
     │   │       ├── sopcs/ #   Standard Operating Procedure Catalog System (markdown SOPs, full-text + semantic search, figures as CouchDB attachments)
     │   │       ├── gial/  #   General Integration Abstraction Layer (plate only)
-    │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (plate only)
+    │   │       └── sarl/  #   Sistema Asistencia de Revisión Lingüística (WOS-style shell: text edition tasks, rule packs, glossaries, phrase catalog, audit)
     │   ├── acsms/       # Agent Capability Self Management System
     │   │   ├── README.md
     │   │   ├── server.py       # Flask API + CouchDB persistence (skills, practice self-reports, paths, tracking)

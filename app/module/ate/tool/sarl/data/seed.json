@@ -1,0 +1,61 @@
+[
+  {
+    "id": "glos-redaccion-tecnica-es",
+    "type": "glossary",
+    "name": "Redacción técnica (es)",
+    "language": "es",
+    "domain": "technical",
+    "note": "Glosario semilla de redacción técnica en español — el agente lo edita a su criterio terminológico.",
+    "enabled": true,
+    "entries": [
+      {"preferred": "carpeta", "forbidden": ["directorio"], "aliases": ["folder"], "note": ""},
+      {"preferred": "archivo", "forbidden": [], "aliases": ["fichero"], "note": "variante peninsular = alias"},
+      {"preferred": "interfaz", "forbidden": ["interface"], "aliases": [], "note": ""},
+      {"preferred": "en línea", "forbidden": ["online", "on-line"], "aliases": [], "note": ""},
+      {"preferred": "correo electrónico", "forbidden": ["email", "mail"], "aliases": ["correo"], "note": ""},
+      {"preferred": "contraseña", "forbidden": ["password"], "aliases": ["clave"], "note": ""},
+      {"preferred": "copia de seguridad", "forbidden": ["backup"], "aliases": ["respaldo"], "note": "respaldo es válido — la deriva se marca, no se corrige"},
+      {"preferred": "sitio web", "forbidden": ["website"], "aliases": ["página web"], "note": ""},
+      {"preferred": "descargar", "forbidden": ["bajarse"], "aliases": [], "note": ""}
+    ],
+    "created_at": "2026-09-19T00:00:00Z",
+    "updated_at": "2026-09-19T00:00:00Z"
+  },
+  {
+    "id": "phr-muletillas-es",
+    "type": "phrase_collection",
+    "name": "Muletillas (es)",
+    "language": "es",
+    "kind": "muletilla",
+    "enabled": true,
+    "note": "Frases de relleno que el pack estilo señala para eliminación.",
+    "phrases": [
+      "cabe destacar que", "cabe señalar que", "cabe mencionar que",
+      "cabe notar que", "cabe recordar que",
+      "es importante destacar que", "es importante señalar que",
+      "es importante mencionar que", "es necesario destacar que",
+      "como es bien sabido", "como todos sabemos", "como es sabido",
+      "en el día de hoy", "sin lugar a dudas", "no cabe duda de que",
+      "por así decirlo", "muy por el contrario", "valga la redundancia"
+    ],
+    "created_at": "2026-09-19T00:00:00Z",
+    "updated_at": "2026-09-19T00:00:00Z"
+  },
+  {
+    "id": "phr-fillers-en",
+    "type": "phrase_collection",
+    "name": "Fillers (en)",
+    "language": "en",
+    "kind": "filler",
+    "enabled": true,
+    "note": "Filler phrases flagged for deletion — the English muletillas.",
+    "phrases": [
+      "it should be noted that", "it is important to note that",
+      "it is worth noting that", "needless to say",
+      "as a matter of fact", "at the end of the day",
+      "for all intents and purposes", "in the final analysis"
+    ],
+    "created_at": "2026-09-19T00:00:00Z",
+    "updated_at": "2026-09-19T00:00:00Z"
+  }
+]
