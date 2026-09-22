@@ -157,6 +157,19 @@ def pks_redirect():
     return redirect("/pks/")
 
 
+@app.route("/pks/learn/")
+@app.route("/pks/learn/<path:name>")
+def pks_learn(name="index.html"):
+    # Learning surfaces hosted under the PKS plate (first: Lebrija, the
+    # Spanish-grammar trainer at /pks/learn/lebrija/). Static, plate-style
+    # like /ags/policies/ — until PKS is implemented (module/pks +
+    # SUBSYSTEMS), at which point that mount shadows these routes.
+    # Dotfiles are never served (the vendored tree must not expose secrets).
+    if name.startswith(".") or "/." in name:
+        return jsonify({"error": "Not found"}), 404
+    return send_from_directory(os.path.join(ROOT, "module", "pks", "learn"), name)
+
+
 @app.route("/gwob")
 def gwob_redirect():
     return redirect("/gwob/")

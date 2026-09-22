@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!-- Lebrija en Autoregia — superficie de aprendizaje (PKS).
+     Vendored from the standalone Lebrija app (22 temas, norma culta RAE)
+     and migrated onto the Autoregia design system (design.md, spec/ui.spec):
+     /ui/ token layer, context chrome (§12), command palette (§7.6, minimal
+     scope), route focus + labelled controls (§10). Class names are frozen:
+     the session engine, the router and any future ACSMS embedding address
+     the DOM by these names. Corrector backend not yet wired (see
+     js/corrector.js). -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lebrija — gramática española para nativos | PKS</title>
+  <meta name="description" content="Lebrija: ejercicios y reglas de la norma culta del español para hablantes nativos: tildes, queísmo, concordancia, subjuntivo, pronombres y más. Cada corrección explica la regla y la razón.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%237A1A2A'/%3E%3Ctext x='8' y='12' font-family='Georgia,serif' font-size='11' font-weight='bold' text-anchor='middle' fill='%23FAF1E6'%3EL%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/ui/css/tokens.css?v=20260922">
+  <link rel="stylesheet" href="/ui/css/fonts.css?v=20260922">
+  <link rel="stylesheet" href="/ui/css/base.css?v=20260922">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#app">Saltar al contenido</a>
+  <nav class="topnav" aria-label="Navegación principal">
+    <div class="topnav-in">
+      <a class="lockup" href="/index.html">Autoregia <span class="lockup-sub">· PKS / Lebrija</span></a>
+      <div class="links">
+        <a href="/pks/">PKS</a>
+        <a href="#/examen">Examen</a>
+        <a href="#/corrector">Corrector</a>
+        <a href="#/referencias">Referencias</a>
+        <a href="/about.html">About</a>
+      </div>
+    </div>
+  </nav>
+  <div class="marco">
+    <aside class="lateral">
+      <div class="lateral-cabecera">
+        <a class="logo" href="#/">Lebrija</a>
+        <p class="lema">Gramática culta<br>del español</p>
+      </div>
+      <nav class="menu-lateral" id="menu-lateral" aria-label="Secciones de Lebrija">
+        <a href="#/" data-ruta="inicio">Temas</a>
+        <a href="#/corrector" data-ruta="corrector">Corrector</a>
+        <a href="#/examen" data-ruta="examen">Examen</a>
+        <a href="#/errores" data-ruta="errores">Mis errores</a>
+        <a href="#/referencias" data-ruta="referencias">Referencias</a>
+      </nav>
+      <p class="atajo-hint"><kbd class="kbd">Ctrl K</kbd> para buscar temas y vistas</p>
+      <div class="lateral-progreso" id="lateral-progreso"></div>
+      <p class="lateral-pie">Norma culta (RAE).<br>Cada corrección explica<br>la regla y la razón.</p>
+      <p class="sidebar-colophon">Lebrija · PKS<span class="mono">learn/lebrija · norma culta</span></p>
+    </aside>
+
+    <div class="principal">
+      <header class="cabecera-movil">
+        <a class="logo" href="#/">Lebrija</a>
+        <nav class="menu-movil" id="menu-movil">
+          <a href="#/" data-ruta="inicio">Temas</a>
+          <a href="#/corrector" data-ruta="corrector">Corrector</a>
+          <a href="#/examen" data-ruta="examen">Examen</a>
+          <a href="#/errores" data-ruta="errores">Errores</a>
+          <a href="#/referencias" data-ruta="referencias">Referencias</a>
+        </nav>
+      </header>
+
+      <main id="app" class="contenedor">
+        <noscript>
+          <p class="aviso">Esta herramienta necesita JavaScript. Actívalo para poder practicar.</p>
+        </noscript>
+      </main>
+
+      <footer class="pie">
+        <div class="contenedor">
+          <p>Lebrija · gramática culta del español · PKS — Agent Knowledge · <a href="#/referencias">Referencias</a></p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/nucleo.js"></script>
+  <script src="js/datos/indice.js"></script>
+  <script src="js/datos/temas/tildes.js"></script>
+  <script src="js/datos/temas/dequeismo.js"></script>
+  <script src="js/datos/temas/concordancia.js"></script>
+  <script src="js/datos/temas/subjuntivo.js"></script>
+  <script src="js/datos/temas/pronombres.js"></script>
+  <script src="js/datos/temas/preposiciones.js"></script>
+  <script src="js/datos/temas/haber-gerundio.js"></script>
+  <script src="js/datos/temas/paronimos.js"></script>
+  <script src="js/datos/temas/puntuacion.js"></script>
+  <script src="js/datos/temas/mayusculas.js"></script>
+  <script src="js/datos/temas/byv.js"></script>
+  <script src="js/datos/temas/ll-y.js"></script>
+  <script src="js/datos/temas/gjh.js"></script>
+  <script src="js/datos/temas/aspecto.js"></script>
+  <script src="js/datos/temas/participios.js"></script>
+  <script src="js/datos/temas/hipotetico.js"></script>
+  <script src="js/datos/temas/irregulares.js"></script>
+  <script src="js/datos/temas/se.js"></script>
+  <script src="js/datos/temas/ser-estar.js"></script>
+  <script src="js/datos/temas/relativos.js"></script>
+  <script src="js/datos/temas/estilo-indirecto.js"></script>
+  <script src="js/datos/temas/cuantificadores.js"></script>
+  <script src="js/progreso.js"></script>
+  <script src="js/ejercicios.js"></script>
+  <script src="js/corrector.js"></script>
+  <script src="js/vistas.js"></script>
+  <script src="js/paleta.js"></script>
+</body>
+</html>

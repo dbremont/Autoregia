@@ -168,6 +168,7 @@ Users of this archetype: `ags` (policy pages), `pras` (deliberations),
 | `ags` — policy pages               | standalone | ✅ conforms |
 | `pras` — deliberations             | standalone | ✅ conforms |
 | `ags`, `gwob`, `pks` — landing plates | standalone | ✅ conforms (canonical tokens 2026-09) |
+| `pks/learn/lebrija` — Lebrija (Spanish-grammar trainer) | standalone + embedded-app | ✅ conforms (vendored 2026-09, migrated onto `/ui/` tokens: class names frozen, dark mode removed, §12 chrome, minimal §7.6 palette; corrector backend deferred) |
 | `acsms` — landing                  | standalone | ✅ conforms (canonical tokens 2026-09) |
 | `ces` — console (`/ate/tool/ces/`) | standalone | ✅ conforms (restyled 2026-09) |
 | `index.html`, `about.html`, `docs.html` (root plates) | standalone | ✅ conforms (self-hosted fonts, canonical tokens 2026-09) |

@@ -29,7 +29,49 @@ TODO:
 
 ## Index
 
-### 2026 — GCAL wave 1: the connector manager goes live
+### 2026 — Lebrija vendored into PKS and migrated onto the design system
+
+**Question.** The standalone Lebrija app (Spanish norma-culta grammar: 22 temas,
+240+ ejercicios) belongs in Autoregia as PKS's first learning surface, but it
+ships its own theme (own tokens, auto dark mode, absolute `/api/corregir`,
+no context chrome). How to host it under `/pks/` conformant without forking
+its session engine?
+
+**Decision.**
+
+1. **Vendor, don't fork**: `app/module/pks/learn/lebrija/` holds upstream's
+   `index.html`, `css/`, `js/` verbatim-structure; excluded `server.py`,
+   `.env` (live secret — never copied), `.env.example`, `__pycache__`,
+   `prueba-e2e.html`, and the unreferenced 1.7 MB `gramatica.png`.
+2. **Plate-style serving**: `app/app.py` gains `/pks/learn/` +
+   `/pks/learn/<path:name>` routes (dotfile-safe, `ags/policies` precedent) —
+   no `SUBSYSTEMS` change, no `prefix_assets` change (all-relative URLs), and
+   a future real PKS mount shadows them cleanly.
+3. **Reskin with frozen class names**: `css/styles.css` rewritten onto the
+   `/ui/` token layer (typing-camp precedent); every DOM class unchanged so
+   the engine, router, and a future ACSMS practice embed keep working.
+4. **Dark mode removed** (out of scope per `design.md` §1); §12 chrome added
+   (own topnav + colophon footer); minimal §7.6 palette (`Ctrl/⌘+K` over
+   22 temas + 5 views); route-focus + labelled inputs (§10); corrector
+   retargeted to relative `api/corregir` with honest not-connected copy.
+5. **Scratchpad recorded as §11.4 deviation** (meaningless for a grammar
+   trainer); corrector LLM backend and the ACSMS practice duplication
+   (`training-session-complete`, `SKILL-spanish-grammar`) are follow-ups —
+   same-origin `localStorage` means progress carries over for free.
+
+**Rationale.** PKS is the knowledge substrate: learn surfaces live there,
+practice evidence is tracked in ACSMS. Single copy + cross-embed beats
+duplication; token-layer migration (not markup rewrite) bounds the blast
+radius to styling while the didactics stay byte-identical.
+
+**Trade-offs accepted.** No dark mode (users with `prefers-color-scheme:
+dark` get parchment); no corrector until the backend lands; palette is
+search-only (no actions); `learn/` has no index page of its own.
+
+**Implements.** [PKS plate](app/module/pks/index.html),
+[app.py learn routes](app/app.py),
+[Lebrija](app/module/pks/learn/lebrija/index.html),
+[design.md conformance](design.md).
 
 **Question.** The GCAL design (registry, lifecycle, gateway, dormant OAuth2)
 was complete but unimplemented. How should wave 1 land so the manager's
