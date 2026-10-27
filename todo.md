@@ -1,6 +1,9 @@
 - [ ] We need to add a Paper Search and Indexing Mechanism - From Journals Sources - ./spec/todo - as part of the monitoring of the environment.
 - https://www.rankless.org/
 
+- https://nitter.click/AswathDamodaran
+- 
+
 Autoregia Sourdces:
 - https://nitter.click/P_Astudillo
 - https://nitter.click/raulaldaz
