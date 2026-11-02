@@ -29,6 +29,57 @@ TODO:
 
 ## Index
 
+### 2026 — Naturgnosis Index: a frozen space of spaces in PKS
+
+**Question.** Naturgnosis already has a universal viewer over its five graph
+spaces, but it is read-only and the project is about to freeze while its notes
+move to Epistecnica. How should PKS carry the corpus forward as an editable
+index without re-authoring 16,165 nodes or resurrecting stale data?
+
+**Decision.**
+
+1. **Promote PKS to a real sub-system** (`module/pks/server.py` in
+   `SUBSYSTEMS`) instead of root plate routes; the landing plate, the Lebrija
+   trainer, and the new viewer all live under one mount.
+2. **Snapshot, don't proxy**: copy Naturgnosis's committed
+   `universal-graph.json` + `universal-layout.json` into
+   `app/module/pks/data/` with a provenance block (source commit, generated
+   date, five spaces). The builder validates per-space counts, uid uniqueness,
+   layout coverage, and edge targets, and refuses to write an incomplete
+   snapshot. The live CouchDB is never used — it carries stale docs
+   (import duplicates, the dropped Bottema monograph, legal/rights artifacts
+   moved back to Social).
+3. **One universal space, space-preserving nodes**: the viewer aggregates
+   Social, Research, Technique, Epistemic, and Nature; every node keeps its
+   `source` as badge, colour, filter, and `space:id` identity.
+4. **Editable node overlay, frozen snapshot**: CouchDB `pks` docs store local
+   nodes (`origin: local`), base-node overrides (`origin: override`), and
+   deletion tombstones. The detail panel is a state machine — `VIEW` with
+   Edit/Delete after the content, `EDIT` with Save/Cancel, `ADD` from the
+   always-active `+ Node` canvas control. Local/edited nodes get gold rings and
+   the overlay exports as JSON/Markdown for the Epistecnica hand-off.
+5. **Design-system conformance**: the deck.gl renderer is vendored but its
+   chrome is rewritten on the Autoregia token layer, labels/edges recoloured
+   for paper, and no CDN fonts are used.
+
+**Rationale.** The snapshot is evidence; the node overlay is judgement.
+Freezing the base corpus and letting only additions, edits, and deletions
+mutate keeps the index trustworthy while giving the migration a living layer.
+Building 16k nodes once and never again is cheaper and safer than a runtime
+dependency on a project that is being retired.
+
+**Trade-offs accepted.** The viewer is a copy of Naturgnosis's renderer, not a
+shared library; the snapshot must be regenerated manually until the freeze; only
+the five graph spaces are indexed (nation, note, glossaria, and QA are linked,
+not imported); node editing has no auth beyond the single-user deployment.
+
+**Implements.** [PKS server](app/module/pks/server.py),
+[Naturgnosis Index](app/module/pks/static/naturgnosis/index.html),
+[snapshot builder](app/module/pks/bin/snapshot_naturgnosis.py),
+[snapshot data](app/module/pks/data/naturgnosis-index.json),
+[sub-system registry](app/app.py), [spec](spec/pks/README.md),
+[tests](app/module/pks/test_pks.py).
+
 ### 2026 — Lebrija vendored into PKS and migrated onto the design system
 
 **Question.** The standalone Lebrija app (Spanish norma-culta grammar: 22 temas,
@@ -68,7 +119,7 @@ radius to styling while the didactics stay byte-identical.
 dark` get parchment); no corrector until the backend lands; palette is
 search-only (no actions); `learn/` has no index page of its own.
 
-**Implements.** [PKS plate](app/module/pks/index.html),
+**Implements.** [PKS plate](app/module/pks/static/index.html),
 [app.py learn routes](app/app.py),
 [Lebrija](app/module/pks/learn/lebrija/index.html),
 [design.md conformance](design.md).

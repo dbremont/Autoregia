@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKS — Personal Knowledge System</title>
+<link rel="stylesheet" href="/ui/css/tokens.css?v=20260917">
+<link rel="stylesheet" href="/ui/css/fonts.css?v=20260917">
+<link rel="stylesheet" href="/ui/css/standalone.css?v=20260917">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    font-family:var(--serif,"Iowan Old Style",Georgia,serif);
+    background:var(--paper,#faf8f4);
+    color:var(--ink,#1c1916);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 32px}
+
+  /* nav */
+  .topnav{position:sticky;top:0;z-index:30;background:var(--paper,#faf8f4);
+    border-bottom:1px solid var(--rule,#e4ded2)}
+  .topnav-in{max-width:920px;margin:0 auto;padding:0 32px;height:64px;
+    display:flex;align-items:center;gap:18px}
+  .lockup{font-family:var(--serif,Georgia,serif);font-size:19px;letter-spacing:-.01em;
+    color:var(--ink,#1c1916);text-decoration:none}
+  .links{margin-left:auto;display:flex;gap:28px}
+  .links a{font-family:var(--sans,system-ui,sans-serif);font-size:13px;letter-spacing:.02em;
+    color:var(--muted,#8a8378);text-decoration:none;padding:6px 0;
+    border-bottom:1px solid transparent;transition:color .16s,border-color .16s}
+  .links a:hover{color:var(--ink,#1c1916);border-bottom-color:var(--gold,#a8894f)}
+
+  /* masthead — h1 and quotes top-aligned */
+  .masthead{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:56px;
+    align-items:start;
+    padding:96px 0 0;
+  }
+  .masthead-left{padding-top:0}
+  h1{
+    font-size:clamp(64px,10vw,110px);
+    font-weight:300;
+    letter-spacing:-.045em;
+    line-height:.88;
+    color:var(--ink,#1c1916);
+    margin:0;
+  }
+  .tagline{margin-top:18px;font-size:17px;font-style:italic;color:var(--ink-soft,#4a453e)}
+
+  .quotes{display:flex;flex-direction:column;gap:22px;padding-top:2px}
+  blockquote{
+    margin:0;padding-left:20px;
+    border-left:2px solid var(--gold,#a8894f);
+    font-size:17px;line-height:1.7;
+    color:var(--ink-soft,#4a453e);
+    max-width:46ch;
+  }
+  blockquote:first-child{font-size:18px;color:var(--ink,#1c1916)}
+  blockquote cite{
+    display:block;margin-top:6px;
+    font-family:var(--mono,ui-monospace,monospace);
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted,#8a8378);font-style:normal
+  }
+
+  /* index */
+  .index-rule{height:1px;background:var(--rule,#e4ded2);margin-top:88px}
+  .index-head{display:flex;justify-content:space-between;align-items:baseline;
+    padding:34px 0 4px}
+  .eyebrow{font-family:var(--sans,system-ui,sans-serif);font-size:11px;
+    letter-spacing:.24em;text-transform:uppercase;color:var(--gold,#a8894f);font-weight:600}
+  .count{font-family:var(--mono,ui-monospace,monospace);font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--muted,#8a8378)}
+
+  .entry{display:grid;grid-template-columns:38px minmax(0,1fr) 26px;gap:26px;
+    align-items:start;padding:30px 0;border-top:1px solid var(--rule,#e4ded2);
+    text-decoration:none;color:inherit;outline-offset:6px}
+  .entry:last-of-type{border-bottom:1px solid var(--rule,#e4ded2)}
+
+  .num{font-family:var(--mono,ui-monospace,monospace);font-size:11px;
+    letter-spacing:.14em;color:var(--muted,#8a8378);padding-top:9px;
+    transition:color .16s}
+  .e-eyebrow{font-family:var(--mono,ui-monospace,monospace);font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--gold,#a8894f);font-weight:600}
+  .e-title{font-size:clamp(21px,2.4vw,27px);font-weight:400;letter-spacing:-.015em;
+    color:var(--ink,#1c1916);margin-top:5px;transition:color .16s}
+  .e-desc{margin-top:7px;font-size:15.5px;line-height:1.65;
+    color:var(--ink-soft,#4a453e);max-width:58ch}
+  .e-arrow{font-family:var(--sans,system-ui,sans-serif);font-size:15px;
+    color:var(--muted,#8a8378);padding-top:12px;justify-self:end;
+    transition:transform .18s,color .18s}
+
+  .entry:hover .e-title,
+  .entry:focus-visible .e-title{color:var(--accent,#9a5b34)}
+  .entry:hover .num,
+  .entry:focus-visible .num{color:var(--gold,#a8894f)}
+  .entry:hover .e-arrow,
+  .entry:focus-visible .e-arrow{transform:translateX(5px);color:var(--accent,#9a5b34)}
+
+  /* footer */
+  footer{margin-top:96px;border-top:1px solid var(--rule,#e4ded2);padding:26px 0 64px}
+  footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  footer span{font-family:var(--mono,ui-monospace,monospace);font-size:11px;
+    letter-spacing:.1em;color:var(--muted,#8a8378)}
+
+  /* responsive */
+  @media (max-width:780px){
+    .wrap,.topnav-in{padding:0 22px}
+    .masthead{grid-template-columns:1fr;gap:34px;padding-top:60px}
+    .index-rule{margin-top:52px}
+    .entry{grid-template-columns:minmax(0,1fr) 22px;gap:6px 16px;padding:26px 0}
+    .num{grid-column:1 / -1;padding-top:0;order:-1}
+    .e-arrow{padding-top:6px}
+    .e-desc{max-width:none}
+    blockquote{max-width:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-in">
+    <a class="lockup" href="/index.html">Autoregia</a>
+    <div class="links">
+      <a href="/index.html#loop">Systems</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <header class="masthead">
+      <div class="masthead-left">
+        <h1>PKS</h1>
+        <p class="tagline">Personal Knowledge System</p>
+      </div>
+
+      <div class="quotes">
+        <blockquote>
+          The agent's knowledge substrate — the corpus of concepts, episteme, and technique it holds: externalized, indexed, and retrievable for understanding and action.
+        </blockquote>
+        <blockquote>
+          Externalized, indexed, and made retrievable for understanding and action.
+          <cite>— PKS</cite>
+        </blockquote>
+      </div>
+    </header>
+
+    <div class="index-rule"></div>
+
+    <div class="index-head">
+      <div class="eyebrow">Index</div>
+      <div class="count">03 entries</div>
+    </div>
+
+    <a class="entry" href="/pks/naturgnosis/">
+      <span class="num">01</span>
+      <div>
+        <div class="e-eyebrow">universal · 16,165 nodes</div>
+        <h2 class="e-title">Naturgnosis Index</h2>
+        <p class="e-desc">Social, Nature, Research, Technique, and Epistemic spaces aggregated into one space of spaces — searchable, navigable, and editable node by node.</p>
+      </div>
+      <span class="e-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a class="entry" href="https://github.com/dbremont/Epistecnica" target="_blank" rel="noopener">
+      <span class="num">02</span>
+      <div>
+        <div class="e-eyebrow">dbremont · framework</div>
+        <h2 class="e-title">Epistecnica</h2>
+        <p class="e-desc">A unified framework for the two dimensions of human agency: knowing (Epistemica) and acting (Tecnica).</p>
+      </div>
+      <span class="e-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <a class="entry" href="/pks/learn/lebrija/index.html">
+      <span class="num">03</span>
+      <div>
+        <div class="e-eyebrow">español · norma culta (RAE)</div>
+        <h2 class="e-title">Lebrija</h2>
+        <p class="e-desc">Spanish grammar for native speakers — 22 temas, 240+ ejercicios. Every correction explains the rule and the reason.</p>
+      </div>
+      <span class="e-arrow" aria-hidden="true">→</span>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Autoregia · PKS</span>
+    <span>what the agent knows</span>
+  </div>
+</footer>
+
+</body>
+</html>

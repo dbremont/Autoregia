@@ -15,13 +15,16 @@ app/                 the application
 ├── app.py           unified server (SUBSYSTEMS registry, WSGI prefix
 │                    dispatcher, plate-only routes)
 ├── index.html       landing plate     (about.html and docs.html beside it)
-├── module/          the sub-systems — 11 mounted in SUBSYSTEMS:
+├── module/          the sub-systems — 12 mounted in SUBSYSTEMS:
 │                    mad, pkts, pwts, wos, gis, aias, aoos, ate, pras,
-│                    acsms, loop
+│                    acsms, loop, pks
 │   └── <sys>/       server.py (Flask app) + static/ + data/ + tests
-│       ags/ gwob/ pks/        plate-only (index.html; ags adds policies/):
+│       ags/ gwob/             plate-only (index.html; ags adds policies/):
 │                             served by root routes in app.py, NOT SUBSYSTEMS
 │       asrs/ pais/ peos/ …    husks — __pycache__ only, deleted modules
+│       pks/         Personal Knowledge System: landing plate + Lebrija
+│                    trainer + Naturgnosis Index (universal snapshot +
+│                    CouchDB `pks` node overlay) — spec/pks/
 │       ate/         Agent Toolbox Ecosystem: hosts tools under tool/<id>/
 │         └── ces/  a tool (own Flask app, mounted at /ate/tool/ces/)
 │         └── ctes/  a tool — WOS-style app shell: handle register + task specs + runs + audit (spec/ctes/)
@@ -63,10 +66,10 @@ make deploy-local      # build the local image (autoregia:local) and run it — 
 make deploy-server     # pull the GHCR image CI publishes and run it — production
 # also: make build | logs | stop
 
-# tests (WOS + GIS + ACSMS tests need CouchDB running on 127.0.0.1:5984)
+# tests (WOS + GIS + ACSMS + PKS tests need CouchDB running on 127.0.0.1:5984)
 make test              # = python3 -m pytest app/module/ate/tool/ces/test_ces.py \
                        #    app/module/wos/test_wos.py app/module/gis/test_gis.py \
-                       #    app/module/acsms/test_acsms.py
+                       #    app/module/acsms/test_acsms.py app/module/pks/test_pks.py
 
 # after changing any URL prefix in app/app.py SUBSYSTEMS — MANDATORY:
 make prefix-assets
@@ -104,9 +107,18 @@ everything else runs out-of-band:
   `app/module/aoos/config/client_secret.json` (or `AOOS_GC_CLIENT_SECRET`),
   writes `config/token.json` on connect; status machine
   mock → authorized_pending → connected.
-- **Plate-only routes** — `/ags/` (+ `/ags/policies/…`), `/gwob/`, `/pks/`
-  are static plates served by root routes in `app/app.py`, not `SUBSYSTEMS`
+- **Plate-only routes** — `/ags/` (+ `/ags/policies/…`) and `/gwob/` are
+  static plates served by root routes in `app/app.py`, not `SUBSYSTEMS`
   mounts. A real mount with the same prefix shadows the plate route.
+- **Naturgnosis snapshot** — `/pks/naturgnosis/` reads the committed
+  `app/module/pks/data/naturgnosis-index.json` + `naturgnosis-layout.json`
+  (16,165 nodes from Naturgnosis's five graph spaces). The snapshot is built
+  from the *committed* Naturgnosis mirrors, never from its live CouchDB
+  (which carries stale docs: import duplicates, the dropped Bottema
+  monograph, artifacts moved back to Social). Refresh with
+  `python3 app/module/pks/bin/snapshot_naturgnosis.py`; it refuses to write an
+  incomplete snapshot. Node additions/edits/deletions are an overlay in the
+  `pks` DB (`origin: local|override`, tombstones) and export to Epistecnica.
 
 ## Data & storage
 
@@ -130,10 +142,13 @@ everything else runs out-of-band:
   | pkts | `pkts_raw` + `pkts` |
   | pwts | `pwts_raw` + `pwts` |
   | acsms | `acsms` |
+  | pks | `pks` (node overlay + legacy notes; the snapshot is a committed JSON file) |
 
 - Local-file only (no CouchDB): `loop` (read-only `data/mock_loop.json`),
   `ces` (in-memory sessions + read-only mock environments), `pras`
-  (`deliberations/*.html` files *are* the data).
+  (`deliberations/*.html` files *are* the data). PKS is hybrid: the
+  Naturgnosis snapshot is local JSON, the editable node overlay lives in `pks`
+  CouchDB.
 
 ## Invariants (do not break silently)
 
@@ -163,8 +178,9 @@ everything else runs out-of-band:
   focused window, shared by PWTS and PKTS collectors. Never fork it.
 - **Tests are listed explicitly in `make test`** — there is no pytest config
   and no auto-discovery, so a new suite does not run until added to the
-  Makefile. WOS/GIS suites module-level-skip when CouchDB is unreachable;
-  CES needs nothing (in-memory).
+  Makefile. WOS/GIS/ACSMS/PKS suites module-level-skip when CouchDB is
+  unreachable; CES needs nothing (in-memory). PKS additionally tests the
+  committed snapshot offline (completeness, layout, dangling edges).
 - **Design standard:** `design.md` governs every plate and sub-system UI.
   Canonical tokens: paper `#FAFAF6`, oxford `#7A1A2A`, gold
   `#A8854A`, Spectral/Inter/IBM Plex Mono. Fonts are **self-hosted**
@@ -294,7 +310,7 @@ in-repo. Commits are SSH-signed via 1Password (`op-ssh-sign`).
 
 1. `make run` → all mounts return 200,
    `/api/` lists the expected sub-systems, `0` tracebacks in the log.
-2. `make test` → currently **102 passed, 1 failed**
+2. `make test` → currently **295 passed, 2 skipped, 1 failed**
    (`test_wos.py::test_clusters_lexical_backend_groups_related` —
    pre-existing lexical-backend clustering failure).
 3. `make deploy-local` → curl the mount matrix on the container port; check

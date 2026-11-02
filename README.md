@@ -28,8 +28,17 @@ Autoregia/
     ├── index.html       # project landing / index page
     ├── about.html       # the system described in full
     ├── docs.html        # documentation plate
-    ├── ags/, gwob/, pks/ # landing plates: AGS + policies, GWOB gateway, PKS (conceived)
+    ├── ags/, gwob/       # landing plates: AGS + policies, GWOB gateway
     ├── module/          # all materialized sub-systems
+    │   ├── pks/         # Personal Knowledge System — landing plate, Lebrija trainer,
+    │   │                #   Naturgnosis Index (universal snapshot + node overlay)
+    │   │   ├── server.py
+    │   │   ├── static/index.html      # landing plate
+    │   │   ├── static/naturgnosis/    # one universal space (5 graph spaces, 16,165 nodes)
+    │   │   ├── learn/lebrija/         # Spanish norma-culta trainer
+    │   │   ├── data/                  # committed Naturgnosis snapshot + layout
+    │   │   ├── bin/snapshot_naturgnosis.py
+    │   │   └── test_pks.py
     │   ├── mad/         # Memory Aid System (MAD) — formerly PBS
     │   │   ├── README.md
     │   │   ├── spec.md

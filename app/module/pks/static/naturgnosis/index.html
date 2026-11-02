@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naturgnosis Index · PKS</title>
+<link rel="stylesheet" href="/ui/css/tokens.css?v=20261102">
+<link rel="stylesheet" href="/ui/css/fonts.css?v=20261102">
+<link rel="stylesheet" href="/ui/css/base.css?v=20261102">
+<style>
+  :root {
+    --src-social: #7A1A2A;
+    --src-research: #3F6092;
+    --src-technique: #8A6A2F;
+    --src-epistemica: #6B4A7A;
+    --src-nature: #3F6E50;
+  }
+
+  body {
+    display: grid;
+    grid-template-columns: 300px 1fr 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink-1);
+  }
+  body.detail-open { grid-template-columns: 300px 1fr 400px; }
+
+  /* ── Sidebar ─────────────────────────────────────────── */
+  aside.toolbox {
+    position: relative; z-index: 10;
+    background: var(--color-surface-warm);
+    border-right: 1px solid var(--ink-8);
+    padding: var(--space-6) var(--space-5) var(--space-8);
+    overflow-y: auto;
+  }
+  .sb-eyebrow {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold-ink); display: block; margin-bottom: var(--space-2);
+    text-decoration: none;
+  }
+  .sb-eyebrow:hover { color: var(--oxford); }
+  .sb-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: var(--text-xl); line-height: 1.1; letter-spacing: -.01em;
+    padding-bottom: var(--space-2); margin-bottom: var(--space-1);
+  }
+  .sb-subtitle {
+    font-family: var(--font-display); font-style: italic;
+    font-size: var(--text-sm); color: var(--ink-3); margin-bottom: var(--space-3);
+  }
+
+  .search-box {
+    width: 100%; background: var(--color-surface);
+    border: 1px solid var(--ink-8); color: var(--ink-1);
+    font-family: var(--font-body); font-size: var(--text-sm);
+    padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
+    outline: 0; transition: border-color .15s, box-shadow .15s;
+  }
+  .search-box:focus { border-color: var(--oxford); box-shadow: 0 0 0 3px var(--oxford-bg); }
+  .search-box::placeholder { color: var(--ink-5); }
+
+  .search-results { margin-top: var(--space-1); display: flex; flex-direction: column; gap: 1px; }
+  .sr {
+    text-align: left; background: none; border: 1px solid transparent;
+    border-radius: var(--radius-sm); padding: 6px 8px; cursor: pointer; color: inherit;
+    display: flex; gap: var(--space-2); align-items: baseline;
+  }
+  .sr:hover { background: var(--gold-tint); border-color: var(--ink-9); }
+  .sr-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; transform: translateY(-1px); }
+  .sr-name {
+    font-family: var(--font-display); font-size: var(--text-sm);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .sr-src {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    color: var(--ink-5); margin-left: auto; text-transform: uppercase; letter-spacing: .08em;
+  }
+
+  .sb-group-label {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold-ink); display: block; margin: var(--space-5) 0 var(--space-2);
+  }
+  .src-toggle {
+    display: flex; align-items: center; gap: var(--space-2);
+    font-size: var(--text-sm); color: var(--ink-3);
+    padding: 4px 6px; border-radius: var(--radius-sm); cursor: pointer;
+  }
+  .src-toggle:hover { background: var(--gold-tint); color: var(--ink-1); }
+  .src-toggle input { accent-color: var(--oxford); }
+  .src-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .src-n {
+    margin-left: auto; font-family: var(--font-mono);
+    font-size: var(--text-2xs); color: var(--ink-5);
+  }
+  .src-actions { display: flex; gap: 6px; margin-bottom: var(--space-2); }
+  .mini-btn {
+    flex: 1; background: var(--color-surface); border: 1px solid var(--ink-8);
+    color: var(--ink-3); font-family: var(--font-mono); font-size: var(--text-2xs);
+    letter-spacing: .06em; text-transform: uppercase;
+    border-radius: var(--radius-sm); padding: 5px 0; cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .mini-btn:hover { color: var(--oxford); border-color: var(--gold); }
+
+  .sb-hint {
+    display: block; margin-top: var(--space-5);
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    color: var(--ink-5); letter-spacing: .04em;
+  }
+  kbd {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    color: var(--ink-2); background: var(--color-surface);
+    border: 1px solid var(--ink-8); border-bottom-width: 2px;
+    border-radius: var(--radius-xs); padding: 1px 5px;
+  }
+
+  /* ── Canvas ──────────────────────────────────────────── */
+  main.canvas-area {
+    position: relative; overflow: hidden; background: var(--paper);
+  }
+  canvas#graph-canvas { width: 100%; height: 100%; display: block; position: relative; z-index: 2; cursor: grab; }
+  canvas#graph-canvas:active { cursor: grabbing; }
+  #silhouette-view { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: .9; }
+  .canvas-tools {
+    position: absolute; z-index: 20; bottom: var(--space-5); right: var(--space-5);
+    display: flex; align-items: center; gap: var(--space-2);
+  }
+  .canvas-btn {
+    background: var(--color-surface); border: 1px solid var(--ink-8);
+    color: var(--ink-3); width: 38px; height: 38px; flex: none;
+    border-radius: var(--radius-md); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--text-base); box-shadow: var(--shadow-sm);
+  }
+  .canvas-btn:hover { color: var(--oxford); border-color: var(--gold); }
+  .canvas-btn.wide {
+    width: auto; padding: 0 12px; gap: 6px;
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .canvas-btn:disabled {
+    opacity: .42; cursor: not-allowed; color: var(--ink-5);
+    border-color: var(--ink-9); background: var(--color-surface-warm);
+  }
+  .canvas-btn:disabled:hover { color: var(--ink-5); border-color: var(--ink-9); }
+
+  .export-wrap { position: relative; }
+  .export-menu {
+    position: absolute; right: 0; bottom: calc(100% + var(--space-2));
+    min-width: 190px; z-index: 40;
+    background: var(--color-surface); border: 1px solid var(--ink-8);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+    padding: 6px;
+  }
+  .export-menu[hidden] { display: none; }
+  .export-menu-label {
+    display: block; padding: 4px 10px 6px; margin-bottom: 4px;
+    border-bottom: 1px solid var(--ink-9);
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .12em; color: var(--gold-ink);
+  }
+  .export-menu a {
+    display: block; padding: 7px 10px; border-radius: var(--radius-sm);
+    color: var(--ink-3); text-decoration: none; font-size: var(--text-sm);
+  }
+  .export-menu a:hover, .export-menu a:focus {
+    background: var(--gold-tint); color: var(--oxford); outline: none;
+  }
+
+  /* ── Tooltip ─────────────────────────────────────────── */
+  #tooltip {
+    position: absolute; display: none; z-index: 100; pointer-events: none;
+    background: var(--color-surface); border: 1px solid var(--ink-8);
+    border-left: 2px solid var(--gold); border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
+    padding: var(--space-3); width: 250px; box-shadow: var(--shadow-lg);
+  }
+  .tt-src {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .1em; color: var(--ink-4);
+  }
+  .tt-title { font-family: var(--font-display); font-size: var(--text-base); margin: 4px 0; line-height: 1.3; }
+  .tt-desc { font-size: var(--text-2sm); color: var(--ink-3); line-height: 1.55; }
+
+  /* ── Detail panel ────────────────────────────────────── */
+  aside.detail-panel {
+    background: var(--color-surface-warm);
+    border-left: 1px solid var(--ink-8);
+    overflow-y: auto; z-index: 10; opacity: 0; pointer-events: none;
+    transition: opacity .25s ease; padding: var(--space-6) var(--space-5) var(--space-8);
+    position: relative;
+  }
+  body.detail-open aside.detail-panel { opacity: 1; pointer-events: auto; }
+  .dp-close {
+    position: absolute; top: var(--space-3); right: var(--space-3);
+    background: none; border: none; color: var(--ink-4);
+    font-size: 20px; cursor: pointer; width: 28px; height: 28px; line-height: 1;
+  }
+  .dp-close:hover { color: var(--oxford); }
+  .dp-src {
+    display: inline-block; font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .1em;
+    padding: 3px 9px; border-radius: var(--radius-pill); margin-bottom: var(--space-3);
+    border: 1px solid var(--ink-9); color: var(--ink-3); background: var(--color-surface);
+  }
+  .dp-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: var(--text-xl); line-height: 1.15; margin-bottom: var(--space-3);
+    padding-right: var(--space-6);
+  }
+  .dp-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: var(--space-3); }
+  .dp-badge {
+    font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--ink-3);
+    background: var(--color-surface); border: 1px solid var(--ink-9);
+    border-radius: var(--radius-pill); padding: 2px 8px;
+  }
+  .dp-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: var(--space-4); }
+  .dp-tag {
+    font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--ink-4);
+    background: var(--gold-tint); border: 1px solid var(--gold-soft);
+    border-radius: var(--radius-xs); padding: 2px 6px;
+  }
+  .dp-section-title {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .14em; color: var(--gold-ink);
+    padding-bottom: 5px; margin: var(--space-5) 0 var(--space-3);
+    border-bottom: 1px solid var(--ink-9);
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2);
+  }
+  .dp-prose { font-size: var(--text-sm); color: var(--ink-3); line-height: 1.65; }
+  .dp-ref, .dp-nbr {
+    display: block; background: var(--color-surface); border: 1px solid var(--ink-9);
+    border-radius: var(--radius-md); padding: 8px 10px; margin-bottom: 6px;
+    color: inherit; text-decoration: none; font-size: var(--text-2sm);
+  }
+  a.dp-ref:hover, button.dp-nbr:hover { border-color: var(--gold); }
+  button.dp-nbr { width: 100%; text-align: left; cursor: pointer; font-family: inherit; }
+  .dp-nbr-name { font-family: var(--font-display); color: var(--ink-1); }
+  .dp-empty {
+    color: var(--ink-4); font-family: var(--font-display); font-style: italic;
+    text-align: center; padding: var(--space-16) var(--space-5); line-height: 1.6;
+  }
+  .dp-empty-inline {
+    font-family: var(--font-display); font-style: italic;
+    font-size: var(--text-sm); color: var(--ink-4); margin-bottom: var(--space-3);
+  }
+
+  /* ── Node actions + form (view / edit / add) ─────────── */
+  .dp-actions { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
+  .dp-actions button {
+    background: var(--color-surface); border: 1px solid var(--ink-8);
+    border-radius: var(--radius-sm); padding: 4px 12px; cursor: pointer;
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3);
+  }
+  .dp-actions button:hover { color: var(--oxford); border-color: var(--gold); }
+  .dp-actions button.danger:hover { color: #A33434; border-color: #A33434; }
+
+  .node-form { display: flex; flex-direction: column; gap: var(--space-3); }
+  .node-form label {
+    display: flex; flex-direction: column; gap: 4px;
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .1em; color: var(--gold-ink);
+  }
+  .node-form input, .node-form select, .node-form textarea {
+    width: 100%; font-family: var(--font-body); font-size: var(--text-sm);
+    color: var(--ink-1); background: var(--paper);
+    border: 1px solid var(--ink-8); border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3); outline: 0;
+  }
+  .node-form input:focus, .node-form select:focus, .node-form textarea:focus {
+    border-color: var(--oxford); box-shadow: 0 0 0 3px var(--oxford-bg);
+  }
+  .node-form textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+  .form-actions { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
+  .form-actions button {
+    border-radius: var(--radius-md); padding: 8px 16px; cursor: pointer;
+    font-family: var(--font-body); font-size: var(--text-sm);
+  }
+  .form-actions .save {
+    background: var(--oxford); border: 1px solid var(--oxford);
+    color: var(--paper-on-accent);
+  }
+  .form-actions .save:hover { background: var(--oxford-deep); border-color: var(--oxford-deep); }
+  .form-actions .cancel {
+    background: var(--color-surface); border: 1px solid var(--ink-8);
+    color: var(--ink-3);
+  }
+  .form-actions .cancel:hover { border-color: var(--gold); color: var(--oxford); }
+  .form-error { font-size: var(--text-2sm); color: #A33434; }
+  .dp-origin {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--gold-ink); border: 1px solid var(--gold-soft);
+    border-radius: var(--radius-pill); padding: 2px 8px;
+  }
+
+  /* ── Modals ──────────────────────────────────────────── */
+  .ov-overlay {
+    position: fixed; inset: 0; z-index: 600;
+    background: rgba(30,28,25,.28); backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity .2s ease;
+  }
+  .ov-overlay.open { opacity: 1; pointer-events: auto; }
+  .ov-modal {
+    position: fixed; top: 50%; left: 50%; z-index: 610;
+    transform: translate(-50%,-48%) scale(.97);
+    width: min(560px, 92vw); max-height: 82vh; overflow-y: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--ink-8); border-top: 2px solid var(--oxford);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease, transform .2s cubic-bezier(.22,1,.36,1);
+    padding: var(--space-6);
+  }
+  .ov-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
+  .ov-eyebrow {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold-ink); display: block; margin-bottom: var(--space-1);
+  }
+  .ov-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: var(--text-xl); margin-bottom: var(--space-4);
+  }
+  .ov-close {
+    position: absolute; top: var(--space-3); right: var(--space-3);
+    background: none; border: none; color: var(--ink-4);
+    font-size: 20px; width: 28px; height: 28px; cursor: pointer; line-height: 1;
+  }
+  .ov-close:hover { color: var(--oxford); }
+  .ov-row {
+    display: grid; grid-template-columns: 10px 1fr auto auto; gap: var(--space-2);
+    align-items: baseline; padding: 7px 2px;
+    border-bottom: 1px solid var(--ink-9); font-size: var(--text-sm);
+  }
+  .ov-dot { width: 8px; height: 8px; border-radius: 50%; transform: translateY(-1px); }
+  .ov-name { font-family: var(--font-display); color: var(--ink-1); }
+  .ov-n, .ov-e { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--ink-4); }
+  .ov-foot {
+    margin-top: var(--space-4); font-family: var(--font-mono);
+    font-size: var(--text-2xs); color: var(--ink-4); line-height: 1.9;
+  }
+  .ov-foot a { color: var(--oxford); }
+
+  .help-group { margin-bottom: var(--space-4); }
+  .help-group-title {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    text-transform: uppercase; letter-spacing: .14em; color: var(--gold-ink);
+    border-bottom: 1px solid var(--ink-9); padding-bottom: 4px; margin-bottom: 6px;
+  }
+  .help-row {
+    display: flex; gap: var(--space-3); align-items: baseline;
+    padding: 3px 0; font-size: var(--text-sm); color: var(--ink-3);
+  }
+  .help-keys { flex: 0 0 96px; }
+  .help-label { flex: 1; }
+
+  /* ── Loading ─────────────────────────────────────────── */
+  #loading-overlay {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--paper); z-index: 200; transition: opacity .5s;
+  }
+  #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+  .loader-text {
+    font-family: var(--font-mono); font-size: var(--text-2xs);
+    color: var(--ink-4); margin-top: var(--space-4);
+    text-transform: uppercase; letter-spacing: .25em;
+  }
+
+  @media (max-width: 980px) {
+    body, body.detail-open { grid-template-columns: 250px 1fr; }
+    aside.detail-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: min(400px, 92vw);
+      box-shadow: var(--shadow-xl);
+    }
+    body:not(.detail-open) aside.detail-panel { pointer-events: none; }
+  }
+</style>
+</head>
+
+<body>
+  <aside class="toolbox">
+    <a class="sb-eyebrow" href="/pks/">PKS · Naturgnosis Index</a>
+    <h2 class="sb-title">Space of Spaces</h2>
+    <p class="sb-subtitle">One universal space. Every node keeps its origin.</p>
+
+    <span class="sb-group-label">Find anything</span>
+    <input type="search" class="search-box" id="search" placeholder="Search all nodes…  ( / )" autocomplete="off">
+    <div class="search-results" id="search-results"></div>
+
+    <span class="sb-group-label">Spaces</span>
+    <div class="src-actions">
+      <button class="mini-btn" id="select-all">Select all</button>
+      <button class="mini-btn" id="deselect-all">Deselect all</button>
+    </div>
+    <div id="source-toggles"></div>
+  </aside>
+
+  <main class="canvas-area">
+    <canvas id="silhouette-view" aria-hidden="true"></canvas>
+    <canvas id="graph-canvas"></canvas>
+    <div class="canvas-tools" role="group" aria-label="Canvas actions">
+      <button class="canvas-btn wide" id="add-node-btn" title="Add a node"
+              aria-label="Add a node">+ Node</button>
+      <button class="canvas-btn" id="help-btn" title="Keyboard shortcuts (?)"
+              aria-label="Keyboard shortcuts">?</button>
+      <button class="canvas-btn" id="overview-btn" title="Snapshot overview">◔</button>
+      <button class="canvas-btn" id="fit-btn" title="Fit graph to view">⤢</button>
+      <div class="export-wrap">
+        <button class="canvas-btn wide" id="export-btn" aria-haspopup="menu"
+                aria-expanded="false" title="Export node overlay">⇩ Export</button>
+        <div class="export-menu" id="export-menu" role="menu" hidden>
+          <span class="export-menu-label">Export node overlay</span>
+          <a role="menuitem" href="/pks/api/nodes/export?format=json" download>JSON</a>
+          <a role="menuitem" href="/pks/api/nodes/export?format=md" download>Markdown</a>
+        </div>
+      </div>
+    </div>
+    <div id="tooltip">
+      <div class="tt-src" id="tt-src"></div>
+      <div class="tt-title" id="tt-title"></div>
+      <div class="tt-desc" id="tt-desc"></div>
+    </div>
+  </main>
+
+  <aside class="detail-panel" id="detail" aria-live="polite">
+    <button class="dp-close" id="dp-close" aria-label="Close">×</button>
+    <div id="dp-body"><div class="dp-empty">Click a node to read it, or press <b>+ Node</b> to add one.</div></div>
+  </aside>
+
+  <div id="loading-overlay"><div class="loader-text" id="loader-msg">Loading Naturgnosis index</div></div>
+
+  <div class="ov-overlay" id="ov-overlay"></div>
+  <div class="ov-modal" id="ov-modal" role="dialog" aria-label="Snapshot overview">
+    <button class="ov-close" id="ov-close" aria-label="Close overview">×</button>
+    <span class="ov-eyebrow">PKS · Naturgnosis Index</span>
+    <h3 class="ov-title">Snapshot</h3>
+    <div id="ov-rows"></div>
+    <div class="ov-foot" id="ov-foot"></div>
+  </div>
+
+  <div class="ov-overlay" id="help-overlay"></div>
+  <div class="ov-modal" id="help-modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <button class="ov-close" id="help-close" aria-label="Close help">×</button>
+    <span class="ov-eyebrow">PKS · Naturgnosis Index</span>
+    <h3 class="ov-title">Keyboard shortcuts</h3>
+    <div id="help-body"></div>
+    <div class="ov-foot">Press <kbd>?</kbd> or <kbd>Esc</kbd> to close.</div>
+  </div>
+
+  <script src="vendor/deck.min.js"></script>
+  <script src="vendor/socio-graph.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── source model ─────────────────────────────────────────────── */
+    var SOURCES = ['social', 'research', 'technique', 'epistemica', 'nature'];
+    var SOURCE_COLORS = {
+      social: '#7A1A2A',
+      research: '#3F6092',
+      technique: '#8A6A2F',
+      epistemica: '#6B4A7A',
+      nature: '#3F6E50'
+    };
+    var SOURCE_LABEL = {
+      social: 'Social Space',
+      research: 'Research Space',
+      technique: 'Technique Space',
+      epistemica: 'Epistemic Space',
+      nature: 'Nature Space'
+    };
+
+    /* Single source of truth for the help modal and the key handler. */
+    var KEYMAP = [
+      { group: 'Find', items: [
+        { key: '/', label: 'Focus search' },
+        { key: 'R', label: 'Select a random node' }
+      ] },
+      { group: 'Node', items: [
+        { key: 'A', label: 'Add node' },
+        { key: 'E', label: 'Edit selected node' },
+        { key: 'D', label: 'Delete selected node' },
+        { key: '⌘/Ctrl+↵', label: 'Save the open node form' }
+      ] },
+      { group: 'View', items: [
+        { key: 'F', label: 'Fit graph' },
+        { key: 'O', label: 'Snapshot overview' },
+        { key: '1–5', label: 'Toggle Social … Nature' },
+        { key: 'S', label: 'Select all spaces' },
+        { key: 'X', label: 'Deselect all spaces' }
+      ] },
+      { group: 'Help', items: [
+        { key: '?', label: 'Keyboard shortcuts' },
+        { key: 'Esc', label: 'Close / cancel' }
+      ] },
+      { group: 'Mouse', items: [
+        { key: 'drag', label: 'Pan the canvas' },
+        { key: 'wheel', label: 'Zoom' },
+        { key: 'click', label: 'Select a node' }
+      ] }
+    ];
+
+    function hexToRGBA(hex, a) {
+      var h = (hex || '#888888').replace('#', '');
+      if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+      var r = parseInt(h.slice(0, 2), 16) || 0,
+          g = parseInt(h.slice(2, 4), 16) || 0,
+          b = parseInt(h.slice(4, 6), 16) || 0;
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+    }
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s == null ? '' : String(s);
+      return d.innerHTML;
+    }
+    function getSourceColor(source) { return SOURCE_COLORS[source] || '#888888'; }
+    function srcIndex(source) { var i = SOURCES.indexOf(source); return i < 0 ? 0 : i; }
+
+    /* ── state ────────────────────────────────────────────────────── */
+    var nodes = [], nM = {}, gE = [];
+    var nodeDegrees = {}, labelTiers = {};
+    var cam = { x: 0, y: 0, z: 1 }, camTgt = null;
+    var hovN = null, selN = null;
+    var W = 0, H = 0, deck = null;
+    var silCanvas = null, silCtx = null, silBounds = null, silDirty = true;
+    var staticLayers = [], deckDirty = true, labelsDirty = true, lastBand = null, lastLabelZ = -1;
+    var catRGBCache = {};
+    var activeSources = {};
+    SOURCES.forEach(function (s) { activeSources[s] = true; });
+
+    var overlayNodes = {}, tombstones = {}, baseUids = new Set();
+    var localSet = new Set();
+    var panelState = 'view';            // view | edit | add
+    var addDraft = null;
+
+    var canvas = document.getElementById('graph-canvas');
+    var tooltip = document.getElementById('tooltip');
+    var dpBody = document.getElementById('dp-body');
+
+    function zoomBand() {
+      if (cam.z < 0.3) return 'macro';
+      if (cam.z < 0.9) return 'meso';
+      return 'micro';
+    }
+    function nodeRadius(n) { return 5 + (nodeDegrees[n.id] || 0) * 0.6; }
+    function visNodes() { return nodes.filter(function (n) { return n.visible; }); }
+
+    function labelTargetOpacity(n, band) {
+      var t = labelTiers[n.id] || 'micro';
+      if (band === 'macro') return t === 'always' ? 1 : 0;
+      if (band === 'meso') return t === 'always' ? 1 : (t === 'meso' ? 0.85 : 0);
+      return (t !== 'micro' || (nodeDegrees[n.id] || 0) > 1) ? 0.8 : 0;
+    }
+
+    /* ── renderer ─────────────────────────────────────────────────── */
+    function sizeCanvas() {
+      var r = canvas.parentElement.getBoundingClientRect();
+      W = r.width; H = r.height;
+      var sil = document.getElementById('silhouette-view');
+      sil.width = Math.max(1, W * devicePixelRatio);
+      sil.height = Math.max(1, H * devicePixelRatio);
+      if (deck) deck.setProps({ width: W, height: H });
+      silDirty = true;
+    }
+    function computeFitTarget() {
+      var v = visNodes();
+      if (!v.length) return { x: 0, y: 0, z: 1 };
+      var x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
+      v.forEach(function (n) {
+        if (n.x < x1) x1 = n.x; if (n.x > x2) x2 = n.x;
+        if (n.y < y1) y1 = n.y; if (n.y > y2) y2 = n.y;
+      });
+      var p = 80, gw = Math.max(1, x2 - x1 + p * 2), gh = Math.max(1, y2 - y1 + p * 2);
+      var z = Math.min(W / gw, H / gh, 1.5);
+      return { z: z, x: W / 2 - ((x1 + x2) / 2) * z, y: H / 2 - ((y1 + y2) / 2) * z };
+    }
+    function tweenCamera(toX, toY, toZ, ms) {
+      camTgt = { from: { x: cam.x, y: cam.y, z: cam.z }, to: { x: toX, y: toY, z: toZ }, start: performance.now(), dur: ms || 600 };
+    }
+    function stepTween(now) {
+      if (!camTgt) return;
+      var t = Math.min(1, (now - camTgt.start) / camTgt.dur);
+      var e = 1 - Math.pow(1 - t, 3);
+      cam.x = camTgt.from.x + (camTgt.to.x - camTgt.from.x) * e;
+      cam.y = camTgt.from.y + (camTgt.to.y - camTgt.from.y) * e;
+      cam.z = camTgt.from.z + (camTgt.to.z - camTgt.from.z) * e;
+      if (t >= 1) camTgt = null;
+      deckDirty = true;
+    }
+    function buildStaticLayers() {
+      var vn = visNodes();
+      var vmap = {};
+      vn.forEach(function (n) { vmap[n.id] = n; });
+      var ve = gE.filter(function (e) { return vmap[e.source] && vmap[e.target]; });
+      var ew = new Array(ve.length), mw = 1;
+      for (var i = 0; i < ve.length; i++) {
+        var w = (nodeDegrees[ve[i].source] || 0) + (nodeDegrees[ve[i].target] || 0);
+        ew[i] = w; if (w > mw) mw = w;
+      }
+      return SocioGraph.buildStaticLayers({
+        lib: window.SocioDeck, nodes: vn, cam: cam, band: zoomBand(),
+        edges: ve, nodeMap: vmap,
+        hoveredNode: hovN, selectedNode: selN,
+        searchHighlights: new Set(), annotatedSet: localSet,
+        linkSourceNode: null, linkMode: false,
+        nodeRadius: nodeRadius, getCategoryColor: getSourceColor, catCache: catRGBCache,
+        edgeWeights: ew, maxEdgeWeight: mw,
+        edgeShouldShow: function (i, band) {
+          if (band === 'macro') return ew[i] >= mw * 0.9;
+          return true;
+        },
+        hexToRGBA: hexToRGBA
+      });
+    }
+    function draw() {
+      if (!deck) return;
+      stepTween(performance.now());
+      if (silDirty) {
+        var hulls = SocioGraph.computeHulls(visNodes(), srcIndex);
+        var sr = SocioGraph.renderSilhouettes(silCanvas, silCtx, hulls,
+          SOURCES.map(function (s) { return SOURCE_COLORS[s]; }), hexToRGBA);
+        silCanvas = sr.canvas; silCtx = sr.ctx2d; silBounds = sr.bounds;
+        silDirty = false;
+      }
+      var band = zoomBand();
+      if (lastBand !== band) { lastBand = band; deckDirty = true; labelsDirty = true; }
+      if (lastLabelZ < 0 || Math.abs(cam.z - lastLabelZ) / Math.max(cam.z, 1e-6) > 0.12) {
+        lastLabelZ = cam.z; labelsDirty = true;
+      }
+      deck.setProps({ viewState: SocioGraph.viewStateFromCam(cam, W, H) });
+      if (deckDirty) { staticLayers = buildStaticLayers(); deckDirty = false; labelsDirty = true; }
+      if (labelsDirty) {
+        var r = SocioGraph.buildLabelsLayer({
+          lib: window.SocioDeck, nodes: visNodes(), cam: cam, W: W, H: H, band: band,
+          labelTargetOpacity: labelTargetOpacity, labelTiers: labelTiers,
+          nodeDegrees: nodeDegrees, nodeRadius: nodeRadius,
+          hoveredNode: hovN, selectedNode: selN
+        });
+        deck.setProps({ layers: r.layer ? staticLayers.concat([r.layer]) : staticLayers });
+        labelsDirty = false;
+      }
+      var sil = document.getElementById('silhouette-view');
+      SocioGraph.drawSilhouetteView(sil.getContext('2d'), sil, silCanvas, silBounds, cam, devicePixelRatio);
+      requestAnimationFrame(draw);
+    }
+
+    /* ── interaction ──────────────────────────────────────────────── */
+    var isDown = false, downPos = null, moved = false, hoverQueued = false;
+    canvas.addEventListener('mousedown', function (e) {
+      isDown = true; moved = false; camTgt = null;
+      downPos = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y };
+    });
+    window.addEventListener('mouseup', function () { isDown = false; });
+    canvas.addEventListener('mousemove', function (e) {
+      var r = canvas.getBoundingClientRect();
+      var sx = e.clientX - r.left, sy = e.clientY - r.top;
+      if (isDown && downPos) {
+        var dx = e.clientX - downPos.x, dy = e.clientY - downPos.y;
+        if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+        cam.x = downPos.cx + dx; cam.y = downPos.cy + dy;
+        deckDirty = true;
+        hideTooltip();
+        return;
+      }
+      if (!hoverQueued) {
+        hoverQueued = true;
+        requestAnimationFrame(function () {
+          hoverQueued = false;
+          if (!deck) return;
+          var info = null;
+          try { info = deck.pickObject({ x: sx, y: sy, radius: 6, layerIds: ['nodes'] }); } catch (err) { /* noop */ }
+          var n = info && info.object ? info.object : null;
+          if (n !== hovN) { hovN = n; deckDirty = true; }
+          if (hovN) showTooltip(hovN, sx, sy); else hideTooltip();
+          canvas.style.cursor = hovN ? 'pointer' : 'grab';
+        });
+      }
+    });
+    canvas.addEventListener('mouseleave', function () { hovN = null; hideTooltip(); deckDirty = true; });
+    canvas.addEventListener('click', function () {
+      if (moved) return;
+      if (hovN) selectNode(hovN, false);
+      else closeDetail();
+    });
+    canvas.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      camTgt = null;
+      var r = canvas.getBoundingClientRect();
+      var sx = e.clientX - r.left, sy = e.clientY - r.top;
+      var f = Math.exp(-e.deltaY * 0.0015);
+      var z2 = Math.max(0.05, Math.min(6, cam.z * f));
+      cam.x = sx - (sx - cam.x) * (z2 / cam.z);
+      cam.y = sy - (sy - cam.y) * (z2 / cam.z);
+      cam.z = z2;
+      deckDirty = true;
+    }, { passive: false });
+    window.addEventListener('resize', sizeCanvas);
+    function fitGraph() {
+      var t = computeFitTarget();
+      tweenCamera(t.x, t.y, t.z, 600);
+    }
+    document.getElementById('fit-btn').addEventListener('click', fitGraph);
+
+    /* ── node overlay + editor ────────────────────────────────────── */
+    function api(url, method, body) {
+      return fetch(url, {
+        method: method,
+        headers: body != null ? { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                              : { 'Accept': 'application/json' },
+        body: body != null ? JSON.stringify(body) : undefined
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+          return d;
+        });
+      });
+    }
+
+    function loadOverlay() {
+      return fetch('/pks/api/nodes/overlay', { headers: { 'Accept': 'application/json' } })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function (d) {
+          overlayNodes = {};
+          tombstones = {};
+          (d.nodes || []).forEach(function (n) { overlayNodes[n.uid] = n; });
+          (d.tombstones || []).forEach(function (t) { tombstones[t.uid] = t; });
+        })
+        .catch(function () { overlayNodes = {}; tombstones = {}; });
+    }
+
+    function overlayStats() {
+      var local = 0, edited = 0;
+      Object.keys(overlayNodes).forEach(function (uid) {
+        if (baseUids.has(uid)) edited++; else local++;
+      });
+      return { local: local, edited: edited, deleted: Object.keys(tombstones).length };
+    }
+
+    function refreshCounts() {
+      var live = {};
+      SOURCES.forEach(function (s) { live[s] = 0; });
+      nodes.forEach(function (n) { if (live[n.source] != null) live[n.source] += 1; });
+      window.__ustats = window.__ustats || {};
+      window.__ustats.counts = live;
+      window.__ustats.total = nodes.length;
+      buildToggles(live);
+    }
+
+    function parseTags(value) {
+      return String(value || '').split(',').map(function (t) { return t.trim(); })
+        .filter(function (t, i, a) { return t && a.indexOf(t) === i; });
+    }
+
+    function showFormError(msg) {
+      var el = document.getElementById('form-error');
+      if (el) { el.textContent = msg; el.hidden = false; }
+    }
+
+    function nodeFormHtml(node, isAdd) {
+      var space = isAdd ? node.space : (node.source || node.space);
+      var spaceField = isAdd
+        ? '<label>Space<select name="space">' + SOURCES.map(function (s) {
+            return '<option value="' + s + '"' + (s === space ? ' selected' : '') + '>' +
+              esc(SOURCE_LABEL[s]) + '</option>';
+          }).join('') + '</select></label>'
+        : '';
+      return '<span class="dp-src" style="color:' + esc(getSourceColor(space)) +
+        ';border-color:' + esc(hexToRGBA(getSourceColor(space), 0.35)) + '">' +
+        esc(isAdd ? 'New node' : (SOURCE_LABEL[space] || space)) + '</span>' +
+        '<div class="dp-title">' + (isAdd ? 'Add node' : 'Edit node') + '</div>' +
+        '<form class="node-form" id="node-form">' +
+        spaceField +
+        '<label>Name<input name="name" required autocomplete="off" value="' +
+        esc(node.name || '') + '"></label>' +
+        '<div class="form-row">' +
+        '<label>Category<input name="category" autocomplete="off" value="' +
+        esc(node.cat || node.category || '') + '"></label>' +
+        '<label>Layer<input name="layer" autocomplete="off" value="' +
+        esc(node.layer || '') + '"></label></div>' +
+        '<label>Content<textarea name="description" placeholder="What is this node?">' +
+        esc(node.description || '') + '</textarea></label>' +
+        '<label>Tags<input name="tags" autocomplete="off" placeholder="comma, separated" value="' +
+        esc((node.tags || []).join(', ')) + '"></label>' +
+        '<p class="form-error" id="form-error" hidden></p>' +
+        '<div class="form-actions">' +
+        '<button type="submit" class="save">Save</button>' +
+        '<button type="button" class="cancel" data-act="cancel">Cancel</button>' +
+        '</div></form>';
+    }
+
+    function bindNodeForm() {
+      var form = document.getElementById('node-form');
+      if (!form) return;
+      form.addEventListener('submit', saveNodeForm);
+      form.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      });
+    }
+
+    function startAdd() {
+      var space = selN ? selN.source : (addDraft && addDraft.space) || 'social';
+      var x, y;
+      if (selN) {
+        x = selN.x + 50; y = selN.y + 50;
+      } else {
+        x = (W / 2 - cam.x) / cam.z;
+        y = (H / 2 - cam.y) / cam.z;
+      }
+      addDraft = { space: space, name: '', category: '', layer: '', description: '', tags: [], x: x, y: y };
+      selN = null;
+      panelState = 'add';
+      document.body.classList.add('detail-open');
+      sizeCanvas();
+      renderDetail(null);
+      var input = document.querySelector('#node-form input[name="name"]');
+      if (input) input.focus();
+    }
+
+    function startEdit() {
+      if (!selN) return;
+      panelState = 'edit';
+      renderDetail(selN);
+      var input = document.querySelector('#node-form input[name="name"]');
+      if (input) input.focus();
+    }
+
+    function cancelForm() {
+      panelState = 'view';
+      if (selN) renderDetail(selN);
+      else closeDetail();
+    }
+
+    function applyNodeDoc(node, doc) {
+      node.name = doc.name;
+      node.cat = doc.category || '';
+      node.layer = doc.layer || '';
+      node.tags = doc.tags || [];
+      node.description = doc.description || '';
+      node.origin = doc.origin || (baseUids.has(node.uid) ? 'override' : 'local');
+      node.category = node.source;   // colour grouping stays by space
+    }
+
+    function createLocalNode(doc) {
+      enableSource(doc.space);
+      var node = {
+        id: doc.uid,
+        uid: doc.uid,
+        source: doc.space,
+        source_id: doc.uid.slice(doc.space.length + 1),
+        name: doc.name,
+        cat: doc.category || '',
+        category: doc.space,
+        layer: doc.layer || '',
+        tags: doc.tags || [],
+        description: doc.description || '',
+        references: [],
+        deep_link: '',
+        targets: [],
+        incoming: [],
+        origin: doc.origin || 'local',
+        x: Number(doc.x) || 0,
+        y: Number(doc.y) || 0,
+        visible: !!activeSources[doc.space]
+      };
+      nodes.push(node);
+      nM[node.uid] = node;
+      localSet.add(node.uid);
+      deckDirty = true;
+      silDirty = true;
+      return node;
+    }
+
+    function saveNodeForm(ev) {
+      ev.preventDefault();
+      var form = ev.target;
+      var data = new FormData(form);
+      var payload = {
+        name: String(data.get('name') || '').trim(),
+        category: String(data.get('category') || '').trim(),
+        layer: String(data.get('layer') || '').trim(),
+        description: String(data.get('description') || ''),
+        tags: parseTags(data.get('tags'))
+      };
+      if (!payload.name) { showFormError('Name is required.'); return; }
+
+      if (panelState === 'add') {
+        payload.space = String(data.get('space') || 'social');
+        payload.x = addDraft.x;
+        payload.y = addDraft.y;
+        api('/pks/api/nodes', 'POST', payload)
+          .then(function (doc) {
+            overlayNodes[doc.uid] = doc;
+            var node = createLocalNode(doc);
+            panelState = 'view';
+            refreshCounts();
+            selectNode(node, true);
+          })
+          .catch(function (err) { showFormError(err.message); });
+        return;
+      }
+
+      if (!selN) return;
+      api('/pks/api/nodes/' + encodeURIComponent(selN.uid), 'PUT', payload)
+        .then(function (doc) {
+          overlayNodes[doc.uid] = doc;
+          applyNodeDoc(selN, doc);
+          localSet.add(selN.uid);
+          panelState = 'view';
+          refreshCounts();
+          deckDirty = true;
+          labelsDirty = true;
+          renderDetail(selN);
+        })
+        .catch(function (err) { showFormError(err.message); });
+    }
+
+    function removeFromGraph(uid) {
+      for (var i = nodes.length - 1; i >= 0; i--) {
+        if (nodes[i].uid === uid) nodes.splice(i, 1);
+      }
+      delete nM[uid];
+      gE = gE.filter(function (e) { return e.source !== uid && e.target !== uid; });
+      nodes.forEach(function (n) {
+        if (n.incoming) n.incoming = n.incoming.filter(function (x) { return x !== uid; });
+      });
+      localSet.delete(uid);
+      deckDirty = true;
+      silDirty = true;
+    }
+
+    function deleteCurrentNode() {
+      if (!selN) return;
+      var node = selN;
+      if (!window.confirm('Delete "' + node.name + '" ?')) return;
+      var uid = node.uid;
+      api('/pks/api/nodes/' + encodeURIComponent(uid), 'DELETE')
+        .then(function () {
+          delete overlayNodes[uid];
+          if (baseUids.has(uid)) tombstones[uid] = { uid: uid };
+          removeFromGraph(uid);
+          closeDetail();
+          refreshCounts();
+        })
+        .catch(function (err) { window.alert('Delete failed: ' + err.message); });
+    }
+
+    dpBody.addEventListener('click', function (e) {
+      var nb = e.target.closest('.dp-nbr');
+      if (nb) {
+        var m = nM[nb.getAttribute('data-uid')];
+        if (m) selectNode(m, false);
+        return;
+      }
+      var b = e.target.closest('button[data-act]');
+      if (!b) return;
+      var act = b.getAttribute('data-act');
+      if (act === 'edit') startEdit();
+      else if (act === 'delete') deleteCurrentNode();
+      else if (act === 'cancel') cancelForm();
+    });
+
+    document.getElementById('add-node-btn').addEventListener('click', startAdd);
+
+    /* ── overview modal ───────────────────────────────────────────── */
+    function renderOverview() {
+      var st = window.__ustats || { counts: {}, edge_counts: {}, generated: '', total: 0, snapshot: {} };
+      var rows = SOURCES.map(function (s) {
+        var nc = (st.counts[s] || 0).toLocaleString();
+        var ec = (st.edge_counts[s] || 0).toLocaleString();
+        return '<div class="ov-row"><span class="ov-dot" style="background:' +
+          esc(getSourceColor(s)) + '"></span><span class="ov-name">' +
+          esc(SOURCE_LABEL[s] || s) + '</span><span class="ov-n">' + nc +
+          ' nodes</span><span class="ov-e">' + ec + ' edges</span></div>';
+      }).join('');
+      document.getElementById('ov-rows').innerHTML = rows;
+      var snap = st.snapshot || {};
+      var os = overlayStats();
+      document.getElementById('ov-foot').innerHTML =
+        esc(Number(st.total || 0).toLocaleString()) + ' nodes in one universal space<br>' +
+        'source generated ' + esc(st.generated || '—') +
+        ' · snapshot ' + esc((snap.taken_at || '—').slice(0, 10)) +
+        ' · commit ' + esc((snap.source_commit || '').slice(0, 12) || '—') + '<br>' +
+        'local ' + esc(os.local) + ' · edited ' + esc(os.edited) +
+        ' · deleted ' + esc(os.deleted) + '<br>' +
+        '<a href="/pks/api/nodes/export?format=md">export nodes</a> · ' +
+        '<a href="/pks/api/nodes/export?format=json">json</a><br>' +
+        'Naturgnosis is frozen; nodes are edited in PKS and the overlay exports to Epistecnica.';
+    }
+    function openOverview() {
+      renderOverview();
+      document.getElementById('ov-overlay').classList.add('open');
+      document.getElementById('ov-modal').classList.add('open');
+    }
+    function closeOverview() {
+      document.getElementById('ov-overlay').classList.remove('open');
+      document.getElementById('ov-modal').classList.remove('open');
+    }
+    document.getElementById('overview-btn').addEventListener('click', openOverview);
+    document.getElementById('ov-close').addEventListener('click', closeOverview);
+    document.getElementById('ov-overlay').addEventListener('click', closeOverview);
+
+    /* ── help modal ───────────────────────────────────────────────── */
+    function renderHelp() {
+      document.getElementById('help-body').innerHTML = KEYMAP.map(function (group) {
+        return '<div class="help-group"><div class="help-group-title">' + esc(group.group) + '</div>' +
+          group.items.map(function (item) {
+            return '<div class="help-row"><span class="help-keys"><kbd>' +
+              esc(item.key) + '</kbd></span><span class="help-label">' +
+              esc(item.label) + '</span></div>';
+          }).join('') + '</div>';
+      }).join('');
+    }
+    function openHelp() {
+      renderHelp();
+      document.getElementById('help-overlay').classList.add('open');
+      document.getElementById('help-modal').classList.add('open');
+    }
+    function closeHelp() {
+      document.getElementById('help-overlay').classList.remove('open');
+      document.getElementById('help-modal').classList.remove('open');
+    }
+    function toggleHelp() {
+      var open = document.getElementById('help-modal').classList.contains('open');
+      if (open) closeHelp(); else openHelp();
+    }
+    document.getElementById('help-btn').addEventListener('click', toggleHelp);
+    document.getElementById('help-close').addEventListener('click', closeHelp);
+    document.getElementById('help-overlay').addEventListener('click', closeHelp);
+
+    /* ── export menu ─────────────────────────────────────────────── */
+    function setExportMenu(open) {
+      var menu = document.getElementById('export-menu');
+      var btn = document.getElementById('export-btn');
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    function toggleExportMenu() {
+      setExportMenu(document.getElementById('export-menu').hidden);
+    }
+    document.getElementById('export-btn').addEventListener('click', toggleExportMenu);
+    document.getElementById('export-menu').addEventListener('click', function () {
+      setExportMenu(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.export-wrap')) setExportMenu(false);
+    });
+
+    /* ── tooltip ──────────────────────────────────────────────────── */
+    function showTooltip(n, sx, sy) {
+      document.getElementById('tt-src').textContent = SOURCE_LABEL[n.source] || n.source;
+      document.getElementById('tt-src').style.color = getSourceColor(n.source);
+      document.getElementById('tt-title').textContent = n.name;
+      document.getElementById('tt-desc').textContent = (n.description || '').slice(0, 140);
+      tooltip.style.display = 'block';
+      var r = canvas.parentElement.getBoundingClientRect();
+      tooltip.style.left = Math.min(r.width - 270, sx + 16) + 'px';
+      tooltip.style.top = Math.min(r.height - 160, sy + 14) + 'px';
+    }
+    function hideTooltip() { tooltip.style.display = 'none'; }
+
+    /* ── detail panel (state machine: view | edit | add) ─────────── */
+    function renderView(n) {
+      var nbrs = (n.targets || []).map(function (t) { return nM[t]; }).filter(Boolean);
+      var incoming = [];
+      if (n.incoming) n.incoming.forEach(function (uid) { if (nM[uid]) incoming.push(nM[uid]); });
+      var html = '<span class="dp-src" style="color:' + esc(getSourceColor(n.source)) +
+        ';border-color:' + esc(hexToRGBA(getSourceColor(n.source), 0.35)) + '">' +
+        esc(SOURCE_LABEL[n.source] || n.source) + '</span>' +
+        '<div class="dp-title">' + esc(n.name) + '</div><div class="dp-meta">';
+      if (n.cat) html += '<span class="dp-badge">' + esc(n.cat) + '</span>';
+      if (n.layer) html += '<span class="dp-badge">' + esc(n.layer) + '</span>';
+      html += '<span class="dp-badge">' + esc(n.uid) + '</span>';
+      if (n.origin === 'local') html += '<span class="dp-origin">local</span>';
+      else if (n.origin === 'override') html += '<span class="dp-origin">edited</span>';
+      html += '</div>';
+      if (n.tags && n.tags.length) {
+        html += '<div class="dp-tags">' + n.tags.map(function (t) {
+          return '<span class="dp-tag">' + esc(t) + '</span>';
+        }).join('') + '</div>';
+      }
+      html += '<div class="dp-section-title">Content</div>';
+      html += n.description
+        ? '<p class="dp-prose">' + esc(n.description) + '</p>'
+        : '<p class="dp-empty-inline">No content yet.</p>';
+      html += '<div class="dp-actions">' +
+        '<button data-act="edit">Edit</button>' +
+        '<button data-act="delete" class="danger">Delete</button></div>';
+
+      var all = nbrs.concat(incoming.filter(function (m) { return nbrs.indexOf(m) < 0; }));
+      if (all.length) {
+        html += '<div class="dp-section-title">Links · ' + all.length + '</div>';
+        all.slice(0, 30).forEach(function (m) {
+          html += '<button class="dp-nbr" data-uid="' + esc(m.uid) + '"><span class="dp-nbr-name">' +
+            esc(m.name) + '</span><br><span style="font-family:var(--font-mono);font-size:var(--text-2xs);color:var(--ink-4)">' +
+            esc(m.cat || m.source) + '</span></button>';
+        });
+      }
+      if (n.references && n.references.length) {
+        html += '<div class="dp-section-title">Sources · ' + n.references.length + '</div>';
+        n.references.forEach(function (ref) {
+          var t = esc(ref.title || ref.link || 'source');
+          if (ref.link) html += '<a class="dp-ref" href="' + esc(ref.link) + '" target="_blank" rel="noopener">' + t + '</a>';
+          else html += '<span class="dp-ref">' + t + '</span>';
+        });
+      }
+      dpBody.innerHTML = html;
+    }
+
+    function renderDetail(n) {
+      if (panelState === 'add') {
+        dpBody.innerHTML = nodeFormHtml(addDraft, true);
+        bindNodeForm();
+        return;
+      }
+      if (panelState === 'edit' && n) {
+        dpBody.innerHTML = nodeFormHtml(n, false);
+        bindNodeForm();
+        return;
+      }
+      if (n) renderView(n);
+    }
+
+    function selectNode(n, snap) {
+      panelState = 'view';
+      selN = n;
+      deckDirty = true;
+      document.body.classList.add('detail-open');
+      sizeCanvas();
+      renderDetail(n);
+      var z = Math.max(cam.z, 0.9);
+      var tx = W / 2 - n.x * z, ty = H / 2 - n.y * z;
+      if (snap) {
+        cam.x = tx; cam.y = ty; cam.z = z;
+        camTgt = null;
+      } else {
+        tweenCamera(tx, ty, z, 500);
+      }
+      setTimeout(sizeCanvas, 320);
+    }
+    function closeDetail() {
+      panelState = 'view';
+      selN = null;
+      document.body.classList.remove('detail-open');
+      sizeCanvas();
+      deckDirty = true;
+    }
+    document.getElementById('dp-close').addEventListener('click', closeDetail);
+
+    /* ── search ───────────────────────────────────────────────────── */
+    var searchInput = document.getElementById('search');
+    var searchBox = document.getElementById('search-results');
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.trim().toLowerCase();
+      if (!q) { searchBox.innerHTML = ''; return; }
+      var hits = [];
+      for (var i = 0; i < nodes.length && hits.length < 300; i++) {
+        var n = nodes[i];
+        if ((n.name || '').toLowerCase().indexOf(q) >= 0 ||
+            (n.description || '').toLowerCase().indexOf(q) >= 0 ||
+            (n.tags || []).some(function (t) { return String(t).toLowerCase().indexOf(q) >= 0; })) {
+          hits.push(n);
+        }
+      }
+      hits.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      searchBox.innerHTML = hits.slice(0, 10).map(function (n) {
+        return '<button class="sr" data-uid="' + esc(n.uid) + '"><span class="sr-dot" style="background:' +
+          esc(getSourceColor(n.source)) + '"></span><span class="sr-name">' + esc(n.name) +
+          '</span><span class="sr-src">' + esc(n.source) + '</span></button>';
+      }).join('');
+      Array.prototype.forEach.call(searchBox.querySelectorAll('.sr'), function (b) {
+        b.addEventListener('click', function () {
+          var n = nM[b.getAttribute('data-uid')];
+          if (!n) return;
+          enableSource(n.source);
+          selectNode(n, false);
+          searchBox.innerHTML = '';
+          searchInput.value = n.name;
+        });
+      });
+    });
+
+    /* ── source toggles ───────────────────────────────────────────── */
+    function enableSource(s) {
+      activeSources[s] = true;
+      var box = document.querySelector('#source-toggles input[data-src="' + s + '"]');
+      if (box) box.checked = true;
+      applyVisibility();
+    }
+    function setAll(on) {
+      SOURCES.forEach(function (s) { activeSources[s] = on; });
+      Array.prototype.forEach.call(document.querySelectorAll('#source-toggles input'), function (box) {
+        box.checked = on;
+      });
+      applyVisibility();
+    }
+    function toggleSpace(s) {
+      if (SOURCES.indexOf(s) < 0) return;
+      activeSources[s] = !activeSources[s];
+      var box = document.querySelector('#source-toggles input[data-src="' + s + '"]');
+      if (box) box.checked = activeSources[s];
+      applyVisibility();
+    }
+    document.getElementById('select-all').addEventListener('click', function () { setAll(true); });
+    document.getElementById('deselect-all').addEventListener('click', function () { setAll(false); });
+    function buildToggles(counts) {
+      var wrap = document.getElementById('source-toggles');
+      wrap.innerHTML = SOURCES.map(function (s) {
+        return '<label class="src-toggle"><input type="checkbox" data-src="' + s + '"' +
+          (activeSources[s] ? ' checked' : '') + '>' +
+          '<span class="src-dot" style="background:' + SOURCE_COLORS[s] + '"></span>' +
+          esc(SOURCE_LABEL[s]) + '<span class="src-n">' + (counts[s] || 0).toLocaleString() + '</span></label>';
+      }).join('');
+      Array.prototype.forEach.call(wrap.querySelectorAll('input'), function (box) {
+        box.addEventListener('change', function () {
+          activeSources[box.getAttribute('data-src')] = box.checked;
+          applyVisibility();
+        });
+      });
+    }
+    function applyVisibility() {
+      nodes.forEach(function (n) { n.visible = !!activeSources[n.source]; });
+      if (selN && !selN.visible) closeDetail();
+      if (hovN && !hovN.visible) { hovN = null; hideTooltip(); }
+      silDirty = true; deckDirty = true;
+      var t = computeFitTarget();
+      cam.x = t.x; cam.y = t.y; cam.z = t.z;
+    }
+
+    function randomNode() {
+      if (panelState !== 'view' || !nodes.length) return;
+      var pool = nodes.filter(function (n) { return n.visible; });
+      if (!pool.length) { setAll(true); pool = nodes.slice(); }
+      if (!pool.length) return;
+      var pick = pool[Math.floor(Math.random() * pool.length)];
+      if (selN && pick === selN && pool.length > 1) {
+        pick = pool[(pool.indexOf(pick) + 1) % pool.length];
+      }
+      enableSource(pick.source);
+      selectNode(pick, true);
+    }
+
+    /* ── boot ─────────────────────────────────────────────────────── */
+    function fail(msg, hint) {
+      document.getElementById('loader-msg').innerHTML =
+        '<span style="color:#A33434">' + esc(msg) + '</span>' +
+        (hint ? '<br><span style="font-size:.85em">' + esc(hint) + '</span>' : '');
+    }
+    function initGraph(arr) {
+      baseUids = new Set(arr.map(function (n) { return n.uid; }));
+      var map = {};
+      arr.forEach(function (d) {
+        d.id = d.uid;
+        d.cat = d.category;
+        d.category = d.source;
+        d.origin = d.origin || 'base';
+        d.visible = !!activeSources[d.source];
+        map[d.uid] = d;
+      });
+
+      Object.keys(overlayNodes).forEach(function (uid) {
+        var ov = overlayNodes[uid];
+        if (baseUids.has(uid)) {
+          var base = map[uid];
+          if (!base) return;
+          base.name = ov.name || base.name;
+          base.cat = ov.category || base.cat;
+          base.layer = ov.layer || base.layer;
+          base.tags = ov.tags || [];
+          base.description = ov.description || '';
+          base.origin = 'override';
+        } else {
+          map[uid] = {
+            id: uid, uid: uid, source: ov.space,
+            source_id: uid.slice(ov.space.length + 1),
+            name: ov.name, cat: ov.category || '',
+            category: ov.space, layer: ov.layer || '',
+            tags: ov.tags || [], description: ov.description || '',
+            references: [], deep_link: '', targets: [], incoming: [],
+            origin: 'local', x: Number(ov.x) || 0, y: Number(ov.y) || 0,
+            visible: !!activeSources[ov.space]
+          };
+        }
+      });
+      Object.keys(tombstones).forEach(function (uid) { delete map[uid]; });
+
+      nodes = Object.keys(map).map(function (k) { return map[k]; });
+      nM = map;
+      localSet = new Set(Object.keys(overlayNodes).filter(function (uid) { return !!nM[uid]; }));
+
+      gE = [];
+      nodes.forEach(function (n) {
+        (n.targets || []).forEach(function (t) {
+          if (nM[t]) gE.push({ source: n.uid, target: t, visible: true });
+        });
+      });
+      nodes.forEach(function (n) { n.incoming = []; });
+      gE.forEach(function (e) { if (nM[e.target]) nM[e.target].incoming.push(e.source); });
+      var deg = {};
+      gE.forEach(function (e) {
+        deg[e.source] = (deg[e.source] || 0) + 1;
+        deg[e.target] = (deg[e.target] || 0) + 1;
+      });
+      nodeDegrees = deg;
+      var ranked = nodes.slice().sort(function (a, b) { return (deg[b.uid] || 0) - (deg[a.uid] || 0); });
+      ranked.forEach(function (n, i) {
+        var f = i / Math.max(1, ranked.length);
+        labelTiers[n.uid] = f < 0.03 ? 'always' : (f < 0.12 ? 'meso' : 'micro');
+      });
+
+      var lib = window.SocioDeck;
+      if (!lib) { fail('Renderer missing', 'vendor/deck.min.js failed to load'); return; }
+      sizeCanvas();
+      deck = SocioGraph.createDeck(lib, canvas, W, H);
+      SocioGraph.applyLayoutToNodes(nodes, window.__ulayout);
+      Object.keys(overlayNodes).forEach(function (uid) {
+        var ov = overlayNodes[uid];
+        if (!baseUids.has(uid) && nM[uid]) {
+          nM[uid].x = Number(ov.x) || 0;
+          nM[uid].y = Number(ov.y) || 0;
+        }
+      });
+
+      refreshCounts();
+
+      var t = computeFitTarget();
+      cam.x = t.x; cam.y = t.y; cam.z = t.z;
+      document.getElementById('loading-overlay').classList.add('hidden');
+      draw();
+      try {
+        var qn = new URLSearchParams(window.location.search).get('node');
+        if (qn && nM[qn]) { enableSource(nM[qn].source); selectNode(nM[qn], true); }
+      } catch (e) { /* ignore */ }
+    }
+
+    document.getElementById('loader-msg').textContent = 'Loading Naturgnosis index';
+    fetch('/pks/data/naturgnosis-index.json')
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (g) {
+        var arr = g.nodes || [];
+        if (!arr.length) throw new Error('Empty snapshot');
+        var counts = g.counts || {};
+        var snap = g.snapshot || {};
+        window.__ustats = {
+          counts: counts,
+          edge_counts: g.edge_counts || {},
+          generated: snap.source_generated || g.generated || '',
+          total: arr.length,
+          snapshot: snap
+        };
+        document.getElementById('loader-msg').textContent = 'Loading layout';
+        return fetch('/pks/data/naturgnosis-layout.json', { cache: 'no-cache' })
+          .then(function (r) {
+            if (!r.ok) throw new Error('layout missing');
+            return r.json();
+          })
+          .then(function (L) {
+            window.__ulayout = L;
+            document.getElementById('loader-msg').textContent = 'Loading node overlay';
+            return loadOverlay().then(function () {
+              setTimeout(function () { initGraph(arr); }, 40);
+            });
+          });
+      })
+      .catch(function (err) {
+        fail('Failed to load: ' + (err.message || err),
+          'Run: python3 app/module/pks/bin/snapshot_naturgnosis.py');
+      });
+
+    function isTypingTarget(el) {
+      if (!el) return false;
+      var tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || !!el.isContentEditable;
+    }
+
+    function handleKey(e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var helpOpen = document.getElementById('help-modal').classList.contains('open');
+      var ovOpen = document.getElementById('ov-modal').classList.contains('open');
+
+      if (e.key === 'Escape') {
+        if (!document.getElementById('export-menu').hidden) { setExportMenu(false); return; }
+        if (helpOpen) { closeHelp(); return; }
+        if (panelState === 'add') { closeDetail(); return; }
+        if (panelState === 'edit') { cancelForm(); return; }
+        if (ovOpen) { closeOverview(); return; }
+        closeDetail();
+        return;
+      }
+      if (isTypingTarget(e.target)) return;
+
+      if (e.key === '?') {
+        e.preventDefault();
+        if (ovOpen) closeOverview();
+        toggleHelp();
+        return;
+      }
+      if (helpOpen || ovOpen) return;
+
+      if (e.key === '/') { e.preventDefault(); searchInput.focus(); return; }
+      var k = e.key.toLowerCase();
+      if (k === 'r') { e.preventDefault(); randomNode(); return; }
+      if (k === 'a') { e.preventDefault(); if (panelState === 'view') startAdd(); return; }
+      if (k === 'e') { e.preventDefault(); if (panelState === 'view') startEdit(); return; }
+      if (k === 'd') { e.preventDefault(); if (panelState === 'view') deleteCurrentNode(); return; }
+      if (k === 'f') { e.preventDefault(); fitGraph(); return; }
+      if (k === 'o') { e.preventDefault(); openOverview(); return; }
+      if (k === 's') { e.preventDefault(); setAll(true); return; }
+      if (k === 'x') { e.preventDefault(); setAll(false); return; }
+      if (e.key >= '1' && e.key <= '5') {
+        e.preventDefault();
+        toggleSpace(SOURCES[Number(e.key) - 1]);
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+  })();
+  </script>
+</body>
+</html>

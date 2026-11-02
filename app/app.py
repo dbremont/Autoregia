@@ -20,7 +20,7 @@ index at the root.
     /acsms/...   Agent Capability Self Management System  (substrate — capability growth)
     /ags/...     Agency Grounding System (in the model, not yet built — policies at /ags/policies/…)
     /gwob/...    General World and Self Observation System gateway (over WOS, PKTS, PWTS)
-    /pks/...     Personal Knowledge System (conceived, not yet designed — Agent Knowledge substrate)
+    /pks/...     Personal Knowledge System — Naturgnosis Index (Agent Knowledge substrate)
 
 Sub-systems are not independent apps: they are functional organs of one
 system, surfaced here through one router.
@@ -81,6 +81,7 @@ SUBSYSTEMS = [
     ("pras", "Personal Reflection & Adaptation System", "module/pras/server.py"),
     ("acsms", "Agent Capability Self Management System", "module/acsms/server.py"),
     ("loop", "The Loop — Control-Loop Dashboard", "module/loop/server.py"),
+    ("pks", "Personal Knowledge System", "module/pks/server.py"),
 ]
 
 MOUNTS = {prefix: _load_app(f"{prefix}_server", rel)
@@ -142,32 +143,6 @@ def ags_policies(name):
 def gwob():
     # Gateway plate over the observation sub-systems (WOS, PKTS, PWTS).
     return send_from_directory(ROOT, "module/gwob/index.html")
-
-
-@app.route("/pks/")
-def pks():
-    # Landing plate for a system conceived in the model but not yet designed.
-    # When PKS is implemented (module/pks + SUBSYSTEMS), that mount
-    # shadows this route.
-    return send_from_directory(ROOT, "module/pks/index.html")
-
-
-@app.route("/pks")
-def pks_redirect():
-    return redirect("/pks/")
-
-
-@app.route("/pks/learn/")
-@app.route("/pks/learn/<path:name>")
-def pks_learn(name="index.html"):
-    # Learning surfaces hosted under the PKS plate (first: Lebrija, the
-    # Spanish-grammar trainer at /pks/learn/lebrija/). Static, plate-style
-    # like /ags/policies/ — until PKS is implemented (module/pks +
-    # SUBSYSTEMS), at which point that mount shadows these routes.
-    # Dotfiles are never served (the vendored tree must not expose secrets).
-    if name.startswith(".") or "/." in name:
-        return jsonify({"error": "Not found"}), 404
-    return send_from_directory(os.path.join(ROOT, "module", "pks", "learn"), name)
 
 
 @app.route("/gwob")

@@ -28,6 +28,7 @@ TOOLS = {
     "ags": ["app/ags/policies"],
     "aoos": ["module/aoos/static"],
     "ate/tool/ces": ["module/ate/tool/ces/static"],
+    "pks": ["module/pks/static"],
 }
 
 # Path segments served under each tool's mount that must be prefixed.
